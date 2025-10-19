@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans:wght@400;600&display=swap');
+
+/* GENERAL */
+body { font-family: 'Open Sans', sans-serif; background: #F9FAFB; color: #111827; }
+
+/* INTRO SCENE */
+.intro-scene-container { max-width:1200px; margin:0 auto; position:relative; height:85vh; }
+.intro-scene {
+  position:relative;
+  height:100%;
+  background: linear-gradient(to bottom, #1E3A8A, #2563EB);
+  border-radius: 16px;
+  overflow:hidden;
+  padding:1.5rem;
+  box-shadow: 0 12px 36px rgba(11,61,145,0.18);
+}
+
+/* radar sweep */
+.intro-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events:none;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04), transparent 60%);
+  animation: radar-sweep 14s linear infinite;
+}
+@keyframes radar-sweep { from{ transform: rotate(0deg); } to { transform: rotate(360deg);} }
+
+/* Avatar */
+.captain-ray {
+  position:absolute;
+  left:4%;
+  bottom:0;
+  height:66%;
+  max-height:480px;
+  object-fit:contain;
+  z-index:2;
+  transform: translateY(6%);
+  animation: slide-up 0.8s ease-out forwards;
+}
+@keyframes slide-up { to { transform: translateY(0); } }
+
+/* Dialogue box */
+.dialogue-box {
+  position:absolute;
+  right:6%;
+  bottom:5.5rem;
+  width:52%;
+  background: rgba(255,255,255,0.9);
+  border-radius:16px;
+  padding:1.25rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  z-index:3;
+  opacity:0;
+  animation: fade-in 0.9s 0.6s ease-out forwards;
+}
+@keyframes fade-in { to { opacity:1; } }
+
+.dialogue-box p { margin:0; font-size:18px; line-height:1.5; color:#111827; }
+
+/* Typing cursor handling:
+   `.typing` class will show a blinking cursor via pseudo-element.
+   When not typing, we use `.no-cursor` to hide it.
+*/
+#dialogue-text.no-cursor::after { content: none; }
+#dialogue-text.typing::after { content: '|' ; margin-left:6px; animation: blink 1s steps(1) infinite; color:#1E3A8A; }
+@keyframes blink { 50% { opacity:0; } }
+
+/* Language toggle */
+.lang-toggle { position:absolute; top:10px; right:14px; z-index:5; }
+.toggle-pill {
+  font-family:'Montserrat',sans-serif;
+  background:#E5E7EB;
+  color:#111827;
+  border:none;
+  border-radius:999px;
+  padding:6px 12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* Audio button */
+.audio-control { margin-top:0.8rem; display:flex; justify-content:center; }
+.audio-play-btn {
+  width:42px; height:42px; border-radius:50%; background:#2563EB; color:#fff; border:none;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;
+}
+.audio-play-btn.playing { animation: pulse 1.6s infinite; }
+@keyframes pulse { 0%{ box-shadow:0 0 0 0 rgba(37,99,235,0.5);} 70%{ box-shadow:0 0 0 12px rgba(37,99,235,0);} 100%{ box-shadow:0 0 0 0 rgba(37,99,235,0);} }
+
+/* Footer/Next */
+.dialogue-footer { text-align:center; margin-top:0.6rem; }
+#next-btn { display:inline-block; }
+
+/* Continue button area */
+.continue-container { position:absolute; bottom:1rem; right:6%; width:22%; z-index:4; }
+.continue-btn {
+  display:inline-block; width:100%; text-align:center; padding:10px 12px; border-radius:12px;
+  font-family:'Montserrat',sans-serif; font-weight:700; font-size:18px; text-decoration:none;
+  color:#fff; background:#10B981; box-shadow:0 8px 22px rgba(16,185,129,0.12);
+  transition: all 0.2s ease;
+}
+.continue-btn:hover { background:#059669; transform: translateY(-2px); }
+.btn-disabled { opacity:0.7; pointer-events:none; filter:grayscale(0.02); }
+
+/* hidden utility */
+.hidden { display:none !important; }
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .dialogue-box { right:5%; width:88%; bottom:7rem; }
+  .continue-container { right:5%; width:88%; bottom:1rem; }
+  .captain-ray { display:none; }
+}

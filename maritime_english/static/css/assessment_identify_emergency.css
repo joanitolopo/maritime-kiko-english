@@ -1,0 +1,39 @@
+/* same style as earlier assessment CSS (kepraktisan) */
+.quiz-scene { padding:18px; border-radius:12px; background: linear-gradient(180deg,#081226 0,#03101a 100%); color:#F9FAFB; }
+.quiz-header { padding:8px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.question-number { font-family:"Montserrat",sans-serif; font-weight:600; font-size:16px; color:#0B3D91; }
+.toggle-pill { background:#E5E7EB; border:0; padding:6px 10px; border-radius:999px; font-weight:700; color:#000; cursor:pointer; }
+
+.alert-indicator { display:flex; justify-content:center; margin-bottom:10px; }
+.red-light { width:12px; height:12px; background:#DC2626; border-radius:50%; box-shadow:0 0 6px rgba(220,38,38,0.7); }
+.red-light.pulse { animation: pulse-red 1.6s infinite; }
+@keyframes pulse-red { 0%{transform:scale(1); opacity:1;}50%{transform:scale(1.4); opacity:0.55;}100%{transform:scale(1); opacity:1;} }
+
+.question-box { background: rgba(255,255,255,0.95); padding:12px; border-radius:10px; margin-bottom:12px; color:#111827; min-height:64px; }
+.options-wrap { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+.option-btn { display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:10px; border:1px solid #D1D5DB; background:#F9FAFB; cursor:pointer; text-align:left; font-weight:700; color:#0f172a; }
+.option-btn:hover { box-shadow:0 8px 18px rgba(37,99,235,0.06); border-color:#2563EB; transform: translateY(-2px); }
+.option-btn .opt-label { font-weight:800; margin-right:8px; color:#374151; }
+.option-btn.correct { background:#ECFDF5; border-color:#10B981; box-shadow: inset 0 2px 0 rgba(16,185,129,0.06); }
+.option-btn.incorrect { background:#FEF2F2; border-color:#EF4444; }
+.vibrate { animation: vib .36s ease; }
+@keyframes vib { 0%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(2px)} 100%{transform:translateX(0)} }
+
+.feedback-bubble { display:flex; gap:12px; align-items:center; margin-top:14px; background:rgba(255,255,255,0.95); padding:8px 10px; border-radius:12px; color:#0b1220; }
+.feedback-bubble.visually-hidden { display:none; }
+.feedback-bubble.positive { border-left:4px solid #10B981; }
+.feedback-bubble.negative { border-left:4px solid #EF4444; }
+.fb-avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+
+.progress-wrap { display:flex; align-items:center; gap:12px; margin-top:8px; }
+.progress-text { font-size:14px; color:#D1D5DB; }
+.progress-bar { flex:1; height:10px; background:#08182f; border-radius:999px; overflow:hidden; }
+.progress-fill { height:100%; background:#2563EB; width:0%; transition:width .36s ease; }
+
+.btn-next { padding:10px 18px; border-radius:10px; background:#10B981; color:#fff; font-weight:800; border:0; cursor:pointer; }
+.btn-secondary { padding:10px 18px; border-radius:10px; background:#3B82F6; color:#fff; border:0; cursor:pointer; }
+.btn-next[disabled], .btn-next[aria-disabled="true"] { opacity:0.6; cursor:not-allowed; }
+
+@media (max-width:767px) {
+  .btn-next, .btn-secondary { width:86%; }
+}

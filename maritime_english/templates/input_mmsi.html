@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_mmsi.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 mmsi-page">
+
+  <div class="mmsi-scene shadow-lg" role="region" aria-label="{{ section_content.title }}">
+    <div class="radio-bg" aria-hidden="true"></div>
+
+    <!-- Avatar -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="avatar-captain" />
+
+    <!-- Instruction -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="instruction-text" class="lead">
+        {{ section_content.instruction_en }}
+      </p>
+    </div>
+
+    <!-- Cards area (render from section_content.examples) -->
+    <div class="cards-area" id="cards-area">
+      {% for ex in section_content.examples %}
+      <div class="ship-card {{ 'card-blue' if loop.index0 % 2 == 0 else 'card-green' }}" data-example="{{ loop.index }}" id="card-{{ loop.index }}">
+        <div class="card-header">
+          <div class="ship-name">{{ ex.name }}</div>
+          <div class="ship-icon" aria-hidden="true"><i class="fas fa-ship"></i></div>
+        </div>
+
+        <div class="card-body">
+          <div class="mmsi-number" id="mmsi-{{ loop.index }}">{{ ex.mmsi }}</div>
+
+          <button class="btn-audio play-card" data-target="{{ loop.index }}" aria-label="Play MMSI example {{ loop.index }}">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Practice replay buttons (one per example if provided) -->
+    <div class="practice-area">
+      {% for ex in section_content.examples %}
+        <button id="replay-{{ loop.index }}" class="btn btn-replay" aria-label="Replay Example {{ loop.index }}">{{ ex.replay_label or ('Replay Example ' ~ loop.index) }}</button>
+      {% endfor %}
+    </div>
+
+    <!-- Feedback bubble -->
+    <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-arrow"></div>
+      <div class="fb-content">{{ section_content.default_feedback or "Great! You repeated the MMSI clearly." }}</div>
+    </div>
+
+    <!-- Footer next -->
+    <div class="footer-cta">
+      <button id="next-btn" class="btn btn-next" aria-label="Next">
+        Next
+      </button>
+      <a id="continue-link" class="visually-hidden"
+         href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content.start_next_section else '' }}"></a>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/input_mmsi.js') }}"></script>
+{% endblock %}

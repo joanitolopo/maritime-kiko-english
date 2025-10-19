@@ -1,0 +1,1212 @@
+{
+  "title": "Basic Maritime Vocabulary",
+  "input_intro": {
+    "title": "NATO Phonetic Alphabet & Numbers",
+    "intro_en": "Now that you've warmed up, let's learn the full NATO Phonetic Alphabet and numbers. We use them to spell ship names, call signs, MMSI, and channel numbers.",
+    "intro_id": "Sekarang setelah pemanasan, mari kita pelajari Alfabet Fonetik NATO dan angka lengkap. Kita menggunakannya untuk mengeja nama kapal, tanda panggilan, MMSI, dan nomor saluran.",
+    "audio_en": "/static/data/audio/unit_1/input_intro_en.wav",
+    "start_next_section": "input_alphabet"
+  },
+  "input_alphabet": {
+    "title": "NATO Phonetic Alphabet A–Z",
+    "start_next_section": "input_numbers",
+    "practice_text": "Example: ANTARA → Alpha – November – Tango – Alpha – Romeo – Alpha",
+    "practice_audio": "/static/data/audio/unit_1/alphabet_practice_antara.wav",
+    "practice_sequence": ["A","N","T","A","R","A"]
+  },
+  "input_numbers": {
+    "title": "Numbers 0–9",
+    "start_next_section": "input_mmsi",
+    "practice_text": "Example: YB321 → Yankee – Bravo – Tree – Too – Wun",
+    "practice_audio": "/static/data/audio/unit_1/numbers_practice_yb321.wav",
+    "practice_sequence": ["Y","B","3","2","1"]
+  },
+  "input_mmsi": {
+    "title": "Example: MMSI Number",
+    "instruction_en": "Listen to the MMSI numbers carefully. Repeat them aloud, digit by digit.",
+    "instruction_id": "Dengarkan nomor MMSI dengan saksama. Ulangi dengan suara keras, angka demi angka.",
+    "default_feedback": "Great! You repeated the MMSI clearly.",
+    "start_next_section": "input_channel",
+    "examples": [
+      {
+        "name": "MV ANTARA",
+        "mmsi": "123456789",
+        "replay_audio": "/static/data/audio/unit_1/mmsi_1_replay.wav"
+      },
+      {
+        "name": "MV SELAMAT",
+        "mmsi": "987654321"
+      }
+    ]
+  },
+  "input_channel": {
+    "title": "Example: Channel Number",
+    "audio_en": "/static/data/audio/channel/channel_16_wun_six.wav",
+    "start_next_section": "input_vhf"
+  },
+  "input_vhf": {
+    "title": "Mini Dialogue: VHF Exchange",
+    "dialogue_en": "<strong>Operator A (Ray):</strong> “This is MV ANTARA, Call Sign Alpha – Bravo – Charlie – WUN. Radio check, over.”<br><strong>Operator B (Lina):</strong> “Roger, MV ANTARA. Switch to Channel WUN SIX.”",
+    "dialogue_id": "<strong>Operator A (Ray):</strong> “Ini MV ANTARA, tanda panggilan Alpha – Bravo – Charlie – WUN. Periksa radio, over.”<br><strong>Operator B (Lina):</strong> “Roger, MV ANTARA. Pindah ke Saluran WUN SIX.”",
+    "instruction_en": "Listen to the dialogue carefully. Then, repeat Operator B's response aloud.",
+    "audio_full": "/static/data/audio/unit_1/vhf_dialogues_full_en.wav",
+    "audio_b": "/static/data/audio/unit_1/vhf_dialogues_b_en.wav",
+    "start_next_section": "input_wrapup",
+    "quiz_question": "Who said 'Switch to Channel WUN SIX'?",
+    "quiz_options": ["ray", "lina"],
+    "quiz_labels": { "ray": "Operator A (Ray)", "lina": "Operator B (Lina)" },
+    "correct_answer": "lina",
+    "default_feedback": "Good job! Keep practicing to sound like a real sailor."
+  },
+  "input_wrapup": {
+    "title": "Input Wrap-up",
+    "intro_en": "Great work! Now you know the full alphabet and numbers, and how they are used for ship names, call signs, MMSI, and radio channels. You’ll see numbers again in later units, like time, weather, and sea reports.",
+    "intro_id": "Kerja bagus! Sekarang kalian sudah mengetahui alfabet dan angka lengkap, serta bagaimana cara menggunakannya untuk nama kapal, tanda panggilan, MMSI, dan saluran radio. Kalian akan menemui angka lagi di unit-unit selanjutnya, seperti waktu, cuaca, dan laporan pelayaran.",
+    "audio_en": "/static/data/audio/unit_1/input_wrapup_lina_en.wav",
+    "start_next_section": "noticing_intro"
+  },
+  "noticing_intro": {
+    "title": "Noticing: Differences in Pronunciation",
+    "intro_en": "Now let’s look more closely at the alphabet and numbers. Some of them sound different in Maritime English. Listen and compare.",
+    "intro_id": "Sekarang mari kita lihat lebih dekat alfabet dan angka. Beberapa bunyinya berbeda dalam Bahasa Inggris Maritim. Dengarkan dan bandingkan.",
+    "audio_en": "/static/data/audio/unit_1/noticing_intro.wav",
+    "start_next_section": "noticing_alphabet"
+  },
+  "noticing_alphabet": {
+    "title": "Alphabet Differences",
+    "instruction_en": "Click each pair to hear the difference.",
+    "instruction_id": "Klik setiap pasangan untuk mendengar perbedaannya.",
+    "feedback_text_en": "Good listening! See the difference?",
+    "feedback_text_id": "Bagus pendengaranmu! Lihat bedanya?",
+    "start_next_section": "noticing_numbers",
+    "prefetch_audio": true,
+    "pairs": [
+      { "letter": "A", "general": "Bee", "maritime": "Bravo", "general_audio": "/static/data/audio/noticing/alphabet/b_bee.wav", "maritime_audio": "/static/data/audio/alphabet/b_bravo.wav" },
+      { "letter": "C", "general": "See", "maritime": "Charlie", "general_audio": "/static/data/audio/noticing/alphabet/see.wav", "maritime_audio": "/static/data/audio/alphabet/c_charlie.wav" },
+      { "letter": "D", "general": "Dee", "maritime": "Delta", "general_audio": "/static/data/audio/noticing/alphabet/dee.wav", "maritime_audio": "/static/data/audio/alphabet/d_delta.wav" },
+      { "letter": "N", "general": "En", "maritime": "November", "general_audio": "/static/data/audio/noticing/alphabet/en.wav", "maritime_audio": "/static/data/audio/alphabet/n_november.wav" },
+      { "letter": "T", "general": "Tee", "maritime": "Tango", "general_audio": "/static/data/audio/noticing/alphabet/tee.wav", "maritime_audio": "/static/data/audio/alphabet/t_tango.wav" }
+    ]
+  },
+  "noticing_numbers": {
+    "title": "Number Differences",
+    "instruction_en": "Click each pair to hear the difference. Pay special attention to 3, 5, and 9.",
+    "instruction_id": "Klik setiap pasangan untuk mendengar perbedaannya. Perhatikan secara khusus angka 3, 5, dan 9.",
+    "feedback_text_en": "Excellent! You caught the differences.",
+    "feedback_text_id": "Bagus sekali! Kamu sudah memperhatikan perbedaannya.",
+    "captain_tip_en": "We change the pronunciation to avoid mistakes. For example, 'Nine' sounds like 'Five' on the radio, so we say 'Niner'.",
+    "captain_tip_id": "Kita mengubah pengucapan untuk menghindari kesalahan. Misalnya, 'Nine' terdengar mirip dengan 'Five' di radio, jadi kita mengatakan 'Niner'.",
+    "start_next_section": "noticing_wrapup",
+    "prefetch_audio": true,
+    "feedback_after_interactions": 3,
+    "pairs": [
+      { "label":"0", "general":"Zero",   "maritime":"Zee-ro", "general_audio":"/static/data/audio/noticing/numbers/zero.wav",  "maritime_audio":"/static/data/audio/numbers/0_zeero.wav" },
+      { "label":"1", "general":"One",    "maritime":"Wun",    "general_audio":"/static/data/audio/noticing/numbers/one.wav",   "maritime_audio":"/static/data/audio/numbers/1_wun.wav" },
+      { "label":"2", "general":"Two",    "maritime":"Too",    "general_audio":"/static/data/audio/noticing/numbers/two.wav",   "maritime_audio":"/static/data/audio/numbers/2_too.wav" },
+      { "label":"3", "general":"Three",  "maritime":"Tree",   "general_audio":"/static/data/audio/noticing/numbers/three.wav", "maritime_audio":"/static/data/audio/numbers/3_tree.wav", "highlight": true },
+      { "label":"4", "general":"Four",   "maritime":"Fower",  "general_audio":"/static/data/audio/noticing/numbers/four.wav",  "maritime_audio":"/static/data/audio/numbers/4_fower.wav" },
+      { "label":"5", "general":"Five",   "maritime":"Fife",   "general_audio":"/static/data/audio/noticing/numbers/five.wav",  "maritime_audio":"/static/data/audio/numbers/5_fife.wav", "highlight": true },
+      { "label":"6", "general":"Six",    "maritime":"Six",    "general_audio":"/static/data/audio/noticing/numbers/six.wav",   "maritime_audio":"/static/data/audio/numbers/6_six.wav" },
+      { "label":"7", "general":"Seven",  "maritime":"Seven",  "general_audio":"/static/data/audio/noticing/numbers/seven.wav", "maritime_audio":"/static/data/audio/numbers/7_seven.wav" },
+      { "label":"8", "general":"Eight",  "maritime":"Eight",  "general_audio":"/static/data/audio/noticing/numbers/eight.wav", "maritime_audio":"/static/data/audio/numbers/8_eight.wav" },
+      { "label":"9", "general":"Nine",   "maritime":"Niner",  "general_audio":"/static/data/audio/noticing/numbers/nine.wav",  "maritime_audio":"/static/data/audio/numbers/9_niner.wav", "highlight": true }
+    ]
+  },
+  "noticing_wrapup": {
+    "title": "Noticing Wrap-up",
+    "text_en": "Great! You have noticed the differences in how we say letters and numbers at sea. These small changes make communication clear and safe.",
+    "text_id": "Bagus sekali! Kalian sudah memperhatikan perbedaan cara kita menyebut huruf dan angka di laut. Perubahan kecil ini membuat komunikasi lebih jelas dan aman.",
+    "audio_en": "/static/data/audio/noticing/wrapup_lina_en.wav",
+    "avatar": "img/captain_ray_half.png",
+    "avatar_alt": "Captain Ray",
+    "callouts": ["A","3","5","9","Z"],
+    "cta_label": "Go to Controlled Practice",
+    "start_next_section": "controlled_practice_intro"
+  },
+  "controlled_practice_intro": {
+    "title": "Controlled Practice: Exercises",
+    "instruction_en": "Now it's your turn! Let's practice the alphabet and numbers step by step. Listen carefully and choose the correct answer.",
+    "instruction_id": "Sekarang giliran kalian! Mari kita berlatih alfabet dan angka langkah demi langkah. Dengarkan dengan saksama dan pilih jawaban yang benar.",
+    "audio_en": "/static/data/audio/unit_1/controlled_practice_intro.wav",
+    "avatar": "img/os_lina.png",
+    "avatar_alt": "OS Lina",
+    "start_next_section": "controlled_ex_1"
+  },
+  "controlled_ex_1": {
+    "title": "Exercise 1: Listen & Choose (Alphabet)",
+    "instruction_en": "Listen and choose the correct letter.",
+    "instruction_id": "Dengarkan dan pilih huruf yang benar.",
+    "start_next_section": "controlled_ex_2",
+    "avatar": "img/os_lina.png",
+    "avatar_alt": "OS Lina",
+    "questions": [
+      { "prompt_text": "Bravo", "prompt_audio": "/static/data/audio/alphabet/b_bravo.wav", "correct": "B", "options": ["B","D","C"] },
+      { "prompt_text": "Charlie", "prompt_audio": "/static/data/audio/alphabet/c_charlie.wav", "correct": "C", "options": ["E","C","A"] },
+      { "prompt_text": "Alpha", "prompt_audio": "/static/data/audio/alphabet/a_alpha.wav", "correct": "A", "options": ["A","G","F"] },
+      { "prompt_text": "Delta", "prompt_audio": "/static/data/audio/alphabet/d_delta.wav", "correct": "D", "options": ["D","B","E"] },
+      { "prompt_text": "Echo", "prompt_audio": "/static/data/audio/alphabet/e_echo.wav", "correct": "E", "options": ["F","E","T"] },
+      { "prompt_text": "Foxtrot", "prompt_audio": "/static/data/audio/alphabet/f_foxtrot.wav", "correct": "F", "options": ["F","H","V"] },
+      { "prompt_text": "Golf", "prompt_audio": "/static/data/audio/alphabet/g_golf.wav", "correct": "G", "options": ["J","G","K"] },
+      { "prompt_text": "Hotel", "prompt_audio": "/static/data/audio/alphabet/h_hotel.wav", "correct": "H", "options": ["H","O","M"] },
+      { "prompt_text": "India", "prompt_audio": "/static/data/audio/alphabet/i_india.wav", "correct": "I", "options": ["I","L","N"] },
+      { "prompt_text": "Juliett", "prompt_audio": "/static/data/audio/alphabet/j_juliett.wav", "correct": "J", "options": ["X","J","Q"] }
+    ]
+  },
+  "controlled_ex_2": {
+    "title": "Exercise 2: Listen & Choose (Numbers)",
+    "instruction_en": "Listen and choose the correct number.",
+    "instruction_id": "Dengarkan dan pilih angka yang benar.",
+    "start_next_section": "controlled_ex_3",
+    "avatar": "img/os_lina.png",
+    "avatar_alt": "OS Lina",
+    "questions": [
+      { "prompt_text": "Wun", "prompt_audio": "/static/data/audio/numbers/1_wun.wav", "correct": "1", "options": ["1","7","3"] },
+      { "prompt_text": "Too", "prompt_audio": "/static/data/audio/numbers/2_too.wav", "correct": "2", "options": ["2","5","9"] },
+      { "prompt_text": "Tree", "prompt_audio": "/static/data/audio/numbers/3_tree.wav", "correct": "3", "options": ["3","2","8"] },
+      { "prompt_text": "Fower", "prompt_audio": "/static/data/audio/numbers/4_fower.wav", "correct": "4", "options": ["4","9","5"] },
+      { "prompt_text": "Fife", "prompt_audio": "/static/data/audio/numbers/5_fife.wav", "correct": "5", "options": ["5","3","0"] },
+      { "prompt_text": "Six", "prompt_audio": "/static/data/audio/numbers/6_six.wav", "correct": "6", "options": ["6","1","8"] },
+      { "prompt_text": "Seven", "prompt_audio": "/static/data/audio/numbers/7_seven.wav", "correct": "7", "options": ["7","2","4"] },
+      { "prompt_text": "Eight", "prompt_audio": "/static/data/audio/numbers/8_eight.wav", "correct": "8", "options": ["8","6","0"] },
+      { "prompt_text": "Niner", "prompt_audio": "/static/data/audio/numbers/9_niner.wav", "correct": "9", "options": ["9","5","4"] },
+      { "prompt_text": "Zeero", "prompt_audio": "/static/data/audio/numbers/0_zeero.wav", "correct": "0", "options": ["0","1","7"] }
+    ]
+  },
+  "controlled_ex_3": {
+    "title": "Exercise 3: Matching Letters to Code Words",
+    "instruction_en": "Listen to the audio and type the correct letter. Sometimes you will also see a letter — type the correct NATO code word for it.",
+    "instruction_id": "Dengarkan audio dan ketik huruf yang benar. Kadang kalian juga akan melihat huruf – ketik kata kode NATO yang sesuai.",
+    "start_next_section": "controlled_ex_4",
+    "avatar": "img/os_lina.png",
+    "questions": [
+      { "type": "A", "prompt_audio": "/static/data/audio/alphabet/b_bravo.wav", "correct_letter": "B", "correct_word": "Bravo" },
+      { "type": "B", "prompt_letter": "E", "correct_letter": "E", "correct_word": "Echo" },
+      { "type": "A", "prompt_audio": "/static/data/audio/alphabet/c_charlie.wav", "correct_letter": "C", "correct_word": "Charlie" },
+      { "type": "B", "prompt_letter": "K", "correct_letter": "K", "correct_word": "Kilo" },
+      { "type": "A", "prompt_audio": "/static/data/audio/alphabet/a_alpha.wav", "correct_letter": "A", "correct_word": "Alpha" },
+      { "type": "B", "prompt_letter": "R", "correct_letter": "R", "correct_word": "Romeo" },
+      { "type": "A", "prompt_audio": "/static/data/audio/alphabet/d_delta.wav", "correct_letter": "D", "correct_word": "Delta" },
+      { "type": "B", "prompt_letter": "S", "correct_letter": "S", "correct_word": "Sierra" },
+      { "type": "A", "prompt_audio": "/static/data/audio/alphabet/h_hotel.wav", "correct_letter": "H", "correct_word": "Hotel" },
+      { "type": "B", "prompt_letter": "Z", "correct_letter": "Z", "correct_word": "Zulu" }
+    ]
+  },
+  "controlled_ex_4": {
+    "title": "Exercise 4: Spelling Ship Names",
+    "instruction_en": "Spell the ship name using the NATO alphabet. Click the letters in the correct order.",
+    "instruction_id": "Eja nama kapal dengan menggunakan alfabet NATO. Klik huruf dalam urutan yang benar.",
+    "start_next_section": "controlled_wrapup",
+    "avatar": "img/captain_ray.png",
+    "ships": [
+      { "name": "ANTARA" },
+      { "name": "SELAMAT" },
+      { "name": "EXAMPLE" }
+    ]
+  },
+  "controlled_wrapup": {
+    "title": "Controlled Practice Wrap-up",
+    "text_en": "Well done! You’ve practiced spelling with the NATO alphabet and numbers. You can now spell ship names and codes clearly. Next, we’ll try using them in real communication tasks.",
+    "text_id": "Kerja bagus! Kalian sudah berlatih mengeja dengan alfabet dan angka NATO. Sekarang kalian bisa mengeja nama kapal dan kode dengan jelas. Selanjutnya, kita akan mencobanya dalam tugas komunikasi nyata.",
+    "audio_en": "/static/data/audio/unit_1/controlled_wrapup_en.wav",
+    "start_next_section": "guided_intro",
+    "avatar": "img/os_lina_half.png"
+  },
+  "guided_intro": {
+    "title": "Guided Practice: Communication Tasks",
+    "text_en": "Now, let’s try real communication. I’ll guide you through short radio tasks. Listen first, then repeat or respond as instructed.",
+    "text_id": "Sekarang mari kita coba komunikasi nyata. Saya akan memandu kalian melalui tugas radio singkat. Dengarkan dulu, lalu ulangi atau jawab sesuai instruksi.",
+    "audio_en": "/static/data/audio/guided/guided_intro_en.wav",
+    "avatar": "img/captain_ray_radio.png",
+    "start_next_section": "guided_task_1"
+  },
+  "guided_task_1": {
+    "title": "Task 1: Radio Check",
+    "instruction_en": "Listen to the exchange. Then, repeat OS Lina's response.",
+    "instruction_id": "Dengarkan percakapan. Lalu, ulangi jawaban OS Lina.",
+    "dialogue_en": "<strong>Captain Ray:</strong> “This is MV ANTARA, Call Sign Alpha – November – Tango – Alpha – Romeo – Alpha. Radio check, over.”<br><strong>OS Lina:</strong> “Roger, MV ANTARA. Loud and clear.”",
+    "dialogue_id": "<strong>Captain Ray:</strong> “Ini MV ANTARA, tanda panggilan Alpha – November – Tango – Alpha – Romeo – Alpha. Periksa radio, over.”<br><strong>OS Lina:</strong> “Roger, MV ANTARA. Jelas.”",
+    "audio_full": "/static/data/audio/unit_1/guided_task1_full_en.wav",
+    "audio_lina": "/static/data/audio/unit_1/guided_task1_lina_en.wav",
+    "start_next_section": "guided_task_2",
+    "feedback_good": "Loud and clear! Good job.",
+    "feedback_try": "Not clear enough. Listen again and repeat.",
+    "avatar_left": "img/captain_ray.png",
+    "avatar_right": "img/os_lina.png"
+  },
+  "guided_task_2": {
+    "title": "Task 2: Spelling Ship Name",
+    "example_name": "MV PACIFIC STAR",
+    "example_spelling": "Papa – Alpha – Charlie – India – Foxtrot – India – Charlie – Sierra – Tango – Alpha – Romeo",
+    "example_sequence": ["P","A","C","I","F","I","C","S","T","A","R"],
+    "instruction_en": "Listen to the spelling. Then, try spelling another ship name by clicking the letters in the correct order.",
+    "instruction_id": "Dengarkan cara pengejaannya. Lalu, coba eja nama kapal lain dengan mengklik huruf dalam urutan yang benar.",
+    "audio_example": "/static/data/audio/unit_1/guided_task2_example_en.wav",
+    "audio_output": "", 
+    "start_next_section": "guided_task_3",
+    "feedback_good": "Well done! You spelled it clearly.",
+    "feedback_try": "Check again. Make sure the order is correct."
+  },
+  "guided_task_3": {
+    "title": "Task 3: MMSI & Channel Number",
+    "instruction_en": "Listen to the example. Then, try spelling your own MMSI number and channel.",
+    "instruction_id": "Dengarkan contoh. Lalu, coba eja nomor MMSI dan saluran kalian sendiri.",
+    "dialogue_en": "Captain Ray: \"Say your MMSI number and channel.\" OS Lina: \"MMSI: Fife – Too – Fife – Wun – Too – Tree – Fower – Fife – Six. Channel Wun Six.\"",
+    "dialogue_id": "Captain Ray: \"Ucapkan nomor MMSI dan saluran kalian.\" OS Lina: \"MMSI: Fife – Too – Fife – Wun – Too – Tree – Fower – Fife – Six. Channel Wun Six.\"",
+    "audio_example": "/static/data/audio/unit_1/guided_task3_example_en.wav",
+    "example_mmsi": "525123456",
+    "example_channel": "16",
+    "help_text": "Type digits; the system will generate the radio pronunciation. Click the small play icon to hear each output.",
+    "default_feedback": "Excellent! Clear MMSI and channel.",
+    "start_next_section": "guided_task_4"
+  },
+  "guided_task_4": {
+    "title": "Task 4: Mini Dialogue — Distress Message",
+    "instruction_en": "Listen carefully to the distress message. Then, repeat the key information: ship name, call sign, MMSI, and emergency type.",
+    "instruction_id": "Dengarkan dengan saksama pesan darurat. Lalu, ulangi informasi penting: nama kapal, tanda panggilan, MMSI, dan jenis keadaan darurat.",
+    "dialogue_en": "OS Lina: \"Mayday, Mayday, Mayday. This is MV ANTARA, Call Sign Alpha – November – Tango – Alpha – Romeo – Alpha. MMSI Fife – Too – Fife – Wun – Too – Tree – Fower – Fife – Six. Position: 10° South, 123° East. Fire in engine room. Request immediate assistance. Over.\" Captain Ray: \"Roger, MV ANTARA. Assistance on the way.\"",
+    "dialogue_id": "OS Lina: \"Mayday, Mayday, Mayday. Ini MV ANTARA, tanda panggilan Alpha – November – Tango – Alpha – Romeo – Alpha. MMSI Fife – Too – Fife – Wun – Too – Tree – Fower – Fife – Six. Posisi: 10° S, 123° E. Kebakaran di ruang mesin. Minta bantuan segera. Over.\" Captain Ray: \"Roger, MV ANTARA. Bantuan sedang dalam perjalanan.\"",
+    "audio_full": "/static/data/audio/guided/distress_full_en.wav",
+    "audio_key": "/static/data/audio/guided/distress_key_en.wav",
+    "audio_sample_response": "/static/data/audio/guided/distress_sample_response_en.wav",
+    "feedback_good": "Clear and precise. Well done, cadet!",
+    "start_next_section": "guided_wrapup"
+  },
+  "guided_wrapup": {
+    "title": "Guided Practice Wrap-up",
+    "text_en": "Well done, cadets! You’ve completed guided practice. You can now spell ship names, MMSI, and channel numbers, and even send a short distress message. In the next section, you’ll practice on your own.",
+    "text_id": "Kerja bagus, kadet! Kalian telah menyelesaikan latihan terbimbing. Sekarang kalian bisa mengeja nama kapal, MMSI, dan nomor saluran, bahkan mengirim pesan darurat singkat. Pada bagian berikutnya, kalian akan berlatih sendiri.",
+    "audio_en": "/static/data/audio/unit_1/guided_wrapup_en.wav",
+    "feedback_good": "Well done! Guided practice complete.",
+    "start_next_section": "authentic_intro"
+  },
+  "authentic_intro": {
+    "title": "Authentic Task: Radio Communication Simulation",
+    "text_en": "Now it’s time to try a real-life simulation. You will act as the radio operator. Follow the prompts and communicate clearly using the NATO alphabet and numbers.",
+    "text_id": "Sekarang saatnya mencoba simulasi nyata. Kalian akan berperan sebagai operator radio. Ikuti instruksi dan berkomunikasilah dengan jelas menggunakan alfabet dan angka NATO.",
+    "instruction_en": "Click Start Simulation to begin. You will hear a scenario and need to respond aloud.",
+    "instruction_id": "Klik Mulai Simulasi untuk memulai. Kalian akan mendengar sebuah skenario dan harus merespons dengan suara keras.",
+    "audio_en": "/static/data/audio/unit_1/authentic_intro_en.wav",
+    "start_next_section": "authentic_task_1"
+  },
+  "authentic_task_1": {
+    "title": "Simulation Task 1: Radio Check",
+    "scenario_en": "You are the radio operator on MV ANTARA. Captain asks you to respond to a radio check.",
+    "scenario_id": "Kamu adalah operator radio di MV ANTARA. Kapten memintamu untuk merespons pemeriksaan radio.",
+    "dialogue_en": "<strong>Captain Ray:</strong> “This is MV ANTARA, Call Sign Alpha – November – Tango – Alpha – Romeo – Alpha. Radio check, over.”",
+    "dialogue_id": "<strong>Captain Ray:</strong> “Ini MV ANTARA, tanda panggilan Alpha – November – Tango – Alpha – Romeo – Alpha. Pemeriksaan radio, over.”",
+    "instruction_en": "Speak aloud: 'Roger, MV ANTARA. Loud and clear.'",
+    "instruction_id": "Ucapkan dengan suara keras: 'Roger, MV ANTARA. Loud and clear.'",
+    "audio_call": "/static/data/audio/authentic/authentic_task1_captain_call_en.wav",
+    "feedback_good_en": "Loud and clear! Well done.",
+    "feedback_try_en": "Not clear enough. Try again with a stronger voice.",
+    "default_feedback": "Loud and clear! Well done.",
+    "start_next_section": "authentic_task_2"
+  },
+  "authentic_task_2": {
+    "title": "Simulation Task 2: Spelling Ship Name",
+    "scenario_en": "You are asked to spell your ship name to the port authority.",
+    "scenario_id": "Kamu diminta mengeja nama kapalmu kepada otoritas pelabuhan.",
+    "dialogue_en": "<strong>Captain Ray:</strong> “Please spell your ship name.” Your Task: “PACIFIC STAR → Papa – Alpha – Charlie – India – Foxtrot – India – Charlie – Sierra – Tango – Alpha – Romeo.”",
+    "dialogue_id": "<strong>Captain Ray:</strong> “Tolong eja nama kapal Anda.” Tugas Anda: “PACIFIC STAR → Papa – Alpha – Charlie – India – Foxtrot – India – Charlie – Sierra – Tango – Alpha – Romeo.”",
+    "instruction_en": "Speak aloud and spell the ship name clearly, letter by letter.",
+    "instruction_id": "Ucapkan dengan suara keras dan eja nama kapal dengan jelas, huruf demi huruf.",
+    "audio_example": "/static/data/audio/authentic/authentic_task2_example_spelling_en.wav",
+    "feedback_good_en": "Perfect spelling! Loud and clear.",
+    "feedback_try_en": "Some letters unclear. Try again.",
+    "default_feedback": "Perfect spelling! Loud and clear.",
+    "start_next_section": "authentic_task_3"
+  },
+  "authentic_task_3": {
+    "title": "Simulation Task 3: MMSI & Channel",
+    "scenario_en": "You are asked to state your ship's MMSI number and working channel.",
+    "scenario_id": "Kamu diminta menyebutkan nomor MMSI kapalmu dan saluran kerja.",
+    "dialogue_en": "<strong>Captain Ray:</strong> \"State your MMSI and channel number.\" Your Task: \"MMSI: Fife – Too – Fife – Wun – Too – Tree – Fow-er – Fife – Six. Channel Wun Six.\"",
+    "dialogue_id": "<strong>Captain Ray:</strong> \"Sebutkan MMSI dan nomor saluran Anda.\" Tugas Anda: \"MMSI: Fife – Too – Fife – Wun – Too – Tree – Fow-er – Fife – Six. Channel Wun Six.\"",
+    "instruction_en": "Speak aloud your MMSI and channel clearly.",
+    "instruction_id": "Ucapkan dengan jelas nomor MMSI dan saluran.",
+    "audio_example": "/static/data/audio/authentic/authentic_task3_example_mmsi_channel_en.wav",
+    "example_mmsi": "525123456",
+    "example_channel": "16",
+    "feedback_good_en": "Excellent! Clear MMSI and channel.",
+    "feedback_try_en": "Not clear enough. Try again.",
+    "default_feedback": "Excellent! Clear MMSI and channel.",
+    "start_next_section": "authentic_task_4"
+  },
+  "authentic_task_4": {
+    "title": "Simulation Task 4: Distress Message",
+    "scenario_en": "Your ship has an emergency. Send a distress message with ship name, call sign, MMSI, position, and type of emergency.",
+    "scenario_id": "Kapalmu mengalami keadaan darurat. Kirim pesan darurat dengan nama kapal, tanda panggilan, MMSI, posisi, dan jenis keadaan darurat.",
+    "dialogue_en": "OS Lina: “Mayday, Mayday, Mayday. This is MV ANTARA, Call Sign Alpha – November – Tango – Alpha – Romeo – Alpha, MMSI Fife – Too – Fife – Wun – Too – Tree – Fow-er – Fife – Six. Position: 10° South, 123° East. Fire in engine room. Request immediate assistance. Over.”",
+    "dialogue_id": "OS Lina: “Mayday, Mayday, Mayday. Ini MV ANTARA, tanda panggilan Alpha – November – Tango – Alpha – Romeo – Alpha, MMSI Fife – Too – Fife – Wun – Too – Tree – Fow-er – Fife – Six. Posisi: 10° Selatan, 123° Timur. Kebakaran di ruang mesin. Meminta bantuan segera. Over.”",
+    "instruction_en": "Speak aloud and send your own distress message using the same structure.",
+    "instruction_id": "Ucapkan dengan suara keras dan kirim pesan daruratmu sendiri dengan struktur yang sama.",
+    "audio_example": "/static/data/audio/authentic/authentic_task4_distress_example_en.wav",
+    "default_feedback": "Clear distress message. Well done, cadet.",
+    "feedback_good_en": "Clear distress message. Well done, cadet.",
+    "feedback_try_en": "Important info missing. Repeat with ship name, MMSI, and emergency type.",
+    "feedback_good_id": "Pesan darurat jelas. Kerja bagus, kadet.",
+    "feedback_try_id": "Informasi penting hilang. Ulangi dengan nama kapal, MMSI, dan jenis darurat.",
+    "start_next_section": "authentic_wrapup"
+  },
+  "authentic_wrapup": {
+    "title": "Authentic Task Wrap-up",
+    "text_en": "Excellent work, cadets! You’ve completed the full simulation: radio check, spelling ship names, stating MMSI & channels, and sending a distress message. These skills are vital for clear and safe communication at sea.",
+    "text_id": "Kerja bagus, kadet! Kalian telah menyelesaikan simulasi penuh: pemeriksaan radio, mengeja nama kapal, menyebutkan MMSI & saluran, serta mengirim pesan darurat. Keterampilan ini sangat penting untuk komunikasi yang jelas dan aman di laut.",
+    "audio_en": "/static/data/audio/unit_1/authentic_wrapup_en.wav",
+    "start_next_section": "assessment_intro"
+  },
+  "assessment_intro": {
+    "title": "Assessment: Unit 1 Quiz",
+    "text_en": "It’s time to check what you’ve learned. This quiz will test your spelling of ship names, numbers, MMSI, and emergency communication. Don’t worry — just do your best!",
+    "text_id": "Sekarang saatnya mengecek apa yang sudah kalian pelajari. Kuis ini akan menguji kemampuan kalian dalam mengeja nama kapal, angka, MMSI, dan komunikasi darurat. Jangan khawatir — lakukan yang terbaik!",
+    "audio_en": "/static/data/audio/unit_1/assessment_intro_en.wav",
+    "instruction_en": "Click [Start Quiz] to begin. Answer all questions carefully.",
+    "instruction_id": "Klik [Mulai Kuis] untuk memulai. Jawablah semua pertanyaan dengan saksama.",
+    "total_questions": 10,
+    "start_next_section": "assessment_letters"
+  },
+  "assessment_letters": {
+    "title": "Assessment: Letters Quiz",
+    "start_next_section": "assessment_numbers",
+    "start_next_section_path": "/learn/unit/1/assessment_numbers", 
+    "feedback_correct_en": "✔ Correct!",
+    "feedback_incorrect_en": "Not correct. The right answer is %s.",
+    "feedback_correct_id": "✔ Benar!",
+    "feedback_incorrect_id": "Tidak benar. Jawaban yang benar adalah %s.",
+    "questions": [
+      {
+        "letter": "A",
+        "text_en": "What is the correct NATO code word for the letter A?",
+        "text_id": "Apa kode NATO yang benar untuk huruf A?",
+        "options": [
+          { "text_en": "Alpha", "text_id": "Alpha", "correct": true },
+          { "text_en": "Able", "text_id": "Able", "correct": false },
+          { "text_en": "Atlas", "text_id": "Atlas", "correct": false }
+        ]
+      },
+      {
+        "letter": "B",
+        "text_en": "What is the correct NATO code word for the letter B?",
+        "text_id": "Apa kode NATO yang benar untuk huruf B?",
+        "options": [
+          { "text_en": "Bravo", "text_id": "Bravo", "correct": true },
+          { "text_en": "Baker", "text_id": "Baker", "correct": false },
+          { "text_en": "Beta", "text_id": "Beta", "correct": false }
+        ]
+      },
+      {
+        "letter": "C",
+        "text_en": "What is the correct NATO code word for the letter C?",
+        "text_id": "Apa kode NATO yang benar untuk huruf C?",
+        "options": [
+          { "text_en": "Charlie", "text_id": "Charlie", "correct": true },
+          { "text_en": "Coco", "text_id": "Coco", "correct": false },
+          { "text_en": "Cee", "text_id": "Cee", "correct": false }
+        ]
+      },
+      {
+        "letter": "D",
+        "text_en": "What is the correct NATO code word for the letter D?",
+        "text_id": "Apa kode NATO yang benar untuk huruf D?",
+        "options": [
+          { "text_en": "Delta", "text_id": "Delta", "correct": true },
+          { "text_en": "Dog", "text_id": "Dog", "correct": false },
+          { "text_en": "Duke", "text_id": "Duke", "correct": false }
+        ]
+      },
+      {
+        "letter": "E",
+        "text_en": "What is the correct NATO code word for the letter E?",
+        "text_id": "Apa kode NATO yang benar untuk huruf E?",
+        "options": [
+          { "text_en": "Echo", "text_id": "Echo", "correct": true },
+          { "text_en": "Ear", "text_id": "Ear", "correct": false },
+          { "text_en": "Eagle", "text_id": "Eagle", "correct": false }
+        ]
+      },
+      {
+        "letter": "F",
+        "text_en": "What is the correct NATO code word for the letter F?",
+        "text_id": "Apa kode NATO yang benar untuk huruf F?",
+        "options": [
+          { "text_en": "Foxtrot", "text_id": "Foxtrot", "correct": true },
+          { "text_en": "Fox", "text_id": "Fox", "correct": false },
+          { "text_en": "Far", "text_id": "Far", "correct": false }
+        ]
+      },
+      {
+        "letter": "G",
+        "text_en": "What is the correct NATO code word for the letter G?",
+        "text_id": "Apa kode NATO yang benar untuk huruf G?",
+        "options": [
+          { "text_en": "Golf", "text_id": "Golf", "correct": true },
+          { "text_en": "Gulf", "text_id": "Gulf", "correct": false },
+          { "text_en": "Gamma", "text_id": "Gamma", "correct": false }
+        ]
+      },
+      {
+        "letter": "H",
+        "text_en": "What is the correct NATO code word for the letter H?",
+        "text_id": "Apa kode NATO yang benar untuk huruf H?",
+        "options": [
+          { "text_en": "Hotel", "text_id": "Hotel", "correct": true },
+          { "text_en": "Halo", "text_id": "Halo", "correct": false },
+          { "text_en": "Hawk", "text_id": "Hawk", "correct": false }
+        ]
+      },
+      {
+        "letter": "I",
+        "text_en": "What is the correct NATO code word for the letter I?",
+        "text_id": "Apa kode NATO yang benar untuk huruf I?",
+        "options": [
+          { "text_en": "India", "text_id": "India", "correct": true },
+          { "text_en": "Indie", "text_id": "Indie", "correct": false },
+          { "text_en": "Iron", "text_id": "Iron", "correct": false }
+        ]
+      },
+      {
+        "letter": "J",
+        "text_en": "What is the correct NATO code word for the letter J?",
+        "text_id": "Apa kode NATO yang benar untuk huruf J?",
+        "options": [
+          { "text_en": "Juliett", "text_id": "Juliett", "correct": true },
+          { "text_en": "Juno", "text_id": "Juno", "correct": false },
+          { "text_en": "Jazz", "text_id": "Jazz", "correct": false }
+        ]
+      }
+    ]
+  },
+  "assessment_numbers": {
+    "title": "Assessment: Numbers Quiz",
+    "start_next_section": "assessment_spelling",
+    "start_next_section_path": "/learn/unit/1/assessment_spelling",
+    "feedback_correct_en": "✔ Correct! Well done.",
+    "feedback_incorrect_en": "Not quite. The correct answer is %s.",
+    "feedback_correct_id": "✔ Benar! Bagus.",
+    "feedback_incorrect_id": "Tidak benar. Jawaban yang benar adalah %s.",
+    "questions": [
+      {
+        "number": "0",
+        "text_en": "What is the correct pronunciation for the number 0 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 0 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Zero", "text_id": "Zero", "correct": true },
+          { "text_en": "Ought", "text_id": "Ought", "correct": false },
+          { "text_en": "Oh", "text_id": "Oh", "correct": false }
+        ]
+      },
+      {
+        "number": "1",
+        "text_en": "What is the correct pronunciation for the number 1 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 1 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Wun", "text_id": "Wun", "correct": true },
+          { "text_en": "One", "text_id": "Satu", "correct": false },
+          { "text_en": "Won", "text_id": "Won", "correct": false }
+        ]
+      },
+      {
+        "number": "2",
+        "text_en": "What is the correct pronunciation for the number 2 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 2 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Too", "text_id": "Too", "correct": true },
+          { "text_en": "Two", "text_id": "Dua", "correct": false },
+          { "text_en": "To", "text_id": "To", "correct": false }
+        ]
+      },
+      {
+        "number": "3",
+        "text_en": "What is the correct pronunciation for the number 3 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 3 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Tree", "text_id": "Tree", "correct": true },
+          { "text_en": "Three", "text_id": "Three", "correct": false },
+          { "text_en": "Tri", "text_id": "Tri", "correct": false }
+        ]
+      },
+      {
+        "number": "4",
+        "text_en": "What is the correct pronunciation for the number 4 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 4 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Fower", "text_id": "Fower", "correct": true },
+          { "text_en": "Four", "text_id": "Four", "correct": false },
+          { "text_en": "For", "text_id": "For", "correct": false }
+        ]
+      },
+      {
+        "number": "5",
+        "text_en": "What is the correct pronunciation for the number 5 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 5 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Fife", "text_id": "Fife", "correct": true },
+          { "text_en": "Five", "text_id": "Five", "correct": false },
+          { "text_en": "Fiv", "text_id": "Fiv", "correct": false }
+        ]
+      },
+      {
+        "number": "6",
+        "text_en": "What is the correct pronunciation for the number 6 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 6 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Six", "text_id": "Six", "correct": true },
+          { "text_en": "Sicks", "text_id": "Sicks", "correct": false },
+          { "text_en": "Sechs", "text_id": "Sechs", "correct": false }
+        ]
+      },
+      {
+        "number": "7",
+        "text_en": "What is the correct pronunciation for the number 7 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 7 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Seven", "text_id": "Seven", "correct": true },
+          { "text_en": "Sev-en", "text_id": "Sev-en", "correct": false },
+          { "text_en": "Severn", "text_id": "Severn", "correct": false }
+        ]
+      },
+      {
+        "number": "8",
+        "text_en": "What is the correct pronunciation for the number 8 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 8 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Eight", "text_id": "Eight", "correct": true },
+          { "text_en": "Ate", "text_id": "Ate", "correct": false },
+          { "text_en": "Ayte", "text_id": "Ayte", "correct": false }
+        ]
+      },
+      {
+        "number": "9",
+        "text_en": "What is the correct pronunciation for the number 9 in Maritime English?",
+        "text_id": "Apa pengucapan yang benar untuk angka 9 dalam Bahasa Inggris Maritim?",
+        "options": [
+          { "text_en": "Niner", "text_id": "Niner", "correct": true },
+          { "text_en": "Nine", "text_id": "Nine", "correct": false },
+          { "text_en": "Nein", "text_id": "Nein", "correct": false }
+        ]
+      }
+    ]
+  },
+  "assessment_spelling": {
+    "title": "Assessment: Spelling Ship Name",
+    "start_next_section": "assessment_wrapup",
+    "start_next_section_path": "/learn/unit/1/assessment_mmsi",
+    "questions": [
+      { "name": "LIMA", "codewords": ["Lima","India","Mike","Alpha"] },
+      { "name": "ANTARA", "codewords": ["Alpha","November","Tango","Alpha","Romeo","Alpha"] },
+      { "name": "SELAMAT", "codewords": ["Sierra","Echo","Lima","Alpha","Mike","Alpha","Tango"] },
+      { "name": "PACIFIC", "codewords": ["Papa","Alpha","Charlie","India","Foxtrot","India","Charlie"] },
+      { "name": "OCEAN", "codewords": ["Oscar","Charlie","Echo","Alpha","November"] },
+      { "name": "STAR", "codewords": ["Sierra","Tango","Alpha","Romeo"] },
+      { "name": "VICTOR", "codewords": ["Victor","India","Charlie","Tango","Oscar","Romeo"] },
+      { "name": "NOVA", "codewords": ["November","Oscar","Victor","Alpha"] },
+      { "name": "ORION", "codewords": ["Oscar","Romeo","India","Oscar","November"] },
+      { "name": "MIRAGE", "codewords": ["Mike","India","Romeo","Alpha","Golf","Echo"] }
+    ]
+  },
+  "assessment_mmsi": {
+    "total_questions": 10,
+    "next_path": "/learn/unit/1/assessment_channel",
+    "questions": [
+      { "mmsi": "525123456", "example_audio": "/static/data/audio/assessment/mmsi_525123456_en.wav",
+        "prompt_en": "Spell the MMSI number {mmsi} using Maritime English.",
+        "prompt_id": "Eja nomor MMSI {mmsi} dengan Bahasa Inggris Maritim."
+      },
+      { "mmsi": "123456789", "example_audio": "/static/data/audio/assessment/mmsi_123456789_en.wav" },
+      { "mmsi": "987654321", "example_audio": "/static/data/audio/assessment/mmsi_987654321_en.wav" },
+      { "mmsi": "111000222", "example_audio": "/static/data/audio/assessment/mmsi_111000222_en.wav" },
+      { "mmsi": "314159265", "example_audio": "/static/data/audio/assessment/mmsi_314159265_en.wav" },
+      { "mmsi": "200300400", "example_audio": "/static/data/audio/assessment/mmsi_200300400_en.wav" },
+      { "mmsi": "800700600", "example_audio": "/static/data/audio/assessment/mmsi_800700600_en.wav" },
+      { "mmsi": "444555666", "example_audio": "/static/data/audio/assessment/mmsi_444555666_en.wav" },
+      { "mmsi": "909090909", "example_audio": "/static/data/audio/assessment/mmsi_909090909_en.wav" },
+      { "mmsi": "001122334", "example_audio": "/static/data/audio/assessment/mmsi_001122334_en.wav" }
+    ]
+  },
+  "assessment_channel": {
+    "total_questions": 10,
+    "next_path": "/learn/unit/1/assessment_distress",
+    "correct_channel": "16",
+    "questions": [
+      {
+        "prompt_en": "What is the emergency channel number in Maritime Radio?",
+        "prompt_id": "Berapa nomor saluran darurat di Radio Maritim?",
+        "example_display": "CH 16",
+        "highlight_screen": "CH 16",
+        "options": ["Channel 12", "Channel 16", "Channel 21"],
+        "correct_index": 1
+      },
+      {
+        "prompt_en": "Which channel is commonly used for ship-to-ship communication?",
+        "prompt_id": "Saluran mana yang sering digunakan untuk komunikasi kapal-ke-kapal?",
+        "example_display": "CH 13",
+        "highlight_screen": "CH 13",
+        "options": ["Channel 6", "Channel 13", "Channel 70"],
+        "correct_index": 1
+      },
+      {
+        "prompt_en": "Which channel is reserved for digital selective calling (DSC)?",
+        "prompt_id": "Saluran mana yang dicadangkan untuk Digital Selective Calling (DSC)?",
+        "example_display": "CH 70",
+        "highlight_screen": "CH 70",
+        "options": ["Channel 16", "Channel 70", "Channel 13"],
+        "correct_index": 1
+      },
+      {
+        "prompt_en": "Which channel is used for port operations in many regions?",
+        "prompt_id": "Saluran mana yang digunakan untuk operasi pelabuhan di banyak wilayah?",
+        "example_display": "CH 12",
+        "highlight_screen": "CH 12",
+        "options": ["Channel 12", "Channel 16", "Channel 8"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which channel should you use to call for immediate assistance (distress)?",
+        "prompt_id": "Saluran mana yang harus digunakan untuk meminta bantuan segera (darurat)?",
+        "example_display": "CH 16",
+        "highlight_screen": "CH 16",
+        "options": ["Channel 16", "Channel 13", "Channel 10"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which channel is commonly assigned for bridge-to-bridge navigation safety?",
+        "prompt_id": "Saluran mana yang biasanya digunakan untuk keselamatan navigasi bridge-to-bridge?",
+        "example_display": "CH 13",
+        "highlight_screen": "CH 13",
+        "options": ["Channel 13", "Channel 70", "Channel 16"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which VHF channel is typically used for calling harbor authorities?",
+        "prompt_id": "Saluran VHF mana yang biasanya digunakan untuk memanggil otoritas pelabuhan?",
+        "example_display": "CH 12",
+        "highlight_screen": "CH 12",
+        "options": ["Channel 12", "Channel 14", "Channel 16"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which channel is used for safety broadcasts in some regions (note: varies by region)?",
+        "prompt_id": "Saluran mana yang digunakan untuk siaran keselamatan di beberapa wilayah (bervariasi)?",
+        "example_display": "CH 13",
+        "highlight_screen": "CH 13",
+        "options": ["Channel 13", "Channel 16", "Channel 67"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which channel is reserved internationally for distress and safety calling?",
+        "prompt_id": "Saluran mana yang dicadangkan secara internasional untuk panggilan darurat dan keselamatan?",
+        "example_display": "CH 16",
+        "highlight_screen": "CH 16",
+        "options": ["Channel 16", "Channel 70", "Channel 13"],
+        "correct_index": 0
+      },
+      {
+        "prompt_en": "Which channel is used for DSC alerting, closely related to safety procedures?",
+        "prompt_id": "Saluran mana yang digunakan untuk alerting DSC, berhubungan dengan prosedur keselamatan?",
+        "example_display": "CH 70",
+        "highlight_screen": "CH 70",
+        "options": ["Channel 70", "Channel 21", "Channel 16"],
+        "correct_index": 0
+      }
+    ]
+  },
+  "assessment_distress": {
+    "title": "Assessment: Distress & Emergency",
+    "total_questions": 10,
+    "next_path": "/learn/unit/1/assessment_call",
+    "questions": [
+      {
+        "prompt_en": "What phrase must be repeated three times to start a distress call?",
+        "prompt_id": "Frasa apa yang harus diulang tiga kali untuk memulai panggilan darurat?",
+        "options": ["Pan-Pan", "Mayday", "SOS"],
+        "correct_index": 1,
+        "highlight_red": true,
+        "feedback_en": "Correct! A distress call begins with 'Mayday, Mayday, Mayday.'",
+        "feedback_id": "Benar! Panggilan darurat dimulai dengan 'Mayday, Mayday, Mayday.'"
+      },
+      {
+        "prompt_en": "Which code word signals immediate assistance required (example selection)?",
+        "prompt_id": "Kode kata mana yang menandakan memerlukan bantuan segera?",
+        "options": ["Securité", "Mayday", "Pan-Pan"],
+        "correct_index": 1,
+        "feedback_en": "Mayday indicates distress needing immediate assistance.",
+        "feedback_id": "Mayday menunjukkan keadaan darurat yang membutuhkan bantuan segera."
+      },
+      {
+        "prompt_en": "When giving position in a distress call, which format is preferred?",
+        "prompt_id": "Saat memberi posisi dalam panggilan darurat, format mana yang disukai?",
+        "options": ["Approximate landmark only", "Latitude & Longitude", "Distance only"],
+        "correct_index": 1,
+        "feedback_en": "Latitude & Longitude is the preferred precise format.",
+        "feedback_id": "Lintang & Bujur adalah format yang lebih tepat."
+      },
+      {
+        "prompt_en": "Which item is essential in a distress message?",
+        "prompt_id": "Item mana yang penting dalam pesan darurat?",
+        "options": ["Ship name", "Engine power only", "Passenger list"],
+        "correct_index": 0,
+        "feedback_en": "Correct — ship name is essential (plus call sign, MMSI, position, emergency).",
+        "feedback_id": "Benar — nama kapal adalah penting (bersama tanda panggilan, MMSI, posisi, jenis darurat)."
+      },
+      {
+        "prompt_en": "How many times should the ship's name be spoken for clarity in an urgent report?",
+        "prompt_id": "Berapa kali nama kapal harus disebut untuk kejelasan dalam laporan mendesak?",
+        "options": ["Once", "Twice", "Repeat as needed, clearly once is standard"],
+        "correct_index": 2,
+        "feedback_en": "Clear repetition is important; say the name clearly (standard: once, but repeat if needed).",
+        "feedback_id": "Pengulangan jelas penting; sebutkan nama dengan jelas (standar: sekali, ulangi jika perlu)."
+      },
+      {
+        "prompt_en": "Which phrase confirms you heard the distress message (acknowledgement)?",
+        "prompt_id": "Frasa mana yang mengonfirmasi kamu mendengar pesan darurat (acknowledgement)?",
+        "options": ["Roger", "Over and out", "Say again"],
+        "correct_index": 0,
+        "feedback_en": "Roger is commonly used to acknowledge receipt.",
+        "feedback_id": "Roger digunakan untuk mengonfirmasi penerimaan."
+      },
+      {
+        "prompt_en": "What does 'Mayday relay' mean?",
+        "prompt_id": "Apa arti 'Mayday relay'?",
+        "options": ["A test call", "Relaying someone else's distress message", "Cancel distress"],
+        "correct_index": 1,
+        "feedback_en": "Correct — it's relaying another vessel's distress message.",
+        "feedback_id": "Benar — mengulangi/penerusan pesan darurat kapal lain."
+      },
+      {
+        "prompt_en": "Which number word is used for the digit '5' in a distress broadcast?",
+        "prompt_id": "Kata angka apa yang digunakan untuk digit '5' dalam siaran darurat?",
+        "options": ["Five", "Fife", "Fiver"],
+        "correct_index": 1,
+        "feedback_en": "In Maritime English '5' is pronounced 'Fife'.",
+        "feedback_id": "Dalam Bahasa Inggris Maritim '5' disebut 'Fife'."
+      },
+      {
+        "prompt_en": "If you cannot contact authorities on VHF 16, what is recommended next?",
+        "prompt_id": "Jika tidak bisa menghubungi otoritas di VHF 16, apa yang direkomendasikan selanjutnya?",
+        "options": ["Try DSC or other working channel and relay", "Stop trying", "Broadcast continuously on the same channel forever"],
+        "correct_index": 0,
+        "feedback_en": "Try DSC or another working channel and attempt to relay the distress via other means.",
+        "feedback_id": "Coba DSC atau saluran kerja lain dan usahakan meneruskan pesan darurat melalui cara lain."
+      },
+      {
+        "prompt_en": "Which detail is NOT necessary in the initial distress call?",
+        "prompt_id": "Detail mana yang TIDAK perlu dalam panggilan darurat awal?",
+        "options": ["Type of emergency", "Full passenger manifest", "Position"],
+        "correct_index": 1,
+        "feedback_en": "Full passenger manifest is not required initially; prioritize critical info (name, position, MMSI, emergency).",
+        "feedback_id": "Daftar penumpang lengkap tidak perlu pada awalnya; prioritaskan info kritis (nama, posisi, MMSI, darurat)."
+      }
+    ]
+  },
+  "assessment_call": {
+    "title": "Assessment: Call Sign Spelling",
+    "total_questions": 10,
+    "next_path": "/learn/unit/1/assessment_identify_emergency",
+    "questions": [
+      {
+        "call_sign": "ABC1",
+        "display": "ABC1",
+        "prompt_en": "Spell the call sign ABC1 using the NATO alphabet.",
+        "prompt_id": "Eja tanda panggilan ABC1 dengan alfabet NATO.",
+        "answer_en": "Alpha Bravo Charlie Wun",
+        "answer_id": "Alpha Bravo Charlie Wun",
+        "feedback_en": "Correct! ABC1 = Alpha – Bravo – Charlie – Wun.",
+        "feedback_id": "Benar! ABC1 = Alpha – Bravo – Charlie – Wun."
+      },
+      {
+        "call_sign": "MVX7",
+        "display": "MVX7",
+        "prompt_en": "Spell the call sign MVX7.",
+        "prompt_id": "Eja tanda panggilan MVX7.",
+        "answer_en": "Mike Victor Xray Wun",
+        "answer_id": "Mike Victor Xray Wun",
+        "feedback_en": "Correct! MVX7 = Mike – Victor – X-ray – Wun.",
+        "feedback_id": "Benar! MVX7 = Mike – Victor – X-ray – Wun."
+      },
+      {
+        "call_sign": "PQR9",
+        "display": "PQR9",
+        "prompt_en": "Spell the call sign PQR9.",
+        "prompt_id": "Eja tanda panggilan PQR9.",
+        "answer_en": "Papa Quebec Romeo Niner",
+        "answer_id": "Papa Quebec Romeo Niner",
+        "feedback_en": "Correct! PQR9 = Papa – Quebec – Romeo – Niner.",
+        "feedback_id": "Benar! PQR9 = Papa – Quebec – Romeo – Niner."
+      },
+      {
+        "call_sign": "SEA2",
+        "display": "SEA2",
+        "prompt_en": "Spell the call sign SEA2.",
+        "prompt_id": "Eja tanda panggilan SEA2.",
+        "answer_en": "Sierra Echo Alpha Too",
+        "answer_id": "Sierra Echo Alpha Too",
+        "feedback_en": "Correct! SEA2 = Sierra – Echo – Alpha – Too.",
+        "feedback_id": "Benar! SEA2 = Sierra – Echo – Alpha – Too."
+      },
+      {
+        "call_sign": "LMA5",
+        "display": "LMA5",
+        "prompt_en": "Spell the call sign LMA5.",
+        "prompt_id": "Eja tanda panggilan LMA5.",
+        "answer_en": "Lima Mike Alpha Fife",
+        "answer_id": "Lima Mike Alpha Fife",
+        "feedback_en": "Correct! LMA5 = Lima – Mike – Alpha – Fife.",
+        "feedback_id": "Benar! LMA5 = Lima – Mike – Alpha – Fife."
+      },
+      {
+        "call_sign": "TRN0",
+        "display": "TRN0",
+        "prompt_en": "Spell the call sign TRN0.",
+        "prompt_id": "Eja tanda panggilan TRN0.",
+        "answer_en": "Tango Romeo November Zeero",
+        "answer_id": "Tango Romeo November Zeero",
+        "feedback_en": "Correct! TRN0 = Tango – Romeo – November – Zeero.",
+        "feedback_id": "Benar! TRN0 = Tango – Romeo – November – Zeero."
+      },
+      {
+        "call_sign": "KLM3",
+        "display": "KLM3",
+        "prompt_en": "Spell the call sign KLM3.",
+        "prompt_id": "Eja tanda panggilan KLM3.",
+        "answer_en": "Kilo Lima Mike Tree",
+        "answer_id": "Kilo Lima Mike Tree",
+        "feedback_en": "Correct! KLM3 = Kilo – Lima – Mike – Tree.",
+        "feedback_id": "Benar! KLM3 = Kilo – Lima – Mike – Tree."
+      },
+      {
+        "call_sign": "XRQ8",
+        "display": "XRQ8",
+        "prompt_en": "Spell the call sign XRQ8.",
+        "prompt_id": "Eja tanda panggilan XRQ8.",
+        "answer_en": "Xray Romeo Quebec Eight",
+        "answer_id": "Xray Romeo Quebec Eight",
+        "feedback_en": "Correct! XRQ8 = X-ray – Romeo – Quebec – Eight.",
+        "feedback_id": "Benar! XRQ8 = X-ray – Romeo – Quebec – Eight."
+      },
+      {
+        "call_sign": "BND6",
+        "display": "BND6",
+        "prompt_en": "Spell the call sign BND6.",
+        "prompt_id": "Eja tanda panggilan BND6.",
+        "answer_en": "Bravo November Delta Six",
+        "answer_id": "Bravo November Delta Six",
+        "feedback_en": "Correct! BND6 = Bravo – November – Delta – Six.",
+        "feedback_id": "Benar! BND6 = Bravo – November – Delta – Six."
+      },
+      {
+        "call_sign": "QRS4",
+        "display": "QRS4",
+        "prompt_en": "Spell the call sign QRS4.",
+        "prompt_id": "Eja tanda panggilan QRS4.",
+        "answer_en": "Quebec Romeo Sierra Fower",
+        "answer_id": "Quebec Romeo Sierra Fower",
+        "feedback_en": "Correct! QRS4 = Quebec – Romeo – Sierra – Fower.",
+        "feedback_id": "Benar! QRS4 = Quebec – Romeo – Sierra – Fower."
+      }
+    ]
+  },
+  "assessment_identify_emergency": {
+    "title": "Assessment: Identify Emergency",
+    "next_path": "/learn/unit/1/assessment_dialogue",
+    "questions": [
+      {
+        "prompt_en": "In this distress message: 'Fire in engine room', what type of emergency is it?",
+        "prompt_id": "Dalam pesan darurat ini: 'Kebakaran di ruang mesin', jenis keadaan darurat apa itu?",
+        "emergency_flag": true,
+        "options": [
+          { "value": "collision", "label_en": "Collision", "label_id": "Tabrakan" },
+          { "value": "fire", "label_en": "Fire", "label_id": "Kebakaran" },
+          { "value": "flood", "label_en": "Flooding", "label_id": "Banjir" }
+        ],
+        "correct": "fire",
+        "feedback_correct_en": "Correct! Fire in engine room = Fire emergency.",
+        "feedback_correct_id": "Benar! Kebakaran di ruang mesin = Keadaan darurat kebakaran.",
+        "feedback_wrong_en": "Not quite. The correct answer is Fire.",
+        "feedback_wrong_id": "Belum tepat. Jawaban yang benar: Kebakaran."
+      },
+      {
+        "prompt_en": "If the message says 'Taking on water, flooding in the stern', what is the emergency type?",
+        "prompt_id": "Jika pesan mengatakan 'Kapal kebanjiran di haluan', jenis darurat apa itu?",
+        "emergency_flag": true,
+        "options": [
+          { "value": "flood", "label_en": "Flooding", "label_id": "Banjir" },
+          { "value": "medical", "label_en": "Medical", "label_id": "Medis" },
+          { "value": "collision", "label_en": "Collision", "label_id": "Tabrakan" }
+        ],
+        "correct": "flood",
+        "feedback_correct_en": "Correct — this is a flooding emergency.",
+        "feedback_correct_id": "Benar — ini adalah keadaan darurat kebanjiran.",
+        "feedback_wrong_en": "Not quite. The correct answer is Flooding.",
+        "feedback_wrong_id": "Belum tepat. Jawaban yang benar: Banjir."
+      },
+      {
+        "prompt_en": "Which phrase indicates a life-threatening situation requiring immediate assistance?",
+        "prompt_id": "Frasa mana yang menunjukkan situasi mengancam jiwa yang memerlukan bantuan segera?",
+        "options": [
+          { "value": "mayday", "label_en": "Mayday, Mayday, Mayday", "label_id": "Mayday, Mayday, Mayday" },
+          { "value": "panpan", "label_en": "Pan-Pan", "label_id": "Pan-Pan" },
+          { "value": "secu", "label_en": "Security call", "label_id": "Panggilan keamanan" }
+        ],
+        "correct": "mayday",
+        "feedback_correct_en": "Correct — 'Mayday' repeated three times signals distress.",
+        "feedback_correct_id": "Benar — 'Mayday' diulang tiga kali menandakan darurat.",
+        "feedback_wrong_en": "Not correct. The correct phrase is Mayday.",
+        "feedback_wrong_id": "Salah. Frasa yang benar: Mayday."
+      },
+      {
+        "prompt_en": "If the call reports 'Man overboard at 12:34, latitude ...', what emergency type is this?",
+        "prompt_id": "Jika panggilan melaporkan 'Man overboard pada 12:34, lintang ...', jenis darurat apa ini?",
+        "options": [
+          { "value": "medical", "label_en": "Medical", "label_id": "Medis" },
+          { "value": "man_overboard", "label_en": "Man overboard", "label_id": "Orang jatuh ke laut" },
+          { "value": "fire", "label_en": "Fire", "label_id": "Kebakaran" }
+        ],
+        "correct": "man_overboard",
+        "feedback_correct_en": "Correct — this is a man overboard emergency.",
+        "feedback_correct_id": "Benar — ini darurat orang jatuh ke laut.",
+        "feedback_wrong_en": "Not quite. The correct answer is Man overboard.",
+        "feedback_wrong_id": "Belum tepat. Jawaban: Orang jatuh ke laut."
+      },
+      {
+        "prompt_en": "The report says 'Engine room fire—abandon ship may be required'. What priority is this?",
+        "prompt_id": "Laporan mengatakan 'Kebakaran ruang mesin—mungkin perlu meninggalkan kapal'. Prioritas apa ini?",
+        "options": [
+          { "value": "low", "label_en": "Routine", "label_id": "Rutin" },
+          { "value": "high", "label_en": "Immediate / Distress", "label_id": "Segera / Darurat" },
+          { "value": "info", "label_en": "Information only", "label_id": "Hanya informasi" }
+        ],
+        "correct": "high",
+        "feedback_correct_en": "Correct — this requires immediate distress response.",
+        "feedback_correct_id": "Benar — ini memerlukan respons darurat segera.",
+        "feedback_wrong_en": "Not correct. This is Immediate / Distress priority.",
+        "feedback_wrong_id": "Salah. Ini prioritas Segera / Darurat."
+      },
+      {
+        "prompt_en": "If a message says 'Collision—vessel disabled', what should the operator consider first?",
+        "prompt_id": "Jika pesan mengatakan 'Tabrakan—kapal tidak bisa bergerak', apa yang harus dipertimbangkan operator pertama kali?",
+        "options": [
+          { "value": "salvage", "label_en": "Salvage only", "label_id": "Hanya penyelamatan" },
+          { "value": "safety", "label_en": "Immediate safety / Mayday if lives at risk", "label_id": "Keselamatan segera / Mayday jika nyawa terancam" },
+          { "value": "cargo", "label_en": "Cargo status", "label_id": "Status kargo" }
+        ],
+        "correct": "safety",
+        "feedback_correct_en": "Correct — safety of persons is priority; may escalate to Mayday.",
+        "feedback_correct_id": "Benar — keselamatan orang menjadi prioritas; dapat ditingkatkan ke Mayday.",
+        "feedback_wrong_en": "Not quite. Priority is immediate safety and may escalate to Mayday.",
+        "feedback_wrong_id": "Belum tepat. Prioritas adalah keselamatan segera dan bisa menjadi Mayday."
+      },
+      {
+        "prompt_en": "Which emergency type fits 'Severe medical emergency onboard, unconscious crew'?",
+        "prompt_id": "Jenis darurat mana sesuai dengan 'Darurat medis parah di kapal, awak tidak sadar'?",
+        "options": [
+          { "value": "medical", "label_en": "Medical", "label_id": "Medis" },
+          { "value": "fire", "label_en": "Fire", "label_id": "Kebakaran" },
+          { "value": "collision", "label_en": "Collision", "label_id": "Tabrakan" }
+        ],
+        "correct": "medical",
+        "feedback_correct_en": "Correct — medical emergency requires immediate medical assistance.",
+        "feedback_correct_id": "Benar — darurat medis membutuhkan bantuan medis segera.",
+        "feedback_wrong_en": "Not correct. The right answer is Medical.",
+        "feedback_wrong_id": "Salah. Jawaban yang benar: Medis."
+      },
+      {
+        "prompt_en": "The message 'Pollution: oil spill' falls under which category?",
+        "prompt_id": "Pesan 'Pencemaran: tumpahan minyak' termasuk kategori mana?",
+        "options": [
+          { "value": "pollution", "label_en": "Pollution", "label_id": "Pencemaran" },
+          { "value": "fire", "label_en": "Fire", "label_id": "Kebakaran" },
+          { "value": "man_overboard", "label_en": "Man overboard", "label_id": "Orang jatuh ke laut" }
+        ],
+        "correct": "pollution",
+        "feedback_correct_en": "Correct — pollution incidents require environmental response.",
+        "feedback_correct_id": "Benar — insiden pencemaran memerlukan respons lingkungan.",
+        "feedback_wrong_en": "Not quite. The correct answer is Pollution.",
+        "feedback_wrong_id": "Belum tepat. Jawaban: Pencemaran."
+      },
+      {
+        "prompt_en": "Which is an example of a non-life-threatening but urgent problem?",
+        "prompt_id": "Mana contoh masalah yang tidak mengancam jiwa tetapi mendesak?",
+        "options": [
+          { "value": "power_loss", "label_en": "Power loss (no immediate danger to life)", "label_id": "Kehilangan tenaga (tidak membahayakan jiwa saat ini)" },
+          { "value": "mayday", "label_en": "Mayday", "label_id": "Mayday" },
+          { "value": "man_overboard", "label_en": "Man overboard", "label_id": "Orang jatuh ke laut" }
+        ],
+        "correct": "power_loss",
+        "feedback_correct_en": "Correct — power loss can be urgent but not immediately life-threatening.",
+        "feedback_correct_id": "Benar — kehilangan tenaga bisa mendesak tetapi tidak langsung mengancam nyawa.",
+        "feedback_wrong_en": "Not correct. The best match is Power loss.",
+        "feedback_wrong_id": "Salah. Jawaban yang benar: Kehilangan tenaga."
+      },
+      {
+        "prompt_en": "If a vessel reports 'Explosion in engine room', which emergency category is appropriate?",
+        "prompt_id": "Jika kapal melaporkan 'Ledakan di ruang mesin', kategori darurat mana yang tepat?",
+        "emergency_flag": true,
+        "options": [
+          { "value": "explosion", "label_en": "Explosion / Fire", "label_id": "Ledakan / Kebakaran" },
+          { "value": "pollution", "label_en": "Pollution", "label_id": "Pencemaran" },
+          { "value": "medical", "label_en": "Medical", "label_id": "Medis" }
+        ],
+        "correct": "explosion",
+        "feedback_correct_en": "Correct — explosion is a major emergency (often also fire).",
+        "feedback_correct_id": "Benar — ledakan adalah darurat besar (sering juga kebakaran).",
+        "feedback_wrong_en": "Not correct. The correct answer is Explosion / Fire.",
+        "feedback_wrong_id": "Salah. Jawaban yang benar: Ledakan / Kebakaran."
+      }
+    ]
+  },
+  "assessment_dialogue":{
+    "title": "Assessment: Short Dialogue Completion",
+    "next_path": "/learn/unit/1/assessment_open_ended",
+    "prompts": [
+      {
+        "prompt_en": "Captain Ray: \"This is MV ANTARA, Call Sign Alpha – November – Tango – Alpha – Romeo – Alpha. Radio check, over.\" Your Task: Complete the response from the operator.",
+        "prompt_id": "Kapten: \"Ini MV ANTARA, Tanda Panggilan Alpha – November – Tango – Alpha – Romeo – Alpha. Radio check, over.\" Tugasmu: Lengkapi jawaban operator.",
+        "accepted_answers": ["Roger, MV ANTARA. Loud and clear", "Roger MV ANTARA loud and clear", "roger mv antara loud and clear"],
+        "accept_keywords": ["roger", "mv antara", "loud and clear"],
+        "feedback_correct_en": "Correct! Response: 'Roger, MV ANTARA. Loud and clear.'",
+        "feedback_wrong_en": "Not correct. Correct response: 'Roger, MV ANTARA. Loud and clear.'",
+        "feedback_correct_id": "Benar! Jawaban: 'Roger, MV ANTARA. Loud and clear.'",
+        "feedback_wrong_id": "Belum tepat. Jawaban yang benar: 'Roger, MV ANTARA. Loud and clear.'",
+        "example_audio": "/static/data/audio/assessment/dialogue/q1_example.wav"
+      },
+      {
+        "prompt_en": "Captain Ray: \"State your MMSI and channel.\" Your Task: Complete with an example reply.",
+        "prompt_id": "Kapten: \"Sebutkan MMSI dan saluranmu.\" Tugasmu: Lengkapi dengan contoh jawaban.",
+        "accepted_answers": ["MMSI 525123456. Channel Wun Six", "mmsi 525123456 channel wun six"],
+        "accept_keywords": ["mmsi", "channel", "wun six"],
+        "feedback_correct_en": "Good — you included MMSI and channel clearly.",
+        "feedback_wrong_en": "Include MMSI and channel, e.g. 'MMSI 525123456. Channel Wun Six.'",
+        "example_audio": "/static/data/audio/assessment/dialogue/q2_example.wav"
+      },
+      {
+        "prompt_en": "Captain Ray: \"Please spell PACIFIC STAR.\" Your Task: Begin the spelling reply (first three code words).",
+        "prompt_id": "Kapten: \"Tolong eja PACIFIC STAR.\" Tugasmu: Mulai jawaban pengejaan (tiga kata kode pertama).",
+        "accepted_answers": ["Papa Alpha Charlie", "papa alpha charlie"],
+        "feedback_correct_en": "Correct — Papa Alpha Charlie ...",
+        "feedback_wrong_en": "Try: 'Papa Alpha Charlie ...'",
+        "example_audio": "/static/data/audio/assessment/dialogue/q3_example.wav"
+      },
+      {
+        "prompt_en": "Captain Ray: \"Describe the problem: 'Taking on water'\" Your Task: Short reply acknowledging the emergency.",
+        "prompt_id": "Kapten: \"Jelaskan masalah: 'Kapal kebanjiran'\" Tugasmu: Jawaban singkat mengakui darurat.",
+        "accepted_answers": ["We are taking on water. Request assistance", "taking on water request assistance", "we are taking on water request assistance"],
+        "accept_keywords": ["taking on water", "request assistance"],
+        "feedback_correct_en": "Good — you acknowledged taking on water and requested assistance.",
+        "feedback_wrong_en": "Include 'taking on water' and request assistance."
+      },
+      {
+        "prompt_en": "Captain Ray: \"What is your position?\" Your Task: Give an example position phrase (e.g., '10 degrees South, 123 degrees East').",
+        "prompt_id": "Kapten: \"Apa posisimu?\" Tugasmu: Beri contoh frasa posisi (misal: '10 derajat Selatan, 123 derajat Timur').",
+        "accept_patterns": ["\\d+\\s*degrees?\\s*(south|north)\\s*,\\s*\\d+\\s*degrees?\\s*(east|west)"],
+        "feedback_correct_en": "Correct — position format is fine.",
+        "feedback_wrong_en": "Use a coordinates phrase like '10 degrees South, 123 degrees East'."
+      },
+      {
+        "prompt_en": "Captain Ray: \"Report the emergency type.\" Your Task: Name the emergency in a short phrase.",
+        "prompt_id": "Kapten: \"Laporkan jenis darurat.\" Tugasmu: Sebutkan jenis darurat singkat.",
+        "accepted_answers": ["fire in engine room", "fire", "flooding", "man overboard", "medical emergency"],
+        "feedback_correct_en": "Correct — well reported the emergency type.",
+        "feedback_wrong_en": "Give the emergency type, e.g. 'Fire in engine room' or 'Man overboard'."
+      },
+      {
+        "prompt_en": "Captain Ray: \"Repeat the distress phrase.\" Your Task: Type the correct opening for a distress (three words).",
+        "prompt_id": "Kapten: \"Ulangi frasa darurat.\" Tugasmu: Ketik pembuka darurat yang benar (tiga kata).",
+        "accepted_answers": ["mayday mayday mayday", "mayday, mayday, mayday"],
+        "feedback_correct_en": "Correct — 'Mayday, Mayday, Mayday'.",
+        "feedback_wrong_en": "The correct opening is 'Mayday, Mayday, Mayday'."
+      },
+      {
+        "prompt_en": "Captain Ray: \"Confirm ship name and call sign.\" Your Task: Type a short confirmation (e.g., 'MV ANTARA, Call Sign Alpha-November-Tango-...').",
+        "prompt_id": "Kapten: \"Konfirmasi nama kapal dan tanda panggilan.\" Tugasmu: Ketik konfirmasi singkat.",
+        "accept_keywords": ["mv antara", "call sign"],
+        "feedback_correct_en": "Good — you confirmed ship name and call sign.",
+        "feedback_wrong_en": "Include ship name (MV ANTARA) and the phrase 'call sign'."
+      },
+      {
+        "prompt_en": "Captain Ray: \"State 'Loud and clear' if you can hear me.\" Your Task: Reply with the phrase if audible.",
+        "prompt_id": "Kapten: \"Katakan 'Loud and clear' jika kamu bisa mendengar saya.\" Tugasmu: Balas dengan frasa itu jika terdengar.",
+        "accepted_answers": ["loud and clear", "roger loud and clear", "roger loud & clear"],
+        "feedback_correct_en": "Correct — 'Loud and clear.'",
+        "feedback_wrong_en": "Reply with 'Loud and clear' or similar."
+      },
+      {
+        "prompt_en": "Captain Ray: \"Final short response: confirm readiness to switch channel.\" Your Task: Type a short reply like 'Ready to switch to Channel Wun Six'.",
+        "prompt_id": "Kapten: \"Jawaban singkat akhir: konfirmasi siap pindah saluran.\" Tugasmu: Ketik jawaban singkat, misal 'Siap pindah ke Saluran Wun Six'.",
+        "accepted_answers": ["ready to switch to channel wun six", "ready to switch to channel 16", "ready to switch to channel wun six."],
+        "accept_keywords": ["ready to switch", "channel", "wun six"],
+        "feedback_correct_en": "Good — you confirmed readiness to switch channel.",
+        "feedback_wrong_en": "Confirm readiness, e.g. 'Ready to switch to Channel Wun Six'."
+      }
+    ]
+  },
+  "assessment_open_ended":{
+    "id": "assessment_open_ended_set",
+    "title": "Open-ended Assessment",
+    "next_path": "/learn/unit/1/assessment_wrapup",
+    "questions": [
+      {
+        "id": "q1",
+        "prompt_en": "Scenario 1: Your engine room is on fire. Send a short distress message including Ship Name, Call Sign, MMSI, Position, and Emergency.",
+        "prompt_id": "Skenario 1: Ruang mesin terbakar. Kirim pesan darurat singkat yang mencakup Nama Kapal, Tanda Panggilan, MMSI, Posisi, dan Jenis Darurat.",
+        "example_audio": "/static/data/audio/assessment/open_q1_example.wav",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q2",
+        "prompt_en": "Scenario 2: You have a person overboard. Send a short distress message with essential details.",
+        "prompt_id": "Skenario 2: Ada orang jatuh ke laut. Kirim pesan darurat singkat dengan detail penting.",
+        "example_audio": "/static/data/audio/assessment/open_q2_example.wav",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q3",
+        "prompt_en": "Scenario 3: Collision with another vessel. State ship name, call sign, MMSI and type of emergency.",
+        "prompt_id": "Skenario 3: Tabrakan dengan kapal lain. Sebutkan nama kapal, tanda panggilan, MMSI, dan jenis darurat.",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q4",
+        "prompt_en": "Scenario 4: Fire reported in the engine room while at position 10°S 123°E. Send the distress message.",
+        "prompt_id": "Skenario 4: Kebakaran dilaporkan di ruang mesin pada posisi 10°S 123°E. Kirim pesan darurat.",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q5",
+        "prompt_en": "Scenario 5: Taking on water — bilge flooding. Send a concise distress message.",
+        "prompt_id": "Skenario 5: Kapal bocor, ruang bak penumpukan air. Kirim pesan darurat singkat.",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q6",
+        "prompt_en": "Scenario 6: Medical emergency on board. Provide ship name, MMSI, and nature of emergency.",
+        "prompt_id": "Skenario 6: Darurat medis di kapal. Sertakan nama kapal, MMSI, dan jenis darurat.",
+        "expected_fields": ["ship","mmsi","emergency"]
+      },
+      {
+        "id": "q7",
+        "prompt_en": "Scenario 7: You see another vessel sinking nearby. Send a Mayday including position and brief details.",
+        "prompt_id": "Skenario 7: Melihat kapal lain tenggelam. Kirim Mayday termasuk posisi dan detail singkat.",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      },
+      {
+        "id": "q8",
+        "prompt_en": "Scenario 8: Engine failure, drifting near shoals. State MMSI, position and request assistance.",
+        "prompt_id": "Skenario 8: Mesin mati, melayang mendekati karang. Sebutkan MMSI, posisi, dan minta bantuan.",
+        "expected_fields": ["mmsi","position","emergency"]
+      },
+      {
+        "id": "q9",
+        "prompt_en": "Scenario 9: Fire in cargo hold with smoke. Include ship name, call sign, and brief emergency type.",
+        "prompt_id": "Skenario 9: Kebakaran di ruang kargo dengan asap. Sertakan nama kapal, tanda panggilan, dan jenis darurat singkat.",
+        "expected_fields": ["ship","callsign","emergency"]
+      },
+      {
+        "id": "q10",
+        "prompt_en": "Scenario 10: Final: Compose a full distress message including Ship Name, Call Sign, MMSI, Position, and Type of Emergency.",
+        "prompt_id": "Skenario 10: Akhir: Buat pesan darurat lengkap mencakup Nama Kapal, Tanda Panggilan, MMSI, Posisi, dan Jenis Darurat.",
+        "example_audio": "/static/data/audio/assessment/open_q10_example.wav",
+        "expected_fields": ["ship","callsign","mmsi","position","emergency"]
+      }
+    ]
+  }
+}

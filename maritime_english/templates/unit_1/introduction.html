@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Unit 1 - Introduction: Spelling and Numbers{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/units/unit_1_introduction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 intro-scene-container" aria-live="polite">
+  <div class="intro-scene shadow-lg" role="region" aria-label="Unit 1 introduction">
+
+    <!-- Avatar -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="captain-ray">
+
+    <!-- Dialogue box -->
+    <div class="dialogue-box" aria-labelledby="dialogue-text" role="article">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div id="dialogue-content">
+        <p id="dialogue-text" class="no-cursor" tabindex="0" aria-live="polite"></p>
+      </div>
+
+      <div class="audio-control" aria-hidden="false">
+        <button id="audio-btn" class="audio-play-btn" aria-label="Play introduction audio" title="Play">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="next-btn" class="btn btn-primary" aria-label="Next sentence">Next <i class="fas fa-chevron-right ms-1"></i></button>
+      </div>
+    </div>
+
+    <!-- Continue Button (visible but disabled until last sentence) -->
+    <div class="continue-container text-center">
+      <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}"
+         id="continue-btn" class="continue-btn btn-disabled" aria-disabled="true">
+         Continue to Warm-up <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- audio element (keep audio src set by JS) -->
+  <audio id="intro-audio" preload="auto"></audio>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/unit_1_introduction.js') }}" defer></script>
+{% endblock %}

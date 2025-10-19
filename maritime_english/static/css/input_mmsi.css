@@ -1,0 +1,133 @@
+/* unit_1_mmsi.css
+   MMSI Examples page styling
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap');
+
+:root {
+  --navy:#1E3A8A;
+  --bright:#2563EB;
+  --green:#10B981;
+  --panel:#34D399;
+  --soft:#F9FAFB;
+  --text:#111827;
+  --pill:#E5E7EB;
+}
+
+body { font-family:'Open Sans', sans-serif; background:var(--soft); color:var(--text); }
+.mmsi-page { max-width:1100px; margin:0 auto; }
+
+.mmsi-scene {
+  position:relative;
+  background: linear-gradient(180deg, var(--navy) 0%, #172554 100%);
+  border-radius:16px;
+  padding:2rem;
+  overflow:hidden;
+  box-shadow: 0 10px 28px rgba(11,61,145,0.25);
+}
+
+/* decorative */
+.radio-bg { position:absolute; inset:0; background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.02), transparent 30%); z-index:1; pointer-events:none; }
+
+/* avatar */
+.avatar-captain {
+  position:absolute; left:20px; bottom:14px; width:120px; z-index:3; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
+}
+
+/* instruction box */
+.instruction-box {
+  position:relative; width:68%; margin:0 auto 1rem auto; background: rgba(255,255,255,0.92); border-radius:12px; padding:1rem 1.25rem; text-align:center; box-shadow:0 6px 16px rgba(0,0,0,0.18); z-index:4;
+}
+.instruction-box .lead { margin:0; font-size:18px; line-height:1.6; color:var(--text); }
+.lang-toggle { position:absolute; top:10px; right:16px; }
+.toggle-pill { background:var(--pill); color:#111827; border:none; border-radius:999px; padding:6px 12px; font-family:'Montserrat',sans-serif; font-weight:700; cursor:pointer; }
+
+/* cards area */
+.cards-area { display:flex; gap:22px; justify-content:center; align-items:flex-start; margin-top:12px; z-index:4; flex-wrap:wrap; }
+
+/* ship card */
+.ship-card { width: 360px; border-radius:12px; padding:14px; box-shadow: 0 8px 20px rgba(0,0,0,0.18); color:#fff; position:relative; display:flex; flex-direction:column; gap:12px; }
+.card-blue { background: linear-gradient(180deg, var(--bright), #1b63d4); }
+.card-green { background: linear-gradient(180deg, var(--green), #0e9a63); }
+
+.card-header { display:flex; justify-content:space-between; align-items:center; font-weight:700; font-family:'Montserrat',sans-serif; font-size:16px; }
+.ship-name { text-transform:uppercase; letter-spacing:0.6px; }
+.ship-icon { font-size:20px; opacity:0.95; }
+
+.card-body { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.mmsi-number { font-family:'Montserrat',sans-serif; font-weight:800; font-size:22px; letter-spacing:2px; background: rgba(255,255,255,0.08); padding:10px 12px; border-radius:8px; min-width:180px; text-align:center; }
+
+/* play audio button on card */
+.btn-audio {
+  width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,0.95); color:var(--bright); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.14s, box-shadow 0.14s;
+}
+.btn-audio.playing { animation: vibrate 0.36s linear infinite; box-shadow: 0 8px 20px rgba(37,99,235,0.18); }
+@keyframes vibrate {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-2px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+/* practice area */
+.practice-area { margin-top:16px; display:flex; gap:12px; justify-content:center; z-index:4; }
+.btn-replay { background:var(--bright); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+.btn-replay:hover { transform: translateY(-3px); }
+
+/* feedback bubble */
+.feedback-bubble { position:absolute; left:140px; bottom:120px; max-width:280px; background:rgba(255,255,255,0.95); border-radius:12px; padding:10px 12px; box-shadow:0 8px 20px rgba(0,0,0,0.18); z-index:6; animation: popIn 0.36s ease; }
+.fb-arrow { position:absolute; left:12px; bottom:-10px; width:0;height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid rgba(255,255,255,0.95); }
+.fb-content { font-size:15px; color:var(--text); }
+
+/* footer next */
+.footer-cta { margin-top:18px; display:flex; justify-content:center; z-index:4; }
+.btn-next { width:70%; max-width:420px; background:var(--green); color:#fff; border:none; font-family:'Montserrat',sans-serif; font-weight:700; font-size:18px; padding:12px 16px; border-radius:12px; cursor:pointer; box-shadow:0 8px 20px rgba(16,185,129,0.18); transform:translateY(12px); opacity:0; animation: slideUpIn 0.6s 0.2s forwards; }
+.btn-next:hover { background:#0e996a; transform: translateY(8px); }
+
+/* utility */
+.visually-hidden { position:absolute !important; height:1px;width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; border:0; padding:0; margin:-1px; }
+.pop-visible { animation: popIn 0.36s ease; }
+@keyframes popIn { from { opacity:0; transform: scale(0.92) translateY(6px);} to { opacity:1; transform: scale(1) translateY(0);} }
+
+/* responsive */
+@media (max-width:900px) {
+  .cards-area { gap:12px; flex-direction:column; align-items:center; }
+  .instruction-box { width:90%; }
+  .feedback-bubble { left:12px; bottom:140px; }
+  .avatar-captain { display:none; }
+}
+@media (max-width:576px) {
+  .ship-card { width: 92%; }
+  .mmsi-number { font-size:18px; }
+  .btn-next { width:90%; }
+}
+
+/* DEBUG & FIX: Pastikan Next/Continue selalu terlihat di atas */
+.footer-cta, .continue-container {
+  z-index: 1200 !important; /* pastikan berada di atas elemen dekoratif */
+  position: relative;       /* agar z-index berlaku */
+}
+
+/* Pastikan tombol Next tidak tetap tersembunyi karena opacity/animation */
+.footer-cta .btn-next,
+.continue-container .continue-btn,
+#continue-btn {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  pointer-events: auto !important;
+}
+
+/* Beri border / outline sementara untuk debugging visual */
+.footer-cta .btn-next.debug-visible {
+  box-shadow: 0 8px 26px rgba(16,185,129,0.18);
+  border: 2px solid rgba(255,255,255,0.06);
+}
+
+/* Jika tombol menyatu warna, ganti background / border agar kontras */
+.footer-cta .btn-next {
+  background-color: #10B981 !important; /* hijau laut, sesuai palet */
+  color: #ffffff !important;
+}
+

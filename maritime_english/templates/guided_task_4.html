@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Task 4: Mini Dialogue — Distress Message' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_4.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 guided-task4-container" aria-live="polite">
+  <div class="scene shadow-lg" role="region" aria-label="Task 4: Mini Dialogue — Distress Message">
+    <!-- Top instruction -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="gt4-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+      <div id="gt4-instruction" class="instruction-text">
+        {{ section_content.instruction_en or "Listen carefully to the distress message. Then, repeat the key information: ship name, call sign, MMSI, and emergency type." }}
+      </div>
+
+      <div class="audio-controls">
+        <button id="replay-full" class="btn audio-btn urgent" aria-label="Replay full distress message">
+          <i class="fas fa-play" aria-hidden="true"></i> Replay Full
+        </button>
+        <button id="replay-key" class="btn audio-btn urgent" aria-label="Replay key information">
+          <i class="fas fa-play" aria-hidden="true"></i> Key Info
+        </button>
+      </div>
+    </div>
+
+    <!-- Split: Captain Ray (left) & OS Lina (right) visual -->
+    <div class="split-area">
+      <div class="left-side">
+        <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-lg" id="avatar-ray">
+      </div>
+
+      <div class="center-area">
+        <div class="dialogue-box" id="dialogue-box" role="region" aria-label="Distress dialogue">
+          <div id="dialogue-text" class="dialogue-text">
+            {{ section_content.dialogue_en|safe }}
+          </div>
+        </div>
+
+        <div class="practice-prompt">
+          <p class="prompt-label">Repeat aloud: <strong>Ship name, Call sign, MMSI, Emergency</strong></p>
+          <div class="prompt-controls">
+            <button id="repeat-response" class="btn btn-practice" aria-label="Repeat response">Repeat Response</button>
+            <button id="replay-sample" class="btn audio-btn" aria-label="Replay sample response"><i class="fas fa-play"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <img src="{{ url_for('static', filename='img/os_lina.png') }}" alt="OS Lina" class="avatar-lg" id="avatar-lina">
+        <!-- red indicator for distress ambience -->
+        <div id="alert-indicator" class="alert-indicator" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Feedback bubble -->
+    <div id="gt4-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-arrow"></div>
+      <div class="fb-content">Clear and precise. Well done, cadet!</div>
+    </div>
+
+    <!-- Footer next -->
+    <div class="footer-cta">
+      <button id="gt4-next" class="btn btn-next btn-danger" disabled
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_wrapup') }}">
+        Next Task <i class="fas fa-arrow-right ms-2"></i>
+      </button>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="gt4-full-audio" preload="auto" src="{{ section_content.audio_full }}"></audio>
+    <audio id="gt4-key-audio" preload="auto" src="{{ section_content.audio_key }}"></audio>
+    <audio id="gt4-sample-response" preload="auto" src="{{ section_content.audio_sample_response }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/guided_task_4.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Authentic Task: Simulation Intro' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authentic_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 authentic-intro-container" aria-live="polite">
+  <div class="auth-scene shadow-lg" role="region" aria-label="Simulation introduction">
+
+    <!-- Left: Captain Ray avatar -->
+    <div class="avatar-area">
+      <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-ray">
+    </div>
+
+    <!-- Right: Text box -->
+    <section class="intro-box" role="article" aria-labelledby="intro-title">
+      <div class="top-row">
+        <div class="lang-toggle">
+          <button id="auth-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+
+        <div class="sim-badge" aria-hidden="true">Simulation Mode</div>
+      </div>
+
+      <h3 id="intro-title" class="intro-title">{{ section_content.title or "Authentic Task: Radio Communication Simulation" }}</h3>
+
+      <div id="intro-text" class="intro-text">
+        {{ section_content.text_en | safe }}
+      </div>
+
+      <div class="audio-control">
+        <button id="auth-audio-btn" class="audio-play-btn" aria-label="Play simulation intro">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="instruction-box">
+        <p id="auth-instruction">{{ section_content.instruction_en or "Click Start Simulation to begin. You will hear a scenario and need to respond aloud." }}</p>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="start-sim-btn" class="btn btn-start-sim" type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'authentic_task_1') }}">
+          Start Simulation
+        </button>
+      </div>
+    </section>
+
+    <!-- Subtle radio indicator (background) -->
+    <div class="radio-indicators" aria-hidden="true">
+      <span class="light green"></span>
+      <span class="light orange"></span>
+    </div>
+
+    <!-- Hidden audio -->
+    <audio id="auth-audio" preload="auto" src="{{ section_content.audio_en }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/authentic_intro.js') }}" defer></script>
+{% endblock %}

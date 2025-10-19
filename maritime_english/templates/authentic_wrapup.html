@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Authentic Task Wrap-up' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authentic_wrapup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 wrapup-sim-container" aria-live="polite">
+  <div class="wrapup-scene shadow-lg" role="region" aria-label="Authentic Task Wrap-up">
+
+    <div class="avatars-row">
+      <img src="{{ url_for('static', filename='img/os_lina_half.png') }}" alt="OS Lina" class="avatar-lina">
+      <img src="{{ url_for('static', filename='img/captain_ray_half.png') }}" alt="Captain Ray" class="avatar-ray">
+    </div>
+
+    <div class="wrapup-panel">
+      <div class="top-row">
+        <div class="wrapup-title">{{ section_content.title or "Authentic Task Wrap-up" }}</div>
+        <button id="wrapup-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="text-box" id="wrapup-textbox">
+        <p id="wrapup-text">
+          {{ section_content.text_en or "Excellent work, cadets! You’ve completed the full simulation: radio check, spelling ship names, stating MMSI & channels, and sending a distress message. These skills are vital for clear and safe communication at sea." }}
+        </p>
+      </div>
+
+      <div class="audio-control">
+        <button id="wrapup-audio-btn" class="audio-btn" aria-label="Play wrap-up audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="footer-cta">
+        <button id="go-assessment" class="btn-go" type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'assessment_intro') }}">
+          Go to Assessment
+        </button>
+      </div>
+    </div>
+
+    <!-- decorative background lights -->
+    <div class="deck-lights" aria-hidden="true"></div>
+
+    <!-- hidden audio element (EN by default) -->
+    <audio id="wrapup-audio" preload="auto" src="{{ section_content.audio_en }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/authentic_wrapup.js') }}"></script>
+{% endblock %}

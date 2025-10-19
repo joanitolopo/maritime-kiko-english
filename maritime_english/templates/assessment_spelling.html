@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - Assessment: Spelling Ship Name{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_spelling.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 quiz-page" aria-live="polite">
+  <div class="quiz-scene shadow-lg" role="region" aria-label="Assessment: Spelling Ship Name">
+
+    <!-- Header / progress -->
+    <div class="quiz-header d-flex justify-content-between align-items-center">
+      <div id="question-number" class="question-number">Question 1 of 10</div>
+      <div class="lang-toggle">
+        <button id="assess-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <div class="quiz-main">
+      <!-- Instruction / prompt -->
+      <div class="question-box" id="question-box" role="group" aria-labelledby="q-text">
+        <p id="q-text" class="question-text">Spell the ship name using the NATO alphabet.</p>
+      </div>
+
+      <!-- Progress bar small -->
+      <div class="progress-wrap">
+        <div id="progress-text" class="progress-text">1/10</div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill" style="width:10%"></div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="input-area">
+        <input id="spelling-input" class="spelling-input" type="text" placeholder="Type code words (e.g. Lima India Mike Alpha) or letters (L I M A)" aria-label="Type your spelling here">
+        <div class="input-help">Accepts code words (Lima), letters (L I M A) or continuous letters (LIMA).</div>
+        <div class="action-row">
+          <button id="submit-answer" class="btn btn-submit">Submit Answer</button>
+          <button id="skip-btn" class="btn btn-skip" title="Skip this question">Skip</button>
+        </div>
+      </div>
+
+      <!-- Feedback bubble Captain Ray -->
+      <div id="quiz-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/captain_ray_small.png') }}" alt="" class="fb-avatar">
+        <div id="fb-text" class="fb-text">Feedback</div>
+      </div>
+
+      <!-- Next -->
+      <div class="quiz-footer text-center">
+        <button id="next-question" class="btn btn-next" type="button" disabled aria-disabled="true">Next</button>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_spelling.js') }}"></script>
+{% endblock %}

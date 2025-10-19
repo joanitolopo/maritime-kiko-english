@@ -1,0 +1,86 @@
+/* guided_task_1.css */
+.guided-task1-container { font-family: "Open Sans", Arial, sans-serif; }
+
+.split-scene {
+  position: relative;
+  background: linear-gradient(180deg,#0f1724 0%, #111827 100%);
+  color: #F9FAFB;
+  border-radius: 12px;
+  padding: 18px;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* split avatars */
+.split { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.avatar-split { width:130px; border-radius:8px; }
+.avatar-label { font-size:14px; color:#E5E7EB; }
+
+/* center radio panel */
+.center-panel {
+  display:flex; align-items:center; justify-content:center; position:relative;
+  min-height:220px;
+}
+.radio-indicator {
+  width:120px; height:120px; border-radius:12px;
+  background: linear-gradient(180deg,#0ea5a3,#065f46);
+  opacity:0.05; transition:opacity .18s ease, box-shadow .18s ease;
+}
+.radio-indicator.active { opacity:0.95; box-shadow: 0 16px 36px rgba(16,185,129,0.18); }
+
+/* dialogue box (overlay bottom center) */
+.dialogue-box {
+  grid-column: 1 / 4;
+  background: rgba(249,250,251,0.95);
+  color: #0B3D91;
+  margin-top: 8px;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 10px 26px rgba(2,6,23,0.16);
+  position: relative;
+}
+
+/* top row */
+.top-row { display:flex; justify-content:space-between; align-items:center; }
+.instruction-title { font-weight:700; color:#0B3D91; }
+
+/* audio controls */
+.audio-controls { display:flex; gap:10px; margin:10px 0; flex-wrap:wrap; }
+.audio-btn { background:#2563EB; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; }
+.audio-btn i { margin-right:6px; }
+
+/* script */
+.script-box { background: rgba(15,23,42,0.03); border-radius:8px; padding:10px; margin-bottom:12px; min-height:72px; }
+.dialogue-script { color:#0B3D91; font-size:16px; line-height:1.45; }
+
+/* practice area */
+.practice-area { display:flex; justify-content:center; margin-bottom:8px; }
+.btn-practice { background:#10B981; color:white; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+
+/* feedback bubble */
+.feedback-bubble { position: absolute; right:18px; bottom:120px; max-width:220px; background:white; color:#0B3D91; border-radius:10px; padding:10px; box-shadow:0 8px 24px rgba(2,6,23,0.12); }
+.feedback-bubble .fb-arrow { position:absolute; left:12px; bottom:-8px; width:14px; height:14px; transform:rotate(45deg); background:white; }
+
+/* next btn */
+.btn-next { display:inline-block; width:80%; max-width:520px; margin:8px auto 0; background:#2563EB; color:white; border:none; padding:12px 18px; border-radius:10px; font-weight:700; cursor:pointer; }
+.btn-next:hover { background:#1e40af; transform:translateY(-2px); }
+
+/* visibility helpers */
+.visually-hidden { display:none !important; }
+.visually-visible { display:block !important; }
+
+/* small animations */
+.pop-visible { animation: popIn .36s ease; }
+@keyframes popIn { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform: translateY(0);} }
+
+/* responsive */
+@media (max-width:900px) {
+  .split-scene { grid-template-columns: 1fr; }
+  .center-panel { order:2; }
+  .split { order:1; }
+  .dialogue-box { margin-top:12px; }
+  .feedback-bubble { right:12px; bottom:200px; }
+}

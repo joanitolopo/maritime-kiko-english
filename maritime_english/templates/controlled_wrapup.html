@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Controlled Practice Wrap-up' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/controlled_wrapup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 controlled-wrapup" aria-live="polite">
+  <div class="wrapup-scene shadow-lg" role="region" aria-label="Controlled Practice Wrap-up">
+
+    <!-- Avatar OS Lina (left) -->
+    <div class="avatar-area">
+      <img src="{{ url_for('static', filename=section_content.avatar or 'img/os_lina_half.png') }}" alt="OS Lina" class="avatar-lina">
+    </div>
+
+    <!-- Wrap-up box (center/right) -->
+    <div class="wrapup-box" role="article" aria-labelledby="wrapup-heading">
+      <div class="top-row">
+        <div class="title small">Controlled Practice Wrap-up</div>
+        <div class="lang-toggle">
+          <button id="wrap-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+      </div>
+
+      <h2 id="wrapup-heading" class="wrapup-heading">{{ section_content.title or "Wrap-up" }}</h2>
+
+      <div id="wrapup-text" class="wrapup-text">
+        <p id="wrapup-paragraph">
+          {{ section_content.text_en or "Well done! You’ve practiced spelling with the NATO alphabet and numbers. You can now spell ship names and codes clearly. Next, we’ll try using them in real communication tasks." }}
+        </p>
+      </div>
+
+      <div class="audio-control">
+        <button id="wrap-audio-btn" class="audio-play-btn" aria-label="Play wrapup audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="notebook" id="notebook" aria-hidden="true">
+        <div class="checkmark" id="notebook-check">✔</div>
+      </div>
+
+      <div class="footer-cta">
+        <button id="go-guided" class="btn btn-go" type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_intro') }}">
+          Go to Guided Practice <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Hidden audio element (EN) -->
+  <audio id="wrapup-audio" preload="auto" src="{{ section_content.audio_en or '/static/data/audio/unit_1/controlled_wrapup_en.wav' }}"></audio>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/controlled_wrapup.js') }}" defer></script>
+{% endblock %}

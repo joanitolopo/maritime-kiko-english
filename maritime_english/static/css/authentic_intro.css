@@ -1,0 +1,73 @@
+/* authentic_intro.css */
+.authentic-intro-container { font-family: "Open Sans", Arial, sans-serif; }
+
+.auth-scene {
+  background: linear-gradient(180deg, #0f1724 0%, #111827 100%);
+  color: #F9FAFB;
+  border-radius: 12px;
+  padding: 18px;
+  position: relative;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* Avatar */
+.avatar-area { width:160px; display:flex; align-items:flex-end; justify-content:center; }
+.avatar-ray { width:140px; border-radius:8px; box-shadow: 0 10px 30px rgba(2,6,23,0.6); }
+
+/* Intro text box */
+.intro-box {
+  flex:1;
+  background: rgba(249,250,251,0.92);
+  color: #0B3D91;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.top-row { display:flex; justify-content:space-between; align-items:center; }
+.sim-badge {
+  background:#F97316; color:#fff; padding:6px 10px; border-radius:12px; font-weight:700; font-size:13px;
+  box-shadow: 0 6px 18px rgba(249,115,22,0.18); opacity:0; transform: translateX(8px); animation: badgeIn 420ms ease forwards 180ms;
+}
+@keyframes badgeIn { to { opacity:1; transform: translateX(0); } }
+
+.intro-title { margin:0; font-size:18px; color:#0B3D91; font-weight:700; }
+.intro-text { color:#0B3D91; font-size:16px; line-height:1.5; }
+
+/* audio control */
+.audio-control { margin-top:2px; }
+.audio-play-btn {
+  width:44px; height:44px; border-radius:50%; border:none;
+  background:#2563EB; color:#fff; display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.audio-play-btn.playing { animation: pulse 1s infinite; }
+
+/* instruction box & start */
+.instruction-box { background: rgba(14,165,233,0.06); padding:10px; border-radius:10px; color:#0B3D91; }
+.btn-start-sim {
+  width: 80%;
+  max-width: 420px;
+  background:#F97316; color:#fff; font-weight:700; border:none; padding:12px; border-radius:12px;
+  cursor:pointer; align-self:center; box-shadow: 0 10px 30px rgba(249,115,22,0.12); transition: box-shadow .18s, transform .18s;
+}
+.btn-start-sim:hover { transform: translateY(-4px); box-shadow: 0 14px 38px rgba(249,115,22,0.18); }
+
+/* radio indicator lights (background) */
+.radio-indicators { position:absolute; top:14px; right:14px; display:flex; gap:8px; }
+.radio-indicators .light { width:12px; height:12px; border-radius:50%; box-shadow: 0 0 8px rgba(0,0,0,0.3); opacity:0.9; }
+.radio-indicators .light.green { background:#10B981; box-shadow:0 0 12px rgba(16,185,129,0.6); animation: slowBlink 2.4s infinite; }
+.radio-indicators .light.orange { background:#F97316; box-shadow:0 0 12px rgba(249,115,22,0.6); animation: slowBlink 3s infinite 200ms; }
+@keyframes slowBlink { 0% { transform:scale(1); opacity:1 } 50% { transform:scale(0.9); opacity:0.55 } 100% { transform:scale(1); opacity:1 } }
+
+/* responsive */
+@media (max-width:900px) {
+  .auth-scene { flex-direction:column; align-items:center; }
+  .avatar-area { width:100%; display:flex; justify-content:center; }
+  .intro-box { width:95%; }
+}

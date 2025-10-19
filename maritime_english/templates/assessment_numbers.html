@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - Assessment: Numbers Quiz{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_numbers.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 quiz-page" aria-live="polite">
+  <div class="quiz-scene shadow-lg" role="region" aria-label="Assessment: Numbers Quiz">
+
+    <!-- Header / progress -->
+    <div class="quiz-header d-flex justify-content-between align-items-center">
+      <div class="question-number" id="question-number">Question 1 of 10</div>
+      <div class="lang-toggle">
+        <button id="q-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <!-- Radio-screen style large digit (left) + question box (right) on wide screens -->
+    <div class="quiz-main d-flex flex-column flex-lg-row align-items-center gap-3">
+      <div class="radio-display" id="radio-display" aria-hidden="true">
+        <div class="big-digit" id="big-digit">—</div>
+      </div>
+
+      <section class="quiz-content flex-fill">
+        <div class="question-box" id="question-box" role="group" aria-labelledby="q-text">
+          <p id="q-text" class="question-text">What is the correct pronunciation for the number ... in Maritime English?</p>
+        </div>
+
+        <div class="options-list mt-3" id="options-list" role="radiogroup" aria-labelledby="q-text">
+          <!-- options injected by JS -->
+        </div>
+
+        <!-- feedback bubble OS Lina -->
+        <div id="quiz-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+          <img src="{{ url_for('static', filename='img/os_lina_small.png') }}" alt="" class="fb-avatar">
+          <div id="fb-text" class="fb-text">Feedback</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer: Next -->
+    <div class="quiz-footer text-center">
+      <button id="next-question" class="btn btn-next" type="button" disabled aria-disabled="true">Next</button>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_numbers.js') }}"></script>
+{% endblock %}

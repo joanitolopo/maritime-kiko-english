@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Simulation Task 4: Distress Message' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authentic_task_4.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 sim4-container" aria-live="polite">
+  <div class="sim4-scene shadow-lg" role="region" aria-label="Simulation Task 4: Distress Message">
+
+    <!-- Left: Captain Ray -->
+    <aside class="left-panel">
+      <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-ray" />
+      <div id="mic-ray" class="mic-indicator" aria-hidden="true"></div>
+    </aside>
+
+    <!-- Middle / Right: Scenario + Controls -->
+    <section class="main-panel" role="main" aria-labelledby="sim4-title">
+      <div class="top-row">
+        <div class="lang-toggle">
+          <button id="sim4-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+        <div class="sim-badge">Simulation Mode</div>
+      </div>
+
+      <h3 id="sim4-title" class="sim-title">{{ section_content.title or "Simulation Task 4: Distress Message" }}</h3>
+
+      <div class="scenario-box" id="scenario-box" aria-live="polite">
+        <p id="scenario-desc">{{ section_content.scenario_en | safe }}</p>
+      </div>
+
+      <div class="dialogue-area">
+        <div id="dialogue-script" class="dialogue-script">
+          {{ section_content.dialogue_en | safe }}
+        </div>
+
+        <div class="audio-controls">
+          <button id="replay-example" class="audio-btn urgent" aria-label="Replay distress example">
+            <i class="fas fa-play"></i>
+          </button>
+          <span class="audio-label">Replay Example</span>
+        </div>
+
+        <div class="instruction-box" id="instruction-box">
+          <p id="task-instr">{{ section_content.instruction_en or "Speak aloud and send your own distress message using the same structure." }}</p>
+        </div>
+
+        <div class="practice-area">
+          <button id="practice-btn" class="btn-practice urgent-btn" aria-label="Record / Practice Distress Call">
+            Record / Practice Distress Call
+          </button>
+        </div>
+
+        <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+          <div class="fb-arrow"></div>
+          <div class="fb-content" id="fb-content">{{ section_content.default_feedback or "Clear distress message. Well done, cadet." }}</div>
+        </div>
+
+        <div class="dialogue-footer">
+          <button id="finish-sim4" class="btn-finish" type="button" disabled
+                  data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'authentic_wrapup') }}">
+            Finish Simulation
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hidden example audio -->
+    <audio id="example-audio" preload="auto" src="{{ section_content.audio_example }}"></audio>
+
+    <!-- ambient / red-alert strobe (visual only) -->
+    <div id="alert-lights" class="alert-lights" aria-hidden="true"></div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/authentic_task_4.js') }}" defer></script>
+{% endblock %}

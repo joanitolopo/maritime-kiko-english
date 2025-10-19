@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or "Example: Channel Number" }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_channel.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 channel-page">
+
+  <div class="channel-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Example Channel Number' }}">
+    <!-- Radio / dark background -->
+    <div class="radio-bg" aria-hidden="true"></div>
+
+    <!-- Avatar OS Lina -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="OS Lina" class="avatar-lina" />
+
+    <!-- Dialogue / explanation box -->
+    <div class="dialogue-box" role="article" aria-labelledby="dialogue-text">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="dialogue-text" class="lead" role="heading" aria-level="2">
+        {{ section_content.dialogue_en or "We also use numbers for radio channels. For example, the emergency channel is Channel 16, used for distress and safety. We say: WUN SIX." }}
+      </p>
+
+      <!-- Instruction box (below dialogue) -->
+      <div class="instruction-box" aria-describedby="instruction-text">
+        <p id="instruction-text">
+          {{ section_content.instruction_en or 'Listen to the example. Then, repeat "Channel WUN SIX" aloud.' }}
+        </p>
+
+        <!-- Audio control -->
+        <div class="audio-control" role="group" aria-label="Audio controls">
+          <button id="audio-btn" class="audio-play-btn" aria-label="Play channel example" type="button">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+          <button id="replay-btn" class="btn btn-practice" aria-label="Replay example" type="button">
+            Replay Example
+          </button>
+        </div>
+
+        <!-- Radio screen -->
+        <div class="radio-screen" id="radio-screen" aria-hidden="true">
+          <div class="screen-text" id="screen-text">{{ section_content.screen_text or 'Channel 16' }}</div>
+        </div>
+      </div>
+
+      <!-- Optional Quiz (enable via JSON flag) -->
+      <div id="quiz-area" class="quiz-area visually-hidden" aria-hidden="true">
+        <p class="quiz-question">{{ section_content.quiz_question or 'What is the emergency channel?' }}</p>
+        <form id="quiz-form" aria-label="Channel quiz">
+          {% for opt in section_content.quiz_options or ['12','16','21'] %}
+          <label class="quiz-label">
+            <input type="radio" name="quiz" value="{{ opt }}" class="quiz-radio"> Channel {{ opt }}
+          </label>
+          {% endfor %}
+        </form>
+        <div id="quiz-feedback" class="alert d-none mt-2" role="status" aria-live="polite"></div>
+      </div>
+
+      <!-- Feedback bubble (OS Lina, bottom-left) -->
+      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <div class="fb-arrow" aria-hidden="true"></div>
+        <div class="fb-content">{{ section_content.default_feedback or 'Great! Clear communication saves lives.' }}</div>
+      </div>
+
+      <!-- Footer next -->
+      <div class="dialogue-footer">
+        <button id="next-btn" class="btn btn-next" type="button" aria-label="Next to VHF Exchange">
+          Next
+        </button>
+
+        {# Generate continue href from section_content.start_next_section if present #}
+        {% if section_content.start_next_section %}
+          <a id="continue-link" class="visually-hidden"
+             href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}"></a>
+        {% else %}
+          {# fallback: try sensible route name (adjust if your route names differ) #}
+          <a id="continue-link" class="visually-hidden"
+             href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}"></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {# Hidden audio element: prefer section_content.audio_en if provided #}
+  <audio id="channel-audio" preload="auto"
+         src="{{ section_content.audio_en or '/static/data/audio/channel/channel_16_wun_six.wav' }}"></audio>
+</main>
+{% endblock %}
+
+{% block page_js %}
+{# Inject the JSON objects for JS to use (safe) #}
+<script>
+  window.UNIT_CONTENT = {{ content|tojson|safe }};
+  window.SECTION_CONTENT = {{ section_content|tojson|safe }};
+  window.UNIT_ID = {{ unit_id }};
+</script>
+
+<script src="{{ url_for('static', filename='js/input_channel.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 input-intro-container">
+
+  <!-- Radar background & scene -->
+  <div class="input-scene shadow-lg" role="region" aria-label="Introduction by Captain Ray">
+    <!-- Radar decorative background -->
+    <div class="radar-bg" aria-hidden="true"></div>
+    
+    <!-- Avatar (left) -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="avatar-captain" />
+
+    <!-- Dialogue / Text box (right / center bottom) -->
+    <div class="intro-dialogue" id="intro-dialogue">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="dialogue-content" id="dialogue-content">
+        <p id="dialogue-text">{{ section_content.intro_en }}</p>
+      </div>
+
+      <div class="audio-control">
+        <button id="audio-btn" class="audio-play-btn" aria-label="Play narration">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="start-input-btn"
+                class="btn start-input-btn"
+                aria-label="Start input section"
+                type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}">>
+          Start Input <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden audio element (English default) -->
+  <audio id="intro-audio" preload="auto" src="{{ section_content.audio_en }}"></audio>
+  
+  <!-- Continue (for non-immersive) -->
+  <div class="continue-container text-center mt-3">
+    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}"
+       class="continue-link visually-hidden" id="continue-link">
+       Continue
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script>
+  window.FULL_CONTENT = {{ (full_content or {})|tojson|safe }};
+  window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+  window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
+<script src="{{ url_for('static', filename='js/input_intro.js') }}"></script>
+{% endblock %}

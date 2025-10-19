@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - NATO Numbers 0–9{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_numbers.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 numbers-page">
+
+  <div class="numbers-scene shadow-lg" role="region" aria-label="NATO Numbers 0 to 9">
+    <!-- Decorative radio panel background -->
+    <div class="radio-panel-bg" aria-hidden="true"></div>
+
+    <!-- Avatar OS Lina (bottom-left) -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="OS Lina" class="avatar-lina" />
+
+    <!-- Instruction Box -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="instruction-text" class="lead">
+        Click a number to hear how it is said on the radio.
+      </p>
+    </div>
+
+    <!-- Interactive grid (2 x 5) -->
+    <div class="grid-area">
+      <div class="numbers-grid" id="numbers-grid" role="grid" aria-label="Numbers grid">
+        {% for n in range(10) %}
+        <div class="grid-cell" role="gridcell">
+          <button type="button"
+                  class="number-tile"
+                  data-number="{{ n }}"
+                  aria-label="Number {{ n }}"
+                  aria-pressed="false"
+                  title="{{ n }}">
+            <span class="num">{{ n }}</span>
+            <span class="tile-audio" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Radio panel with blinking indicator -->
+      <div class="radio-panel">
+        <div class="radio-screen" id="radio-screen" aria-hidden="true">
+          <div class="screen-number" id="screen-number">—</div>
+        </div>
+        <div class="radio-indicators">
+          <div class="indicator" id="radio-indicator" aria-hidden="true"></div>
+          <div class="indicator-label">Radio</div>
+        </div>
+      </div>
+
+      <!-- Practice prompt and replay -->
+      <div class="practice-area">
+        <div class="practice-box">
+          <div class="practice-text" id="practice-text">
+            Example: YB321 → Yankee – Bravo – Tree – Too – Wun
+          </div>
+          <button id="practice-replay" class="btn btn-practice" aria-label="Replay practice prompt">
+            <i class="fas fa-redo"></i> Replay
+          </button>
+        </div>
+      </div>
+
+      <!-- Feedback bubble (OS Lina) -->
+      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <div class="fb-arrow"></div>
+        <div class="fb-content">Good! You sounded clear.</div>
+      </div>
+    </div>
+
+    <!-- Footer / Next -->
+    <!-- di bagian footer / Next -->
+    <div class="footer-cta">
+      <button id="next-btn" class="btn btn-next" type="button"
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"
+              aria-label="Next to MMSI example">Next</button>
+              
+      <a id="continue-link" class="visually-hidden" 
+        href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"></a>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/input_numbers.js') }}"></script>
+{% endblock %}
+

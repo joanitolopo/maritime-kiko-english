@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Guided Practice Wrap-up' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guided_wrapup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 guided-wrapup-container" aria-live="polite">
+  <div class="wrapup-scene shadow-lg" role="region" aria-label="Guided practice wrap-up">
+
+    <!-- Left avatar (Captain Ray) -->
+    <div class="avatar-area">
+      <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-ray">
+    </div>
+
+    <!-- Right text box -->
+    <div class="wrapup-box" role="article" aria-labelledby="wrapup-title">
+      <div class="lang-toggle">
+        <button id="gw-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <h3 id="wrapup-title" class="wrapup-title">{{ section_content.title or 'Guided Practice Wrap-up' }}</h3>
+
+      <div id="wrapup-text" class="wrapup-text">
+        {{ section_content.text_en | safe }}
+      </div>
+
+      <div class="audio-control">
+        <button id="gw-audio-btn" class="audio-play-btn" aria-label="Play wrap-up narration">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="gw-go-auth" class="btn btn-go" type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'authentic_intro') }}">
+          Go to Authentic Task <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Radio indicator (background subtle) -->
+    <div class="radio-indicator" aria-hidden="true"></div>
+
+    <!-- feedback (caption/thumbs) -->
+    <div id="gw-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-arrow"></div>
+      <div class="fb-content">Nice work — you completed guided practice!</div>
+    </div>
+
+    <!-- Hidden audio element -->
+    <audio id="gw-audio" preload="auto" src="{{ section_content.audio_en }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/guided_wrapup.js') }}" defer></script>
+{% endblock %}

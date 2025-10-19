@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing — Number Differences' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_numbers.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 noticing-numbers-container" aria-live="polite">
+  <div class="noticing-scene shadow-lg">
+
+    <!-- Captain Ray avatar (bottom-left) -->
+    <img src="{{ url_for('static', filename=section_content.avatar or 'img/kiko.png') }}"
+         alt="{{ section_content.avatar_alt or 'Captain Ray' }}" class="captain-ray-small">
+
+    <!-- Instruction Box -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="numbers-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+      <p id="numbers-instruction" class="lead">
+        {{ section_content.instruction_en or 'Click each pair to hear the difference. Pay special attention to 3, 5, and 9.' }}
+      </p>
+    </div>
+
+    <!-- Two-column table -->
+    <div class="table-wrap numbers-table-wrap">
+      <table class="diff-table numbers-table" role="table" aria-label="Number differences: General English vs Maritime English">
+        <thead>
+          <tr>
+            <th class="col-general">General English</th>
+            <th></th>
+            <th class="col-maritime">Maritime English</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="number-pairs-body">
+          {% if section_content.pairs %}
+            {% for pair in section_content.pairs %}
+              <tr data-pair="{{ pair.label }}" class="pair-row {% if pair.highlight %}highlight-number{% endif %}">
+                <td class="cell-general">{{ pair.general }}</td>
+                <td class="cell-action">
+                  <button class="audio-btn small num-btn-general" data-src="{{ pair.general_audio }}" aria-label="Play {{ pair.general }}">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <td class="cell-maritime">{{ pair.maritime }}</td>
+                <td class="cell-action">
+                  <button class="audio-btn small num-btn-maritime" data-src="{{ pair.maritime_audio }}" aria-label="Play {{ pair.maritime }}">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <!-- fallback rows 0..9 minimal -->
+            {% for n in range(10) %}
+            <tr data-pair="{{ n }}" class="{% if n in [3,5,9] %}highlight-number{% endif %}">
+              <td class="cell-general">{{ ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'][n] }}</td>
+              <td class="cell-action">
+                <button class="audio-btn small num-btn-general" data-src="/static/data/audio/noticing/numbers/{{['zero','one','two','three','four','five','six','seven','eight','nine'][n]}}.wav" aria-label="Play">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </td>
+              <td class="cell-maritime">{{ ['Zee-ro','Wun','Too','Tree','Fower','Fife','Six','Seven','Eight','Niner'][n] }}</td>
+              <td class="cell-action">
+                <button class="audio-btn small num-btn-maritime" data-src="/static/data/audio/numbers/{{n}}_audio_placeholder.wav" aria-label="Play">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Feedback speech bubble (Captain Ray) -->
+    <div id="numbers-feedback" class="feedback-bubble d-none" role="status" aria-live="polite">
+      <img src="{{ url_for('static', filename=section_content.feedback_avatar or 'img/kiko.png') }}" alt="" class="fb-avatar">
+      <div id="numbers-fb-text">{{ section_content.feedback_text_en or 'Excellent! You caught the differences.' }}</div>
+    </div>
+
+    <!-- Next Button -->
+    <div class="footer-action text-center">
+      <button id="numbers-next" class="btn btn-success btn-lg d-none"
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section if section_content.start_next_section else 'noticing_pattern') }}">
+        {{ section_content.next_label or 'Next' }} <i class="fas fa-arrow-right ms-1"></i>
+      </button>
+    </div>
+
+    <!-- single audio element used by JS -->
+    <audio id="number-audio" preload="auto"></audio>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/noticing_numbers.js') }}" defer></script>
+{% endblock %}

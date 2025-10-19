@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - Assessment: Call Sign Spelling{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_call.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 quiz-page" aria-live="polite">
+  <div class="quiz-scene shadow-lg" role="region" aria-label="Assessment: Call Sign Spelling">
+
+    <div class="quiz-header d-flex justify-content-between align-items-center">
+      <div id="question-number" class="question-number">Question 1 of {{ section.total_questions }}</div>
+      <div class="lang-toggle">
+        <button id="call-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <div class="quiz-main">
+
+      <div class="screen-wrap" aria-hidden="true">
+        <div id="screen-display" class="screen-display">ABC1</div>
+      </div>
+
+      <div class="question-box" id="question-box" role="group" aria-labelledby="q-text">
+        <p id="q-text" class="question-text">
+          <!-- Filled by JS -->
+        </p>
+      </div>
+
+      <div class="input-wrap">
+        <input id="answer-input" class="answer-input" type="text" placeholder="Type your spelling here..." aria-label="Type your spelling here">
+        <button id="submit-answer" class="btn btn-submit" type="button">Submit Answer</button>
+      </div>
+
+      <div id="call-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/captain_ray_small.png') }}" alt="" class="fb-avatar">
+        <div id="fb-text" class="fb-text">Feedback</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div id="progress-text" class="progress-text">1/{{ section.total_questions }}</div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="quiz-footer text-center">
+        <button id="next-question" class="btn btn-next" type="button" disabled aria-disabled="true">Next</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_call.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Controlled Practice: Exercises' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/controlled_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 controlled-intro-container" aria-live="polite">
+  <div class="controlled-scene shadow-lg" role="region" aria-label="Controlled Practice introduction">
+
+    <!-- Background / desk -->
+    <div class="desk-bg" aria-hidden="true"></div>
+
+    <!-- Avatar OS Lina (left) -->
+    <div class="avatar-area">
+      <img src="{{ url_for('static', filename=section_content.avatar or 'img/os_lina.png') }}"
+           alt="{{ section_content.avatar_alt or 'OS Lina' }}"
+           class="avatar-lina" id="avatar-lina">
+      <!-- workbook (decorative) -->
+      <div class="workbook" id="workbook" aria-hidden="true">
+        <div class="page left"></div>
+        <div class="page right"></div>
+      </div>
+    </div>
+
+    <!-- Instruction box (right / center bottom) -->
+    <div class="intro-box" role="article" aria-labelledby="intro-text">
+      <div class="lang-toggle">
+        <button id="ctrl-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="intro-content" id="intro-text">
+        <p id="intro-paragraph" class="lead">
+          {{ section_content.instruction_en or "Now it's your turn! Let's practice the alphabet and numbers step by step. Listen carefully and choose the correct answer." }}
+        </p>
+      </div>
+
+      <!-- Audio controls -->
+      <div class="audio-control">
+        <button id="ctrl-audio-btn" class="audio-play-btn" aria-label="Play narration">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+        <audio id="ctrl-audio" preload="auto" src="{{ section_content.audio_en or '/static/data/audio/controlled/intro_en.wav' }}"></audio>
+      </div>
+
+      <!-- Footer -->
+      <div class="dialogue-footer">
+        <button id="start-exercises-btn"
+                class="btn start-btn"
+                type="button"
+                aria-disabled="true"
+                disabled
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'controlled_ex_1') }}">
+          Start Exercises <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/controlled_intro.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Task 3: MMSI & Channel Number' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_3.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 guided-task3-container" aria-live="polite">
+
+  <div class="scene shadow-lg" role="region" aria-label="Task 3: MMSI & Channel Number">
+
+    <!-- Top instruction -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="gt3-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+      <div id="gt3-instruction" class="instruction-text">
+        {{ section_content.instruction_en or "Listen to the example. Then, try spelling your own MMSI number and channel." }}
+      </div>
+
+      <div class="audio-controls">
+        <button id="replay-example" class="btn audio-btn" aria-label="Replay example">
+          <i class="fas fa-play" aria-hidden="true"></i> Replay Example
+        </button>
+      </div>
+    </div>
+
+    <!-- Center area split: inputs (left) and radio screen (right) -->
+    <div class="center-grid">
+
+      <div class="input-panel">
+        <label for="mmsi-input" class="field-label">MMSI (9 digits)</label>
+        <input id="mmsi-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="e.g. 525123456" aria-label="MMSI input" />
+
+        <div class="output-row">
+          <div class="output-label">Pronunciation (NATO)</div>
+          <div class="output-box" id="mmsi-output" aria-live="polite"></div>
+          <button id="mmsi-replay" class="btn btn-small audio-btn" aria-label="Replay MMSI pronunciation"><i class="fas fa-play"></i></button>
+        </div>
+
+        <hr>
+
+        <label for="channel-input" class="field-label">Channel (1–3 digits)</label>
+        <input id="channel-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 16" aria-label="Channel input" />
+
+        <div class="output-row">
+          <div class="output-label">Pronunciation (NATO)</div>
+          <div class="output-box" id="channel-output" aria-live="polite"></div>
+          <button id="channel-replay" class="btn btn-small audio-btn" aria-label="Replay channel pronunciation"><i class="fas fa-play"></i></button>
+        </div>
+
+        <div class="help-text small muted">
+          {{ section_content.help_text or "Type digits; the system will generate the radio pronunciation. Click the small play icon to hear each output." }}
+        </div>
+      </div>
+
+      <div class="radio-panel" aria-hidden="true">
+        <div class="radio-screen" id="radio-screen">
+          <div class="screen-line">MMSI: <span id="screen-mmsi">{{ section_content.example_mmsi or '525123456' }}</span></div>
+          <div class="screen-line">Channel: <span id="screen-channel">{{ section_content.example_channel or '16' }}</span></div>
+        </div>
+        <div class="dialogue-box">
+          <div id="dialogue-text" class="dialogue-text">
+            {{ section_content.dialogue_en|safe if section_content.dialogue_en else ( "Captain Ray: \"Say your MMSI number and channel.\" OS Lina: \"MMSI: Fife – Too – Fife – Wun – Too – Tree – Fower – Fife – Six. Channel Wun Six.\"") }}
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- center-grid -->
+
+    <!-- Feedback bubble -->
+    <div id="gt3-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-arrow"></div>
+      <div class="fb-content">Excellent! Clear MMSI and channel.</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-cta">
+      <button id="gt3-next" class="btn btn-next" disabled
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_task_4') }}">
+        Next Task <i class="fas fa-arrow-right ms-2"></i>
+      </button>
+    </div>
+
+    <!-- Hidden example audio -->
+    <audio id="gt3-example-audio" preload="auto" src="{{ section_content.audio_example or '/static/data/audio/unit_1/guided_task3_example_en.wav' }}"></audio>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_CONTENT = {{ content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/guided_task_3.js') }}" defer></script>
+{% endblock %}

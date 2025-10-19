@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing: Differences in Pronunciation' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 noticing-scene-container" aria-live="polite">
+  <div class="noticing-scene shadow-lg" role="region" aria-label="{{ section_content.title}}">
+
+    <!-- Avatar -->
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" 
+         alt="{{ 'Captain Ray' }}" class="captain-ray">
+
+    <!-- Chalkboard (left background) -->
+    <div class="chalkboard" aria-hidden="true">
+      <div class="chalk-text">{{ section_content.chalk_title or 'Notice the Difference' }}</div>
+    </div>
+
+    <!-- Dialogue / Instruction box -->
+    <div class="notice-dialogue-box" role="article" aria-labelledby="notice-text">
+      <div class="lang-toggle">
+        <button id="notice-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div id="notice-content">
+        <p id="notice-text" class="notice-paragraph"> Now let’s look more closely at the alphabet and numbers. Some of them sound different in Maritime English. Listen and compare.
+        </p>
+      </div>
+
+      <div class="audio-control">
+        <button id="notice-audio-btn" class="audio-play-btn" aria-label="Play introduction audio" type="button">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="start-noticing-btn"
+                class="btn btn-primary btn-lg btn-start"
+                aria-disabled="true"
+                disabled
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section if section_content.start_next_section else 'noticing_alphabet') }}">
+          'Start Noticing' <i class="fas fa-arrow-right ms-1"></i>
+        </button>
+       </div>
+    </div>
+
+  </div>
+
+  <!-- audio element (uses section_content.audio_en if present) -->
+  <audio id="notice-audio" preload="auto" src="{{ section_content.audio_en or '' }}"></audio>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/noticing_intro.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or "NATO Phonetic Alphabet A–Z" }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_alphabet.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 alphabet-page">
+  <div class="instruction-scene shadow-lg" role="region" aria-label="NATO Phonetic Alphabet">
+    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="avatar-small" />
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+      <p id="instruction-text" class="lead">Click a letter to hear its NATO phonetic code word. Then, repeat it aloud.</p>
+    </div>
+
+    <div class="chart-area">
+      <div class="alphabet-grid" id="alphabet-grid" role="grid" aria-label="Alphabet grid">
+        {% set letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] %}
+        {% for i in range(30) %}
+          <div class="grid-cell" role="gridcell">
+            {% if i < letters|length %}
+              {% set ch = letters[i] %}
+              <button type="button"
+                      class="letter-tile"
+                      data-letter="{{ ch }}"
+                      aria-label="Letter {{ ch }}"
+                      aria-pressed="false"
+                      title="{{ ch }}">
+                <span class="letter">{{ ch }}</span>
+                <span class="tile-audio" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
+              </button>
+            {% else %}
+              <div class="grid-empty" aria-hidden="true"></div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="practice-area">
+        <div class="practice-box">
+          <div class="practice-text" id="practice-text">
+            {{ section_content.practice_text if section_content and section_content.practice_text else "Example: ANTARA → Alpha – November – Tango – Alpha – Romeo – Alpha" }}
+          </div>
+          <button id="practice-replay" class="btn btn-practice" aria-label="Replay practice prompt">
+            <i class="fas fa-redo"></i> Replay
+          </button>
+        </div>
+      </div>
+
+      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <div class="fb-arrow"></div>
+        <div class="fb-content">Great! Keep going.</div>
+      </div>
+    </div>
+
+    <div class="footer-cta">
+      <button id="next-btn"
+              class="btn btn-next"
+              type="button"
+              aria-label="Next to numbers section"
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}">
+        Next
+      </button>
+      <a id="continue-link" class="visually-hidden"
+         href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"></a>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/input_alphabet.js') }}"></script>
+{% endblock %}

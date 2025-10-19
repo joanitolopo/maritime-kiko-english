@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - Assessment: Identify Emergency{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_identify_emergency.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 quiz-page" aria-live="polite">
+  <div class="quiz-scene shadow-lg" role="region" aria-label="Assessment: Identify Emergency">
+    <div class="quiz-header d-flex justify-content-between align-items-center">
+      <div id="question-number" class="question-number">Question 1 of 10</div>
+      <div class="lang-toggle">
+        <button id="em-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <div class="quiz-main">
+
+      <div class="alert-indicator" aria-hidden="true">
+        <span class="red-light"></span>
+      </div>
+
+      <div class="question-box" id="question-box" role="group" aria-labelledby="q-text">
+        <p id="q-text" class="question-text"></p>
+      </div>
+
+      <div id="options-wrap" class="options-wrap"></div>
+
+      <div id="em-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/os_lina_small.png') }}" alt="" class="fb-avatar">
+        <div id="fb-text" class="fb-text">Feedback</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div id="progress-text" class="progress-text">1/10 Questions</div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="quiz-footer d-flex justify-content-center gap-3 mt-3">
+        <button id="prev-question" class="btn btn-secondary" type="button" disabled>Previous</button>
+        <button id="next-question" class="btn btn-next" type="button" disabled aria-disabled="true">Next</button>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_identify_emergency.js') }}"></script>
+{% endblock %}

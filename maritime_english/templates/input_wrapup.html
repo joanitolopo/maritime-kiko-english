@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Wrap-up' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_wrapup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 wrapup-page">
+  <div class="wrapup-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Wrap-up scene' }}">
+    <!-- Avatar OS Lina (left) -->
+    <div class="avatar-area">
+      <img src="{{ url_for('static', filename='img/os_lina_half.png') }}"
+           alt="{{ 'OS Lina' }}" class="avatar-lina">
+      <div class="notebook" id="notebook" aria-hidden="true">
+        <div class="checkmark" id="checkmark">✔</div>
+      </div>
+    </div>
+
+    <!-- Text / dialogue box -->
+    <div class="wrapup-box">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="wrapup-text" id="wrapup-text">
+        <p id="wrapup-paragraph">
+          {{ section_content.message_en or section_content.message or "Great work! Now you know the full alphabet and numbers..." }}
+        </p>
+      </div>
+
+      <!-- Audio control -->
+      <div class="audio-controls">
+        <button id="audio-btn" class="audio-play-btn" aria-label="Play wrapup audio" type="button">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- Go to Noticing -->
+      <div class="footer-cta">
+        {% if section_content.start_next_section %}
+          <a id="go-noticing"
+             href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}"
+             class="btn btn-go" role="button">Go to Noticing <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a>
+        {% else %}
+          <a id="go-noticing"
+             href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}"
+             class="btn btn-go" role="button">Go to Noticing <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- audio element uses section_content.audio_en when available -->
+  <audio id="wrapup-audio" preload="auto" src="{{ section_content.audio_en or '/static/data/audio/wrapup/wrapup_lina_en.wav' }}"></audio>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/input_wrapup.js') }}"></script>
+{% endblock %}

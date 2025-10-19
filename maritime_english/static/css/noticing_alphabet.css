@@ -1,0 +1,43 @@
+/* Alphabet Differences styles (add to unit_1_noticing.css or standalone) */
+.noticing-alphabet-container { max-width:1200px; margin:0 auto; }
+.noticing-scene { position:relative; background: linear-gradient(180deg,#1E3A8A,#223E7A); border-radius:16px; padding:2rem; min-height:72vh; color:#fff; overflow:hidden; }
+
+.oslina-avatar { position:absolute; left:3%; bottom:0; height:60%; z-index:5; }
+
+/* Instruction box */
+.instruction-box { position:absolute; right:6%; top:6%; width:44%; background: rgba(255,255,255,0.92); color:#0b1720; padding:1rem 1.2rem; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+.instruction-box .toggle-pill { position:absolute; top:10px; right:12px; background:#E5E7EB; color:#111827; border-radius:999px; padding:6px 12px; border:none; font-weight:700; cursor:pointer; }
+
+/* Table */
+.table-wrap { margin: 8rem auto 2rem auto; width: 85%; }
+.diff-table { width:100%; border-collapse:collapse; background: rgba(255,255,255,0.95); color:#111827; border-radius:12px; overflow:hidden; box-shadow:0 8px 20px rgba(0,0,0,0.18); }
+.diff-table thead th { text-align:left; padding:14px 16px; font-family:'Montserrat',sans-serif; color:#0B3D91; font-size:16px; background: rgba(245,247,250,0.9); }
+.diff-table td { padding:12px 14px; vertical-align:middle; font-size:18px; }
+.diff-table tr { border-bottom:1px solid rgba(0,0,0,0.06); }
+
+/* cell colors */
+.cell-general { background: rgba(59,130,246,0.04); color:#0B3D91; font-weight:700; }
+.cell-maritime { background: rgba(16,185,129,0.05); color:#065f46; font-weight:700; }
+
+/* audio button small */
+.audio-btn.small { background:#2563EB; color:#fff; border:none; border-radius:8px; padding:6px 8px; cursor:pointer; }
+.audio-btn.small:active { transform:scale(.98); }
+
+/* highlight when played */
+.played-general { outline: 3px solid rgba(59,130,246,0.22); box-shadow: 0 6px 12px rgba(59,130,246,0.08); }
+.played-maritime { outline: 3px solid rgba(16,185,129,0.22); box-shadow: 0 6px 12px rgba(16,185,129,0.08); }
+
+/* feedback bubble */
+.feedback-bubble { position:absolute; left:7%; bottom:16%; background: rgba(255,255,255,0.95); color:#111827; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow:0 8px 20px rgba(0,0,0,0.18); }
+.feedback-bubble .fb-avatar { width:56px; height:auto; border-radius:6px; }
+
+/* footer next */
+.footer-action { position:absolute; right:6%; bottom:3%; width:44%; text-align:center; }
+
+/* utilities */
+.d-none { display:none !important; }
+@media (max-width:900px) {
+  .instruction-box { position:static; width:100%; margin-bottom:16px; }
+  .table-wrap { margin-top:16px; width:100%; }
+  .oslina-avatar { display:none; }
+}

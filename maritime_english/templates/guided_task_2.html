@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Task 2: Spelling Ship Name' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_2.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 guided-task2-container" aria-live="polite">
+
+  <div class="scene shadow-lg" role="region" aria-label="Task 2: Spelling Ship Name">
+
+    <!-- Top instruction row -->
+    <div class="top-row">
+      <div class="instruction-box">
+        <div class="lang-toggle">
+          <button id="gt2-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+        <div id="gt2-instruction" class="instruction-text">
+          {{ section_content.instruction_en or "Listen to the spelling. Then, try spelling another ship name by clicking the letters in the correct order." }}
+        </div>
+        <div class="audio-controls">
+          <button id="replay-example" class="btn audio-btn" aria-label="Replay example spelling">
+            <i class="fas fa-play" aria-hidden="true"></i> Replay Example
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center interactive area -->
+    <div class="interactive-area">
+      <!-- Prompt / target ship name -->
+      <div class="ship-prompt">
+        <div class="ship-label">Example</div>
+        <div class="ship-name" id="ship-name-display">{{ section_content.example_name or 'MV PACIFIC STAR' }}</div>
+        <div class="ship-spelling small muted" id="ship-spelling-example">{{ section_content.example_spelling_text or 'Papa – Alpha – Charlie – India – Foxtrot – India – Charlie – Sierra – Tango – Alpha – Romeo' }}</div>
+      </div>
+
+      <!-- Letter grid -->
+      <div class="letter-grid" id="letter-grid" role="grid" aria-label="Letter grid A to Z">
+        {% set letters = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z') %}
+        {% for ch in letters %}
+        <button class="letter-btn" data-letter="{{ ch }}" aria-label="Letter {{ ch }}" title="{{ ch }}">{{ ch }}</button>
+        {% endfor %}
+      </div>
+
+      <!-- Output box (typing NATO words) -->
+      <div class="output-area">
+        <div class="output-label">Your spelling (NATO words)</div>
+        <div class="output-box" id="spelling-output" aria-live="polite"></div>
+        <div class="output-audio">
+          <button id="replay-output" class="btn audio-btn small" aria-label="Replay spelled audio">
+            <i class="fas fa-play"></i> Replay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback bubble -->
+    <div id="gt2-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-arrow"></div>
+      <div class="fb-content">Well done! You spelled it clearly.</div>
+    </div>
+
+    <!-- Footer next (disabled until example completed) -->
+    <div class="footer-cta">
+      <button id="gt2-next" class="btn btn-next" disabled
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_task_3') }}">
+        Next Task <i class="fas fa-arrow-right ms-2"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Audio sources -->
+  <audio id="audio-example" preload="auto" src="{{ section_content.audio_example or '/static/data/audio/unit_1/guided_task2_example_en.wav' }}"></audio>
+  <audio id="audio-output" preload="auto" src=""></audio> <!-- dynamically generated/played if desired -->
+
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_CONTENT = {{ content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/guided_task_2.js') }}" defer></script>
+{% endblock %}

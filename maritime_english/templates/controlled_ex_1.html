@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Exercise 1: Listen & Choose (Alphabet)' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/controlled_ex_1.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 controlled-ex1-container" aria-live="polite">
+  <div class="exercise-scene shadow-lg" role="region" aria-label="Exercise 1: Listen & Choose (Alphabet)">
+
+    <!-- Avatar OS Lina -->
+    <img src="{{ url_for('static', filename=section_content.avatar or 'img/os_lina.png') }}"
+         alt="{{ section_content.avatar_alt or 'OS Lina' }}" class="avatar-coach" />
+
+    <!-- Instruction box -->
+    <div class="instruction-box">
+      <div class="top-row">
+        <div class="title small">Exercise 1: Listen & Choose (Alphabet)</div>
+        <div class="progress" id="progress-indicator">0/10</div>
+      </div>
+
+      <div class="lang-toggle">
+        <button id="ex1-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="instruction-text" class="lead">
+        {{ section_content.instruction_en or "Listen and choose the correct letter." }}
+      </p>
+
+      <div class="audio-control">
+        <button id="ex1-audio-btn" class="audio-play-btn" aria-label="Play example audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+        <audio id="ex1-audio" preload="auto"></audio>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-area" id="question-area" role="application" aria-live="polite">
+      <div class="question-card">
+        <div id="question-label" class="question-label">Question <span id="q-num">1</span></div>
+
+        <div class="options-grid" id="options-grid" role="radiogroup" aria-labelledby="question-label">
+          <!-- option buttons inserted by JS -->
+        </div>
+      </div>
+
+      <!-- Feedback bubble (OS Lina) -->
+      <div id="ex1-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/os_lina_small.png') }}" alt="" class="fb-avatar">
+        <div id="fb-text">Good job! Bravo is B.</div>
+      </div>
+
+      <!-- Next button (enabled after feedback) -->
+      <div class="footer-cta">
+        <button id="ex1-next" class="btn btn-next" type="button" disabled
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'controlled_ex_2') }}">
+          Next
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Hidden container for preloaded audio if needed -->
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/controlled_ex_1.js') }}" defer></script>
+{% endblock %}

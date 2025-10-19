@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Exercise 4: Spelling Ship Names' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/controlled_ex_4.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 controlled-ex4-container" aria-live="polite">
+  <div class="scene shadow-lg" role="region" aria-label="Exercise 4: Spelling Ship Names">
+
+    <!-- Captain Ray avatar -->
+    <img src="{{ url_for('static', filename=section_content.avatar or 'img/captain_ray.png') }}" alt="" class="avatar-ray">
+
+    <!-- Instruction area -->
+    <div class="instruction-box">
+      <div class="top-row">
+        <div class="title small">Exercise 4: Spelling Ship Names</div>
+        <div id="progress" class="progress-text">0/0</div>
+      </div>
+
+      <div class="lang-toggle">
+        <button id="ex4-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="instruction-text" class="lead">
+        {{ section_content.instruction_en or "Spell the ship name using the NATO alphabet. Click the letters in the correct order." }}
+      </p>
+    </div>
+
+    <!-- Prompt card -->
+    <div class="prompt-card">
+      <div class="ship-name" id="ship-name">{{ section_content.ships[0].name if section_content.ships else 'ANTARA' }}</div>
+
+      <div class="spelling-output" id="spelling-output" aria-live="polite">
+        <span id="output-words">—</span>
+        <button id="replay-output" class="btn btn-sm btn-outline" aria-label="Replay spelled output">
+          <i class="fas fa-redo"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Letter grid -->
+    <div class="letters-grid" id="letters-grid" role="grid" aria-label="Letter selection grid">
+      {% set letters = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z') %}
+      {% for ch in letters %}
+      <button class="letter-btn" data-letter="{{ ch }}" aria-label="Letter {{ ch }}" title="{{ ch }}">
+        <span class="ltr">{{ ch }}</span>
+      </button>
+      {% endfor %}
+    </div>
+
+    <!-- Feedback bubble -->
+    <div id="ex4-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+      <div class="fb-content" id="fb-content">Correct!</div>
+    </div>
+
+    <!-- Footer / Next -->
+    <div class="footer-cta">
+      <button id="ex4-next" class="btn btn-next" type="button" disabled
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'controlled_wrapup') }}">
+        Next
+      </button>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/controlled_ex_4.js') }}" defer></script>
+{% endblock %}

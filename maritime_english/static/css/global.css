@@ -1,0 +1,61 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Open Sans', sans-serif;
+}
+
+header {
+    background-color: #003087;
+}
+
+.logo span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.site-language {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #003087;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+p, label, input, button, a, textarea, select {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.btn-outline-primary {
+    border-color: #003087;
+    color: #003087;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background-color: #003087;
+    color: #ffffff;
+}
+
+.alert {
+    font-family: 'Open Sans', sans-serif;
+}

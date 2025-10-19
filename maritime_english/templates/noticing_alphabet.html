@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing — Alphabet Differences' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_alphabet.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 noticing-alphabet-container" aria-live="polite">
+  <div class="noticing-scene shadow-lg">
+
+    <!-- Avatar OS Lina (bottom-left) -->
+    <!-- <img src="{{ url_for('static', filename=section_content.avatar or 'img/kiko.png') }}"
+         alt="{{ section_content.avatar_alt or 'OS Lina' }}" class="oslina-avatar"> -->
+
+    <!-- Instruction Box -->
+    <div class="instruction-box">
+      <div class="lang-toggle">
+        <button id="alphabet-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+      <p id="alphabet-instruction" class="lead">
+        {{ section_content.instruction_en or 'Click each pair to hear the difference.' }}
+      </p>
+    </div>
+
+    <!-- Two-column table -->
+    <div class="table-wrap">
+      <table class="diff-table" role="table" aria-label="Alphabet differences: General English vs Maritime English">
+        <thead>
+          <tr>
+            <th>General English</th>
+            <th></th>
+            <th>Maritime English</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="pairs-body">
+          {# generate rows from JSON; if none provided, show a few example rows #}
+          {% if section_content.pairs %}
+            {% for pair in section_content.pairs %}
+              <tr data-pair="{{ pair.letter }}">
+                <td class="cell-general">{{ pair.general }}</td>
+                <td class="cell-action">
+                  <button class="audio-btn small pair-btn-general" data-src="{{ pair.general_audio }}" aria-label="Play {{ pair.general }}">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                  </button>
+                </td>
+
+                <td class="cell-maritime">{{ pair.maritime }}</td>
+                <td class="cell-action">
+                  <button class="audio-btn small pair-btn-maritime" data-src="{{ pair.maritime_audio }}" aria-label="Play {{ pair.maritime }}">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <!-- fallback: a few sample rows -->
+            <tr data-pair="A">
+              <td class="cell-general">Bee</td>
+              <td class="cell-action">
+                <button class="audio-btn small pair-btn-general" data-src="/static/data/audio/noticing/alphabet/bee.wav" aria-label="Play Bee"><i class="fas fa-volume-up"></i></button>
+              </td>
+              <td class="cell-maritime">Bravo</td>
+              <td class="cell-action">
+                <button class="audio-btn small pair-btn-maritime" data-src="/static/data/audio/noticing/alphabet/bravo.wav" aria-label="Play Bravo"><i class="fas fa-volume-up"></i></button>
+              </td>
+            </tr>
+            <tr data-pair="C">
+              <td class="cell-general">See</td>
+              <td class="cell-action">
+                <button class="audio-btn small pair-btn-general" data-src="/static/data/audio/noticing/alphabet/see.wav" aria-label="Play See"><i class="fas fa-volume-up"></i></button>
+              </td>
+              <td class="cell-maritime">Charlie</td>
+              <td class="cell-action">
+                <button class="audio-btn small pair-btn-maritime" data-src="/static/data/audio/noticing/alphabet/charlie.wav" aria-label="Play Charlie"><i class="fas fa-volume-up"></i></button>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Feedback bubble (hidden until first click) -->
+    <div id="alphabet-feedback" class="feedback-bubble d-none" role="status" aria-live="polite">
+      <img src="{{ url_for('static', filename=section_content.feedback_avatar or 'img/kiko.png') }}" alt="" class="fb-avatar">
+      <div id="fb-text">{{ section_content.feedback_text_en or 'Good listening! See the difference?' }}</div>
+    </div>
+
+    <!-- Next Button -->
+    <div class="footer-action text-center">
+      <button id="alphabet-next" class="btn btn-success btn-lg d-none"
+              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section if section_content.start_next_section else 'noticing_numbers') }}">
+        {{ section_content.next_label or 'Next' }} <i class="fas fa-arrow-right ms-1"></i>
+      </button>
+    </div>
+
+    <!-- shared audio element used by JS -->
+    <audio id="pair-audio" preload="auto"></audio>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/noticing_alphabet.js') }}" defer></script>
+{% endblock %}

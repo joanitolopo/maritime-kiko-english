@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Simulation Task 3: MMSI & Channel' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authentic_task_3.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 sim3-container" aria-live="polite">
+  <div class="sim3-scene shadow-lg" role="region" aria-label="Simulation Task 3: MMSI & Channel">
+
+    <!-- Left: Captain Ray -->
+    <aside class="left-panel">
+      <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-ray" />
+      <div id="mic-ray" class="mic-indicator" aria-hidden="true"></div>
+    </aside>
+
+    <!-- Middle / Right: Scenario + Controls -->
+    <section class="main-panel" role="main" aria-labelledby="sim3-title">
+      <div class="top-row">
+        <div class="lang-toggle">
+          <button id="sim3-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+        <div class="sim-badge">Simulation Mode</div>
+      </div>
+
+      <h3 id="sim3-title" class="sim-title">{{ section_content.title or "Simulation Task 3: MMSI & Channel" }}</h3>
+
+      <div class="scenario-box" id="scenario-box" aria-live="polite">
+        <p id="scenario-desc">{{ section_content.scenario_en | safe }}</p>
+        <div class="digital-panel">
+          <div class="digital-line">MMSI: <span id="digital-mmsi">{{ section_content.example_mmsi or '525123456' }}</span></div>
+          <div class="digital-line">Channel: <span id="digital-channel">{{ section_content.example_channel or '16' }}</span></div>
+        </div>
+      </div>
+
+      <div class="dialogue-area">
+        <div id="dialogue-script" class="dialogue-script">
+          {{ section_content.dialogue_en | safe }}
+        </div>
+
+        <div class="audio-controls">
+          <button id="replay-example" class="audio-btn" aria-label="Replay example">
+            <i class="fas fa-play"></i>
+          </button>
+          <span class="audio-label">Replay Example</span>
+        </div>
+
+        <div class="instruction-box" id="instruction-box">
+          <p id="task-instr">{{ section_content.instruction_en or "Speak aloud your MMSI and channel clearly." }}</p>
+        </div>
+
+        <div class="practice-area">
+          <button id="practice-btn" class="btn-practice" aria-label="Record / Practice Response">
+            Record / Practice Response
+          </button>
+        </div>
+
+        <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+          <div class="fb-arrow"></div>
+          <div class="fb-content" id="fb-content">{{ section_content.default_feedback or "Excellent! Clear MMSI and channel." }}</div>
+        </div>
+
+        <div class="dialogue-footer">
+          <button id="next-sim3" class="btn-next" type="button" disabled
+                  data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'authentic_task_4') }}">
+            Next Simulation
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hidden example audio -->
+    <audio id="example-audio" preload="auto" src="{{ section_content.audio_example }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/authentic_task_3.js') }}" defer></script>
+{% endblock %}

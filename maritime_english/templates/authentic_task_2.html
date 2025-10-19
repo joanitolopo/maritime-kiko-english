@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Simulation Task 2: Spelling Ship Name' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/authentic_task_2.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 sim2-container" aria-live="polite">
+  <div class="sim2-scene shadow-lg" role="region" aria-label="Simulation Task 2: Spelling Ship Name">
+
+    <!-- Left column: Captain Ray -->
+    <aside class="left-col">
+      <img src="{{ url_for('static', filename='img/captain_ray.png') }}" alt="Captain Ray" class="avatar-ray" />
+      <div class="mic-indicator" id="mic-ray" aria-hidden="true"></div>
+      <div class="sim-badge">Simulation Mode</div>
+    </aside>
+
+    <!-- Right column: scenario, audio, controls -->
+    <section class="right-col" role="main" aria-labelledby="sim2-title">
+      <div class="lang-toggle">
+        <button id="sim2-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <h3 id="sim2-title" class="sim-title">{{ section_content.title or "Simulation Task 2: Spelling Ship Name" }}</h3>
+
+      <div class="scenario-box" id="scenario-box">
+        <p id="scenario-desc">{{ section_content.scenario_en | safe }}</p>
+      </div>
+
+      <div class="dialogue-area">
+        <div id="dialogue-script" class="dialogue-script">
+          {{ section_content.dialogue_en | safe }}
+        </div>
+
+        <div class="audio-controls">
+          <button id="replay-example" class="audio-play-btn" aria-label="Replay example spelling">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+          <span class="audio-note">Replay Example</span>
+        </div>
+
+        <div class="instruction-box" id="instruction-box">
+          <p id="task-instr">{{ section_content.instruction_en or "Speak aloud and spell the ship name clearly, letter by letter." }}</p>
+        </div>
+
+        <div class="practice-area">
+          <button id="practice-spell" class="btn-practice" aria-label="Record / Practice Spelling">
+            Record / Practice Spelling
+          </button>
+        </div>
+
+        <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+          <div class="fb-arrow"></div>
+          <div class="fb-content" id="fb-content">{{ section_content.default_feedback or "Perfect spelling! Loud and clear." }}</div>
+        </div>
+
+        <div class="dialogue-footer">
+          <button id="next-sim2" class="btn-next" type="button" disabled
+                  data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'authentic_task_3') }}">
+            Next Simulation
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- hidden audio -->
+    <audio id="example-audio" preload="auto" src="{{ section_content.audio_example }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/authentic_task_2.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing Wrap-up' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_wrapup.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4 noticing-wrapup-container" aria-live="polite">
+  <div class="wrapup-scene shadow-lg" role="region" aria-label="Noticing wrap-up by Captain Ray">
+
+    <!-- Background map (decorative) -->
+    <div class="map-bg" aria-hidden="true"></div>
+
+    <!-- Captain Ray avatar (left/bottom) -->
+    <img src="{{ url_for('static', filename=section_content.avatar or 'img/kiko.png') }}"
+         alt="{{ section_content.avatar_alt or 'Captain Ray' }}"
+         class="captain-ray-wrap" id="captain-ray">
+
+    <!-- Callouts layer (decorative letters/numbers) -->
+    <div class="callouts" aria-hidden="true">
+      {% for c in section_content.callouts or ['A','3','5','9','Z'] %}
+        <span class="callout">{{ c }}</span>
+      {% endfor %}
+    </div>
+
+    <!-- Wrap-up text box (right / center bottom) -->
+    <div class="wrapup-box" role="article" aria-labelledby="wrapup-text">
+      <div class="lang-toggle">
+        <button id="wrap-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="wrapup-content" id="wrapup-text">
+        <p id="wrapup-paragraph" class="lead">
+          {{ section_content.text_en or "Great! You have noticed the differences in how we say letters and numbers at sea. These small changes make communication clear and safe." }}
+        </p>
+      </div>
+
+      <!-- Audio control -->
+      <div class="audio-control">
+        <button id="wrap-audio-btn" class="audio-play-btn" aria-label="Play wrap-up audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="dialogue-footer">
+        <button id="go-controlled" class="btn btn-go-large" 
+                aria-label="Go to Controlled Practice"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'controlled_practice_intro') }}">
+          {{ section_content.cta_label or 'Go to Controlled Practice' }} <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hidden audio element (EN default) -->
+    <audio id="wrapup-audio" preload="auto" src="{{ section_content.audio_en or '/static/data/audio/noticing/wrapup_en.wav' }}"></audio>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/noticing_wrapup.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,35 @@
+/* static/css/assessment_dialogue.css */
+.quiz-scene { padding:18px; border-radius:12px; background: linear-gradient(180deg,#0b1220 0,#041022 100%); color:#F9FAFB; }
+.quiz-header { padding:8px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.question-number { font-family:"Montserrat",sans-serif; font-weight:600; font-size:16px; color:#0B3D91; }
+.toggle-pill { background:#E5E7EB; border:0; padding:6px 10px; border-radius:999px; font-weight:700; color:#000; cursor:pointer; }
+
+.split-screen { display:flex; justify-content:space-between; gap:12px; margin-bottom:10px; align-items:center; }
+.avatar-small { width:64px; height:64px; border-radius:8px; object-fit:cover; }
+
+.question-box { background: rgba(255,255,255,0.95); padding:12px; border-radius:10px; margin-bottom:12px; color:#111827; min-height:70px; }
+.input-area textarea { width:100%; padding:12px; border-radius:8px; border:1px solid #D1D5DB; font-size:16px; font-family:"Montserrat",sans-serif; resize:vertical; min-height:64px; }
+.input-area textarea:focus { outline:none; box-shadow:0 6px 18px rgba(37,99,235,0.08); border-color:#2563EB; }
+
+.action-row .btn { padding:8px 14px; border-radius:10px; font-weight:700; }
+.btn-audio { background:#2563EB; color:#fff; border:0; }
+.btn-primary { background:#10B981; color:#fff; border:0; }
+.btn-secondary { background:#3B82F6; color:#fff; border:0; }
+.btn-next { padding:10px 18px; border-radius:10px; background:#2563EB; color:#fff; font-weight:800; border:0; cursor:pointer; }
+.btn-next[disabled], .btn-next[aria-disabled="true"] { opacity:0.6; cursor:not-allowed; }
+
+.feedback-bubble { display:flex; gap:12px; align-items:center; margin-top:14px; background:rgba(255,255,255,0.95); padding:8px 10px; border-radius:12px; color:#0b1220; }
+.feedback-bubble.visually-hidden { display:none; }
+.feedback-bubble.positive { border-left:4px solid #10B981; }
+.feedback-bubble.negative { border-left:4px solid #EF4444; }
+.fb-avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+
+.progress-wrap { display:flex; align-items:center; gap:12px; margin-top:8px; }
+.progress-text { font-size:14px; color:#D1D5DB; }
+.progress-bar { flex:1; height:10px; background:#08182f; border-radius:999px; overflow:hidden; }
+.progress-fill { height:100%; background:#2563EB; width:0%; transition:width .36s ease; }
+
+@media (max-width:767px) {
+  .split-screen { flex-direction:row; gap:8px; }
+  .avatar-small { width:48px; height:48px; }
+}

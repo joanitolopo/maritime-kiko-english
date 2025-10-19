@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Assessment: Unit 1 Quiz' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_intro.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 assessment-intro" aria-live="polite">
+  <div class="assessment-scene shadow-lg" role="region" aria-label="Assessment Intro">
+
+    <!-- Left: Avatar OS Lina -->
+    <aside class="avatar-col" aria-hidden="true">
+      <img src="{{ url_for('static', filename='img/os_lina_half.png') }}" alt="OS Lina" class="avatar-lina">
+    </aside>
+
+    <!-- Right: Panel -->
+    <section class="panel-col">
+      <div class="panel-top">
+        <div class="panel-title">{{ section_content.title or "Assessment: Unit 1 Quiz" }}</div>
+        <button id="assess-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="text-box">
+        <p id="intro-text" class="intro-paragraph">
+          {{ section_content.text_en or "It’s time to check what you’ve learned. This quiz will test your spelling of ship names, numbers, MMSI, and emergency communication. Don’t worry — just do your best!" }}
+        </p>
+      </div>
+
+      <div class="audio-row">
+        <button id="intro-audio-btn" class="audio-btn" aria-label="Play introduction audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+        <div class="progress-indicator" id="quiz-progress">0/{{ section_content.total_questions or 10 }} Questions</div>
+      </div>
+
+      <div class="instruction-box">
+        <p class="muted">
+          {{ section_content.instruction_en or "Click [Start Quiz] to begin. Answer all questions carefully." }}
+        </p>
+      </div>
+
+      <div class="footer-cta">
+        <button id="start-quiz-btn" class="btn-start" type="button"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'assessment_q1') }}">
+          Start Quiz
+        </button>
+      </div>
+    </section>
+
+    <!-- Hidden audio element -->
+    <audio id="intro-audio" preload="auto" src="{{ section_content.audio_en }}"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_intro.js') }}"></script>
+{% endblock %}

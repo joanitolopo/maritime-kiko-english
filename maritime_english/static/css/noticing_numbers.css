@@ -1,0 +1,50 @@
+/* noticing_numbers.css - visual style for Number Differences page */
+
+.noticing-numbers-container { font-family: "Open Sans", Arial, sans-serif; }
+.noticing-scene { background: linear-gradient(180deg,#0F172A 0%, #0B3D91 100%); color:#F9FAFB; padding:20px; border-radius:12px; position:relative; overflow:hidden; }
+.captain-ray-small { position:absolute; left:18px; bottom:14px; width:96px; opacity:0.98; }
+
+/* Instruction box */
+.instruction-box { background: rgba(249,250,251,0.88); color:#0B3D91; padding:12px 16px; border-radius:12px; max-width:760px; margin: 8px auto 18px; box-shadow:0 6px 20px rgba(2,6,23,0.35); position:relative; }
+.toggle-pill { background:#E5E7EB; border-radius:999px; padding:6px 10px; font-weight:700; border: none; }
+
+/* Table */
+.table-wrap { max-width:980px; margin: 0 auto; padding: 6px; }
+.diff-table { width:100%; border-collapse:collapse; background:rgba(249,250,251,0.96); color:#07103A; border-radius:8px; overflow:hidden; }
+.diff-table thead th { text-align:left; padding:12px 10px; font-weight:600; color:#0B3D91; font-family:Montserrat, sans-serif; }
+.diff-table tbody tr { border-bottom:1px solid rgba(15,23,42,0.06); }
+.diff-table td { padding:14px 8px; vertical-align:middle; font-size:18px; }
+.cell-action { width:72px; text-align:center; }
+
+/* column colors */
+.col-general { color:#0B3D91; }
+.col-maritime { color:#065F46; }
+
+/* Buttons */
+.audio-btn.small { background:transparent; border:1px solid rgba(37,99,235,0.12); padding:8px; border-radius:8px; cursor:pointer; }
+.audio-btn.small i { color:#2563EB; font-size:14px; }
+
+/* played state & checks */
+.cell-general.played-general, .cell-maritime.played-maritime { opacity:0.95; font-weight:600; }
+.check { color:#10B981; margin-left:6px; font-size:14px; }
+
+/* highlighted numbers (3,5,9) */
+.pair-row.highlight-number td { transition: box-shadow 0.18s ease, transform 0.12s ease; }
+.pair-row.highlight-number.playing td { box-shadow: 0 6px 30px rgba(250,204,21,0.28); transform: translateY(-3px); background: linear-gradient(90deg, rgba(250,204,21,0.08), transparent); }
+
+/* feedback bubble */
+.feedback-bubble { position: absolute; left: 110px; bottom: 120px; background:white; color:#0B3D91; padding:10px 12px; border-radius:10px; box-shadow:0 8px 30px rgba(2,6,23,0.35); display:flex; gap:8px; align-items:center; }
+.feedback-bubble .fb-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; }
+.feedback-bubble.d-none { display:none; }
+
+/* Next button reveal */
+.footer-action { margin-top:18px; }
+.btn-success { background:#10B981; border: none; padding:12px 28px; font-weight:700; color:#fff; border-radius:10px; }
+.btn-success:hover { background:#0e9a66; }
+
+/* small responsive */
+@media (max-width:720px) {
+  .captain-ray-small { width:72px; left:8px; bottom:8px; }
+  .instruction-box { margin: 6px; padding:10px; }
+  .diff-table td { padding:10px 6px; font-size:16px; }
+}

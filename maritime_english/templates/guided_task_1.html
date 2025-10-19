@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Task 1: Radio Check' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_1.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 guided-task1-container" aria-live="polite">
+
+  <div class="split-scene shadow-lg" role="region" aria-label="Task 1: Radio Check">
+
+    <!-- Left: Captain Ray -->
+    <div class="split left">
+      <img src="{{ url_for('static', filename=section_content.avatar_left or 'img/captain_ray.png') }}" alt="Captain Ray" class="avatar-split">
+      <div class="avatar-label">Captain Ray</div>
+    </div>
+
+    <!-- Center: Radio panel -->
+    <div class="center-panel" id="radio-panel" aria-hidden="true">
+      <div class="radio-indicator" id="radio-indicator" aria-hidden="true"></div>
+    </div>
+
+    <!-- Right: OS Lina -->
+    <div class="split right">
+      <img src="{{ url_for('static', filename=section_content.avatar_right or 'img/os_lina.png') }}" alt="OS Lina" class="avatar-split">
+      <div class="avatar-label">OS Lina</div>
+    </div>
+
+    <!-- Dialogue / Instruction Box (bottom center) -->
+    <div class="dialogue-box" role="region" aria-label="Radio exchange">
+      <div class="top-row">
+        <div class="instruction-title">Task 1: Radio Check</div>
+        <div class="lang-toggle">
+          <button id="task1-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+        </div>
+      </div>
+
+      <div class="instruction-text" id="instruction-text">
+        <p id="task-instruction">{{ section_content.instruction_en or "Listen to the exchange. Then, repeat OS Lina's response." }}</p>
+      </div>
+
+      <!-- Audio controls -->
+      <div class="audio-controls">
+        <button id="replay-full" class="btn audio-btn" aria-label="Replay full dialogue">
+          <i class="fas fa-play" aria-hidden="true"></i> Replay Full Dialogue
+        </button>
+
+        <button id="replay-lina" class="btn audio-btn" aria-label="Replay OS Lina">
+          <i class="fas fa-play" aria-hidden="true"></i> Replay OS Lina
+        </button>
+      </div>
+
+      <!-- Dialogue script -->
+      <div class="script-box" id="script-box" aria-live="polite">
+        <div id="dialogue-script" class="dialogue-script">
+          {{ section_content.dialogue_en | safe }}
+        </div>
+      </div>
+
+      <!-- Practice prompt -->
+      <div class="practice-area">
+        <button id="repeat-response" class="btn btn-practice" aria-label="Repeat response">
+          Repeat Response
+        </button>
+      </div>
+
+      <!-- Feedback bubble (OS Lina) -->
+      <div id="task1-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <div class="fb-arrow"></div>
+        <div class="fb-content">Good job!</div>
+      </div>
+
+      <!-- Footer CTA (Next hidden until repeat pressed) -->
+      <div class="dialogue-footer">
+        <button id="next-task" class="btn btn-next visually-hidden"
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_task_2') }}">
+          Next Task <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Audio elements -->
+  <audio id="audio-full" preload="auto" src="{{ section_content.audio_full or '/static/data/audio/unit_1/guided_task1_full_en.wav' }}"></audio>
+  <audio id="audio-lina" preload="auto" src="{{ section_content.audio_lina or '/static/data/audio/unit_1/guided_task1_lina_en.wav' }}"></audio>
+
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/guided_task_1.js') }}" defer></script>
+{% endblock %}

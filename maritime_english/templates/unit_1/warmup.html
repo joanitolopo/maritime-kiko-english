@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}Unit 1: Warmup{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/units/unit_1_warmup.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-5 game-main">
+
+    <h1 class="text-center mb-4">Warm-up: Phonetic Alphabet Game</h1>
+
+    <div id="activity-1" class="activity-section">
+        <div id="warmup-intro" class="intro-scene mb-4">
+            <img src="{{ url_for('static', filename='img/kiko.png') }}" 
+                 alt="OS Lina" class="character-img">
+
+            <div class="dialogue-box">
+                <div class="lang-toggle">
+                    <button id="lang-toggle-btn" class="toggle-pill">EN</button>
+                </div>
+                <p id="dialogue-text">
+                    Hi friends! I just joined this ship as an Ordinary Seaman. 
+                    I’m still learning, just like you. Let’s play a quick game before we learn the full alphabet and numbers. 
+                    You’ll hear a sound — like ‘Sierra’ or ‘Niner’ — and you need to click the correct letter or number. 
+                    Don’t worry, it’s just for fun. Ready? Let’s go!
+                </p>
+                <div class="dialogue-footer">
+                    <button id="start-game-btn" class="btn btn-lg btn-start-game">
+                        Start Game <i class="fas fa-play ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="warmup-game" class="text-center p-4 d-none">
+            <div class="alert alert-info">
+                🎧 Listen carefully! Click the correct letter or number. <br>
+                Round <span id="round">1</span>/8
+            </div>
+
+            <div class="game-grid-container">
+                <div class="row justify-content-center game-grid">
+                    {% for val in ['S','O','A','C','0','1','5','9'] %}
+                    <div class="col-6 col-md-3 p-2">
+                        <button class="btn letter-btn" data-value="{{ val }}">
+                        <span>{{ val }}</span>
+                        {% if val.isdigit() %}
+                            <img src="{{ url_for('static', filename='img/compass.png') }}" alt="icon" class="btn-icon">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/anchor.png') }}" alt="icon" class="btn-icon">
+                        {% endif %}
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="my-4"> <button class="btn btn-compass" id="play-audio">
+                    <img src="{{ url_for('static', filename='img/compass.png') }}" alt="Play" class="compass-icon"> 
+                    Play Sound
+                </button>
+            </div>
+
+            <div id="feedback" class="d-none"></div>
+
+            <button id="to-activity-2" class="btn btn-success btn-lg btn-action-next d-none mt-3">
+                Next Activity
+            </button>
+        </div>
+    </div>
+
+    <div id="activity-2" class="activity-section d-none">
+
+    <div class="mb-3 text-center">
+        <iframe height="400"
+        src="https://www.youtube.com/embed/QxIYX7LQJyY?autoplay=1&mute=1"
+        title="Warm-up Video"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+        </iframe>
+    </div>
+
+    <div class="quiz-box text-center position-relative">
+        <div class="lang-toggle">
+        <button class="toggle-pill" id="toggle-lang">EN</button>
+        </div>
+
+        <p class="lead">What is the ship name spelled in the video?</p>
+
+        <form id="quiz-form">
+        {% for option in ['SAILOR','SAILEX','SAIPEX','SAILEN'] %}
+        <label class="quiz-label">
+            <input type="radio" name="quiz" value="{{ option }}" class="quiz-radio">
+            <span>{{ option }}</span>
+        </label>
+        {% endfor %}
+        </form>
+
+        <div id="quiz-feedback" class="alert d-none mt-3"></div>
+        <button id="to-activity-3" class="btn btn-success btn-lg btn-action-next mt-3 d-none">Finish Warm-up</button>
+        </div>
+    </div>
+
+    <div id="activity-3" class="activity-section d-none">
+        <div class="wrapup-scene mb-4">
+            <img src="{{ url_for('static', filename='img/kiko.png') }}" 
+                 alt="OS Lina" class="wrapup-avatar">
+
+            <div class="wrapup-dialogue-box">
+                <div class="lang-toggle">
+                    <button class="toggle-pill" id="wrapup-lang-toggle">EN</button>
+                </div>
+
+                <p id="wrapup-text" class="fade-in">
+                    Great job! You’ve just tried the special alphabet and numbers used on ships. 
+                    Next, Captain Ray will show you the full version so you can use it like real sailors.
+                </p>
+
+                <button id="wrapup-play" class="audio-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+
+                <div class="dialogue-footer">
+                    <a href="{{ url_for('learning.learning_unit', unit_id=1, section='input_intro') }}" 
+                       id="go-input-btn"
+                       class="btn btn-success btn-lg btn-action-next pulse-green">
+                       Go to Input Section <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/unit_1_warmup.js') }}"></script>
+{% endblock %}

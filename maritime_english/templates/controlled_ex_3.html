@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Exercise 3: Matching Letters to Code Words' }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/controlled_ex_3.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 controlled-ex3-container" aria-live="polite">
+  <div class="exercise-scene shadow-lg" role="region" aria-label="Exercise 3: Matching Letters to Code Words">
+
+    <!-- Avatar OS Lina -->
+    <img src="{{ url_for('static', filename=section_content.avatar or 'img/os_lina.png') }}" alt="" class="avatar-coach" />
+
+    <!-- Instruction -->
+    <div class="instruction-box">
+      <div class="top-row">
+        <div class="title small">Exercise 3: Matching Letters ↔ Code Words</div>
+        <div class="progress" id="progress-indicator">0/10</div>
+      </div>
+
+      <div class="lang-toggle">
+        <button id="ex3-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <p id="instruction-text" class="lead">
+        {{ section_content.instruction_en or "Listen to the audio and type the correct letter. Sometimes you will also see a letter — type the correct NATO code word for it." }}
+      </p>
+    </div>
+
+    <!-- Prompt area -->
+    <div class="prompt-area" id="prompt-area">
+      <div id="prompt-type" class="prompt-type">Prompt</div>
+
+      <!-- Audio prompt (Type A) -->
+      <div id="audio-prompt" class="audio-prompt">
+        <button id="ex3-audio-btn" class="audio-play-btn" aria-label="Play prompt audio">
+          <i class="fas fa-play" aria-hidden="true"></i>
+        </button>
+        <audio id="ex3-audio" preload="auto"></audio>
+      </div>
+
+      <!-- Visual letter prompt (Type B) -->
+      <div id="visual-prompt" class="visual-prompt" aria-hidden="true">
+        <div class="big-letter" id="big-letter">A</div>
+      </div>
+
+      <!-- Input box -->
+      <div class="input-row">
+        <label for="answer-input" class="visually-hidden">Answer</label>
+        <input id="answer-input" class="answer-input" maxlength="20" autocomplete="off" aria-label="Type your answer here">
+        <button id="submit-btn" class="btn btn-primary" type="button">Submit</button>
+      </div>
+
+      <!-- Feedback bubble -->
+      <div id="ex3-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/os_lina_small.png') }}" alt="" class="fb-avatar">
+        <div id="ex3-fb-text">Correct! Bravo = B.</div>
+      </div>
+
+      <!-- Next -->
+      <div class="footer-cta">
+        <button id="ex3-next" class="btn btn-next" type="button" disabled
+                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'controlled_ex_4') }}">
+          Next
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/controlled_ex_3.js') }}" defer></script>
+{% endblock %}

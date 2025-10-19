@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or "Mini Dialogue: VHF Exchange" }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 vhf-page">
+  <div class="vhf-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Mini Dialogue VHF Exchange' }}">
+    <div class="split-screen">
+      <div class="left-avatar">
+        <img src="{{ url_for('static', filename='img/kikock.png') }}" alt="{{ section_content.avatar_a_alt or 'Captain Ray' }}" class="avatar-lg" id="avatar-ray">
+        <div class="mic-indicator" id="mic-ray" aria-hidden="true"></div>
+      </div>
+
+      <div class="right-avatar">
+        <img src="{{ url_for('static', filename='img/os_lina.png') }}" alt="{{ section_content.avatar_b_alt or 'OS Lina' }}" class="avatar-lg" id="avatar-lina">
+        <div class="mic-indicator" id="mic-lina" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="dialogue-box" role="region" aria-label="Dialogue script">
+      <div class="lang-toggle">
+        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+
+      <div class="dialogue-script" id="dialogue-script">
+        <p id="dialogue-text">
+          {{ section_content.dialogue_en | safe if section_content.dialogue_en else section_content.dialogue | safe }}
+        </p>
+      </div>
+
+      <div class="instruction-box">
+        <p id="instruction-text">{{ section_content.instruction_en or section_content.instruction or "Listen to the dialogue carefully. Then, repeat Operator B's response aloud." }}</p>
+      </div>
+
+      <div class="audio-controls">
+        <div class="audio-btn-group">
+          <button id="play-full" class="audio-btn" aria-label="Replay full dialogue" type="button">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+          <span class="audio-label">Full Dialogue</span>
+        </div>
+
+        <div class="audio-btn-group">
+          <button id="play-b" class="audio-btn" aria-label="Replay Operator B only" type="button">
+            <i class="fas fa-play" aria-hidden="true"></i>
+          </button>
+          <span class="audio-label">Operator B</span>
+        </div>
+
+        <button id="repeat-response" class="btn btn-practice" aria-label="Repeat response" type="button">Repeat Response</button>
+      </div>
+
+      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <div class="fb-arrow" aria-hidden="true"></div>
+        <div class="fb-content">{{ section_content.default_feedback or 'Good job! Keep practicing to sound like a real sailor.' }}</div>
+      </div>
+
+      <div id="vhf-quiz" class="vhf-quiz visually-hidden" aria-hidden="true">
+        <p class="quiz-question">{{ section_content.quiz_question or 'Who said "Switch to Channel WUN SIX"?' }}</p>
+        <form id="vhf-quiz-form" aria-label="VHF quiz">
+          {% for opt in section_content.quiz_options or ['ray','lina'] %}
+            <label class="quiz-label">
+              <input type="radio" name="vhf-quiz" value="{{ opt }}">{{ section_content.quiz_labels[opt] if section_content.quiz_labels and opt in section_content.quiz_labels else (opt|capitalize) }}
+            </label>
+          {% endfor %}
+        </form>
+        <div id="vhf-quiz-feedback" class="alert d-none mt-2" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="dialogue-footer">
+        <button id="next-btn" class="btn btn-next" aria-label="Next to Wrap-up" type="button">Next</button>
+
+        {% if section_content.start_next_section %}
+          <a id="continue-link" class="visually-hidden" href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}"></a>
+        {% else %}
+          <a id="continue-link" class="visually-hidden" href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_wrapup') }}"></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio elements: use section_content paths if present -->
+  <audio id="audio-full" preload="auto" src="{{ section_content.audio_full or '/static/data/audio/dialogues/unit1_full_en.wav' }}"></audio>
+  <audio id="audio-b" preload="auto" src="{{ section_content.audio_b or '/static/data/audio/dialogues/unit1_b_en.wav' }}"></audio>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/input_vhf.js') }}"></script>
+{% endblock %}

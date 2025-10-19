@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Unit {{ unit_id }} - Assessment: MMSI (10 questions){% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/assessment_mmsi.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="container my-4 quiz-page" aria-live="polite">
+  <div class="quiz-scene shadow-lg" role="region" aria-label="Assessment: MMSI">
+
+    <div class="quiz-header d-flex justify-content-between align-items-center">
+      <div id="question-number" class="question-number">Question 1 of {{ section.total_questions }}</div>
+      <div class="lang-toggle">
+        <button id="mmsi-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+      </div>
+    </div>
+
+    <div class="quiz-main">
+      <div class="question-box" id="question-box" role="group" aria-labelledby="q-text">
+        <p id="q-text" class="question-text">
+          <!-- filled by JS -->
+        </p>
+      </div>
+
+      <div class="progress-wrap">
+        <div id="progress-text" class="progress-text">1/{{ section.total_questions }}</div>
+        <div class="progress-bar" aria-hidden="true">
+          <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <input id="mmsi-input" class="mmsi-input" type="text"
+               placeholder="Type digits or NATO words (e.g. 525123456 or Fife Too Fife Wun ...)"
+               aria-label="Type your MMSI spelling">
+        <div class="input-help">Accepts digits (0–9) or Maritime code words (Wun, Too, Tree, Fower, Fife, Niner...)</div>
+
+        <div class="action-row">
+          <button id="submit-answer" class="btn btn-submit">Submit Answer</button>
+          <button id="play-example" class="btn btn-play" aria-label="Play example audio">
+            <i class="fas fa-volume-up"></i> Play Example
+          </button>
+        </div>
+      </div>
+
+      <div id="mmsi-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
+        <img src="{{ url_for('static', filename='img/os_lina_small.png') }}" alt="" class="fb-avatar">
+        <div id="fb-text" class="fb-text">Feedback</div>
+      </div>
+
+      <div class="quiz-footer text-center">
+        <button id="next-question" class="btn btn-next" type="button" disabled aria-disabled="true">Next</button>
+      </div>
+    </div>
+
+    <!-- audio element used by JS; src will be set per question -->
+    <audio id="mmsi-audio" preload="auto"></audio>
+  </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script src="{{ url_for('static', filename='js/assessment_mmsi.js') }}"></script>
+{% endblock %}
