@@ -1,27 +1,52 @@
 {% extends 'base.html' %}
 {% block title %}Register - Maritime English{% endblock %}
+
+{% block page_css %}
+<!-- Memuat file CSS khusus untuk halaman register -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
 {% block content %}
 <main class="container my-5">
+
+    <!-- Kontainer untuk karakter dan teksnya -->
     <div class="character-container">
+        <!-- TOMBOL 'X' BARU, sama seperti di login.html -->
+        <a href="{{ url_for('main.index') }}" class="close-button">&times;</a>
         <img src="{{ url_for('static', filename='img/kapten-kiko.png') }}" alt="Kapten Kiko" class="character-img">
-        <span class="character-text">Join the crew, Nakama! Fill in your details!</span>
+        <!-- 
+          Teks kita bungkus dengan div 'speech-bubble' 
+          agar bisa diberi style gelembung ucapan 
+        -->
+        <div class="speech-bubble">
+            Join the crew, Nakama! Fill in your details!
+        </div>
     </div>
-    <h1 class="text-center">Register</h1>
-    <form method="POST" class="w-50 mx-auto">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-success btn-lg w-100">Register</button>
-    </form>
-    <p class="text-center mt-3">Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+
+    <!-- 
+      Kita ganti 'w-50 mx-auto' dengan kelas kustom 'register-form-wrapper'.
+      CSS kita akan menangani styling dan penempatannya.
+    -->
+    <div class="register-form-wrapper">
+        <h1 class="text-center">Register</h1>
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg w-100">Register</button>
+        </form>
+        
+        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+    </div>
 </main>
 {% endblock %}

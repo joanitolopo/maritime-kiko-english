@@ -1,0 +1,65 @@
+/* Style untuk Desktop (default):
+  Membuat form login tampil sebagai 'card' yang rapi di tengah.
+*/
+.login-form-wrapper {
+    position: relative; /* PENTING: Agar tombol 'X' bisa diposisikan */
+    max-width: 450px; /* Lebar maksimum form, menggantikan 'w-50' */
+    margin: 2rem auto 0 auto; /* Menengahkan form dan memberi jarak atas */
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bayangan halus */
+    border: 1px solid #dee2e6; /* Garis tepi tipis */
+}
+
+/* --- STYLE UNTUK TOMBOL 'X' BARU --- */
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem; /* Ukuran ikon 'x' */
+    font-weight: 300; /* Membuat 'x' terlihat lebih tipis/modern */
+    color: #aaa;
+    text-decoration: none;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #333; /* Warna saat di-hover */
+}
+/* --- AKHIR STYLE TOMBOL 'X' --- */
+
+
+.login-form-wrapper h1 {
+    margin-bottom: 1.5rem; /* Jarak antara judul 'Login' dan form */
+}
+
+
+/* Style untuk Mobile (Responsive):
+  Menargetkan layar di bawah 768px.
+*/
+@media (max-width: 767.98px) {
+    .login-form-wrapper {
+        position: relative; /* PENTING: Tetap relative di mobile */
+        /* Di mobile, kita hilangkan tampilan 'card' agar form 
+          terlihat natural dan menyatu dengan halaman.
+          Bootstrap '.container' di 'main' sudah memberi padding di sisi kiri/kanan.
+        */
+        padding: 0;
+        margin-top: 1rem; /* Kurangi jarak atas di mobile */
+        background-color: transparent; /* Hapus latar belakang putih */
+        box-shadow: none; /* Hapus bayangan */
+        border: none; /* Hapus garis tepi */
+        max-width: 100%; /* Pastikan form tidak melebihi lebar layar */
+    }
+
+    /* Sesuaikan posisi tombol 'X' di mobile */
+    .close-button {
+        top: 0rem; /* Lebih dekat ke atas */
+        right: 0.5rem; /* Lebih dekat ke tepi */
+        font-size: 2.5rem; /* Sedikit lebih besar agar mudah di-tap */
+        color: #888;
+    }
+}
+

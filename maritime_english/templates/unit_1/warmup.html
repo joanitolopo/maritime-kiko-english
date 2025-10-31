@@ -7,7 +7,7 @@
 
 {% block content %}
 <main class="container my-5 game-main">
-
+    <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
     <h1 class="text-center mb-4">Warm-up: Phonetic Alphabet Game</h1>
 
     <div id="activity-1" class="activity-section">
@@ -34,9 +34,16 @@
         </div>
 
         <div id="warmup-game" class="text-center p-4 d-none">
-            <div class="alert alert-info">
-                🎧 Listen carefully! Click the correct letter or number. <br>
-                Round <span id="round">1</span>/8
+            <div class="alert alert-info d-flex flex-column flex-md-row justify-content-between align-items-center p-3 p-md-4">
+                <div class="game-instructions text-center text-md-start">
+                    🎧 Listen carefully! Click the correct letter or number. <br>
+                    <strong>Round <span id="round">1</span>/8</strong>
+                </div>
+                <!-- 3. Mengganti style tombol dari .btn-compass -->
+                <button class="btn btn-primary btn-lg mt-3 mt-md-0" id="play-audio">
+                    <i class="fas fa-play me-2"></i>
+                    Play Sound
+                </button>
             </div>
 
             <div class="game-grid-container">
@@ -54,13 +61,6 @@
                     </div>
                     {% endfor %}
                 </div>
-            </div>
-
-
-            <div class="my-4"> <button class="btn btn-compass" id="play-audio">
-                    <img src="{{ url_for('static', filename='img/compass.png') }}" alt="Play" class="compass-icon"> 
-                    Play Sound
-                </button>
             </div>
 
             <div id="feedback" class="d-none"></div>
@@ -126,7 +126,7 @@
                     <a href="{{ url_for('learning.learning_unit', unit_id=1, section='input_intro') }}" 
                        id="go-input-btn"
                        class="btn btn-success btn-lg btn-action-next pulse-green">
-                       Go to Input Section <i class="fas fa-arrow-right ms-1"></i>
+                       Go to Input Section</i>
                     </a>
                 </div>
             </div>

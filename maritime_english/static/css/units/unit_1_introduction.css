@@ -3,6 +3,14 @@
 /* GENERAL */
 body { font-family: 'Open Sans', sans-serif; background: #F9FAFB; color: #111827; }
 
+/* --- PERUBAHAN DI SINI ---
+  Sembunyikan nav 'Back to Home' dari base.html 
+  agar halaman ini terasa seperti scene 'fokus'
+*/
+nav.navbar {
+  display: none !important;
+}
+
 /* INTRO SCENE */
 .intro-scene-container { max-width:1200px; margin:0 auto; position:relative; height:85vh; }
 .intro-scene {
@@ -25,6 +33,28 @@ body { font-family: 'Open Sans', sans-serif; background: #F9FAFB; color: #111827
   animation: radar-sweep 14s linear infinite;
 }
 @keyframes radar-sweep { from{ transform: rotate(0deg); } to { transform: rotate(360deg);} }
+
+/* --- PERUBAHAN DI SINI ---
+  Style baru untuk Tombol 'X' (Close Scene)
+*/
+.scene-close-button {
+  position: absolute;
+  top: 1.5rem; /* Posisikan di dalam scene */
+  left: 2rem;  /* Kita letakkan di kiri agar tidak bentrok dengan tombol EN */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #ffffff; /* Warna putih agar terlihat di background biru */
+  opacity: 0.7;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 10; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button:hover {
+  opacity: 1;
+}
+/* --- Akhir Style Tombol 'X' --- */
+
 
 /* Avatar */
 .captain-ray {
@@ -59,8 +89,8 @@ body { font-family: 'Open Sans', sans-serif; background: #F9FAFB; color: #111827
 .dialogue-box p { margin:0; font-size:18px; line-height:1.5; color:#111827; }
 
 /* Typing cursor handling:
-   `.typing` class will show a blinking cursor via pseudo-element.
-   When not typing, we use `.no-cursor` to hide it.
+    `.typing` class will show a blinking cursor via pseudo-element.
+    When not typing, we use `.no-cursor` to hide it.
 */
 #dialogue-text.no-cursor::after { content: none; }
 #dialogue-text.typing::after { content: '|' ; margin-left:6px; animation: blink 1s steps(1) infinite; color:#1E3A8A; }
@@ -110,5 +140,100 @@ body { font-family: 'Open Sans', sans-serif; background: #F9FAFB; color: #111827
 @media (max-width: 900px) {
   .dialogue-box { right:5%; width:88%; bottom:7rem; }
   .continue-container { right:5%; width:88%; bottom:1rem; }
-  .captain-ray { display:none; }
+  
+  /* --- PERUBAHAN KAPAL KIKO ---
+    Style 'display:none' diganti menjadi style 
+    untuk memposisikan Kiko di atas-tengah.
+  */
+  .captain-ray {
+    /* display:none; */ /* <-- INI DIGANTI */
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: auto; /* Hapus 'bottom: 0' */
+    top: 1rem;    /* Posisikan di atas */
+    height: 30%;  /* Buat lebih kecil */
+    max-height: 200px;
+    animation: fade-in 0.8s ease-out forwards; /* Ganti animasi slide-up */
+  }
+
+  /* Sesuaikan tombol 'X' di tablet */
+  .scene-close-button {
+    top: 1.25rem;
+    left: 1.5rem;
+    font-size: 2.25rem;
+  }
 }
+
+/* --- TAMBAHAN: Penyesuaian untuk Layar Mobile yang Sangat Kecil --- */
+@media (max-width: 576px) {
+    .intro-scene-container {
+        height: 90vh; /* Beri sedikit lebih banyak ruang vertikal jika diperlukan */
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .intro-scene {
+        padding: 1rem; /* Kurangi padding utama scene */
+    }
+
+    /* --- PERUBAHAN DI SINI ---
+      Sesuaikan tombol 'X' dan Kapten Kiko di mobile kecil
+    */
+    .scene-close-button {
+      top: 1rem;
+      left: 1.25rem;
+      font-size: 2rem;
+    }
+
+    .captain-ray {
+      top: 8.5rem;
+      max-height: 160px; /* Buat lebih kecil lagi */
+    }
+
+    .dialogue-box {
+        padding: 1rem; /* Kurangi padding di dalam box dialog */
+        bottom: 6.5rem; /* Naikkan sedikit box dialog */
+        width: 92%; /* Sedikit lebih lebar */
+        right: 4%;
+    }
+
+    .dialogue-box p {
+        font-size: 16px; /* Kecilkan font dialog */
+        line-height: 1.45;
+    }
+
+    .audio-control {
+        margin-top: 0.5rem; /* Kurangi margin */
+    }
+
+    .dialogue-footer {
+        margin-top: 0.5rem; /* Kurangi margin */
+    }
+
+    #next-btn {
+        font-size: 0.9rem; /* Kecilkan font tombol next */
+        padding: 0.5rem 1rem;
+    }
+    
+    .continue-container {
+        width: 92%; /* Samakan dengan dialog box */
+        right: 4%;
+        bottom: 0.75rem; /* Naikkan sedikit */
+    }
+
+    .continue-btn {
+        font-size: 1rem; /* Kecilkan font tombol continue */
+        padding: 0.75rem 1rem;
+    }
+
+    .lang-toggle {
+        top: 8px;
+        right: 8px;
+    }
+
+    .toggle-pill {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+

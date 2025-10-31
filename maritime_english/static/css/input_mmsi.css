@@ -14,6 +14,48 @@
 }
 
 body { font-family:'Open Sans', sans-serif; background:var(--soft); color:var(--text); }
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Tombol Navigasi Kustom (X dan Previous) */
+.scene-close-button,
+.scene-prev-button {
+  position: absolute;
+  top: 0.5rem; /* Relatif ke container */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Warna gelap agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button { 
+  right: 1.5rem; 
+}
+.scene-prev-button { 
+  left: 1.5rem; 
+  font-size: 2rem; /* Buat ikon panah sedikit lebih kecil */
+  top: 0.75rem; /* Sejajarkan secara vertikal */
+}
+
+.scene-close-button:hover,
+.scene-prev-button:hover {
+  opacity: 1;
+}
+
+.mmsi-page { 
+    max-width:1100px; 
+    margin:0 auto; 
+    position: relative; /* DITAMBAHKAN: Untuk menahan tombol */
+    padding-top: 3rem; /* DITAMBAHKAN: Memberi ruang untuk tombol */
+}
+/* --- AKHIR PERUBAHAN --- */
+
 .mmsi-page { max-width:1100px; margin:0 auto; }
 
 .mmsi-scene {
@@ -69,11 +111,6 @@ body { font-family:'Open Sans', sans-serif; background:var(--soft); color:var(--
   100% { transform: translateY(0); }
 }
 
-/* practice area */
-.practice-area { margin-top:16px; display:flex; gap:12px; justify-content:center; z-index:4; }
-.btn-replay { background:var(--bright); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,0.12); }
-.btn-replay:hover { transform: translateY(-3px); }
-
 /* feedback bubble */
 .feedback-bubble { position:absolute; left:140px; bottom:120px; max-width:280px; background:rgba(255,255,255,0.95); border-radius:12px; padding:10px 12px; box-shadow:0 8px 20px rgba(0,0,0,0.18); z-index:6; animation: popIn 0.36s ease; }
 .fb-arrow { position:absolute; left:12px; bottom:-10px; width:0;height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid rgba(255,255,255,0.95); }
@@ -88,46 +125,47 @@ body { font-family:'Open Sans', sans-serif; background:var(--soft); color:var(--
 .visually-hidden { position:absolute !important; height:1px;width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; border:0; padding:0; margin:-1px; }
 .pop-visible { animation: popIn 0.36s ease; }
 @keyframes popIn { from { opacity:0; transform: scale(0.92) translateY(6px);} to { opacity:1; transform: scale(1) translateY(0);} }
+@keyframes slideUpIn { to { transform: translateY(0); opacity:1; } } /* Definisikan keyframe-nya */
 
-/* responsive */
+
+/* --- PERUBAHAN RESPONSIF --- */
 @media (max-width:900px) {
+  /* Tombol Nav Kustom */
+  .scene-close-button,
+  .scene-prev-button {
+    top: 0;
+    color: #6B7280;
+  }
+  .scene-close-button { right: 1rem; }
+  .scene-prev-button { left: 1rem; top: 0.25rem; }
+
+  .mmsi-page {
+    padding-top: 2.5rem; /* Kurangi padding atas */
+  }
+
   .cards-area { gap:12px; flex-direction:column; align-items:center; }
   .instruction-box { width:90%; }
-  .feedback-bubble { left:12px; bottom:140px; }
+  
+  /* Sembunyikan avatar & bubble */
+  .feedback-bubble { display: none; }
   .avatar-captain { display:none; }
 }
+
 @media (max-width:576px) {
-  .ship-card { width: 92%; }
+  .mmsi-scene {
+    padding: 1.5rem 1rem;
+  }
+  .instruction-box {
+    width: 100%;
+    padding: 0.75rem;
+  }
+  .instruction-box .lead {
+    font-size: 15px;
+  }
+
+  .ship-card { width: 100%; } /* Ubah ke 100% */
   .mmsi-number { font-size:18px; }
-  .btn-next { width:90%; }
-}
 
-/* DEBUG & FIX: Pastikan Next/Continue selalu terlihat di atas */
-.footer-cta, .continue-container {
-  z-index: 1200 !important; /* pastikan berada di atas elemen dekoratif */
-  position: relative;       /* agar z-index berlaku */
-}
-
-/* Pastikan tombol Next tidak tetap tersembunyi karena opacity/animation */
-.footer-cta .btn-next,
-.continue-container .continue-btn,
-#continue-btn {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  visibility: visible !important;
-  display: inline-block !important;
-  pointer-events: auto !important;
-}
-
-/* Beri border / outline sementara untuk debugging visual */
-.footer-cta .btn-next.debug-visible {
-  box-shadow: 0 8px 26px rgba(16,185,129,0.18);
-  border: 2px solid rgba(255,255,255,0.06);
-}
-
-/* Jika tombol menyatu warna, ganti background / border agar kontras */
-.footer-cta .btn-next {
-  background-color: #10B981 !important; /* hijau laut, sesuai palet */
-  color: #ffffff !important;
+  .btn-next { width:90%; font-size: 16px; }
 }
 

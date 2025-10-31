@@ -1,0 +1,120 @@
+/* --- Style untuk Karakter & Gelembung Ucapan --- */
+.character-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 450px; /* Samakan dengan lebar card */
+    margin: 0 auto 1.5rem auto; /* Tengahkan dan beri jarak bawah */
+    gap: 1rem; /* Jarak antara gambar dan gelembung */
+}
+
+.character-img {
+    height: 90px; /* Ukuran gambar karakter */
+    flex-shrink: 0; /* Mencegah gambar menyusut */
+}
+
+.speech-bubble {
+    position: relative;
+    background: #e9ecef; /* Warna latar gelembung */
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem; /* Ukuran font di dalam gelembung */
+    color: #333;
+    width: 100%;
+}
+
+/* Membuat "ekor" pada gelembung ucapan */
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -10px; /* Posisikan di kiri */
+    top: 50%;
+    margin-top: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent #e9ecef transparent transparent; /* Arahkan ke kiri */
+}
+
+
+/* --- Style untuk Card Form Registrasi --- */
+.register-form-wrapper {
+    position: relative; /* PENTING: Agar tombol 'X' bisa diposisikan */
+    max-width: 450px; /* Lebar maksimum form */
+    margin: 0 auto; /* Menengahkan form */
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+}
+
+.register-form-wrapper h1 {
+    margin-bottom: 1.5rem;
+}
+
+
+/* --- STYLE UNTUK TOMBOL 'X' (SAMA SEPERTI LOGIN) --- */
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: 300;
+    color: #aaa;
+    text-decoration: none;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #333;
+}
+/* --- AKHIR STYLE TOMBOL 'X' --- */
+
+
+/* --- Style untuk Mobile (Responsive) --- */
+@media (max-width: 767.98px) {
+    .character-container {
+        /* Di mobile, kita tumpuk karakter di atas gelembung */
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0 1rem; /* Beri sedikit padding agar tidak menempel */
+    }
+
+    .character-img {
+        height: 80px; /* Kecilkan sedikit gambar */
+    }
+
+    .speech-bubble {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    /* Pindahkan "ekor" gelembung ke atas */
+    .speech-bubble::before {
+        left: 50%;
+        top: -20px; /* Posisikan di atas */
+        margin-left: -10px;
+        margin-top: 0;
+        border-color: transparent transparent #e9ecef transparent; /* Arahkan ke atas */
+    }
+
+    .register-form-wrapper {
+        position: relative; 
+        padding: 0;
+        margin-top: 1rem;
+        background-color: transparent;
+        box-shadow: none;
+        border: none;
+        max-width: 100%;
+    }
+
+    .close-button {
+        top: 0rem;
+        right: 0.5rem;
+        font-size: 2.5rem;
+        color: #888;
+    }
+}

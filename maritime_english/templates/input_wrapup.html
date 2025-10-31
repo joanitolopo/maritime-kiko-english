@@ -7,6 +7,18 @@
 
 {% block content %}
 <main class="container my-4 wrapup-page">
+  <!-- --- PERUBAHAN BARU --- -->
+  <!-- Tombol Navigasi Kustom -->
+  
+  <!-- Tombol Previous (kembali ke input_vhf) -->
+  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}" class="scene-prev-button" aria-label="Previous section">
+      <i class="fas fa-arrow-left"></i>
+  </a>
+  
+  <!-- Tombol Close (kembali ke home/daftar unit) -->
+  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
+  <!-- --- AKHIR PERUBAHAN --- -->
+   
   <div class="wrapup-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Wrap-up scene' }}">
     <!-- Avatar OS Lina (left) -->
     <div class="avatar-area">
@@ -25,7 +37,7 @@
 
       <div class="wrapup-text" id="wrapup-text">
         <p id="wrapup-paragraph">
-          {{ section_content.message_en or section_content.message or "Great work! Now you know the full alphabet and numbers..." }}
+          {{ section_content.intro_en or section_content.message or "Great work! Now you know the full alphabet and numbers..." }}
         </p>
       </div>
 
@@ -45,7 +57,7 @@
         {% else %}
           <a id="go-noticing"
              href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}"
-             class="btn btn-go" role="button">Go to Noticing <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a>
+             class="btn btn-go" role="button">Go to Noticing</a>
         {% endif %}
       </div>
     </div>

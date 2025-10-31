@@ -7,6 +7,18 @@
 
 {% block content %}
 <main class="container my-4 vhf-page">
+  <!-- --- PERUBAHAN BARU --- -->
+  <!-- Tombol Navigasi Kustom -->
+  
+  <!-- Tombol Previous (kembali ke input_channel) -->
+  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_channel') }}" class="scene-prev-button" aria-label="Previous section">
+      <i class="fas fa-arrow-left"></i>
+  </a>
+  
+  <!-- Tombol Close (kembali ke home/daftar unit) -->
+  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
+  <!-- --- AKHIR PERUBAHAN --- -->
+
   <div class="vhf-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Mini Dialogue VHF Exchange' }}">
     <div class="split-screen">
       <div class="left-avatar">

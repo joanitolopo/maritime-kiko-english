@@ -10,14 +10,14 @@
   "input_alphabet": {
     "title": "NATO Phonetic Alphabet A–Z",
     "start_next_section": "input_numbers",
-    "practice_text": "Example: ANTARA → Alpha – November – Tango – Alpha – Romeo – Alpha",
+    "practice_text": "Example: ANTARA",
     "practice_audio": "/static/data/audio/unit_1/alphabet_practice_antara.wav",
     "practice_sequence": ["A","N","T","A","R","A"]
   },
   "input_numbers": {
     "title": "Numbers 0–9",
     "start_next_section": "input_mmsi",
-    "practice_text": "Example: YB321 → Yankee – Bravo – Tree – Too – Wun",
+    "practice_text": "Example: YB321",
     "practice_audio": "/static/data/audio/unit_1/numbers_practice_yb321.wav",
     "practice_sequence": ["Y","B","3","2","1"]
   },

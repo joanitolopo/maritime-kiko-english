@@ -12,6 +12,48 @@
 }
 
 body { background:var(--soft); color:var(--text); font-family:'Open Sans',sans-serif; }
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Tombol Navigasi Kustom (X dan Previous) */
+.scene-close-button,
+.scene-prev-button {
+  position: absolute;
+  top: 0.5rem; /* Relatif ke container */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Warna gelap agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button {
+  right: 1.5rem;
+}
+.scene-prev-button {
+  left: 1.5rem;
+  font-size: 2rem; /* Buat ikon panah sedikit lebih kecil */
+  top: 0.75rem; /* Sejajarkan secara vertikal */
+}
+
+.scene-close-button:hover,
+.scene-prev-button:hover {
+  opacity: 1;
+}
+
+.vhf-page { 
+    max-width:1150px; 
+    margin:0 auto; 
+    position: relative; /* DITAMBAHKAN: Untuk menahan tombol */
+    padding-top: 3rem; /* DITAMBAHKAN: Memberi ruang untuk tombol */
+}
+/* --- AKHIR PERUBAHAN --- */
+
 .vhf-page { max-width:1150px; margin:0 auto; }
 
 /* Scene */
@@ -105,17 +147,50 @@ body { background:var(--soft); color:var(--text); font-family:'Open Sans',sans-s
 .visually-hidden { position:absolute !important; height:1px;width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; border:0; padding:0; margin:-1px; }
 
 /* responsive */
-@media (max-width:900px) {
+@media (max-width: 900px) {
+  /* --- PERUBAHAN BARU --- */
+  /* Tombol Nav Kustom */
+  .scene-close-button,
+  .scene-prev-button {
+    top: 0;
+    color: #6B7280;
+  }
+  .scene-close-button { right: 1rem; }
+  .scene-prev-button { left: 1rem; top: 0.25rem; }
+
+  .vhf-page {
+    padding-top: 2.5rem; /* Kurangi padding atas */
+  }
+  /* --- AKHIR PERUBAHAN --- */
+
   .split-screen { flex-direction:column; gap:8px; }
   .left-avatar, .right-avatar { width:100%; justify-content:center; }
   .avatar-lg { width: 160px; }
-  .feedback-bubble { left:12px; bottom:110px; }
+  .feedback-bubble { display: none; } /* Sembunyikan bubble */
 }
 @media (max-width:576px) {
+  .vhf-scene {
+    padding: 1.5rem 1rem;
+  }
   .btn-next { width:90%; }
-  .audio-controls { gap:8px; flex-wrap:wrap; }
+  .dialogue-script { font-size: 15px; }
+  .instruction-box p { font-size: 14px; }
+  
+  /* PERBAIKAN: Style audio-controls yang sudah ada di bawah */
+  /* .audio-controls { gap:8px; flex-wrap:wrap; } */
+  
+  .quiz-label {
+    width: 100%;
+  }
 }
 
-.audio-controls { display:flex; gap:20px; align-items:center; justify-content:center; }
+/* Style ini sudah ada di HTML, pastikan konsisten */
+.audio-controls { 
+    display:flex; 
+    gap:20px; 
+    align-items:center; 
+    justify-content:center; 
+    flex-wrap: wrap; /* DITAMBAHKAN: wrap di mobile */
+}
 .audio-btn-group { display:flex; flex-direction:column; align-items:center; gap:4px; }
 .audio-label { font-size:14px; color:#1E3A8A; font-weight:600; font-family:'Montserrat',sans-serif; }

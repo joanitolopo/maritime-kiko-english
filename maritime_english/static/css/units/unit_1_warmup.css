@@ -16,6 +16,31 @@ h1, h2 {
     color: #0B3D91;
 }
 
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Style untuk Tombol 'X' (Close Scene) */
+.scene-close-button {
+  position: absolute;
+  top: 1rem; /* Beda dari scene intro, ini relatif ke container */
+  right: 1.5rem; 
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Buat warna biru tua agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button:hover {
+  opacity: 1;
+}
+/* --- Akhir Perubahan --- */
+
 /* ============================================
    LAYOUT & SHARED COMPONENTS
 ============================================ */
@@ -272,9 +297,38 @@ h1, h2 {
     font-size: 16px;
     color: #111827;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    animation: pop-in 0.4s ease-out;
     z-index: 10;
+
+    /* animasi gabungan: muncul lalu hilang */
+    animation: pop-in 0.4s ease-out, fade-out 0.4s ease-in 2.4s forwards;
+    /* ↑ fade-out mulai setelah 2.4 detik (jadi tampil sekitar 2 detik sebelum hilang) */
 }
+
+/* animasi muncul */
+@keyframes pop-in {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* animasi hilang */
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+    }
+}
+
 
 /* Tombol Play Audio (Kompas) */
 .btn-compass {
@@ -454,6 +508,10 @@ iframe:hover {
         animation: fadeIn 1s ease-out; /* Ganti animasi */
     }
 
+    #warmup-game::before {
+      display: none; 
+    }
+
     #feedback {
         left: 50%;
         transform: translateX(-50%);
@@ -473,3 +531,64 @@ iframe:hover {
         width: 95%;
     }
 }
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.5rem;
+    margin-top: 1.25rem;
+    line-height: 1.3;
+  }
+  
+  .intro-scene, .wrapup-scene {
+    padding: 1rem;
+    padding-top: 3rem;
+    min-height: 75vh;
+  }
+  .wrapup-dialogue-box {
+    margin-top: 180px; /* Kurangi margin atas */
+  }
+  .wrapup-avatar {
+    width: 150px; /* Kecilkan avatar */
+    top: 15px;
+  }
+  
+  .dialogue-box p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .btn-start-game, .btn-action-next {
+    font-size: 16px;
+    padding: 0.75rem 1rem;
+  }
+
+  .letter-btn {
+    min-height: 70px;
+    font-size: 24px;
+  }
+
+  .btn-compass {
+    width: 80px;
+    height: 80px;
+    font-size: 12px;
+    gap: 4px;
+  }
+  .btn-compass img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .quiz-label {
+    padding: 0.7rem 1rem;
+  }
+
+  #warmup-game .alert-info {
+    font-size: 16px;
+    width: 95%;
+  }
+
+  .scene-close-button {
+    font-size: 2.25rem;
+  }
+}
+

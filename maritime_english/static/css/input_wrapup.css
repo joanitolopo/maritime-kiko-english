@@ -11,6 +11,48 @@
 }
 
 body { background:var(--soft); color:var(--text); font-family:'Open Sans',sans-serif; }
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Tombol Navigasi Kustom (X dan Previous) */
+.scene-close-button,
+.scene-prev-button {
+  position: absolute;
+  top: 0.5rem; /* Relatif ke container */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Warna gelap agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button { 
+  right: 1.5rem; 
+}
+.scene-prev-button { 
+  left: 1.5rem; 
+  font-size: 2rem; /* Buat ikon panah sedikit lebih kecil */
+  top: 0.75rem; /* Sejajarkan secara vertikal */
+}
+
+.scene-close-button:hover,
+.scene-prev-button:hover {
+  opacity: 1;
+}
+
+.wrapup-page { 
+    max-width:1100px; 
+    margin:0 auto; 
+    position: relative; /* DITAMBAHKAN: Untuk menahan tombol */
+    padding-top: 3rem; /* DITAMBAHKAN: Memberi ruang untuk tombol */
+}
+/* --- AKHIR PERUBAHAN --- */
+
 .wrapup-page { max-width:1100px; margin:0 auto; }
 
 .wrapup-scene {
@@ -150,9 +192,45 @@ body { background:var(--soft); color:var(--text); font-family:'Open Sans',sans-s
 
 /* responsive */
 @media (max-width:900px) {
+  /* --- PERUBAHAN BARU --- */
+  /* Tombol Nav Kustom */
+  .scene-close-button,
+  .scene-prev-button {
+    top: 0;
+    color: #6B7280;
+  }
+  .scene-close-button { right: 1rem; }
+  .scene-prev-button { left: 1rem; top: 0.25rem; }
+
+  .wrapup-page {
+    padding-top: 2.5rem; /* Kurangi padding atas */
+  }
+  /* --- AKHIR PERUBAHAN --- */
+
   .wrapup-scene { flex-direction:column; gap:14px; padding:1.2rem; }
   .avatar-area, .wrapup-box { width:100%; }
   .avatar-lina { width:200px; }
   .notebook { left:12px; bottom:8px; }
   .btn-go { width:92%; }
 }
+
+/* --- PERUBAHAN BARU --- */
+@media (max-width: 576px) {
+  .wrapup-box {
+    padding: 1rem;
+  }
+  #wrapup-paragraph {
+    font-size: 16px;
+  }
+  .btn-go {
+    font-size: 16px;
+  }
+  .avatar-lina {
+    width: 160px; /* Perkecil lagi avatar di HP */
+  }
+  .notebook {
+    width: 70px; /* Perkecil notebook */
+    height: 70px;
+  }
+}
+/* --- AKHIR PERUBAHAN --- */

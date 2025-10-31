@@ -4,16 +4,16 @@
 <header class="bg-primary text-white py-3">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="logo d-flex align-items-center">
-            <img src="{{ url_for('static', filename='img/anchor.png') }}" alt="Maritime English Logo" style="height: 40px;">
+            <!-- Menambahkan class 'logo-img' untuk kontrol ukuran gambar --><img src="{{ url_for('static', filename='img/anchor.png') }}" alt="Maritime English Logo" class="logo-img">
             <span class="ms-2 fs-4">Maritime English</span>
         </div>
-    </div>
+        <!-- Anda bisa menambahkan elemen lain di sini jika ada, misalnya menu hamburger --></div>
 </header>
 
 <main class="container my-5">
     <div class="row align-items-center">
         <div class="col-md-6 order-md-2">
-            <img src="{{ url_for('static', filename='img/kapten-kiko.png') }}" alt="Kapten Kiko" class="img-fluid kapten-kiko-illustration">
+            <!-- Gambar Kapten Kiko --><img src="{{ url_for('static', filename='img/kapten_kiko2.png') }}" alt="Kapten Kiko" class="img-fluid kapten-kiko-illustration">
         </div>
         <div class="col-md-6 order-md-1 text-center text-md-start">
             <h1>The free, fun, and effective way to learn Maritime English!</h1>

@@ -18,6 +18,48 @@
 body { background: var(--soft-bg); color: var(--text-dark); font-family: 'Open Sans', sans-serif; }
 .alphabet-page { max-width: 1150px; margin: 0 auto; }
 
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Tombol Navigasi Kustom (X dan Previous) */
+.scene-close-button,
+.scene-prev-button {
+  position: absolute;
+  top: 0.5rem; /* Relatif ke container */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Warna gelap agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button { 
+  right: 1.5rem; 
+}
+.scene-prev-button { 
+  left: 1.5rem; 
+  font-size: 2rem; /* Buat ikon panah sedikit lebih kecil */
+  top: 0.75rem; /* Sejajarkan secara vertikal */
+}
+
+.scene-close-button:hover,
+.scene-prev-button:hover {
+  opacity: 1;
+}
+
+.alphabet-page { 
+    max-width: 1150px; 
+    margin: 0 auto; 
+    position: relative; /* DITAMBAHKAN: Untuk menahan tombol */
+    padding-top: 3rem; /* DITAMBAHKAN: Memberi ruang untuk tombol */
+}
+/* --- AKHIR PERUBAHAN --- */
+
 /* Scene */
 .instruction-scene {
   position: relative;
@@ -251,15 +293,74 @@ body { background: var(--soft-bg); color: var(--text-dark); font-family: 'Open S
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Responsive */
+/* --- PERUBAHAN RESPONSIF --- */
 @media (max-width: 900px) {
+  /* Tombol Nav Kustom */
+  .scene-close-button,
+  .scene-prev-button {
+    top: 0;
+    color: #6B7280;
+  }
+  .scene-close-button { right: 1rem; }
+  .scene-prev-button { left: 1rem; top: 0.25rem; }
+
+  .alphabet-page {
+    padding-top: 2.5rem; /* Kurangi padding atas */
+  }
+
   .instruction-box { width: 90%; }
   .alphabet-grid { max-width: 620px; gap: 10px; }
+  
+  /* Sembunyikan avatar & bubble-nya di mobile */
   .avatar-small { display: none; }
-  .feedback-bubble { left: 12px; bottom: 140px; }
+  .feedback-bubble { display: none; }
 }
+
 @media (max-width: 576px) {
-  .alphabet-grid { grid-template-columns: repeat(4, 1fr); }
-  .grid-cell { height: 72px; }
-  .btn-next { width: 90%; }
+  .instruction-scene {
+    padding: 1.5rem 1rem; /* Kurangi padding di scene utama */
+  }
+  .instruction-box {
+    width: 100%;
+    padding: 0.75rem;
+  }
+  .instruction-box .lead {
+    font-size: 15px; /* Kecilkan teks instruksi */
+  }
+  
+  /* Buat grid 5 kolom agar lebih pas */
+  .alphabet-grid { 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 8px;
+    padding: 0.5rem 0;
+  }
+  .grid-cell { height: 64px; } /* Kecilkan sel grid */
+  .letter-tile {
+    font-size: 18px; /* Kecilkan font di tombol */
+    min-height: 50px;
+  }
+  .tile-audio {
+    font-size: 10px;
+  }
+
+  /* Buat practice box bertumpuk */
+  .practice-area {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .practice-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 0.75rem;
+  }
+  .practice-text {
+    font-size: 14px;
+    text-align: center;
+  }
+  .btn-practice {
+    width: 100%;
+  }
+
+  .btn-next { width: 90%; font-size: 16px; }
 }

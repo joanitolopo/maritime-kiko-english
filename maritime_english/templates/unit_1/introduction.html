@@ -9,6 +9,13 @@
 <div class="container my-4 intro-scene-container" aria-live="polite">
   <div class="intro-scene shadow-lg" role="region" aria-label="Unit 1 introduction">
 
+    <!-- 
+      --- PERUBAHAN DI SINI ---
+      Tombol 'X' baru ditambahkan, mengarah kembali ke 'main.home'
+      (daftar unit).
+    -->
+    <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
+
     <!-- Avatar -->
     <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="captain-ray">
 
@@ -37,7 +44,7 @@
     <div class="continue-container text-center">
       <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}"
          id="continue-btn" class="continue-btn btn-disabled" aria-disabled="true">
-         Continue to Warm-up <i class="fas fa-arrow-right ms-2"></i>
+        Continue to Warm-up <i class="fas fa-arrow-right ms-2"></i>
       </a>
     </div>
   </div>
@@ -50,3 +57,4 @@
 {% block page_js %}
 <script src="{{ url_for('static', filename='js/unit_1_introduction.js') }}" defer></script>
 {% endblock %}
+

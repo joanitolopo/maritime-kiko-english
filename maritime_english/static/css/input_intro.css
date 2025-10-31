@@ -19,6 +19,41 @@
 /* Page layout */
 body { background-color: var(--soft-bg); color: var(--text-dark); font-family: 'Open Sans', sans-serif; }
 
+/* --- PERUBAHAN BARU --- */
+/* Sembunyikan nav 'Back to Home' dari base.html */
+nav.navbar {
+  display: none !important;
+}
+
+/* Tombol Navigasi Kustom (X dan Previous) */
+.scene-close-button,
+.scene-prev-button {
+  position: absolute;
+  top: 0.5rem; /* Relatif ke container */
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #0B3D91; /* Warna gelap agar terlihat di background putih */
+  opacity: 0.6;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 100; /* Di atas segalanya */
+  transition: opacity 0.2s ease;
+}
+.scene-close-button { 
+  right: 1.5rem; 
+}
+.scene-prev-button { 
+  left: 1.5rem; 
+  font-size: 2rem; /* Buat ikon panah sedikit lebih kecil */
+  top: 0.75rem; /* Sejajarkan secara vertikal */
+}
+
+.scene-close-button:hover,
+.scene-prev-button:hover {
+  opacity: 1;
+}
+/* --- AKHIR PERUBAHAN --- */
+
 /* Scene container */
 .input-intro-container { max-width: 1100px; margin: 0 auto; }
 
@@ -162,13 +197,59 @@ body { background-color: var(--soft-bg); color: var(--text-dark); font-family: '
 
 /* Small responsive adjustments */
 @media (max-width: 900px) {
-  .intro-dialogue { width: 86%; margin-left: 8%; padding: 1rem; }
-  .avatar-captain { left: 12px; height: 56%; }
+  /* Posisi Tombol Nav Kustom di Mobile */
+  .scene-close-button,
+  .scene-prev-button {
+    top: 0; /* Pindahkan ke atas container */
+    color: #6B7280; /* Warna lebih soft */
+  }
+  .scene-close-button { right: 1rem; }
+  .scene-prev-button { left: 1rem; top: 0.25rem; }
+
+  /* Avatar di atas-tengah */
+  .avatar-captain {
+    left: 50%;
+    transform: translateX(-50%);
+    height: 35%; /* Lebih kecil */
+    max-height: 200px;
+    top: 1rem;
+    bottom: auto; /* Hapus positioning bawah */
+    z-index: 3; /* Pastikan di atas scene */
+  }
+  
+  /* Dialogue di bawah avatar */
+  .intro-dialogue { 
+    width: 90%; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 180px; /* Beri ruang untuk avatar */
+    padding: 1.2rem; 
+    z-index: 4; /* Pastikan di atas avatar */
+    margin-bottom: 0;
+  }
   .start-input-btn { width: 92%; }
 }
+
 @media (max-width: 576px) {
-  .avatar-captain { display: none; } /* hide avatar on very small screens for space */
-  .intro-dialogue { width: 96%; margin-left: 2%; }
+  .input-intro-container {
+    padding-top: 2.5rem; /* Kurangi padding atas */
+  }
+
+  /* Kecilkan avatar lagi */
+  .avatar-captain {
+      height: 30%;
+      max-height: 160px;
+      top: 0.5rem;
+  }
+  
+  /* Kurangi margin-top dialogue */
+  .intro-dialogue { 
+    width: 95%; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    padding: 1rem;
+  }
   .dialogue-content p { font-size: 16px; }
 }
 

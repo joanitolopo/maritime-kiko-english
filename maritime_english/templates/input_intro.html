@@ -8,6 +8,18 @@
 {% block content %}
 <div class="container my-4 input-intro-container">
 
+  <!-- --- PERUBAHAN BARU --- -->
+  <!-- Tombol Navigasi Kustom -->
+  
+  <!-- Tombol Previous (kembali ke warmup) -->
+  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}" class="scene-prev-button" aria-label="Previous section">
+      <i class="fas fa-arrow-left"></i>
+  </a>
+  
+  <!-- Tombol Close (kembali ke home/daftar unit) -->
+  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
+  <!-- --- AKHIR PERUBAHAN --- -->
+
   <!-- Radar background & scene -->
   <div class="input-scene shadow-lg" role="region" aria-label="Introduction by Captain Ray">
     <!-- Radar decorative background -->
@@ -38,7 +50,7 @@
                 aria-label="Start input section"
                 type="button"
                 data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}">>
-          Start Input <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i>
+          Start Input</i>
         </button>
       </div>
     </div>
