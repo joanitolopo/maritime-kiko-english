@@ -1,0 +1,216 @@
+/* ========================================
+   MODERN PROFILE PAGE CSS
+   Konsisten dengan palette Home, Courses, & Report
+======================================== */
+
+/* Menggunakan variabel dari home.css */
+
+body {
+    background-color: #f3f6f9;
+}
+
+/* ======== PROFILE CARD ======== */
+.profile-card {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-out;
+}
+
+.profile-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Header Kartu */
+.profile-header {
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-dark));
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+}
+
+.profile-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.bg-ocean {
+    background-color: rgba(255,255,255,0.2) !important;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.4);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Body Kartu */
+.profile-body {
+    padding: 2.5rem;
+}
+
+/* Kolom Kiri (Foto) */
+.profile-left-col {
+    border-right: 1px solid #f0f0f0;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%; /* Membuat foto bulat modern */
+    border: 5px solid #e0f2fe; /* Border biru muda */
+    box-shadow: var(--hover-shadow);
+}
+
+.btn-edit-photo {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: var(--coral);
+    color: var(--white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.btn-edit-photo:hover {
+    transform: scale(1.1);
+    background: var(--coral-dark);
+}
+
+.member-since {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    background: #f9fafb;
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin-top: 1.5rem;
+}
+
+/* Kolom Kanan (Info) */
+.profile-right-col {
+    padding-left: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.info-item {
+    background: #f9fafb;
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    transition: border-color 0.3s ease;
+}
+.info-item:hover {
+    border-color: var(--ocean-blue);
+}
+
+.info-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Tombol Aksi */
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background-color: var(--ocean-blue);
+    color: var(--white);
+}
+.btn-edit:hover { background-color: var(--ocean-dark); color: #fff; transform: translateY(-2px); }
+
+.btn-password {
+    background-color: #e0e7ff; /* Indigo muda */
+    color: var(--indigo);
+}
+.btn-password:hover { background-color: #c7d2fe; transform: translateY(-2px); }
+
+.btn-logout {
+    background-color: #fee2e2; /* Merah muda */
+    color: #dc2626; /* Merah */
+    margin-left: auto; /* Dorong ke kanan */
+}
+.btn-logout:hover { background-color: #fecaca; color: #b91c1c; transform: translateY(-2px); }
+
+/* Responsif */
+@media (max-width: 768px) {
+    .profile-left-col {
+        border-right: none;
+        border-bottom: 1px solid #f0f0f0;
+        padding-right: 0;
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+    }
+    .profile-right-col {
+        padding-left: 0;
+    }
+    .profile-actions {
+        flex-direction: column;
+    }
+    .btn-logout {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}

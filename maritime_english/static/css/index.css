@@ -1,141 +1,205 @@
-/* index.css - hanya untuk halaman index */
+/* ========================================
+   MODERN WELCOME/LOGIN PAGE CSS
+   (Menggunakan Background Asli)
+======================================== */
 
-/* Menambahkan background-image HANYA untuk halaman ini */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Variabel warna konsisten dari style kita sebelumnya */
+:root {
+    --ocean-blue: #0B5A8F;
+    --ocean-dark: #08426a;
+    --coral: #10b981;
+    --coral-dark: #059669;
+    --indigo: #6366f1;
+    --sky-light: #e0f2fe;
+    --white: #ffffff;
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+    --hover-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.12);
+}
+
+/* Menerapkan background image asli Anda ke body
+*/
 body {
-    /* Perilaku yang Anda inginkan, dipindahkan dari global.css ke sini */
-    font-family: 'Open Sans', sans-serif;
-    background-color: #f0f2f5;
-    background-size: cover;
-    background-repeat: no-repeat;
+    font-family: 'Poppins', sans-serif;
     background-image: url('/static/img/background_index_2.png');
-    background-position: center center; /* Tambahan agar gambar selalu di tengah */
-    background-attachment: fixed; /* Tambahan agar gambar tidak ikut scroll */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-
-/* Header Kustom untuk Halaman Index */
-.hero-header {
-  border-bottom: 2px dashed #003087; /* Garis putus-putus seperti di Gbr 1 */
-  background: #fff !important; /* Memastikan background putih */
+/* ======== HEADER MINIMALIS ======== */
+.welcome-header {
+    /* Header putih bersih, sedikit transparan */
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    z-index: 10;
 }
 
-.hero-content {
-  padding-top: 2rem;
-  padding-bottom: 4rem;
+.welcome-header .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-/* Hero Title */
-.hero-title {
-  color: #003087; /* Sesuai Gbr 1 */
-  font-weight: 700; /* Lebih tebal */
-  font-size: 2.3rem;
-  line-height: 1.3;
+.welcome-header .logo-img {
+    height: 40px; /* Ukuran logo konsisten */
+    width: auto;
 }
 
-/* Hero Subtitle */
-.hero-sub {
-  font-size: 0.74rem;
-  color: #003087; /* Sesuai Gbr 1 */
-  font-family: 'Open Sans', sans-serif;
-  display: flex;
-  flex-wrap: wrap; /* Agar bisa wrap di mobile */
-  align-items: center;
-  gap: 4px;
+.welcome-header .logo-text {
+    font-weight: 700;
+    color: var(--ocean-blue);
+    font-size: 1.2rem;
+    vertical-align: middle;
+    margin-left: 10px;
 }
 
-.hero-sub i {
-  color: #003087; /* Warna ikon */
-}
-
-/* CTA buttons */
-.btn-start {
-  background: #7ed957;
-  color: #10315a;
-  border: none;
-  padding: 14px 28px; /* Sedikit lebih besar */
-  border-radius: 10px;
-  font-weight: 700;
-  box-shadow: 0 8px 20px rgba(52,199,89,0.2);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.btn-start:hover {
-  background: #57b82e;
-  color: #10315a;
-  box-shadow: 0 10px 25px rgba(52,199,89,0.3);
-  transform: translateY(-2px);          
-}
-
-.btn-outline-login {
-  background: #b6e2fd; /* Background biru muda seperti Gbr 1 */
-  color: #10315a;
-  border: 1px solid #cce0ff; /* Border biru muda */
-  padding: 14px 28px; /* Sedikit lebih besar */
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-login:hover {
-  background: #99d4f8;
-  color: #10315a;
-  border-color: #b8d4ff;
-  transform: translateY(-2px);
-}
-
-/* CTAs layout */
-.hero-ctas .btn {
-  min-width: 140px;
-}
-
-/* Teks bantuan di bawah tombol */
-.hero-helper-text {
-  font-size: 0.85rem;
-  color: #555;
-  text-align: center;
-  font-family: 'Open Sans', sans-serif;
-  margin: 0;
-}
-
-.logo-img { 
-    height: 76px;
-}
-
-/* Responsif untuk Mobile */
-@media (max-width: 991.98px) {
-  
-  /* --- TAMBAHKAN BLOK INI --- */
-  /* Ini akan menargetkan container di dalam header Anda */
-  .hero-header .container {
-    flex-direction: column; /* 1. Membuat logo dan ikon menumpuk ke bawah */
-    justify-content: center !important; /* 2. Memaksa tumpukan itu ke tengah */
-    gap: 15px; /* 3. Memberi sedikit jarak antara logo dan ikon */
-  }
-  /* --- AKHIR BLOK TAMBAHAN --- */
-
-  .hero-title {
-    font-size: 2.2rem;
-    text-align: center;
-  }
-  .hero-sub {
+/* ======== KONTEN UTAMA (TERPUSAT) ======== */
+.hero-wrapper {
+    display: flex;
+    flex-grow: 1; /* Memastikan 'main' mengisi sisa ruang */
+    align-items: center; /* Menengahkan konten secara vertikal */
     justify-content: center;
+    padding: 2rem 0;
+}
+
+/* KARTU KACA (GLASSMORPHISM)
+  Ini adalah modernisasi utama.
+*/
+.hero-content-card {
+    background: rgba(255, 255, 255, 0.85); /* Latar belakang semi-transparan */
+    backdrop-filter: blur(15px); /* Efek blur pada background di belakangnya */
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--hover-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Konten di dalam kartu */
+.hero-title {
+    font-weight: 700;
+    color: var(--ocean-blue); /* Menggunakan warna palet kita */
+    font-size: 2.2rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+/* Daftar Fitur (menggantikan .hero-sub) */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+}
+
+.feature-list li i {
+    color: var(--coral); /* Menggunakan warna palet kita */
+    font-size: 1.2rem;
+    width: 20px;
     text-align: center;
-    font-size: 0.95rem;
-  }
-  .hero-ctas {
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .hero-helper-text {
-    font-size: 0.8rem;
-  }
+}
+
+/* Tombol Aksi */
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.btn-action {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+/* Tombol Primary (Start) - Hijau CORAL */
+.btn-action-primary {
+    background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+.btn-action-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+/* Tombol Secondary (Log In) - Outline OCEAN BLUE */
+.btn-action-secondary {
+    background: transparent;
+    color: var(--ocean-blue);
+    border: 2px solid var(--ocean-blue);
+}
+.btn-action-secondary:hover {
+    background: var(--sky-light);
+    transform: translateY(-2px);
+    color: var(--ocean-blue);
+}
+
+.hero-helper-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 0.75rem;
+}
+
+/* ======== ANIMASI FADE-IN ======== */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    /* Animasi akan dijalankan oleh JS */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 991.98px) {
+    .hero-wrapper {
+        align-items: flex-start; /* Konten ke atas di mobile */
+        padding-top: 3rem;
+    }
+    
+    .hero-content-card {
+        padding: 2rem;
+    }
+
+    .hero-title {
+        text-align: center;
+        font-size: 1.8rem;
+    }
+
+    .feature-list {
+        /* Sembunyikan daftar fitur di mobile agar lebih simpel */
+        display: none; 
+    }
 }

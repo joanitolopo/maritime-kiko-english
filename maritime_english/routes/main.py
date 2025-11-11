@@ -22,3 +22,16 @@ def home():
         {"id": 6, "title": "Maritime Commands and Instructions"}
     ]
     return render_template('home.html', units=units)
+
+@main_bp.route('/profile')
+@login_required
+def profile():
+    # Data tiruan (Mockup) untuk field yang mungkin belum ada di database User Anda
+    # Nanti Anda bisa ganti ini dengan data asli dari current_user
+    user_info = {
+        "school": "Maritime Academy",
+        "major": "Nautical Studies",
+        "grade": "Cadet Class 1",
+        "joined_date": "1 November 2025"
+    }
+    return render_template('profile.html', user_info=user_info)

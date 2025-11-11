@@ -1,50 +1,66 @@
 {% extends 'base.html' %}
-{% block title %}Maritime English Learning{% endblock %}
+{% block title %}Welcome - Maritime English Learning{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block content %}
-<header class="bg-white shadow-sm py-1">
-    <div class="container d-flex justify-content-start align-items-center">
-        <div class="logo d-flex align-items-center">
-            <img src="{{ url_for('static', filename='img/logo_website_2.png') }}" alt="Maritime English Logo" class="logo-img">
-        </div>
+<header class="welcome-header">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">
+            <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+            <span class="logo-text">Maritime English</span>
+        </a>
     </div>
 </header>
 
-<main class="container-fluid my-5">
-  <div class="container hero-content">
-    <div class="row align-items-center">
-        <div class="col-lg-7 d-none d-lg-block"></div>
-        <div class="col-lg-5">
-            <h1 class="hero-title">Learn Maritime English for Nautical Growth</h1>
-            <div class="hero-sub my-3">
-                <span><i class="fas fa-anchor me-2"></i>Interactive Lesson</span>
-                <span class="mx-2">·</span>
-                <span><i class="fas fa-ship me-2"></i>Real Ship Communication</span>
-                <span class="mx-2">·</span>
-                <span><i class="fas fa-comments me-2"></i>Direct Feedback</span>
-            </div>
+<main class="hero-wrapper">
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            
+            <div class="col-lg-7 d-none d-lg-block"></div>
 
-            <div class="hero-ctas mt-4">
-                <div class="mb-3">
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-start btn-lg w-100">Start</a>
-                    <p class="hero-helper-text mt-2">
-                        New here? Click 'Start' to create your free account
-                    </p>
+            <div class="col-lg-5">
+                <div class="hero-content-card fade-in-up">
+                    
+                    <h1 class="hero-title fade-in-up" data-delay="100">
+                        Learn Maritime English for Nautical Growth
+                    </h1>
+                    
+                    <ul class="feature-list fade-in-up" data-delay="200">
+                        <li><i class="fas fa-anchor"></i>Interactive Lessons</li>
+                        <li><i class="fas fa-ship"></i>Real Ship Communication</li>
+                        <li><i class="fas fa-comments"></i>Direct Feedback</li>
+                    </ul>
+
+                    <div class="hero-actions mt-4">
+                        <div class="action-group fade-in-up" data-delay="300">
+                            <a href="{{ url_for('auth.register') }}" class="btn-action btn-action-primary w-100">
+                                Start Your Voyage
+                            </a>
+                            <p class="hero-helper-text mt-2">
+                                New here? Click to create your free account.
+                            </p>
+                        </div>
+                        
+                        <div class="action-group fade-in-up" data-delay="400">
+                             <a href="{{ url_for('auth.login') }}" class="btn-action btn-action-secondary w-100">
+                                Log In to Your Account
+                            </a>
+                            <p class="hero-helper-text mt-2">
+                                Already part of the crew? Continue.
+                            </p>
+                        </div>
+                    </div> 
+
                 </div>
-                
-                <div class="mb-3">
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-login btn-lg w-100">Log In</a>
-                    <p class="hero-helper-text mt-2">
-                        Already part of the crew? Click 'Log In' to continue your voyage
-                    </p>
-                </div>
-            </div> 
+            </div>
         </div>
     </div>
-  </div>
 </main>
+{% endblock %}
+
+{% block page_js %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

@@ -16,7 +16,7 @@
         
         <div class="current-unit-title d-flex align-items-center ms-3 me-3">
             <i class="fas fa-anchor me-2"></i>
-            <span>Unit {{ unit_id }} - MMSI & Call Sign</span>
+            <span>Unit {{ unit_id }} - {{ unit_data.title }}</span>
         </div>
 
         <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">

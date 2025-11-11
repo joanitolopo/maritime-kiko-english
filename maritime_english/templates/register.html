@@ -2,86 +2,86 @@
 {% block title %}Create Account - Maritime English{% endblock %}
 
 {% block page_css %}
-<!-- Memuat file CSS khusus untuk halaman register -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 {% endblock %}
 
 {% block content %}
-<!-- Header: Hanya logo di kiri, sesuai instruksi Anda -->
-<header class="bg-white shadow-sm py-1">
-    <div class="container d-flex justify-content-start align-items-center">
-        <div class="logo d-flex align-items-center">
-            <img src="{{ url_for('static', filename='img/logo_website_2.png') }}" alt="Maritime English Logo" class="logo-img">
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg container">
+        <div class="container-fluid p-0">
+            <a class="navbar-brand mx-auto" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+                <span class="logo-text d-none d-sm-inline-block ms-2">Maritime English</span>
+            </a>
         </div>
-    </div>
+    </nav>
 </header>
 
-<!-- Wrapper Halaman Utama -->
-<div class="register-page-wrapper">
-    <div class="container">
-        <!-- Kotak Konten Utama (putih) -->
-        <div class="register-box">
+<main class="auth-page-wrapper">
+    
+    <div class="form-container" id="register-container">
+        <div class="auth-card register-card fade-in-up">
             
-            <!-- Judul Halaman -->
-            <h1 class="register-title mb-4">Create Account</h1>
+            <h1 class="auth-title">Create Your Account</h1>
+            <p class="auth-subtitle">Join the crew and start your voyage today.</p>
 
-            <div class="row">
-                <!-- ========================== -->
-                <!-- Kolom Form (Kiri) -->
-                <!-- ========================== -->
+            <div class="row mt-4">
                 <div class="col-lg-7">
-                    <!-- Form membutuhkan ID agar bisa di-submit dari kolom lain -->
                     <form method="POST" id="register-form">
                         
-                        <!-- Ganti dari Username -> Name -->
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                            <label for="name" class="form-label">Full Name</label>
+                            <div class="input-group-modern">
+                                <i class="fas fa-user"></i>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                            </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                            <div class="input-group-modern">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="your.email@sea.com" required>
+                            </div>
                         </div>
                         
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                            <div class="input-group-modern">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required>
+                            </div>
                         </div>
                         
-                        <!-- Tombol ini HANYA MUNCUL di mobile -->
-                        <button type="submit" class="btn btn-start btn-lg w-100 mt-4 d-lg-none">Create My Account</button>
+                        <button type="submit" class="btn-action btn-action-primary w-100 mt-4 d-lg-none">
+                            <i class="fas fa-user-plus me-2"></i> Create My Account
+                        </button>
                     </form>
                 </div>
 
-                <!-- ========================== -->
-                <!-- Divider (Tengah) -->
-                <!-- ========================== -->
                 <div class="col-lg-1 d-none d-lg-flex justify-content-center align-items-center">
                     <div class="vertical-divider"></div>
                 </div>
 
-                <!-- ========================== -->
-                <!-- Kolom Tombol & Link (Kanan) -->
-                <!-- ========================== -->
                 <div class="col-lg-4 d-none d-lg-flex flex-column justify-content-center">
-                    
-                    <!-- Tombol ini HANYA MUNCUL di desktop -->
-                    <!-- Atribut 'form' menunjuk ke ID form di kolom kiri -->
-                    <button type="submit" form="register-form" class="btn btn-start btn-lg w-100 mb-3">Create My Account</button>
-                    
-                    <p class="login-link text-center">
+                    <button type="submit" form="register-form" class="btn-action btn-action-primary w-100 mb-4">
+                        <i class="fas fa-user-plus me-2"></i> Create My Account
+                    </button>
+                    <p class="form-link-alt text-center">
                         Already part of the crew? <br> <a href="{{ url_for('auth.login') }}">Log In</a>
                     </p>
                 </div>
             </div>
             
-            <!-- Link login ini HANYA MUNCUL di mobile -->
-            <p class="login-link text-center mt-3 d-lg-none">
+            <p class="form-link-alt text-center mt-3 d-lg-none">
                 Already part of the crew? <a href="{{ url_for('auth.login') }}">Log In</a>
             </p>
 
-        </div> <!-- / .register-box -->
-    </div> <!-- / .container -->
-</div> <!-- / .register-page-wrapper -->
+        </div> </div> </main> {% endblock %}
+
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

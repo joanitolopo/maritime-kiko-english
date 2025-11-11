@@ -1,0 +1,184 @@
+/* ========================================
+   MODERN AUTH PAGES CSS (Login & Register)
+   Konsisten dengan palette Home, Courses, & Report
+======================================== */
+
+/* Variabel warna & font sudah diimpor dari home.css */
+
+/* Latar belakang halaman (abu-abu muda) */
+body {
+    background-color: #f3f6f9; /* Latar belakang abu-abu muda */
+    min-height: 100vh;
+}
+
+/* Header: Kita butuh style khusus untuk header auth
+   karena kita ingin logo di tengah.
+*/
+.main-header .navbar-brand {
+    margin: 0 auto; /* Logo di tengah */
+}
+/* Sembunyikan tombol/menu lain di header */
+.main-header .navbar-toggler,
+.main-header .navbar-collapse {
+    display: none !important;
+}
+
+/* Wrapper Halaman */
+.auth-page-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    min-height: calc(100vh - 90px); /* Penuh di bawah header */
+    overflow: hidden; /* Mencegah card "terbang" saat animasi */
+}
+
+/* Kartu Putih Utama */
+.auth-card {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e5e7eb;
+    width: 100%;
+    max-width: 800px; /* Lebar maksimum untuk form login */
+}
+/* Kartu register bisa lebih lebar jika perlu */
+.auth-card.register-card {
+    max-width: 900px;
+}
+
+/* Judul */
+.auth-title {
+    color: var(--ocean-blue);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.auth-subtitle {
+    color: var(--text-muted);
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Input Form Modern */
+.form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.input-group-modern {
+    position: relative;
+}
+.input-group-modern i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+.input-group-modern .form-control {
+    padding-left: 45px;
+    height: 50px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    font-weight: 500;
+}
+.input-group-modern .form-control:focus {
+    background: var(--white);
+    border-color: var(--ocean-blue);
+    box-shadow: 0 0 0 3px rgba(11, 90, 143, 0.1);
+}
+.input-group-modern .form-control:focus + i,
+.input-group-modern .form-control:not(:placeholder-shown) + i {
+    color: var(--ocean-blue);
+}
+
+/* Tombol Aksi */
+.btn-action {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-action-primary {
+    background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+.btn-action-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+/* Link Form */
+.form-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ocean-blue);
+    text-decoration: none;
+}
+.form-link:hover { text-decoration: underline; }
+
+.form-link-alt {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+.form-link-alt a {
+    font-weight: 600;
+    color: var(--ocean-blue);
+    text-decoration: none;
+}
+.form-link-alt a:hover { text-decoration: underline; }
+
+/* Divider Vertikal */
+.vertical-divider {
+    border-left: 1px solid #e5e7eb;
+    height: 100%;
+    min-height: 200px;
+}
+
+/* ==== Animasi Transisi ==== */
+.form-container {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.form-container.fading-out {
+    opacity: 0;
+    transform: scale(0.98);
+}
+.form-container.hidden {
+    display: none;
+}
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .auth-page-wrapper {
+        padding: 1rem;
+    }
+    .auth-card {
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow); /* Tetap pakai shadow di mobile */
+    }
+    .auth-title { font-size: 1.8rem; }
+    .auth-subtitle { font-size: 1rem; }
+}

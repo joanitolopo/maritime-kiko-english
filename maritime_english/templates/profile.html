@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - Maritime English{% endblock %}
+
+{% block page_css %}
+    <!-- Memuat CSS utama untuk header & variabel -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <!-- CSS khusus untuk halaman profile -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- 1. HEADER (Dimodifikasi sedikit agar 'Profile' bisa aktif jika diinginkan di navbar utama) -->
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg container">
+        <div class="container-fluid p-0">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+                <span class="logo-text d-none d-sm-inline-block ms-2">Maritime English</span>
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-pills-custom">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.courses_page') }}"><i class="fas fa-book-open me-1"></i> Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.report') }}"><i class="fas fa-chart-bar me-1"></i> Report</a></li>
+                    <!-- Menu Profile ditambahkan di sini agar terlihat aktif sesuai gambar referensi -->
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.profile') }}"><i class="fas fa-user-circle me-1"></i> Profile</a></li>
+                </ul>
+                
+                <!-- User Info Kanan (Tetap ada untuk konsistensi) -->
+                 <div class="user-actions d-flex align-items-center">
+                    <div class="dropdown">
+                        <a class="user-profile-btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- Avatar menggunakan inisial nama user -->
+                            <img src="https://ui-avatars.com/api/?name={{ current_user.username }}&background=0B5A8F&color=fff" alt="{{ current_user.username }}" class="user-avatar">
+                            <span class="d-none d-md-inline-block ms-2">{{ current_user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end custom-dropdown fade-in" aria-labelledby="userDropdown">
+                             <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- 2. KONTEN UTAMA: PROFILE CARD -->
+<main class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <!-- KARTU IDENTITAS KRU MODERN -->
+            <div class="profile-card fade-in-up">
+                
+                <!-- Header Kartu -->
+                <div class="profile-header">
+                    <h2 class="profile-title">
+                        <i class="fas fa-id-card-alt me-2"></i> Crew Identity
+                    </h2>
+                    <span class="badge bg-ocean">Active Cadet</span>
+                </div>
+
+                <div class="profile-body">
+                    <div class="row">
+                        
+                        <!-- KOLOM KIRI: FOTO & STATUS -->
+                        <div class="col-md-4 text-center profile-left-col">
+                            <div class="profile-picture-container">
+                                <!-- Ganti src dengan foto profil user jika ada -->
+                                <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Profile Picture" class="profile-picture">
+                                <button class="btn-edit-photo" title="Change Photo">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                            <div class="member-since mt-3">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Member since: <strong>{{ user_info.joined_date }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- KOLOM KANAN: DETAIL INFORMASI -->
+                        <div class="col-md-8 profile-right-col">
+                            <div class="info-grid">
+                                
+                                <div class="info-item">
+                                    <label class="info-label">Full Name</label>
+                                    <div class="info-value">{{ current_user.username }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <label class="info-label">Email Address</label>
+                                    <div class="info-value">{{ current_user.email }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <label class="info-label">School / Institution</label>
+                                    <div class="info-value">{{ user_info.school }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <label class="info-label">Major</label>
+                                    <div class="info-value">{{ user_info.major }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <label class="info-label">Grade / Rank</label>
+                                    <div class="info-value">{{ user_info.grade }}</div>
+                                </div>
+
+                            </div>
+
+                            <!-- Tombol Aksi -->
+                            <div class="profile-actions mt-4">
+                                <button class="btn-action btn-edit">
+                                    <i class="fas fa-edit me-2"></i> Edit Profile
+                                </button>
+                                <button class="btn-action btn-password">
+                                    <i class="fas fa-key me-2"></i> Change Password
+                                </button>
+                                <a href="{{ url_for('auth.logout') }}" class="btn-action btn-logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- /profile-body -->
+
+            </div> <!-- /profile-card -->
+
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block page_js %}
+    <!-- Animasi fade-in dari home.js atau bisa pakai inline kecil jika hanya untuk ini -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('.profile-card').classList.add('is-visible');
+        });
+    </script>
+{% endblock %}
