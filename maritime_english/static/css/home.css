@@ -1,209 +1,521 @@
-/* * CSS UNTUK HALAMAN HOME (DESAIN BARU)
- * Menghapus semua style lama
- */
+/* ========================================
+   MODERN DASHBOARD HOME CSS
+   Konsisten dengan palette Guided Tasks
+======================================== */
 
-/* 1. HEADER / NAVBAR BARU */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --ocean-blue: #0B5A8F;
+    --ocean-dark: #08426a;
+    --coral: #10b981;
+    --coral-dark: #059669;
+    --indigo: #6366f1;
+    --sky-light: #e0f2fe;
+    --white: #ffffff;
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+    --hover-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.12);
+}
+
+body {
+    background-color: #f3f6f9; /* Latar belakang sedikit abu-abu/biru agar konten 'pop' */
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ======== 1. MODERN NAVBAR ======== */
 .main-header {
-    background-color: #0077aa; /* Warna biru tua dari gambar */
+    background: var(--white);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.main-header.scrolled {
     padding: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
 }
 
-.main-header .logo-img {
-    height: 45px; /* Sesuaikan ukuran logo */
+.logo-img {
+    height: 40px;
+    width: auto;
 }
 
-/* Style link navigasi di tengah */
-.main-header .navbar-nav .nav-link {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1.1rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-
-.main-header .navbar-nav .nav-link:hover,
-.main-header .navbar-nav .nav-link:focus {
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Style link "Home" yang aktif */
-.main-header .navbar-nav .nav-link.active {
-    background-color: #e3f4ff;
-    color: #003087;
+.logo-text {
     font-weight: 700;
+    color: var(--ocean-blue);
+    font-size: 1.2rem;
+    vertical-align: middle;
 }
 
-/* Style ikon user di kanan */
-.main-header .user-info .nav-link {
-    padding: 0;
-}
-.main-header .user-info .fa-user-circle {
-    color: #ffffff;
-}
-
-/* Tombol Toggler Mobile */
-.navbar-toggler {
-    border: none;
-}
-.navbar-toggler:focus {
-    box-shadow: none;
-}
-
-
-/* 2. BANNER SAMBUTAN */
-.welcome-banner {
-    background-color: #b6e2fd; /* Latar belakang biru muda */
-    border: 1px solid #bce6ff;
+/* Nav Pills Custom */
+.nav-pills-custom .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
     border-radius: 12px;
-    padding: 1.1rem 2rem 0.1rem 2rem;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.nav-pills-custom .nav-link:hover {
+    color: var(--ocean-blue);
+    background-color: var(--sky-light);
+}
+
+.nav-pills-custom .nav-link.active {
+    color: var(--ocean-blue);
+    background-color: var(--sky-light);
+}
+
+/* User Actions */
+.nav-icon-btn {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    position: relative;
+    transition: color 0.3s ease;
+}
+.nav-icon-btn:hover { color: var(--ocean-blue); }
+
+.badge-dot {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--coral);
+    border-radius: 50%;
+    border: 1px solid var(--white);
+}
+
+.user-profile-btn {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    text-align: center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.user-profile-btn:hover, .user-profile-btn[aria-expanded="true"] {
+    background-color: var(--sky-light);
+    border-color: var(--ocean-blue);
+    color: var(--ocean-blue);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.custom-dropdown {
+    border: none;
+    box-shadow: var(--hover-shadow);
+    border-radius: 16px;
+    padding: 1rem;
+    margin-top: 15px !important;
+}
+.dropdown-header {
+    color: var(--ocean-blue);
+    font-size: 0.9rem;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--ocean-blue), var(--indigo));
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    color: white;
+}
+
+/* ======== 2. WELCOME BANNER ======== */
+.welcome-banner {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--indigo) 100%);
+    border-radius: 24px;
+    padding: 3rem;
     position: relative;
     overflow: hidden;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    min-height: 250px;
+    box-shadow: var(--card-shadow);
 }
 
-.welcome-banner .welcome-text h2 {
-    font-family: 'Poppins', sans-serif;
-    color: #fcfcfc;
+/* Pattern Overlay halus */
+.welcome-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+}
+
+.greeting-text {
     font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
 }
-.welcome-banner .welcome-text p {
+
+.banner-subtitle {
     font-size: 1.1rem;
-    color: #10315a;
-    margin-bottom: 1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
 }
 
-.welcome-text {
-    flex-grow: 1;
-    padding: 2rem 2rem 2rem 2rem;
+.btn-voyage-start {
+    background: var(--coral);
+    color: var(--white);
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 14px;
+    border: none;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-/* Tombol Hijau (seperti di index.css) */
-.btn-start-voyage {
-  background: #34c759;
-  color: #10315a;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 10px;
-  font-weight: 900;
-  font-family: 'Poppins', sans-serif;
-  text-decoration: none;
-  box-shadow: 0 8px 20px rgba(52,199,89,0.12);
-  transition: all 0.3s ease;
+.btn-voyage-start:hover {
+    background: var(--coral-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+    color: var(--white);
 }
-.btn-start-voyage:hover {
-  background: #2dab4d;
-  color: #fff;
+
+.banner-illustration {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    height: 110%; /* Sedikit lebih tinggi dari banner agar efek pop-out */
+    display: flex;
+    align-items: flex-end;
 }
 
 .cadet-img {
-  height: 170px;
-  width: auto;
-  object-fit: contain;
-  align-self: flex-end; /* jaga tetap di bawah */
-  z-index: 2;
+    height: auto;
+    max-height: 100%;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+.cadet-female { z-index: 2; height: 90%; }
+.cadet-male { z-index: 1; height: 95%; margin-left: -50px; opacity: 0.9; }
+
+.welcome-banner:hover .cadet-img {
+    transform: translateY(-10px) scale(1.02);
 }
 
-/* 3. PETA & SIDEBAR */
-.voyage-map-container {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid #dee2e6;
+/* ======== 3. DASHBOARD CARDS ======== */
+.dashboard-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: none;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    height: 100%;
 }
-.voyage-map-img {
+.dashboard-card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+.card-header-custom {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    color: var(--ocean-blue);
+}
+
+.bg-ocean { background-color: var(--ocean-blue) !important; }
+.bg-coral { background-color: var(--coral) !important; }
+
+/* ======== INTERACTIVE VOYAGE MAP ======== */
+.interactive-map {
+    position: relative;
     width: 100%;
-    height: 340px;
-    border-radius: 8px;
+    height: 400px; /* Tinggi tetap agar peta konsisten */
+    background: linear-gradient(180deg, #4aa3e0 0%, #0B5A8F 100%); /* Gradien Laut */
+    border-radius: 0 0 20px 20px; /* Rounded bawah mengikuti card */
+    overflow: hidden;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.2); /* Efek kedalaman */
 }
 
-.sidebar-cards {
+/* Animasi Ombak Sederhana */
+.sea-waves {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px;
+    animation: sea-move 10s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes sea-move {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 100px 50px, -100px 80px; }
+}
+
+/* Jalur SVG */
+.voyage-path {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Agar tidak mengganggu klik */
+}
+
+/* Voyage Nodes (Titik Unit) */
+.voyage-node {
+    position: absolute;
+    transform: translate(-50%, 50%); /* Pusatkan titik pada koordinat */
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.info-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1.25rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid #dee2e6;
+.voyage-node:hover {
+    transform: translate(-50%, 45%) scale(1.1); /* Efek naik sedikit saat hover */
+}
+
+.node-marker {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 2;
 }
 
-.info-card .info-icon {
-    flex-shrink: 0;
-    width: 50px; /* Memberi ruang tetap untuk ikon */
-    text-align: center;
-}
-.info-card .info-text {
-    flex-grow: 1;
-}
-.info-card .info-text strong {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1rem;
-    color: #333;
-}
-.info-card .info-text p {
-    font-family: 'Open Sans', sans-serif;
-    color: #555;
-    margin-bottom: 0;
+.node-label {
+    margin-top: 8px;
+    background: rgba(0,0,0,0.5);
+    color: var(--white);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0; /* Sembunyikan label secara default agar tidak ramai */
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
 }
 
-/* Progress bar kustom */
-.progress {
-    background-color: #e9ecef;
-    border-radius: 10px;
-}
-.progress-bar {
-    background-color: #6a00c9; /* Warna ungu dari ikon */
-    border-radius: 10px;
+.voyage-node:hover .node-label {
+    opacity: 1;
+    transform: translateY(0);
 }
 
+/* Style Node berdasarkan Status */
+/* 1. Active (Unit saat ini) */
+.voyage-node.active .node-marker {
+    background: var(--coral);
+    color: var(--white);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+}
+.voyage-node.active .node-label {
+    opacity: 1; /* Label selalu muncul untuk unit aktif */
+    background: var(--coral-dark);
+}
 
-/* 4. RESPONSIVE MOBILE */
-@media (max-width: 991.98px) {
-    /* Tengahkan item navbar saat mobile */
-    .main-header .navbar-nav {
-        text-align: center;
-        margin-top: 1rem;
+/* 2. Locked (Unit masa depan) */
+.voyage-node.locked .node-marker {
+    background: rgba(255,255,255,0.3); /* Semi-transparan */
+    color: rgba(255,255,255,0.8);
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+/* 3. Goal (Unit terakhir) */
+.voyage-node.goal .node-marker {
+    background: var(--indigo);
+    color: var(--white);
+    border: 3px solid #FFD700; /* Emas */
+}
+
+/* KAPAL USER (Animasi) */
+.user-ship-marker {
+    position: absolute;
+    top: -25px; /* Di atas marker node */
+    font-size: 2.5rem;
+    color: var(--white);
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+    animation: float-ship 3s ease-in-out infinite;
+    z-index: 3;
+}
+
+/* Efek riak air di bawah kapal */
+.ship-ripple {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%) rotateX(75deg);
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255,255,255,0.8);
+    border-radius: 50%;
+    animation: ripple 2s linear infinite;
+    opacity: 0;
+}
+
+@keyframes float-ship {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes ripple {
+    0% { transform: translateX(-50%) rotateX(75deg) scale(0.8); opacity: 0.8; }
+    100% { transform: translateX(-50%) rotateX(75deg) scale(2); opacity: 0; }
+}
+
+/* Responsive Adjustments untuk Peta */
+@media (max-width: 768px) {
+    .interactive-map {
+        height: 350px; /* Sedikit lebih pendek di HP */
     }
-    .main-header .user-info {
-        margin-top: 1rem;
-        display: flex;
+    .node-marker {
+        width: 30px; height: 30px; font-size: 0.9rem;
+    }
+    .user-ship-marker {
+        font-size: 2rem; top: -20px;
+    }
+    /* Sembunyikan SVG path di layar sangat kecil jika berantakan, 
+       atau biarkan karena viewBox akan menyesuaikan */
+}
+
+
+/* ======== 4. STAT CARDS (SIDEBAR) ======== */
+.stat-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.primary-stat:hover { border-color: var(--ocean-blue); }
+.secondary-stat:hover { border-color: var(--indigo); }
+.tertiary-stat:hover { border-color: var(--coral); }
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.primary-stat .stat-icon { background: var(--sky-light); color: var(--ocean-blue); }
+.secondary-stat .stat-icon { background: #e0e7ff; color: var(--indigo); }
+.tertiary-stat .stat-icon { background: #d1fae5; color: var(--coral-dark); }
+
+.stat-info h6 {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-info h3 {
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.custom-progress {
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ======== 5. ANIMATIONS & UTILS ======== */
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-left { animation: slideInLeft 1s ease forwards; }
+.slide-in-right { animation: slideInRight 1s ease forwards; }
+
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .welcome-banner {
+        padding: 2rem;
+        text-align: center;
         justify-content: center;
     }
-    /* Pindahkan sidebar ke bawah peta */
-    .sidebar-cards {
-        margin-top: 2rem;
+    .banner-content {
+        max-width: 100%;
+    }
+    .greeting-text {
+        font-size: 2rem;
     }
 }
 
-@media (max-width: 767.98px) {
-    .welcome-banner {
-        padding: 1.5rem 1rem;
-    }
-    .welcome-banner .welcome-text h2 {
-        font-size: 1.5rem;
-    }
-    .welcome-banner .welcome-text p {
-        font-size: 0.9rem;
-    }
-    .btn-start-voyage {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-    /* Sembunyikan salah satu kadet agar tidak penuh */
-    #cadet-male {
-        display: none !important;
-    }
-    .cadet-img {
-        height: 90px;
+@media (max-width: 768px) {
+    .map-container {
+        height: 300px;
     }
 }

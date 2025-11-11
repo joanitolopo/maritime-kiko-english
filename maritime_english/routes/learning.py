@@ -98,3 +98,59 @@ def learning_unit(unit_id, section):
                            unit_data=UNITS[unit_id],
                            content=content_full,
                            section_content=section_content)
+
+@learning_bp.route('/report')
+@login_required
+def report():
+    # --- Data Progres Tiruan (Mock Data) ---
+    # Di aplikasi nyata, Anda akan mengambil data ini dari database
+    # berdasarkan current_user.id
+    mock_progress_data = {
+        "1": {
+            "status": "Completed",
+            "progress": 100,
+            "score": 93,
+            "last_activity": "10 Nov 2025"
+        },
+        "2": {
+            "status": "In Progress",
+            "progress": 75,
+            "score": 0, # Sesuai gambar
+            "last_activity": "12 Nov 2025"
+        },
+        "3": {
+            "status": "Locked",
+            "progress": 0,
+            "score": 0,
+            "last_activity": "Not Yet Started"
+        },
+        "4": {
+            "status": "Locked",
+            "progress": 0,
+            "score": 0,
+            "last_activity": "Not Yet Started"
+        },
+        "5": {
+            "status": "Locked",
+            "progress": 0,
+            "score": 0,
+            "last_activity": "Not Yet Started"
+        },
+        "6": {
+            "status": "Locked",
+            "progress": 0,
+            "score": 0,
+            "last_activity": "Not Yet Started"
+        }
+    }
+    # ------------------------------------
+
+    # Data default jika unit baru ditambahkan tapi belum ada di mock data
+    default_progress = {
+        "status": "Locked", "progress": 0, "score": 0, "last_activity": "Not Yet Started"
+    }
+
+    return render_template('report.html', 
+                           units_data=UNITS, 
+                           progress_data=mock_progress_data,
+                           default_progress=default_progress)

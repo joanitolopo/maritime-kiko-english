@@ -1,75 +1,49 @@
 {% extends 'base.html' %}
-{% block title %}Home - Maritime English{% endblock %}
+{% block title %}Home - Maritime English Dashboard{% endblock %}
 
 {% block page_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock %}
 
 {% block content %}
-<!-- 1. HEADER / NAVBAR BARU -->
-<header class="main-header shadow-sm">
-    <nav class="container navbar navbar-expand-lg">
+<!-- 1. MODERN NAVBAR (SAMA SEPERTI SEBELUMNYA) -->
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg container">
         <div class="container-fluid p-0">
-            <!-- Logo -->
             <a class="navbar-brand" href="{{ url_for('main.home') }}">
                 <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+                <span class="logo-text d-none d-sm-inline-block ms-2">Maritime English</span>
             </a>
-
-            <!-- Tombol Toggle Mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars text-white"></i>
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
             </button>
-
-            <!-- Menu Navigasi -->
             <div class="collapse navbar-collapse" id="mainNav">
-                <!-- Link di Tengah -->
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('learning.courses_page') }}">Courses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Report</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-pills-custom">
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.home') }}"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.courses_page') }}"><i class="fas fa-book-open me-1"></i> Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.report') }}"><i class="fas fa-chart-bar me-1"></i> Report</a></li>
                 </ul>
-
-                <!-- Info User di Kanan -->
-                <div class="user-info">
+                <div class="user-actions d-flex align-items-center">
                     {% if current_user.is_authenticated %}
-                        <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" 
-                               href="#" 
-                               id="userDropdown" 
-                               role="button" 
-                               data-bs-toggle="dropdown" 
-                               aria-expanded="false">
-                                <i class="fas fa-user-circle fa-2x"></i>
+                        <div class="nav-item me-3 d-none d-lg-block">
+                            <a href="#" class="nav-icon-btn" aria-label="Notifications"><i class="fas fa-bell"></i><span class="badge-dot"></span></a>
+                        </div>
+                        <div class="dropdown">
+                            <a class="user-profile-btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name={{ current_user.username }}&background=0B5A8F&color=fff" alt="{{ current_user.username }}" class="user-avatar">
+                                <span class="d-none d-md-inline-block ms-2">{{ current_user.username }}</span>
                             </a>
-                            
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="#">
-                                    Signed in as <strong>{{ current_user.username }}</strong>
-                                </a></li>
+                            <ul class="dropdown-menu dropdown-menu-end custom-dropdown fade-in" aria-labelledby="userDropdown">
+                                <li class="dropdown-header"><strong>Cadet {{ current_user.username }}</strong></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
-                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                    </a>
-                                </li>
+                                <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">
-                            Login
-                        </a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary-custom">Login</a>
                     {% endif %}
                 </div>
             </div>
@@ -77,89 +51,133 @@
     </nav>
 </header>
 
-<!-- 2. KONTEN UTAMA HALAMAN -->
-<main class="container my-4">
+<!-- 2. DASHBOARD CONTENT -->
+<main class="container my-4 dashboard-container">
 
-    <!-- 2.1. BANNER SAMBUTAN -->
-    <section class="welcome-banner">
-        <!-- GANTI 'src' DENGAN GAMBAR KADET WANITA ANDA -->
-        <img src="/static/img/Captain female-2.png" alt="Cadet" class="cadet-img d-none d-md-block" id="cadet-female">
-        
-        <div class="welcome-text">
-            <h2>Welcome aboard, Cadet {{ current_user.username }}!</h2>
-            <p>Let's begin your first voyage in Maritime English</p>
-            <!-- Anda perlu mengarahkan 'href' ini ke unit pertama -->
-            <a href="#" class="btn btn-start-voyage">Start Voyage</a>
+    <!-- 2.1. WELCOME BANNER (SAMA SEPERTI SEBELUMNYA) -->
+    <section class="welcome-banner fade-in-up">
+        <div class="banner-content">
+            <h1 class="greeting-text">
+                <span id="greeting-time">Welcome aboard</span>, <br>
+                Cadet {{ current_user.username }}!
+            </h1>
+            <p class="banner-subtitle">Ready to continue your voyage to mastery?</p>
+            <a href="{{ url_for('learning.courses_page') }}" class="btn btn-voyage-start pulse-animation">
+                <i class="fas fa-compass fa-spin me-2" style="--fa-animation-duration: 3s;"></i>
+                Continue Voyage
+            </a>
         </div>
-        
-        <!-- GANTI 'src' DENGAN GAMBAR KADET PRIA ANDA -->
-        <img src="/static/img/Captain male-3.png" alt="Cadet" class="cadet-img d-none d-md-block" id="cadet-male">
+        <div class="banner-illustration d-none d-md-flex">
+            <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Female Cadet" class="cadet-img cadet-female slide-in-left">
+            <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Male Cadet" class="cadet-img cadet-male slide-in-right">
+        </div>
     </section>
 
-    <!-- 2.2. PETA & SIDEBAR STATISTIK -->
-    <section class="row mt-4">
+    <!-- 2.2. MAIN DASHBOARD GRID -->
+    <div class="row g-4 mt-2">
 
-        <!-- KOLOM KIRI: PETA PERJALANAN -->
-        <div class="col-lg-8">
-            <div class="voyage-map-container">
-                <!-- 
-                  PENTING: GANTI 'src' DI BAWAH INI 
-                  DENGAN GAMBAR PETA PERJALANAN (VOYAGE MAP) ANDA 
-                -->
-                <img src="/static/img/map_journey.png" 
-                     alt="Voyage Map" 
-                     class="voyage-map-img">
+        <!-- KOLOM KIRI: PETA INTERAKTIF BARU -->
+        <div class="col-lg-8 fade-in-up delay-1">
+            <div class="dashboard-card map-card">
+                <div class="card-header-custom">
+                    <h5 class="m-0"><i class="fas fa-map-marked-alt me-2"></i>Your Voyage Map</h5>
+                    <span class="badge bg-ocean">Unit 1 Active</span>
+                </div>
+                
+                <!-- CONTAINER PETA BARU -->
+                <div class="map-container interactive-map">
+                    <!-- Efek Laut -->
+                    <div class="sea-waves"></div>
+                    
+                    <!-- Jalur Perjalanan (SVG Sederhana untuk garis putus-putus) -->
+                    <svg class="voyage-path" viewBox="0 0 800 400" preserveAspectRatio="none">
+                        <path d="M 80 320 C 200 320, 250 200, 400 150 S 600 100, 720 80" 
+                              stroke="rgba(255,255,255,0.4)" stroke-width="4" stroke-dasharray="10,10" fill="none"/>
+                    </svg>
+
+                    <!-- Unit Nodes (Titik-titik Unit) -->
+                    
+                    <!-- UNIT 1 (ACTIVE) - Posisi diatur dengan style inline (persentase) agar responsif -->
+                    <div class="voyage-node active" style="left: 10%; bottom: 20%;" data-bs-toggle="tooltip" title="Unit 1: Spelling the Sea">
+                        <div class="node-marker">1</div>
+                        <div class="node-label">Unit 1</div>
+                        <!-- KAPAL USER (Hanya ada di unit aktif) -->
+                        <div class="user-ship-marker">
+                            <i class="fas fa-ship"></i>
+                            <div class="ship-ripple"></div>
+                        </div>
+                    </div>
+
+                    <!-- UNIT 2 (LOCKED) -->
+                    <div class="voyage-node locked" style="left: 30%; bottom: 45%;" data-bs-toggle="tooltip" title="Unit 2: Locked">
+                        <div class="node-marker"><i class="fas fa-lock"></i></div>
+                        <div class="node-label">Unit 2</div>
+                    </div>
+
+                    <!-- UNIT 3 (LOCKED) -->
+                    <div class="voyage-node locked" style="left: 50%; bottom: 60%;" data-bs-toggle="tooltip" title="Unit 3: Locked">
+                        <div class="node-marker"><i class="fas fa-lock"></i></div>
+                        <div class="node-label">Unit 3</div>
+                    </div>
+
+                    <!-- UNIT 4 (LOCKED) -->
+                    <div class="voyage-node locked" style="left: 70%; bottom: 40%;" data-bs-toggle="tooltip" title="Unit 4: Locked">
+                        <div class="node-marker"><i class="fas fa-lock"></i></div>
+                        <div class="node-label">Unit 4</div>
+                    </div>
+                    
+                     <!-- UNIT 5 (LOCKED) -->
+                     <div class="voyage-node locked" style="left: 80%; bottom: 70%;" data-bs-toggle="tooltip" title="Unit 5: Locked">
+                        <div class="node-marker"><i class="fas fa-lock"></i></div>
+                        <div class="node-label">Unit 5</div>
+                    </div>
+
+                    <!-- UNIT 6 (GOAL) -->
+                    <div class="voyage-node goal" style="left: 90%; bottom: 80%;" data-bs-toggle="tooltip" title="Final Unit: Mastery!">
+                        <div class="node-marker"><i class="fas fa-flag-checkered"></i></div>
+                        <div class="node-label">Goal</div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <!-- KOLOM KANAN: SIDEBAR STATISTIK -->
-        <aside class="col-lg-4">
-            <div class="sidebar-cards">
-                
-                <!-- Card 1: Current Voyage -->
-                <div class="info-card">
-                    <div class="info-icon" style="color: #0052cc;">
-                        <i class="fas fa-anchor fa-2x"></i>
+        <!-- KOLOM KANAN: STATISTIK (SAMA SEPERTI SEBELUMNYA) -->
+        <aside class="col-lg-4 d-flex flex-column gap-3 fade-in-up delay-2">
+            <div class="stat-card primary-stat">
+                <div class="stat-icon"><i class="fas fa-anchor"></i></div>
+                <div class="stat-info">
+                    <h6>Current Unit</h6>
+                    <h3>Spelling the Sea</h3>
+                    <div class="progress custom-progress mt-2">
+                        <div class="progress-bar bg-coral" role="progressbar" style="width: 0%" data-target-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="info-text">
-                        <strong>Current Voyage</strong>
-                        <!-- Ganti ini dengan data dinamis -->
-                        <p>Unit 1 - Spelling the Sea</p>
-                    </div>
+                    <small class="text-muted mt-1 d-block">25% Complete</small>
                 </div>
-
-                <!-- Card 2: Progress -->
-                <div class="info-card">
-                    <div class="info-icon" style="color: #6a00c9;">
-                        <i class="fas fa-chart-line fa-2x"></i>
-                    </div>
-                    <div class="info-text">
-                        <strong>Progress</strong>
-                        <!-- Ganti ini dengan data dinamis -->
-                        <p>0 of 6 units completed</p>
-                        <div class="progress" style="height: 10px;">
-                             <!-- Ganti 'width' dengan persentase dinamis -->
-                            <div class="progress-bar" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
+            </div>
+            <div class="stat-card secondary-stat">
+                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-info">
+                    <h6>Total Progress</h6>
+                    <h3>0 / 6 Units</h3>
+                    <small class="text-muted">Keep sailing!</small>
                 </div>
-
-                <!-- Card 3: Learning Time -->
-                <div class="info-card">
-                    <div class="info-icon" style="color: #c90076;">
-                        <i class="fas fa-clock fa-2x"></i>
-                    </div>
-                    <div class="info-text">
-                        <strong>Learning Time</strong>
-                        <!-- Ganti ini dengan data dinamis -->
-                        <p>Total 00 minutes</p>
-                    </div>
+            </div>
+             <div class="stat-card tertiary-stat">
+                <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                <div class="stat-info">
+                    <h6>Learning Time</h6>
+                    <h3><span id="learning-minutes">45</span> Mins</h3>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i> +15m today</small>
                 </div>
-
             </div>
         </aside>
 
-    </section>
+    </div> <!-- End Row -->
 
 </main>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}
