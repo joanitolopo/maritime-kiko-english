@@ -1,59 +1,243 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing: Differences in Pronunciation' }}{% endblock %}
+{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing: Pronunciation' }}{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_intro.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container my-4 noticing-scene-container" aria-live="polite">
-  <div class="noticing-scene shadow-lg" role="region" aria-label="{{ section_content.title}}">
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items: center header-right-group">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+            <i class="fas fa-chevron-left me-1" aria-hidden="true"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3" aria-hidden="false">
+            <i class="fas fa-ship me-2" aria-hidden="true"></i>
+            <span>Unit {{ unit_id }} - {{ unit_data.title }}</span>
+        </div>
 
-    <!-- Avatar -->
-    <img src="{{ url_for('static', filename='img/kiko.png') }}" 
-         alt="{{ 'Captain Ray' }}" class="captain-ray">
-
-    <!-- Chalkboard (left background) -->
-    <div class="chalkboard" aria-hidden="true">
-      <div class="chalk-text">{{ section_content.chalk_title or 'Notice the Difference' }}</div>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home" aria-hidden="true"></i>
+        </a>
     </div>
+</header>
 
-    <!-- Dialogue / Instruction box -->
-    <div class="notice-dialogue-box" role="article" aria-labelledby="notice-text">
-      <div class="lang-toggle">
-        <button id="notice-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
+<div class="vhf-container">
+    
+    <aside class="vhf-sidebar">
+        
+        <div class="activity-badge">
+            <div class="badge-icon">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+            <div class="badge-text">
+                <h4>Navigate the Language</h4>
+                <p>Activity 5: Decode the Message!</p>
+            </div>
+        </div>
 
-      <div id="notice-content">
-        <p id="notice-text" class="notice-paragraph"> Now let’s look more closely at the alphabet and numbers. Some of them sound different in Maritime English. Listen and compare.
-        </p>
-      </div>
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captain-radio_check_3.png') }}" alt="Captain" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
 
-      <div class="audio-control">
-        <button id="notice-audio-btn" class="audio-play-btn" aria-label="Play introduction audio" type="button">
-          <i class="fas fa-play" aria-hidden="true"></i>
-        </button>
-      </div>
+            <div class="instruction-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Captain's Instructions</span>
+                </div>
+                <p class="speech-text-noticing">
+                    "Cadet, this time we'll study how radio messages are built!
+                    Every call at sea follows a clear order, 1) opening, 2) middle, and
+                    3) closing. Let's read both sides and see how real sailors do it."
+                </p>
+                <div class="vhf-controls noticing-controls">
+                    <button class="control-btn audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        </aside>
 
-      <div class="dialogue-footer">
-        <button id="start-noticing-btn"
-                class="btn btn-primary btn-lg btn-start"
-                aria-disabled="true"
-                disabled
-                data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section if section_content.start_next_section else 'noticing_alphabet') }}">
-          'Start Noticing' <i class="fas fa-arrow-right ms-1"></i>
-        </button>
-       </div>
-    </div>
+    <main class="vhf-main">
+        
+        <section class="exchange-card">
+            <div class="exchange-header">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>Message Structure</h3>
+                        <p>Notice the structure of each radio exchange</p>
+                    </div>
+                </div>
+            </div>
 
-  </div>
+            <div class="exchange-body">
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <p class="instruction-text-noticing">
+                        "Read both messages carefully. Notice the structure of each radio exchange. Click Learn More to see the Captain's notes."
+                    </p>
+                </div>
 
-  <!-- audio element (uses section_content.audio_en if present) -->
-  <audio id="notice-audio" preload="auto" src="{{ section_content.audio_en or '' }}"></audio>
+                <div class="conversation-timeline">
+                    
+                    <div class="message-wrapper caller-message">
+                        <div class="message-card">
+                            <div class="message-header">
+                                <div class="vessel-info">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Caller" class="vessel-avatar">
+                                    <div class="vessel-details">
+                                        <h4>CALLER</h4>
+                                        <span class="vessel-role">Motor Vessel Blue Horizon</span>
+                                    </div>
+                                </div>
+                                <button class="message-play-btn" aria-label="Play caller message" disabled>
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <p class="message-text">
+                                        1. This is Motor Vessel Blue Horizon, Call Sign YBON9, MMSI two-four-eight-one-zero-five-nine-zero-zero.
+                                        <br>
+                                        2. Calling Motor Vessel Antares, Call Sign LAPW5
+                                        <br>
+                                        3. Channel one-six. Over.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-arrow">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="arrow-label">Exchange</div>
+                    </div>
+
+                    <div class="message-wrapper receiver-message">
+                        <div class="message-card">
+                            <div class="message-header">
+                                <button class="message-play-btn" aria-label="Play receiver message" disabled>
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="vessel-info">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Receiver" class="vessel-avatar">
+                                    <div class="vessel-details">
+                                        <h4>RECEIVER</h4>
+                                        <span class="vessel-role">Motor Vessel Antares</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <p class="message-text">
+                                        1. Motor Vessel Blue Horizon, this is Antares
+                                        <br>
+                                        2. Receiving you loud and clear.
+                                        <br>
+                                        3. Over.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="learn-more-section">
+                    <button class="learn-more-button" id="open-popup-btn">
+                        Learn more <i class="fa-solid fa-magnifying-glass ms-2"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_alphabet') }}" class="btn-continue">
+                <span>Continue</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
 </div>
+
+<div class="popup-overlay" id="learn-more-popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <h3>Radio Message Structure & Function</h3>
+            <button class="popup-close" id="close-popup-btn">&times;</button>
+        </div>
+        <div class="popup-body">
+            <div class="popup-section">
+                <span class="popup-number">1</span>
+                <div class="popup-text">
+                    <h4>Opening</h4>
+                    <p>Used by both caller and receiver to start the communication clearly.</p>
+                    <ul>
+                        <li><strong>Caller:</strong> "This is [Ship Name], Call Sign..., MMSI..."</li>
+                        <li><strong>Receiver:</strong> "[Ship Name], this is [Your Ship]."</li>
+                        <li><strong>Function:</strong> Identify yourself and the ship you are contacting.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="popup-section">
+                <span class="popup-number">2</span>
+                <div class="popup-text">
+                    <h4>Middle</h4>
+                    <p>The core part of the message – giving or confirming information.</p>
+                    <ul>
+                        <li><strong>Caller:</strong> "Calling Motor Vessel [Name]."</li>
+                        <li><strong>Receiver:</strong> "Receiving you loud and clear."</li>
+                        <li><strong>Function:</strong> Deliver or acknowledge the main content.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="popup-section">
+                <span class="popup-number">3</span>
+                <div class="popup-text">
+                    <h4>Closing</h4>
+                    <p>Marks the end of your turn in radio communication.</p>
+                    <ul>
+                        <li><strong>Caller:</strong> "Channel one-six. Over."</li>
+                        <li><strong>Receiver:</strong> "Over."</li>
+                        <li><strong>Function:</strong> End your turn and signal readiness for response.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_js %}
-<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script>
+    window.UNIT_CONTENT = {{ (content or {})|tojson|safe }};
+    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
 <script src="{{ url_for('static', filename='js/noticing_intro.js') }}" defer></script>
 {% endblock %}

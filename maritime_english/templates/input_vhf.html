@@ -1,106 +1,280 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - {{ section_content.title or "Mini Dialogue: VHF Exchange" }}{% endblock %}
+{% block title %}Unit {{ unit_id }} - VHF Radio Exchange{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="container my-4 vhf-page">
-  <!-- --- PERUBAHAN BARU --- -->
-  <!-- Tombol Navigasi Kustom -->
-  
-  <!-- Tombol Previous (kembali ke input_channel) -->
-  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_channel') }}" class="scene-prev-button" aria-label="Previous section">
-      <i class="fas fa-arrow-left"></i>
-  </a>
-  
-  <!-- Tombol Close (kembali ke home/daftar unit) -->
-  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
-  <!-- --- AKHIR PERUBAHAN --- -->
-
-  <div class="vhf-scene shadow-lg" role="region" aria-label="{{ section_content.title or 'Mini Dialogue VHF Exchange' }}">
-    <div class="split-screen">
-      <div class="left-avatar">
-        <img src="{{ url_for('static', filename='img/kikock.png') }}" alt="{{ section_content.avatar_a_alt or 'Captain Ray' }}" class="avatar-lg" id="avatar-ray">
-        <div class="mic-indicator" id="mic-ray" aria-hidden="true"></div>
-      </div>
-
-      <div class="right-avatar">
-        <img src="{{ url_for('static', filename='img/os_lina.png') }}" alt="{{ section_content.avatar_b_alt or 'OS Lina' }}" class="avatar-lg" id="avatar-lina">
-        <div class="mic-indicator" id="mic-lina" aria-hidden="true"></div>
-      </div>
-    </div>
-
-    <div class="dialogue-box" role="region" aria-label="Dialogue script">
-      <div class="lang-toggle">
-        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
-
-      <div class="dialogue-script" id="dialogue-script">
-        <p id="dialogue-text">
-          {{ section_content.dialogue_en | safe if section_content.dialogue_en else section_content.dialogue | safe }}
-        </p>
-      </div>
-
-      <div class="instruction-box">
-        <p id="instruction-text">{{ section_content.instruction_en or section_content.instruction or "Listen to the dialogue carefully. Then, repeat Operator B's response aloud." }}</p>
-      </div>
-
-      <div class="audio-controls">
-        <div class="audio-btn-group">
-          <button id="play-full" class="audio-btn" aria-label="Replay full dialogue" type="button">
-            <i class="fas fa-play" aria-hidden="true"></i>
-          </button>
-          <span class="audio-label">Full Dialogue</span>
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_mmsi') }}" class="btn-learn-nav btn-back" aria-label="Back to MMSI">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - VHF Exchange</span>
         </div>
 
-        <div class="audio-btn-group">
-          <button id="play-b" class="audio-btn" aria-label="Replay Operator B only" type="button">
-            <i class="fas fa-play" aria-hidden="true"></i>
-          </button>
-          <span class="audio-label">Operator B</span>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="vhf-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="vhf-sidebar">
+        
+        <!-- Activity Badge -->
+        <div class="activity-badge">
+            <div class="badge-icon">
+                <i class="fas fa-broadcast-tower"></i>
+            </div>
+            <div class="badge-text">
+                <h4>On-Air Communication</h4>
+                <p>Activity 5: VHF Radio Exchange</p>
+            </div>
         </div>
 
-        <button id="repeat-response" class="btn btn-practice" aria-label="Repeat response" type="button">Repeat Response</button>
-      </div>
+        <!-- Captain Card -->
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captain_radio_check_5.png') }}" alt="Captain" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
 
-      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
-        <div class="fb-arrow" aria-hidden="true"></div>
-        <div class="fb-content">{{ section_content.default_feedback or 'Good job! Keep practicing to sound like a real sailor.' }}</div>
-      </div>
+            <div class="instruction-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Captain's Instructions</span>
+                </div>
+                <p class="speech-text-vhf">
+                    "Cadet, remember! Always start with your vessel's name, Call Sign, and MMSI before you speak on the radio. That's how real sailors make sure every message is clear and safe!"
+                </p>
+                <div class="vhf-controls">
+                    <button class="control-btn audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-      <div id="vhf-quiz" class="vhf-quiz visually-hidden" aria-hidden="true">
-        <p class="quiz-question">{{ section_content.quiz_question or 'Who said "Switch to Channel WUN SIX"?' }}</p>
-        <form id="vhf-quiz-form" aria-label="VHF quiz">
-          {% for opt in section_content.quiz_options or ['ray','lina'] %}
-            <label class="quiz-label">
-              <input type="radio" name="vhf-quiz" value="{{ opt }}">{{ section_content.quiz_labels[opt] if section_content.quiz_labels and opt in section_content.quiz_labels else (opt|capitalize) }}
-            </label>
-          {% endfor %}
-        </form>
-        <div id="vhf-quiz-feedback" class="alert d-none mt-2" role="status" aria-live="polite"></div>
-      </div>
+        <!-- Protocol Card -->
+        <div class="protocol-card">
+            <div class="protocol-header">
+                <i class="fas fa-list-check"></i>
+                <span>Radio Protocol</span>
+            </div>
+            <div class="protocol-steps">
+                <div class="protocol-step">
+                    <span class="step-number">1</span>
+                    <span>Vessel Name</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="step-number">2</span>
+                    <span>Call Sign</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="step-number">3</span>
+                    <span>MMSI Number</span>
+                </div>
+                <div class="protocol-step">
+                    <span class="step-number">4</span>
+                    <span>Message</span>
+                </div>
+            </div>
+        </div>
 
-      <div class="dialogue-footer">
-        <button id="next-btn" class="btn btn-next" aria-label="Next to Wrap-up" type="button">Next</button>
+    </aside>
 
-        {% if section_content.start_next_section %}
-          <a id="continue-link" class="visually-hidden" href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) }}"></a>
-        {% else %}
-          <a id="continue-link" class="visually-hidden" href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_wrapup') }}"></a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+    <!-- RIGHT CONTENT -->
+    <main class="vhf-main">
+        
+        <!-- Radio Exchange Card -->
+        <section class="exchange-card">
+            <div class="exchange-header">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>VHF Radio Exchange</h3>
+                        <p>Listen to a real conversation between two vessels</p>
+                    </div>
+                </div>
+                <div class="channel-indicator">
+                    <i class="fas fa-wifi"></i>
+                    <span>Channel 16</span>
+                </div>
+            </div>
 
-  <!-- Audio elements: use section_content paths if present -->
-  <audio id="audio-full" preload="auto" src="{{ section_content.audio_full or '/static/data/audio/dialogues/unit1_full_en.wav' }}"></audio>
-  <audio id="audio-b" preload="auto" src="{{ section_content.audio_b or '/static/data/audio/dialogues/unit1_b_en.wav' }}"></audio>
-</main>
+            <div class="exchange-body">
+                <!-- Instruction Banner -->
+                <div class="instruction-banner instruction-text-vhf">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <p>Listen to the example of radio exchange between two vessels. Notice how Call Sign, MMSI, and Channel Number are used in the conversation. Then, echo each line clearly.</p>
+                </div>
+
+                <!-- Conversation Timeline -->
+                <div class="conversation-timeline">
+                    
+                    <!-- Message 1: Caller (Blue Horizon) -->
+                    <div class="message-wrapper caller-message">
+                        <div class="message-card">
+                            <div class="message-header">
+                                <div class="vessel-info">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_6.png') }}" alt="Blue Horizon" class="vessel-avatar">
+                                    <div class="vessel-details">
+                                        <h4>MV BLUE HORIZON</h4>
+                                        <span class="vessel-role">Calling Vessel</span>
+                                    </div>
+                                </div>
+                                <button id="play-caller-audio" class="message-play-btn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <p class="message-text">
+                                        "This is Motor Vessel Blue Horizon, Call Sign Bravo Hotel Nine Two Five One. MMSI two-four-eight-one-zero-five-nine-zero-zero. Calling Motor Vessel Antares, Call Sign Yankee Bravo Oscar November Nine, Channel one-six. Over."
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="vessel-data-card">
+                                <div class="data-row">
+                                    <i class="fas fa-ship"></i>
+                                    <div class="data-info">
+                                        <label>Vessel Name</label>
+                                        <value>BLUE HORIZON</value>
+                                    </div>
+                                </div>
+                                <div class="data-row">
+                                    <i class="fas fa-hashtag"></i>
+                                    <div class="data-info">
+                                        <label>MMSI</label>
+                                        <value>248105900</value>
+                                    </div>
+                                </div>
+                                <div class="data-row">
+                                    <i class="fas fa-broadcast-tower"></i>
+                                    <div class="data-info">
+                                        <label>Call Sign</label>
+                                        <value>BH9251</value>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connection Arrow -->
+                    <div class="conversation-arrow">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="arrow-label">Radio Exchange</div>
+                    </div>
+
+                    <!-- Message 2: Receiver (Antares) -->
+                    <div class="message-wrapper receiver-message">
+                        <div class="message-card">
+                            <div class="message-header">
+                                <button id="play-receiver-audio" class="message-play-btn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="vessel-info">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_7.png') }}" alt="Antares" class="vessel-avatar">
+                                    <div class="vessel-details">
+                                        <h4>MV ANTARES</h4>
+                                        <span class="vessel-role">Receiving Vessel</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <p class="message-text">
+                                        "Motor Vessel Blue Horizon, this is Antares. Receiving you loud and clear. Over."
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="vessel-data-card">
+                                <div class="data-row">
+                                    <i class="fas fa-ship"></i>
+                                    <div class="data-info">
+                                        <label>Vessel Name</label>
+                                        <value>ANTARES</value>
+                                    </div>
+                                </div>
+                                <div class="data-row">
+                                    <i class="fas fa-hashtag"></i>
+                                    <div class="data-info">
+                                        <label>MMSI</label>
+                                        <value>257689000</value>
+                                    </div>
+                                </div>
+                                <div class="data-row">
+                                    <i class="fas fa-broadcast-tower"></i>
+                                    <div class="data-info">
+                                        <label>Call Sign</label>
+                                        <value>LAPW5</value>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Play All Button -->
+                <div class="play-all-section">
+                    <button id="play-all-btn" class="play-all-button">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Play Full Conversation</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Continue Button -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}" class="btn-continue">
+                <span>Continue to Next Section</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </main>
+
+</div>
+
 {% endblock %}
 
 {% block page_js %}
-<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script>
+    window.UNIT_CONTENT = {{ (content or {})|tojson|safe }};
+    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
 <script src="{{ url_for('static', filename='js/input_vhf.js') }}"></script>
 {% endblock %}

@@ -1,80 +1,616 @@
-// static/js/guided_intro.js
+// ========================================
+// MODERN GUIDED INTRO JAVASCRIPT
+// Radio Watch Duty with Speech Recognition
+// ========================================
+
 document.addEventListener('DOMContentLoaded', () => {
-  const audioBtn = document.getElementById('audio-btn');
-  const guidedAudio = document.getElementById('guided-audio');
-  const langToggle = document.getElementById('lang-toggle');
-  const paragraph = document.getElementById('guided-paragraph');
-  const radioConsole = document.getElementById('radio-console');
-  const startBtn = document.getElementById('start-guided');
+    console.log('🌊 Radio Watch Duty Initialized!');
 
-  const SECTION = window.SECTION_CONTENT || {};
-  const texts = {
-    en: SECTION.text_en || "Now, let’s try real communication. I’ll guide you through short radio tasks. Listen first, then repeat or respond as instructed.",
-    id: SECTION.text_id || "Sekarang mari kita coba komunikasi nyata. Saya akan memandu kalian melalui tugas radio singkat. Dengarkan dulu, lalu ulangi atau jawab sesuai instruksi."
-  };
+    // ==================================================
+    // SPEECH RECOGNITION SETUP
+    // ==================================================
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!window.SpeechRecognition) {
+        console.error('❌ Browser tidak mendukung Speech Recognition API');
+        showNotification('Your browser does not support speech recognition. Please use Chrome or Edge.', 'error');
+        document.querySelectorAll('.mic-btn-task').forEach(btn => {
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        });
+        return;
+    }
 
-  let currentLang = 'en';
-  let isPlaying = false;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
 
-  // language toggle
-  langToggle.addEventListener('click', () => {
-    currentLang = currentLang === 'en' ? 'id' : 'en';
-    langToggle.textContent = currentLang.toUpperCase();
-    paragraph.textContent = texts[currentLang];
-  });
+    // ==================================================
+    // ELEMENTS & AUDIO PLAYERS
+    // ==================================================
 
-  // audio control
-  if (audioBtn && guidedAudio) {
-    audioBtn.addEventListener('click', async () => {
-      try {
-        if (guidedAudio.paused) {
-          await guidedAudio.play();
-          isPlaying = true;
-          audioBtn.classList.add('playing');
-          radioConsole.classList.add('active');
-          audioBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-          guidedAudio.pause();
-          isPlaying = false;
-          audioBtn.classList.remove('playing');
-          radioConsole.classList.remove('active');
-          audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+    // Sidebar Controls
+    const playBtn_sidebar = document.querySelector('.guided-controls .fa-play');
+    const translateBtn_sidebar = document.querySelector('.guided-controls .fa-language');
+    const speechText_sidebar = document.querySelector('.speech-text-guided');
+    const instructionText_activity = document.querySelector('.instruction-text-guided');
+
+    // Microphone Buttons
+    const micBtns = document.querySelectorAll('.mic-btn-task');
+
+    // Audio Players
+    const audio_sidebar = new Audio();
+    const allAudios = [audio_sidebar];
+    
+    let isTranslated = false;
+    let isListening = false;
+    let currentMicBtn = null;
+
+    // ==================================================
+    // CONTENT & AUDIO PATHS
+    // ==================================================
+
+    // Text Content
+    const originalText_sidebar = `"Cadet, this time you'll sail through a real-life situation. Read each story carefully and imagine what's happening at sea. Then, decide what to say as the caller and as the receiver. Remember, clear radio messages can save lives!"`;
+    const translatedText_sidebar = `"Kadet, kali ini kamu akan menghadapi situasi kehidupan nyata. Baca setiap cerita dengan hati-hati dan bayangkan apa yang terjadi di laut. Lalu, putuskan apa yang harus dikatakan sebagai pemanggil dan penerima. Ingat, pesan radio yang jelas dapat menyelamatkan nyawa!"`;
+
+    const originalText_instruction = `Read the situation. Identify your role (caller and receiver). Say both messages aloud using the correct maritime alphabet and number pronunciation.`;
+    const translatedText_instruction = `Baca situasinya. Identifikasi peranmu (pemanggil dan penerima). Ucapkan kedua pesan dengan lantang menggunakan alfabet maritim dan pengucapan angka yang benar.`;
+
+    // Audio Paths
+    const audioPath_sidebar = '/static/data/audio/unit1/guided_intro.wav';
+
+    // Target Phrases for Speech Recognition
+    const TARGET_PHRASES = {
+        // Situation 1
+        'situation1-caller': "This is 538209100 Motor Vessel CORALIS Charlie Lima Foxtrot Whisky 2 calling 312985600 Motor Vessel SILVERWIND Sierra Victor November Papa 4 Channel 16 Over",
+        'situation1-receiver': "Motor Vessel CORALIS this is SILVERWIND receiving you loud and clear Over",
+        
+        // Situation 2
+        'situation2-caller': "This is 239814900 Motor Vessel CRYSTAL WAVE Charlie Whisky Tango Romeo 8 calling 519402300 Motor Vessel EMERALD SKY Echo Mike Sierra Kilo 7 Channel 16 Over",
+        'situation2-receiver': "Motor Vessel CRYSTAL WAVE this is EMERALD SKY receiving you loud and clear Over"
+    };
+
+    // ==================================================
+    // MAIN AUDIO CONTROL FUNCTIONS
+    // ==================================================
+
+    function stopAllAudioAndSpeech() {
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+        
+        if (isListening && recognition) {
+            try {
+                recognition.stop();
+            } catch (e) {
+                console.warn('Recognition already stopped');
+            }
+            isListening = false;
         }
-      } catch (err) {
-        console.error('Audio play failed', err);
-        alert('Audio gagal diputar. Periksa path file audio di server.');
-      }
+
+        if (playBtn_sidebar) {
+            playBtn_sidebar.classList.remove('fa-pause');
+            playBtn_sidebar.classList.add('fa-play');
+        }
+
+        micBtns.forEach(btn => {
+            btn.classList.remove('listening');
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            if (icon) icon.className = 'fas fa-microphone';
+            if (text) text.textContent = 'Record';
+        });
+    }
+
+    // ==================================================
+    // TEXT CLEANING & NORMALIZATION
+    // ==================================================
+
+    function cleanText(text) {
+        const numMap = {
+            'zero': '0', 'one': '1', 'two': '2', 'three': '3',
+            'four': '4', 'five': '5', 'six': '6', 'seven': '7',
+            'eight': '8', 'nine': '9'
+        };
+        
+        let newText = text.toLowerCase();
+        
+        for (const word in numMap) {
+            const regex = new RegExp(`\\b${word}\\b`, 'g');
+            newText = newText.replace(regex, numMap[word]);
+        }
+        
+        return newText.replace(/[.,!?"-]/g, '')
+                      .replace(/\s+/g, ' ')
+                      .trim();
+    }
+
+    // ==================================================
+    // PRONUNCIATION CHECKING
+    // ==================================================
+
+    function checkPronunciation(transcript, targetText, micBtn) {
+        const userWords = new Set(cleanText(transcript).split(' '));
+        const targetWords = cleanText(targetText).split(' ');
+        
+        let resultHTML = '';
+        let correctCount = 0;
+        let totalCount = targetWords.length;
+
+        targetWords.forEach(targetWord => {
+            if (userWords.has(targetWord)) {
+                resultHTML += `<span class="correct">${targetWord}</span> `;
+                correctCount++;
+            } else {
+                resultHTML += `<span class="missing">${targetWord}</span> `;
+            }
+        });
+
+        const accuracy = Math.round((correctCount / totalCount) * 100);
+        const allCorrect = correctCount === totalCount;
+
+        // Create modal
+        const modal = document.createElement('div');
+        modal.className = 'feedback-modal';
+        
+        let title = '';
+        let message = '';
+
+        if (allCorrect) {
+            title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent Work!</h4>';
+            message = `<p style="color: #059669;">Perfect! You pronounced all the key words correctly. You're ready for real radio watch duty! 🎉</p>`;
+        } else if (accuracy >= 70) {
+            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Try!</h4>';
+            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Review the missing words and try again!</p>`;
+        } else {
+            title = '<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>';
+            message = `<p style="color: #2563eb;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Read the situation again and practice the correct format.</p>`;
+        }
+        
+        const transcriptDisplay = `
+            <h5>What you said:</h5>
+            <p style="font-style: italic; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; word-wrap: break-word; color: #0c4a6e;">
+                "${transcript}"
+            </p>
+        `;
+
+        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct):</h5>`;
+
+        modal.innerHTML = `
+            <div class="feedback-modal-content">
+                <button class="feedback-close">&times;</button>
+                <div class="mic-result-box">
+                    ${title}
+                    ${message}
+                    ${transcriptDisplay}
+                    ${expectedLabel}
+                    <div class="diff-output">${resultHTML}</div>
+                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+
+        // Close button functionality
+        const closeBtn = modal.querySelector('.feedback-close');
+        const tryAgainBtn = modal.querySelector('.try-again-btn');
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => modal.remove(), 300);
+        });
+
+        tryAgainBtn.addEventListener('click', () => {
+            modal.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                modal.remove();
+                micBtn.click();
+            }, 300);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => modal.remove(), 300);
+            }
+        });
+
+        if (allCorrect) {
+            playSuccessSound();
+        }
+    }
+
+    function playSuccessSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            setTimeout(() => oscillator.stop(), 200);
+        } catch (e) {
+            console.log('Success sound not available');
+        }
+    }
+
+    // ==================================================
+    // SIDEBAR CONTROLS
+    // ==================================================
+
+    if (playBtn_sidebar) {
+        playBtn_sidebar.addEventListener('click', function() {
+            if (audio_sidebar.paused) {
+                stopAllAudioAndSpeech();
+                audio_sidebar.src = audioPath_sidebar;
+                audio_sidebar.play()
+                    .then(() => {
+                        playBtn_sidebar.classList.remove('fa-play');
+                        playBtn_sidebar.classList.add('fa-pause');
+                        addPulseEffect(this);
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this);
+                    });
+            } else {
+                audio_sidebar.pause();
+                playBtn_sidebar.classList.remove('fa-pause');
+                playBtn_sidebar.classList.add('fa-play');
+                removePulseEffect(this);
+            }
+        });
+
+        audio_sidebar.addEventListener('ended', () => {
+            playBtn_sidebar.classList.remove('fa-pause');
+            playBtn_sidebar.classList.add('fa-play');
+            removePulseEffect(playBtn_sidebar);
+        });
+    }
+
+    if (translateBtn_sidebar) {
+        translateBtn_sidebar.addEventListener('click', function() {
+            stopAllAudioAndSpeech();
+            
+            fadeTransition(speechText_sidebar, () => {
+                if (isTranslated) {
+                    speechText_sidebar.textContent = originalText_sidebar;
+                    instructionText_activity.textContent = originalText_instruction;
+                    isTranslated = false;
+                } else {
+                    speechText_sidebar.textContent = translatedText_sidebar;
+                    instructionText_activity.textContent = translatedText_instruction;
+                    isTranslated = true;
+                }
+            });
+            
+            fadeTransition(instructionText_activity, () => {});
+            
+            addClickEffect(this);
+        });
+    }
+
+    // ==================================================
+    // MICROPHONE CONTROLS
+    // ==================================================
+
+    micBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (isListening) {
+                showNotification('Please wait for the current recording to finish', 'warning');
+                return;
+            }
+
+            stopAllAudioAndSpeech();
+            isListening = true;
+            currentMicBtn = this;
+            
+            const taskKey = this.dataset.task;
+            const targetText = TARGET_PHRASES[taskKey];
+
+            if (!targetText) {
+                console.warn(`Target phrase not found for: ${taskKey}`);
+                showNotification('Target phrase not configured for this task', 'error');
+                return;
+            }
+
+            this.classList.add('listening');
+            const icon = this.querySelector('i');
+            const text = this.querySelector('span');
+            if (icon) icon.className = 'fas fa-stop';
+            if (text) text.textContent = 'Listening...';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log('📝 Transcript:', transcript);
+                checkPronunciation(transcript, targetText, currentMicBtn);
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                if (currentMicBtn) {
+                    currentMicBtn.classList.remove('listening');
+                    const icon = currentMicBtn.querySelector('i');
+                    const text = currentMicBtn.querySelector('span');
+                    if (icon) icon.className = 'fas fa-microphone';
+                    if (text) text.textContent = 'Record';
+                }
+                currentMicBtn = null;
+            };
+
+            recognition.onerror = (event) => {
+                console.error('❌ Speech recognition error:', event.error);
+                isListening = false;
+                
+                if (currentMicBtn) {
+                    currentMicBtn.classList.remove('listening');
+                    const icon = currentMicBtn.querySelector('i');
+                    const text = currentMicBtn.querySelector('span');
+                    if (icon) icon.className = 'fas fa-microphone';
+                    if (text) text.textContent = 'Record';
+                }
+                
+                let errorMessage = 'Could not recognize speech.';
+                if (event.error === 'no-speech') {
+                    errorMessage = 'No speech detected. Please try again and speak clearly.';
+                } else if (event.error === 'audio-capture') {
+                    errorMessage = 'Microphone not found. Please check your microphone connection.';
+                } else if (event.error === 'not-allowed') {
+                    errorMessage = 'Microphone permission denied. Please allow microphone access.';
+                }
+                
+                showNotification(errorMessage, 'error');
+                currentMicBtn = null;
+            };
+
+            try {
+                recognition.start();
+                showNotification('Listening... Speak your radio message now!', 'info');
+            } catch (e) {
+                console.error('Failed to start recognition:', e);
+                isListening = false;
+                this.classList.remove('listening');
+            }
+        });
     });
 
-    guidedAudio.addEventListener('ended', () => {
-      isPlaying = false;
-      audioBtn.classList.remove('playing');
-      radioConsole.classList.remove('active');
-      audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-    });
-  }
+    // ==================================================
+    // HELPER FUNCTIONS
+    // ==================================================
 
-  // button: navigate to next section
-  if (startBtn) {
-    startBtn.addEventListener('click', () => {
-      const href = startBtn.dataset.next;
-      if (href) {
-        startBtn.style.transform = 'scale(1.1)';
-        setTimeout(() => window.location.href = href, 300);
-      } else {
-        alert('Next section not configured.');
-      }
-    });
-  }
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
+    }
 
-  // keyboard support
-  [audioBtn, startBtn].forEach(el => {
-    if (!el) return;
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        el.click();
-      }
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.style.animation = 'playPulse 1s ease infinite';
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.style.animation = '';
+    }
+
+    function addClickEffect(element) {
+        if (!element) return;
+        element.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle',
+            warning: 'fa-exclamation-triangle'
+        };
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+        
+        notification.innerHTML = `
+            <i class="fas ${icons[type]}"></i>
+            <span>${message}</span>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid ${colors[type]};
+            color: ${colors[type]};
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // ==================================================
+    // SMOOTH INTERACTIONS
+    // ==================================================
+
+    const continueBtn = document.querySelector('.continue-button');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    }
+
+    const captainImage = document.querySelector('.captain-image');
+    if (captainImage) {
+        captainImage.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        captainImage.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // Situation cards hover effect
+    const situationCards = document.querySelectorAll('.situation-card');
+    situationCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.borderWidth = '3px';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.borderWidth = '2px';
+        });
     });
-  });
+
+    // ==================================================
+    // ENTRANCE ANIMATIONS
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const animatedElements = document.querySelectorAll(
+        '.situation-card, .task-item'
+    );
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        observer.observe(el);
+    });
+
+    // ==================================================
+    // KEYBOARD SHORTCUTS
+    // ==================================================
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key.toLowerCase() === 't') {
+            if (translateBtn_sidebar) translateBtn_sidebar.click();
+        }
+
+        if (e.key.toLowerCase() === 'c') {
+            if (playBtn_sidebar) playBtn_sidebar.click();
+        }
+
+        // Number keys 1-4 for tasks
+        if (e.key >= '1' && e.key <= '4') {
+            const index = parseInt(e.key) - 1;
+            if (micBtns[index]) micBtns[index].click();
+        }
+    });
+
+    // ==================================================
+    // CONSOLE TIPS
+    // ==================================================
+
+    console.log('✅ Radio Watch Duty Ready!');
+    console.log('💡 Tip: Press 1-4 to activate recording for each task');
+    console.log('💡 Tip: Press T to translate instructions');
+    console.log('💡 Tip: Press C to hear captain\'s voice');
+    console.log('🎯 Read each situation carefully and practice realistic radio exchanges!');
 });
+
+// Add CSS for notifications and animations
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    
+    @keyframes playPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+`;
+document.head.appendChild(notificationStyles);

@@ -2,9 +2,11 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_mail import Mail
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+mail = Mail()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -13,6 +15,11 @@ def create_app():
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI=f'sqlite:///{db_path}', 
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        MAIL_SERVER='smtp.googlemail.com',
+        MAIL_PORT=587,
+        MAIL_USE_TLS=True,
+        MAIL_USERNAME='amalopo99@gmail.com', # Email Anda
+        MAIL_PASSWORD='fqsm dcfh jkwn bstj'
     )
 
     try:
@@ -25,6 +32,7 @@ def create_app():
 
     login_manager.init_app(app) 
     login_manager.login_view = 'auth.login'
+    mail.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):

@@ -1,189 +1,438 @@
-// input_alphabet.js
-document.addEventListener('DOMContentLoaded', function() {
-  const gridButtons = Array.from(document.querySelectorAll('.letter-tile'));
-  const feedback = document.getElementById('feedback-bubble');
-  const feedbackContent = feedback ? feedback.querySelector('.fb-content') : null;
-  const practiceReplay = document.getElementById('practice-replay');
-  const practiceTextEl = document.getElementById('practice-text');
-  const langToggle = document.getElementById('lang-toggle-btn');
-  const instructionText = document.getElementById('instruction-text');
-  const nextBtn = document.getElementById('next-btn');
-  const continueLink = document.getElementById('continue-link');
+// ========================================
+// MODERN ALPHABET CHART JAVASCRIPT
+// Interactive NATO Phonetic Alphabet
+// ========================================
 
-  const UNIT = window.UNIT_CONTENT || {};
-  const SECTION = window.SECTION_CONTENT || {};
-  const UNIT_ID = window.UNIT_ID || 1;
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔤 Alphabet Chart Initialized!');
 
-  const texts = {
-    en: {
-      instruction: "Click a letter to hear its NATO phonetic code word. Then, repeat it aloud.",
-      practice: "Example: ANTARA → Alpha – November – Tango – Alpha – Romeo – Alpha",
-      feedback_good: "Excellent! You sounded like a real sailor.",
-      feedback_retry: "Not clear enough. Try again after the audio."
-    },
-    id: {
-      instruction: "Klik sebuah huruf untuk mendengar kata kode fonetik NATO. Lalu, ulangi dengan suara keras.",
-      practice: "Contoh: ANTARA → Alpha – November – Tango – Alpha – Romeo – Alpha",
-      feedback_good: "Bagus! Kamu terdengar seperti pelaut sejati.",
-      feedback_retry: "Belum jelas. Coba lagi setelah audio."
-    }
-  };
+    // ==================================================
+    // ELEMENTS & AUDIO PLAYERS
+    // ==================================================
 
-  // -------------------------------
-  // GLOBAL ALPHABET MAP (shared)
-  // -------------------------------
-  // Single source for all units — adjust paths to where your audio assets are stored.
-  // Put A–Z audio files in: /static/data/audio/alphabet/
-  const GLOBAL_ALPHABET_MAP = {
-    A: '/static/data/audio/alphabet/a_alpha.wav',
-    B: '/static/data/audio/alphabet/b_bravo.wav',
-    C: '/static/data/audio/alphabet/c_charlie.wav',
-    D: '/static/data/audio/alphabet/d_delta.wav',
-    E: '/static/data/audio/alphabet/e_echo.wav',
-    F: '/static/data/audio/alphabet/f_foxtrot.wav',
-    G: '/static/data/audio/alphabet/g_golf.wav',
-    H: '/static/data/audio/alphabet/h_hotel.wav',
-    I: '/static/data/audio/alphabet/i_india.wav',
-    J: '/static/data/audio/alphabet/j_juliett.wav',
-    K: '/static/data/audio/alphabet/k_kilo.wav',
-    L: '/static/data/audio/alphabet/l_lima.wav',
-    M: '/static/data/audio/alphabet/m_mike.wav',
-    N: '/static/data/audio/alphabet/n_november.wav',
-    O: '/static/data/audio/alphabet/o_oscar.wav',
-    P: '/static/data/audio/alphabet/p_papa.wav',
-    Q: '/static/data/audio/alphabet/q_quebec.wav',
-    R: '/static/data/audio/alphabet/r_romeo.wav',
-    S: '/static/data/audio/alphabet/s_sierra.wav',
-    T: '/static/data/audio/alphabet/t_tango.wav',
-    U: '/static/data/audio/alphabet/u_uniform.wav',
-    V: '/static/data/audio/alphabet/v_victor.wav',
-    W: '/static/data/audio/alphabet/w_whiskey.wav',
-    X: '/static/data/audio/alphabet/x_xray.wav',
-    Y: '/static/data/audio/alphabet/y_yankee.wav',
-    Z: '/static/data/audio/alphabet/z_zulu.wav'
-  };
+    // Sidebar Controls
+    const audioBtn_sidebar = document.querySelector('.activity2-controls .audio-btn i');
+    const translateBtn_sidebar = document.querySelector('.activity2-controls .translate-btn');
+    const speechText_sidebar = document.querySelector('.speech-text-activity2');
 
-  let currentLang = 'en';
-  let clickedSet = new Set();
-  let audioCache = {};
-  let playing = false;
+    // Alphabet Grid
+    const letterBoxes = document.querySelectorAll('.letter-box');
+    const searchInput = document.getElementById('search-input');
 
-  // Preload audio objects from GLOBAL_ALPHABET_MAP
-  Object.keys(GLOBAL_ALPHABET_MAP).forEach(letter => {
-    const path = GLOBAL_ALPHABET_MAP[letter];
-    if (!path) return;
-    const a = new Audio(path);
-    a.preload = 'auto';
-    audioCache[letter] = a;
-    a.addEventListener('ended', () => { playing = false; });
-  });
+    // Progress Tracking
+    const lettersPlayedEl = document.getElementById('letters-played');
+    const progressBar = document.getElementById('progress-bar');
 
-  function showFeedback(message) {
-    if (!feedback) return;
-    feedbackContent.textContent = message;
-    feedback.classList.remove('visually-hidden');
-    feedback.classList.add('pop-visible');
-    setTimeout(() => {
-      feedback.classList.add('visually-hidden');
-      feedback.classList.remove('pop-visible');
-    }, 3000);
-  }
+    // Audio Players
+    const audio_sidebar = new Audio();
+    const audio_letter = new Audio();
 
-  // Attach events to each letter tile
-  gridButtons.forEach(btn => {
-    const letter = (btn.dataset.letter || '').toUpperCase();
-    btn.addEventListener('click', async () => {
-      if (playing) return;
-      const audio = audioCache[letter];
-      if (!audio) {
-        console.warn('No audio for', letter);
-        showFeedback(texts[currentLang].feedback_retry);
-        return;
-      }
-      try {
-        playing = true;
-        audio.currentTime = 0;
-        await audio.play();
-        btn.classList.add('clicked');
-        btn.setAttribute('aria-pressed', 'true');
-        clickedSet.add(letter);
-        if (clickedSet.size > 3 && clickedSet.size % 3 === 1) {
-          showFeedback(texts[currentLang].feedback_good);
-        }
-      } catch (err) {
-        console.error('Audio play failed for', letter, err);
-        showFeedback(texts[currentLang].feedback_retry);
-        playing = false;
-      }
-    });
+    const allAudios = [audio_sidebar, audio_letter];
+    
+    let currentPlayingLetter = null;
+    let playedLetters = new Set();
 
-    btn.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        ev.preventDefault();
-        btn.click();
-      }
-    });
-  });
+    // ==================================================
+    // CONTENT & AUDIO PATHS
+    // ==================================================
 
-  // Practice replay: use SECTION.practice_audio if provided, else fall back to example sequence
-  let practiceAudio = null;
-  if (SECTION && SECTION.practice_audio) {
-    practiceAudio = new Audio(SECTION.practice_audio);
-    practiceAudio.preload = 'auto';
-  }
+    // Text Content
+    const originalText_sidebar = `"Cadet, it's time to master our code words at sea! Shadow each code word you hear, let's hear you sound like a true mariner!"`;
+    const translatedText_sidebar = `"Kadet, saatnya menguasai kata sandi kita di laut! Tiru setiap kata sandi yang kamu dengar, mari kita dengar kamu bersuara seperti pelaut sejati!"`;
+    let isTranslated_sidebar = false;
 
-  practiceReplay && practiceReplay.addEventListener('click', async () => {
-    if (practiceAudio) {
-      try { await practiceAudio.play(); return; } catch (e) { console.warn('practice audio play failed', e); }
-    }
-    // fallback sequence (ANTARA) or SECTION.practice_sequence if provided as array ['A','N',...]
-    const seq = (SECTION && Array.isArray(SECTION.practice_sequence) && SECTION.practice_sequence.length) ? SECTION.practice_sequence : ['A','N','T','A','R','A'];
-    let idx = 0;
-    playing = true;
-    const playSeq = () => {
-      if (idx >= seq.length) { playing = false; return; }
-      const a = audioCache[seq[idx]];
-      if (!a) { idx++; return playSeq(); }
-      a.currentTime = 0;
-      a.play().then(() => {
-        a.addEventListener('ended', function onend() {
-          a.removeEventListener('ended', onend);
-          idx++;
-          setTimeout(playSeq, 200);
+    // Audio Paths
+    const audioPath_sidebar = '/static/data/audio/unit1/activity2_intro.wav';
+    const natoAudioBasePath = '/static/data/audio/nato/';
+
+    // ==================================================
+    // MAIN AUDIO CONTROL FUNCTIONS
+    // ==================================================
+
+    function stopAllAudio() {
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
         });
-      }).catch(err => {
-        console.error('Seq play err', err);
-        idx++;
-        setTimeout(playSeq, 120);
-      });
-    };
-    playSeq();
-  });
+        
+        // Reset sidebar button
+        if (audioBtn_sidebar) {
+            audioBtn_sidebar.classList.remove('fa-pause');
+            audioBtn_sidebar.classList.add('fa-play');
+        }
 
-  // Language toggle only swaps UI text & practice_text copy
-  if (langToggle && instructionText && practiceTextEl) {
-    langToggle.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'id' : 'en';
-      langToggle.textContent = currentLang.toUpperCase();
-      langToggle.setAttribute('aria-pressed', currentLang === 'id' ? 'true' : 'false');
-      instructionText.textContent = texts[currentLang].instruction;
-      practiceTextEl.textContent = SECTION.practice_text || texts[currentLang].practice;
-    });
-  }
+        // Reset letter boxes
+        if (currentPlayingLetter) {
+            currentPlayingLetter.classList.remove('playing');
+            currentPlayingLetter = null;
+        }
+    }
 
-  // Next button navigation uses data-next injected in template
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      const next = nextBtn.dataset.next || (continueLink && continueLink.href);
-      if (next) {
-        nextBtn.classList.add('glow-redirect');
-        setTimeout(() => { window.location.href = next; }, 180);
-      } else {
-        alert('Next section belum dikonfigurasi untuk unit ini.');
-      }
+    function updateProgress() {
+        const totalLetters = 26;
+        const played = playedLetters.size;
+        const percentage = (played / totalLetters) * 100;
+
+        if (lettersPlayedEl) {
+            // Animate number change
+            animateNumber(lettersPlayedEl, parseInt(lettersPlayedEl.textContent), played);
+        }
+
+        if (progressBar) {
+            progressBar.style.width = percentage + '%';
+        }
+    }
+
+    function animateNumber(element, from, to) {
+        const duration = 500;
+        const steps = 20;
+        const stepValue = (to - from) / steps;
+        const stepDuration = duration / steps;
+        let current = from;
+        
+        const timer = setInterval(() => {
+            current += stepValue;
+            if ((stepValue > 0 && current >= to) || (stepValue < 0 && current <= to)) {
+                element.textContent = to;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current);
+            }
+        }, stepDuration);
+    }
+
+    // ==================================================
+    // SIDEBAR CONTROLS
+    // ==================================================
+
+    if (audioBtn_sidebar) {
+        audioBtn_sidebar.parentElement.addEventListener('click', function() {
+            if (audio_sidebar.paused) {
+                stopAllAudio();
+                audio_sidebar.src = audioPath_sidebar;
+                audio_sidebar.play()
+                    .then(() => {
+                        audioBtn_sidebar.classList.remove('fa-play');
+                        audioBtn_sidebar.classList.add('fa-pause');
+                        addPulseEffect(this);
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this);
+                    });
+            } else {
+                audio_sidebar.pause();
+                audioBtn_sidebar.classList.remove('fa-pause');
+                audioBtn_sidebar.classList.add('fa-play');
+                removePulseEffect(this);
+            }
+        });
+
+        audio_sidebar.addEventListener('ended', () => {
+            audioBtn_sidebar.classList.remove('fa-pause');
+            audioBtn_sidebar.classList.add('fa-play');
+            removePulseEffect(audioBtn_sidebar.parentElement);
+        });
+    }
+
+    if (translateBtn_sidebar) {
+        translateBtn_sidebar.addEventListener('click', function() {
+            stopAllAudio();
+            
+            fadeTransition(speechText_sidebar, () => {
+                if (isTranslated_sidebar) {
+                    speechText_sidebar.textContent = originalText_sidebar;
+                    isTranslated_sidebar = false;
+                } else {
+                    speechText_sidebar.textContent = translatedText_sidebar;
+                    isTranslated_sidebar = true;
+                }
+            });
+            
+            addClickEffect(this);
+        });
+    }
+
+    // ==================================================
+    // ALPHABET GRID FUNCTIONALITY
+    // ==================================================
+
+    letterBoxes.forEach(box => {
+        box.addEventListener('click', function() {
+            const code = this.dataset.code;
+            const letter = this.dataset.letter;
+            
+            if (!code) return;
+
+            // Stop other audio
+            stopAllAudio();
+
+            // Play letter audio
+            audio_letter.src = `${natoAudioBasePath}${code}.wav`;
+            audio_letter.play()
+                .then(() => {
+                    this.classList.add('playing');
+                    currentPlayingLetter = this;
+
+                    // Track played letter
+                    if (!playedLetters.has(letter)) {
+                        playedLetters.add(letter);
+                        updateProgress();
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Letter audio error:', error);
+                    shakeElement(this);
+                });
+
+            audio_letter.onended = () => {
+                this.classList.remove('playing');
+                this.classList.add('played');
+                currentPlayingLetter = null;
+            };
+        });
+
+        // Hover sound effect
+        box.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('playing')) {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            }
+        });
+
+        box.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('playing')) {
+                this.style.transform = '';
+            }
+        });
     });
-    nextBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextBtn.click(); }
+
+    // ==================================================
+    // SEARCH FUNCTIONALITY
+    // ==================================================
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+
+            letterBoxes.forEach(box => {
+                const letter = box.dataset.letter.toLowerCase();
+                const code = box.querySelector('.letter-code').textContent.toLowerCase();
+
+                if (searchTerm === '' || letter.includes(searchTerm) || code.includes(searchTerm)) {
+                    box.classList.remove('hidden');
+                    // Add entrance animation
+                    box.style.animation = 'fadeInUp 0.3s ease';
+                } else {
+                    box.classList.add('hidden');
+                }
+            });
+        });
+
+        // Clear search on Escape
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                this.dispatchEvent(new Event('input'));
+            }
+        });
+    }
+
+    // ==================================================
+    // KEYBOARD SHORTCUTS
+    // ==================================================
+
+    document.addEventListener('keydown', function(e) {
+        // Don't trigger if typing in search box
+        if (document.activeElement === searchInput) return;
+
+        const key = e.key.toUpperCase();
+        
+        // Check if pressed key matches a letter
+        letterBoxes.forEach(box => {
+            if (box.dataset.letter === key) {
+                box.click();
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
     });
-  }
+
+    // ==================================================
+    // HELPER FUNCTIONS
+    // ==================================================
+
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
+    }
+
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.classList.add('playing');
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.classList.remove('playing');
+    }
+
+    function addClickEffect(element) {
+        if (!element) return;
+        element.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    // ==================================================
+    // AUTO-PLAY ALPHABET (OPTIONAL FEATURE)
+    // ==================================================
+
+    let autoPlayInterval = null;
+    let autoPlayIndex = 0;
+
+    function startAutoPlay() {
+        if (autoPlayInterval) return;
+
+        const boxes = Array.from(letterBoxes);
+        autoPlayIndex = 0;
+
+        autoPlayInterval = setInterval(() => {
+            if (autoPlayIndex >= boxes.length) {
+                stopAutoPlay();
+                return;
+            }
+
+            boxes[autoPlayIndex].click();
+            autoPlayIndex++;
+        }, 2000); // 2 seconds between each letter
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+            autoPlayIndex = 0;
+        }
+    }
+
+    // Add auto-play button (optional - can be triggered by special key)
+    document.addEventListener('keydown', function(e) {
+        // Press 'A' key while holding Shift to start auto-play
+        if (e.shiftKey && e.key.toUpperCase() === 'P') {
+            if (autoPlayInterval) {
+                stopAutoPlay();
+                console.log('⏹️ Auto-play stopped');
+            } else {
+                startAutoPlay();
+                console.log('▶️ Auto-play started');
+            }
+        }
+    });
+
+    // ==================================================
+    // SMOOTH INTERACTIONS
+    // ==================================================
+
+    // Continue button hover
+    const continueBtn = document.querySelector('.btn-continue');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    }
+
+    // Captain avatar hover
+    const captainAvatar = document.querySelector('.captain-avatar');
+    if (captainAvatar) {
+        captainAvatar.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        captainAvatar.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // ==================================================
+    // ENTRANCE ANIMATIONS
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const animatedElements = document.querySelectorAll('.alphabet-card, .continue-wrapper');
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+        observer.observe(el);
+    });
+
+    // ==================================================
+    // COMPLETION CELEBRATION
+    // ==================================================
+
+    function checkCompletion() {
+        if (playedLetters.size === 26) {
+            setTimeout(() => {
+                showCompletionMessage();
+            }, 500);
+        }
+    }
+
+    function showCompletionMessage() {
+        // Create confetti effect or celebration message
+        console.log('🎉 Congratulations! You\'ve completed all 26 letters!');
+        
+        // You can add a modal or toast notification here
+        if (progressBar) {
+            progressBar.style.background = 'linear-gradient(90deg, #10b981 0%, #34d399 100%)';
+        }
+    }
+
+    // Check completion after each letter is played
+    audio_letter.addEventListener('ended', () => {
+        checkCompletion();
+    });
+
+    // ==================================================
+    // CONSOLE TIPS
+    // ==================================================
+
+    console.log('✅ Alphabet Chart Ready!');
+    console.log('💡 Tip: Press any letter key (A-Z) to hear its phonetic code');
+    console.log('💡 Tip: Press Shift+P to auto-play all letters');
+    console.log('💡 Tip: Use the search box to find specific letters');
+    console.log('🎯 Progress:', playedLetters.size + '/26 letters');
 });

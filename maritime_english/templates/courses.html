@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}Courses - Maritime English{% endblock %}
+
+{% block page_css %}
+    <!-- Kita gunakan CSS dari home.css untuk header yang konsisten -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <!-- CSS baru khusus untuk halaman ini -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- 1. HEADER / NAVBAR (Sama seperti home.html) -->
+<header class="main-header shadow-sm">
+    <nav class="container navbar navbar-expand-lg">
+        <div class="container-fluid p-0">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+            </a>
+
+            <!-- Tombol Toggle Mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+
+            <!-- Menu Navigasi -->
+            <div class="collapse navbar-collapse" id="mainNav">
+                <!-- Link di Tengah -->
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Tandai 'Courses' sebagai 'active' -->
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('learning.courses_page') }}">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+
+                <!-- Info User di Kanan -->
+                <div class="user-info">
+                    {% if current_user.is_authenticated %}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" 
+                               href="#" 
+                               id="userDropdown" 
+                               role="button" 
+                               data-bs-toggle="dropdown" 
+                               aria-expanded="false">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#">Signed in as <strong>{{ current_user.username }}</strong></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- 2. KONTEN UTAMA HALAMAN -->
+<main class="container my-4">
+    <div class="row">
+        
+        <!-- KOLOM KIRI: SIDEBAR -->
+        <aside class="col-lg-3 d-none d-lg-block">
+            <div class="voyage-chart-sidebar">
+                <h3 class="voyage-title">Your Maritime English Voyage Chart</h3>
+                <!-- GANTI 'src' DENGAN GAMBAR ANDA -->
+                <img src="{{ url_for('static', filename='img/Captain-Radio Check.png') }}" 
+                     alt="Voyage Chart" 
+                     class="img-fluid rounded">
+            </div>
+        </aside>
+
+        <!-- KOLOM KANAN: GRID KURSUS -->
+        <div class="col-lg-9">
+            
+            <!-- Header Kursus -->
+            <div class="course-header">
+                <!-- GANTI 'src' DENGAN GAMBAR KADET ANDA -->
+                <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Cadet" class="cadet-icon">
+                <span>Choose your next destination and continue your training at sea</span>
+            </div>
+
+            <!-- Grid Unit -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+                
+                <!-- Loop melalui semua unit dari UNITS -->
+                {% for unit_id, unit_info in units_data.items() %}
+                    {% set is_locked = unit_id > 1 %} <!-- Logika: Hanya Unit 1 yang tidak terkunci -->
+
+                    <!-- 
+                      Jika tidak terkunci, seluruh card adalah link.
+                      Jika terkunci, card adalah div biasa.
+                    -->
+                    {% if not is_locked %}
+                    <div class="col">
+                        <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) }}" class="unit-card">
+                    {% else %}
+                    <div class="col">
+                        <div class="unit-card is-locked">
+                    {% endif %}
+
+                            <!-- Judul Card -->
+                            <div class="unit-card-title">
+                                <h5>Unit {{ unit_id }} - {{ unit_info.title }}</h5>
+                                <p>{{ unit_info.subtitle }}</p>
+                            </div>
+
+                            <!-- Gambar Card -->
+                            <div class="unit-card-image">
+                                <!-- GANTI 'src' DENGAN '{{ url_for('static', filename='img/' + unit_info.image) }}' -->
+                                <img src="{{ url_for('static', filename='img/' + unit_info.image) }}" 
+                                     alt="{{ unit_info.title }}">
+                            </div>
+
+                            <!-- Status Bar Card -->
+                            <div class="status-bar">
+                                {% if is_locked %}
+                                    <span class="status-locked">
+                                        <i class="fas fa-lock me-1"></i> Locked
+                                    </span>
+                                {% else %}
+                                    <!-- 
+                                      Nanti Anda bisa tambahkan logika 'In Progress' atau 'Completed' di sini.
+                                      Untuk sekarang, kita buat "Start".
+                                    -->
+                                    <span class="status-start">
+                                        Start Unit <i class="fas fa-arrow-right ms-1"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                    {% if not is_locked %}
+                        </a>
+                    </div>
+                    {% else %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                {% endfor %}
+                
+            </div> <!-- / .row (Grid) -->
+        </div> <!-- / .col-lg-9 -->
+    </div> <!-- / .row (Layout Utama) -->
+</main>
+
+<!-- 
+  CATATAN: Footer bar di bagian bawah (dari gambar Anda) belum saya tambahkan
+  karena itu akan memerlukan state management (JavaScript/HTMX)
+  untuk tahu "unit mana yang sedang aktif". 
+  Kita bisa tambahkan itu belakangan.
+-->
+{% endblock %}

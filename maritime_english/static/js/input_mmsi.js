@@ -1,293 +1,428 @@
-// input_mmsi.js (revised)
-// Data-driven MMSI page: robust digit-by-digit playback using fresh Audio instances,
-// isPlaying guard, fallback timeout, and cleaned digit parsing.
+// ========================================
+// MODERN MMSI PAGE JAVASCRIPT
+// Ship Identity & Radio Communication
+// ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
-  const playButtons = Array.from(document.querySelectorAll('.play-card'));
-  const feedback = document.getElementById('feedback-bubble');
-  const feedbackContent = feedback ? feedback.querySelector('.fb-content') : null;
-  const langToggle = document.getElementById('lang-toggle-btn');
-  const instructionText = document.getElementById('instruction-text');
-  const nextBtn = document.getElementById('next-btn');
-  const continueLink = document.getElementById('continue-link');
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚢 MMSI & Call Sign Page Initialized!');
 
-  // injected from template
-  const SECTION = window.SECTION_CONTENT || {};
-  const UNIT = window.UNIT_CONTENT || {};
-  const UNIT_ID = window.UNIT_ID || 1;
+    // ==================================================
+    // ELEMENTS & AUDIO PLAYERS
+    // ==================================================
 
-  const texts = {
-    en: {
-      instruction: SECTION.instruction_en || "Listen to the MMSI numbers carefully. Repeat them aloud, digit by digit.",
-      feedback_good: SECTION.default_feedback || "Great! You repeated the MMSI clearly.",
-      feedback_retry: "Not clear enough. Replay and try again."
-    },
-    id: {
-      instruction: SECTION.instruction_id || "Dengarkan nomor MMSI dengan saksama. Ulangi dengan suara keras, angka demi angka.",
-      feedback_good: SECTION.default_feedback_id || "Bagus! Kamu mengulang MMSI dengan jelas.",
-      feedback_retry: "Belum jelas. Putar ulang dan coba lagi."
-    }
-  };
-  let currentLang = 'en';
-  let isPlaying = false; // prevent concurrent plays
+    // Sidebar Controls
+    const audioBtn_sidebar = document.querySelector('.mmsi-controls .audio-btn i');
+    const translateBtn_sidebar = document.querySelector('.mmsi-controls .translate-btn');
+    const speechText_sidebar = document.querySelector('.speech-text-mmsi');
+    const instructionText = document.querySelector('.instruction-text-mmsi p');
 
-  // global digit audio map (shared across units)
-  const DIGIT_AUDIO = {
-    "0": "/static/data/audio/numbers/0_zeero.wav",
-    "1": "/static/data/audio/numbers/1_wun.wav",
-    "2": "/static/data/audio/numbers/2_too.wav",
-    "3": "/static/data/audio/numbers/3_tree.wav",
-    "4": "/static/data/audio/numbers/4_fower.wav",
-    "5": "/static/data/audio/numbers/5_fife.wav",
-    "6": "/static/data/audio/numbers/6_six.wav",
-    "7": "/static/data/audio/numbers/7_seven.wav",
-    "8": "/static/data/audio/numbers/8_eight.wav",
-    "9": "/static/data/audio/numbers/9_niner.wav"
-  };
+    // Radio Player
+    const playButton = document.getElementById('play-mmsi-example');
+    const playButtonIcon = playButton ? playButton.querySelector('i') : null;
+    const playButtonText = playButton ? playButton.querySelector('span') : null;
+    const statusDot = document.querySelector('.status-dot');
+    const statusText = document.querySelector('.status-indicator span:last-child');
 
-  function showFeedback(msg) {
-    if (!feedback || !feedbackContent) return;
-    feedbackContent.textContent = msg;
-    feedback.classList.remove('visually-hidden');
-    feedback.classList.add('pop-visible');
-    setTimeout(() => {
-      feedback.classList.add('visually-hidden');
-      feedback.classList.remove('pop-visible');
-    }, 3000);
-  }
+    // Audio Players
+    const audio_sidebar = new Audio();
+    const audio_example = new Audio();
 
-  function wrapDigitsIfNeeded(containerEl) {
-    if (!containerEl) return;
-    if (containerEl.dataset.wrapped) return;
-    const text = containerEl.textContent.trim();
-    const chars = text.split('');
-    containerEl.innerHTML = chars.map(c => `<span class="digit">${c}</span>`).join('');
-    containerEl.dataset.wrapped = '1';
-  }
+    const allAudios = [audio_sidebar, audio_example];
+    
+    let isPlayingExample = false;
 
-  function blinkDigit(containerEl, idx) {
-    if (!containerEl) return;
-    const spans = containerEl.querySelectorAll('.digit');
-    spans.forEach(s => s.classList.remove('blink'));
-    if (spans[idx]) spans[idx].classList.add('blink');
-  }
-  function clearBlink(containerEl) {
-    if (!containerEl) return;
-    const spans = containerEl.querySelectorAll('.digit');
-    spans.forEach(s => s.classList.remove('blink'));
-  }
+    // ==================================================
+    // CONTENT & AUDIO PATHS
+    // ==================================================
 
-  // create a fresh Audio instance for each playback and wait for ended or timeout
-  function playAudioOnce(src, timeout = 6000) {
-    return new Promise((resolve, reject) => {
-      if (!src) return resolve(); // nothing to play
-      const a = new Audio(src);
-      a.preload = 'auto';
-      let finished = false;
-      const onEnded = () => {
-        if (finished) return;
-        finished = true;
-        cleanup();
-        resolve();
-      };
-      const onError = (e) => {
-        if (finished) return;
-        finished = true;
-        cleanup();
-        reject(new Error('audio error'));
-      };
-      const t = setTimeout(() => {
-        if (finished) return;
-        finished = true;
-        cleanup();
-        // treat timeout as finished but warn
-        console.warn('audio play timeout for', src);
-        resolve();
-      }, timeout);
+    // Text Content
+    const originalText_sidebar = `"Cadet, every ship at sea has its own identity! We use a Call Sign (a special code made of letters and numbers) and an MMSI number (a digital ID for radio communication). Let's listen to how sailors use them when spelling names and sending messages!"`;
+    const translatedText_sidebar = `"Kadet, setiap kapal di laut punya identitas sendiri! Kita menggunakan Call Sign (kode khusus dari huruf dan angka) dan nomor MMSI (ID digital untuk komunikasi radio). Mari dengarkan bagaimana pelaut menggunakannya saat mengeja nama dan mengirim pesan!"`;
 
-      function cleanup() {
-        clearTimeout(t);
-        try { a.pause(); } catch(e){}
-        a.removeEventListener('ended', onEnded);
-        a.removeEventListener('error', onError);
-      }
+    const originalText_instruction = `Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.`;
+    const translatedText_instruction = `Dengarkan contoh komunikasi radio. Perhatikan bagaimana Call Sign dan MMSI dieja dan diucapkan. Lalu, ulangi masing-masing dengan jelas menggunakan suaramu sendiri.`;
 
-      a.addEventListener('ended', onEnded, { once: true });
-      a.addEventListener('error', onError, { once: true });
+    let isTranslated = false;
 
-      // try play, if rejected (autoplay blocked), reject so caller can fallback
-      a.play().catch(err => {
-        // reject to let caller fallback gracefully
-        onError(err);
-      });
-    });
-  }
+    // Audio Paths
+    const audioPath_sidebar = '/static/data/audio/unit1/mmsi_intro.wav';
+    const audioPath_example = '/static/data/audio/unit1/mmsi_example.wav';
 
-  // play digits sequentially using fresh audio objects for each digit
-  async function playDigitsSequence(containerEl, mmsi) {
-    if (!containerEl || !mmsi) return;
-    // prevent double start
-    if (isPlaying) return;
-    isPlaying = true;
-    wrapDigitsIfNeeded(containerEl);
+    // ==================================================
+    // MAIN AUDIO CONTROL FUNCTIONS
+    // ==================================================
 
-    // sanitize to digits only
-    const digits = mmsi.replace(/\D+/g, '').split('');
-    if (digits.length === 0) {
-      isPlaying = false;
-      return;
+    function stopAllAudio() {
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+        
+        // Reset sidebar button
+        if (audioBtn_sidebar) {
+            audioBtn_sidebar.classList.remove('fa-pause');
+            audioBtn_sidebar.classList.add('fa-play');
+        }
+
+        // Reset play button
+        if (playButton) {
+            playButton.classList.remove('playing');
+            if (playButtonIcon) {
+                playButtonIcon.classList.remove('fa-pause');
+                playButtonIcon.classList.add('fa-play');
+            }
+            if (playButtonText) {
+                playButtonText.textContent = 'Play Example';
+            }
+        }
+
+        isPlayingExample = false;
+        updateStatus('ready');
     }
 
-    for (let i = 0; i < digits.length; i++) {
-      const d = digits[i];
-      blinkDigit(containerEl, i);
-      const src = DIGIT_AUDIO[d];
-      if (src) {
-        try {
-          // play fresh audio; timeout ~ 4s per digit (adjust if your audio longer)
-          await playAudioOnce(src, 4000);
-        } catch (err) {
-          console.warn('digit audio failed for', d, err);
-          // continue to next digit
+    function updateStatus(state) {
+        if (!statusDot || !statusText) return;
+
+        switch(state) {
+            case 'ready':
+                statusDot.style.background = '#10b981';
+                statusText.textContent = 'Ready to Listen';
+                break;
+            case 'playing':
+                statusDot.style.background = '#f59e0b';
+                statusText.textContent = 'Playing';
+                break;
+            case 'completed':
+                statusDot.style.background = '#10b981';
+                statusText.textContent = 'Completed';
+                break;
         }
-      } else {
-        // no audio mapping: small pause so user can read blinking
-        await new Promise(r => setTimeout(r, 300));
-      }
-      // short gap between digits
-      await new Promise(r => setTimeout(r, 140));
     }
 
-    clearBlink(containerEl);
-    isPlaying = false;
-  }
+    // ==================================================
+    // SIDEBAR CONTROLS
+    // ==================================================
 
-  // high level: play an example object (either replay_audio, audio_sequence, or digits)
-  async function playExample(exampleObj, containerEl, playBtn) {
-    if (isPlaying) return; // guard
-    if (!exampleObj || !containerEl) return;
-    if (playBtn) playBtn.classList.add('playing');
+    if (audioBtn_sidebar) {
+        audioBtn_sidebar.parentElement.addEventListener('click', function() {
+            if (audio_sidebar.paused) {
+                stopAllAudio();
+                audio_sidebar.src = audioPath_sidebar;
+                audio_sidebar.play()
+                    .then(() => {
+                        audioBtn_sidebar.classList.remove('fa-play');
+                        audioBtn_sidebar.classList.add('fa-pause');
+                        addPulseEffect(this);
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this);
+                    });
+            } else {
+                audio_sidebar.pause();
+                audioBtn_sidebar.classList.remove('fa-pause');
+                audioBtn_sidebar.classList.add('fa-play');
+                removePulseEffect(this);
+            }
+        });
 
-    try {
-      if (exampleObj.replay_audio) {
-        // attempt to play full file. If it fails, fallback to digits.
-        try {
-          await playAudioOnce(exampleObj.replay_audio, 20000);
-        } catch (err) {
-          console.warn('replay_audio failed, fallback to digits', err);
-          await playDigitsSequence(containerEl, exampleObj.mmsi);
-        }
-      } else if (exampleObj.audio_sequence && Array.isArray(exampleObj.audio_sequence) && exampleObj.audio_sequence.length) {
-        // play provided sequence (fresh audio per path)
-        wrapDigitsIfNeeded(containerEl);
-        for (let i = 0; i < exampleObj.audio_sequence.length; i++) {
-          blinkDigit(containerEl, i);
-          try {
-            await playAudioOnce(exampleObj.audio_sequence[i], 4000);
-          } catch (e) { console.warn('audio_sequence item failed', exampleObj.audio_sequence[i], e); }
-          await new Promise(r => setTimeout(r, 140));
-        }
-        clearBlink(containerEl);
-      } else {
-        // digit-by-digit
-        await playDigitsSequence(containerEl, exampleObj.mmsi);
-      }
-      showFeedback(texts[currentLang].feedback_good);
-    } catch (err) {
-      console.error('playExample error', err);
-      showFeedback(texts[currentLang].feedback_retry);
-    } finally {
-      if (playBtn) {
-        playBtn.classList.remove('playing');
-        playBtn.classList.add('glow-complete');
-        setTimeout(() => playBtn.classList.remove('glow-complete'), 420);
-      }
-      // ensure blink cleared
-      clearBlink(containerEl);
-      isPlaying = false;
+        audio_sidebar.addEventListener('ended', () => {
+            audioBtn_sidebar.classList.remove('fa-pause');
+            audioBtn_sidebar.classList.add('fa-play');
+            removePulseEffect(audioBtn_sidebar.parentElement);
+        });
     }
-  }
 
-  // wire up play buttons
-  playButtons.forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const target = btn.dataset.target;
-      if (!target) return;
-      const idx = parseInt(target, 10) - 1;
-      const exampleObj = (SECTION.examples && SECTION.examples[idx]) ? SECTION.examples[idx] : null;
-      const container = document.getElementById(`mmsi-${target}`);
-      // if no example in JSON, fallback to reading container text
-      const fallback = { mmsi: container ? container.textContent.trim() : '' };
-      await playExample(exampleObj || fallback, container, btn);
-    });
-    btn.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); btn.click(); }
-    });
-  });
+    if (translateBtn_sidebar) {
+        translateBtn_sidebar.addEventListener('click', function() {
+            stopAllAudio();
+            
+            // Fade transition for both texts
+            fadeTransition(speechText_sidebar, () => {
+                if (isTranslated) {
+                    speechText_sidebar.textContent = originalText_sidebar;
+                    if (instructionText) {
+                        instructionText.textContent = originalText_instruction;
+                    }
+                    isTranslated = false;
+                } else {
+                    speechText_sidebar.textContent = translatedText_sidebar;
+                    if (instructionText) {
+                        instructionText.textContent = translatedText_instruction;
+                    }
+                    isTranslated = true;
+                }
+            });
+            
+            addClickEffect(this);
+        });
+    }
 
-  // wire up replay buttons (if any). prefer replay_audio else trigger card play
-  (SECTION.examples || []).forEach((ex, i) => {
-    const idx = i + 1;
-    const replayBtn = document.getElementById(`replay-${idx}`);
-    if (!replayBtn) return;
-    replayBtn.addEventListener('click', async () => {
-      // if replay_audio exists, play it (fresh instance)
-      const playBtn = document.querySelector(`.play-card[data-target="${idx}"]`);
-      if (ex.replay_audio) {
-        try {
-          await playAudioOnce(ex.replay_audio, 20000);
-        } catch (err) {
-          console.warn('replay_audio play failed, fallback to card play', err);
-          playBtn && playBtn.click();
+    // ==================================================
+    // RADIO COMMUNICATION PLAYER
+    // ==================================================
+
+    if (playButton) {
+        playButton.addEventListener('click', function() {
+            if (isPlayingExample) {
+                // Stop playing
+                audio_example.pause();
+                audio_example.currentTime = 0;
+                this.classList.remove('playing');
+                
+                if (playButtonIcon) {
+                    playButtonIcon.classList.remove('fa-pause');
+                    playButtonIcon.classList.add('fa-play');
+                }
+                if (playButtonText) {
+                    playButtonText.textContent = 'Play Example';
+                }
+                
+                isPlayingExample = false;
+                updateStatus('ready');
+            } else {
+                // Start playing
+                stopAllAudio();
+                audio_example.src = audioPath_example;
+                audio_example.play()
+                    .then(() => {
+                        this.classList.add('playing');
+                        
+                        if (playButtonIcon) {
+                            playButtonIcon.classList.remove('fa-play');
+                            playButtonIcon.classList.add('fa-pause');
+                        }
+                        if (playButtonText) {
+                            playButtonText.textContent = 'Stop';
+                        }
+                        
+                        isPlayingExample = true;
+                        updateStatus('playing');
+                        
+                        // Animate transcript lines
+                        animateTranscript();
+                    })
+                    .catch(error => {
+                        console.error('❌ Playback error:', error);
+                        shakeElement(this);
+                    });
+            }
+        });
+
+        audio_example.addEventListener('ended', () => {
+            playButton.classList.remove('playing');
+            
+            if (playButtonIcon) {
+                playButtonIcon.classList.remove('fa-pause');
+                playButtonIcon.classList.add('fa-play');
+            }
+            if (playButtonText) {
+                playButtonText.textContent = 'Play Again';
+            }
+            
+            isPlayingExample = false;
+            updateStatus('completed');
+        });
+    }
+
+    // ==================================================
+    // TRANSCRIPT ANIMATION
+    // ==================================================
+
+    function animateTranscript() {
+        const transcriptLines = document.querySelectorAll('.transcript-line');
+        
+        transcriptLines.forEach((line, index) => {
+            setTimeout(() => {
+                line.style.opacity = '0.3';
+                line.style.transition = 'all 0.3s ease';
+                
+                setTimeout(() => {
+                    line.style.opacity = '1';
+                    line.style.background = '#fef3c7';
+                    
+                    setTimeout(() => {
+                        line.style.background = '#f9fafb';
+                    }, 500);
+                }, 100);
+            }, index * 2000); // 2 seconds between each line
+        });
+    }
+
+    // ==================================================
+    // INFO CARD INTERACTIONS
+    // ==================================================
+
+    const infoRows = document.querySelectorAll('.info-row');
+    
+    infoRows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+
+    // Copy to clipboard functionality
+    const mmsiNumber = document.querySelector('.mmsi-number');
+    const callSign = document.querySelector('.call-sign');
+
+    if (mmsiNumber) {
+        mmsiNumber.style.cursor = 'pointer';
+        mmsiNumber.title = 'Click to copy';
+        
+        mmsiNumber.addEventListener('click', function() {
+            copyToClipboard(this.textContent);
+            showCopyFeedback(this, 'MMSI copied!');
+        });
+    }
+
+    if (callSign) {
+        callSign.style.cursor = 'pointer';
+        callSign.title = 'Click to copy';
+        
+        callSign.addEventListener('click', function() {
+            copyToClipboard(this.textContent);
+            showCopyFeedback(this, 'Call sign copied!');
+        });
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('📋 Copied to clipboard:', text);
+        }).catch(err => {
+            console.error('❌ Failed to copy:', err);
+        });
+    }
+
+    function showCopyFeedback(element, message) {
+        const originalBg = element.style.background;
+        element.style.background = '#10b981';
+        element.style.color = '#fff';
+        element.style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+            element.style.background = originalBg;
+            element.style.color = '';
+        }, 500);
+    }
+
+    // ==================================================
+    // HELPER FUNCTIONS
+    // ==================================================
+
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
+    }
+
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.classList.add('playing');
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.classList.remove('playing');
+    }
+
+    function addClickEffect(element) {
+        if (!element) return;
+        element.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    // ==================================================
+    // SMOOTH INTERACTIONS
+    // ==================================================
+
+    const continueBtn = document.querySelector('.btn-continue');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    }
+
+    const captainAvatar = document.querySelector('.captain-avatar');
+    if (captainAvatar) {
+        captainAvatar.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        captainAvatar.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // ==================================================
+    // ENTRANCE ANIMATIONS
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const animatedElements = document.querySelectorAll('.radio-card, .continue-wrapper');
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+        observer.observe(el);
+    });
+
+    // ==================================================
+    // KEYBOARD SHORTCUTS
+    // ==================================================
+
+    document.addEventListener('keydown', function(e) {
+        // Space to play/pause
+        if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+            e.preventDefault();
+            if (playButton) playButton.click();
         }
-      } else {
-        // trigger the card button which will run digit-by-digit
-        playBtn && playBtn.click();
-      }
-      replayBtn.classList.add('replay-glow');
-      setTimeout(() => replayBtn.classList.remove('replay-glow'), 420);
     });
-  });
 
-  // lang toggle: swap instruction text only
-  if (langToggle && instructionText) {
-    langToggle.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'id' : 'en';
-      langToggle.textContent = currentLang.toUpperCase();
-      langToggle.setAttribute('aria-pressed', currentLang === 'id' ? 'true' : 'false');
-      instructionText.textContent = texts[currentLang].instruction;
-    });
-  }
+    // ==================================================
+    // CONSOLE TIPS
+    // ==================================================
 
-  // next navigation
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      const nextHref = continueLink && continueLink.href;
-      if (nextHref) {
-        nextBtn.classList.add('glow-redirect');
-        setTimeout(() => { window.location.href = nextHref; }, 240);
-      } else {
-        alert('Next section belum dikonfigurasi untuk unit ini.');
-      }
-    });
-    nextBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextBtn.click(); }
-    });
-  }
-
-  // small CSS helpers
-  const css = document.createElement('style');
-  css.innerHTML = `
-    .digit { display:inline-block; padding:0 2px; }
-    .digit.blink { background: rgba(255,255,255,0.18); border-radius:4px; transform: translateY(-2px); transition: background 0.15s, transform 0.12s; }
-    .btn-audio.glow-complete { box-shadow: 0 8px 22px rgba(37,99,235,0.28); transform: translateY(-3px); }
-    .btn-replay.replay-glow { box-shadow: 0 8px 22px rgba(37,99,235,0.28); transform: translateY(-3px); }
-    .play-card.playing { opacity: 0.85; transform: scale(0.98); }
-  `;
-  document.head.appendChild(css);
-
-  // cleanup on unload
-  window.addEventListener('beforeunload', () => {
-    // nothing to pause (we create fresh audio per playback), but keep this for safety
-  });
+    console.log('✅ MMSI Page Ready!');
+    console.log('💡 Tip: Press Space to play/pause the example');
+    console.log('💡 Tip: Click on MMSI or Call Sign to copy');
+    console.log('📻 Radio communication example loaded');
 });

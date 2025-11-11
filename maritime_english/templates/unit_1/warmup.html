@@ -1,140 +1,237 @@
 {% extends 'base.html' %}
-{% block title %}Unit 1: Warmup{% endblock %}
+{% block title %}Unit 1: Warmup - Radio Check{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/units/unit_1_warmup.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="container my-5 game-main">
-    <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
-    <h1 class="text-center mb-4">Warm-up: Phonetic Alphabet Game</h1>
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.courses_page') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - Warmup</span>
+        </div>
 
-    <div id="activity-1" class="activity-section">
-        <div id="warmup-intro" class="intro-scene mb-4">
-            <img src="{{ url_for('static', filename='img/kiko.png') }}" 
-                 alt="OS Lina" class="character-img">
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+</header>
 
-            <div class="dialogue-box">
-                <div class="lang-toggle">
-                    <button id="lang-toggle-btn" class="toggle-pill">EN</button>
+<!-- MAIN CONTENT -->
+<div class="warmup-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="warmup-sidebar">
+        
+        <!-- Activity Badge -->
+        <div class="activity-badge">
+            <div class="badge-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="badge-text">
+                <h4>Get Ready to Sail</h4>
+                <p>Activity 1: Radio Check!</p>
+            </div>
+        </div>
+
+        <!-- Captain Card -->
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/Captain-Radio Check.png') }}" alt="Captain" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <p id="dialogue-text">
-                    Hi friends! I just joined this ship as an Ordinary Seaman. 
-                    I’m still learning, just like you. Let’s play a quick game before we learn the full alphabet and numbers. 
-                    You’ll hear a sound — like ‘Sierra’ or ‘Niner’ — and you need to click the correct letter or number. 
-                    Don’t worry, it’s just for fun. Ready? Let’s go!
+            </div>
+
+            <div class="instruction-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>Captain's Instructions</span>
+                </div>
+                <p class="speech-text-warmup">
+                    "Cadet, tune your ears to the radio! Identify each code word you hear, let's see if your radio ears are sharp!"
                 </p>
-                <div class="dialogue-footer">
-                    <button id="start-game-btn" class="btn btn-lg btn-start-game">
-                        Start Game <i class="fas fa-play ms-1"></i>
+                <div class="warmup-controls">
+                    <button class="control-btn audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="warmup-game" class="text-center p-4 d-none">
-            <div class="alert alert-info d-flex flex-column flex-md-row justify-content-between align-items-center p-3 p-md-4">
-                <div class="game-instructions text-center text-md-start">
-                    🎧 Listen carefully! Click the correct letter or number. <br>
-                    <strong>Round <span id="round">1</span>/8</strong>
-                </div>
-                <!-- 3. Mengganti style tombol dari .btn-compass -->
-                <button class="btn btn-primary btn-lg mt-3 mt-md-0" id="play-audio">
-                    <i class="fas fa-play me-2"></i>
-                    Play Sound
-                </button>
-            </div>
+    </aside>
 
-            <div class="game-grid-container">
-                <div class="row justify-content-center game-grid">
-                    {% for val in ['S','O','A','C','0','1','5','9'] %}
-                    <div class="col-6 col-md-3 p-2">
-                        <button class="btn letter-btn" data-value="{{ val }}">
-                        <span>{{ val }}</span>
-                        {% if val.isdigit() %}
-                            <img src="{{ url_for('static', filename='img/compass.png') }}" alt="icon" class="btn-icon">
-                        {% else %}
-                            <img src="{{ url_for('static', filename='img/anchor.png') }}" alt="icon" class="btn-icon">
-                        {% endif %}
-                        </button>
+    <!-- RIGHT CONTENT -->
+    <main class="warmup-main">
+        
+        <!-- ACTIVITY 1: Code Grid -->
+        <section class="activity-card grid-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <div class="activity-number">1</div>
+                    <div class="header-text">
+                        <h3>Quick Pick Challenge</h3>
+                        <p>Listen and select the correct code</p>
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
-
-            <div id="feedback" class="d-none"></div>
-
-            <button id="to-activity-2" class="btn btn-success btn-lg btn-action-next d-none mt-3">
-                Next Activity
-            </button>
-        </div>
-    </div>
-
-    <div id="activity-2" class="activity-section d-none">
-
-    <div class="mb-3 text-center">
-        <iframe height="400"
-        src="https://www.youtube.com/embed/QxIYX7LQJyY?autoplay=1&mute=1"
-        title="Warm-up Video"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowfullscreen>
-        </iframe>
-    </div>
-
-    <div class="quiz-box text-center position-relative">
-        <div class="lang-toggle">
-        <button class="toggle-pill" id="toggle-lang">EN</button>
-        </div>
-
-        <p class="lead">What is the ship name spelled in the video?</p>
-
-        <form id="quiz-form">
-        {% for option in ['SAILOR','SAILEX','SAIPEX','SAILEN'] %}
-        <label class="quiz-label">
-            <input type="radio" name="quiz" value="{{ option }}" class="quiz-radio">
-            <span>{{ option }}</span>
-        </label>
-        {% endfor %}
-        </form>
-
-        <div id="quiz-feedback" class="alert d-none mt-3"></div>
-        <button id="to-activity-3" class="btn btn-success btn-lg btn-action-next mt-3 d-none">Finish Warm-up</button>
-        </div>
-    </div>
-
-    <div id="activity-3" class="activity-section d-none">
-        <div class="wrapup-scene mb-4">
-            <img src="{{ url_for('static', filename='img/kiko.png') }}" 
-                 alt="OS Lina" class="wrapup-avatar">
-
-            <div class="wrapup-dialogue-box">
-                <div class="lang-toggle">
-                    <button class="toggle-pill" id="wrapup-lang-toggle">EN</button>
-                </div>
-
-                <p id="wrapup-text" class="fade-in">
-                    Great job! You’ve just tried the special alphabet and numbers used on ships. 
-                    Next, Captain Ray will show you the full version so you can use it like real sailors.
-                </p>
-
-                <button id="wrapup-play" class="audio-btn">
+                <button id="play-grid-audio" class="play-audio-btn">
                     <i class="fas fa-play"></i>
+                    <span>Play Audio</span>
                 </button>
+            </div>
 
-                <div class="dialogue-footer">
-                    <a href="{{ url_for('learning.learning_unit', unit_id=1, section='input_intro') }}" 
-                       id="go-input-btn"
-                       class="btn btn-success btn-lg btn-action-next pulse-green">
-                       Go to Input Section</i>
-                    </a>
+            <div class="activity-body">
+                <div class="radio-display">
+                    <img src="{{ url_for('static', filename='img/walkie-talkies.png') }}" alt="Radio" class="radio-img">
+                    <div class="audio-wave">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="instruction-text">
+                    <i class="fas fa-headphones"></i>
+                    <p>Listen carefully! Click the correct letter or number</p>
+                </div>
+
+                <div class="code-grid">
+                    <button class="code-btn" data-code="oscar">
+                        <span class="code-letter">O</span>
+                        <span class="code-label">Oscar</span>
+                    </button>
+                    <button class="code-btn" data-code="charlie">
+                        <span class="code-letter">C</span>
+                        <span class="code-label">Charlie</span>
+                    </button>
+                    <button class="code-btn" data-code="sierra">
+                        <span class="code-letter">S</span>
+                        <span class="code-label">Sierra</span>
+                    </button>
+                    <button class="code-btn" data-code="alpha">
+                        <span class="code-letter">A</span>
+                        <span class="code-label">Alpha</span>
+                    </button>
+                    <button class="code-btn" data-code="zeero">
+                        <span class="code-letter">0</span>
+                        <span class="code-label">Zero</span>
+                    </button>
+                    <button class="code-btn" data-code="wun">
+                        <span class="code-letter">1</span>
+                        <span class="code-label">One</span>
+                    </button>
+                    <button class="code-btn" data-code="niner">
+                        <span class="code-letter">9</span>
+                        <span class="code-label">Niner</span>
+                    </button>
+                    <button class="code-btn" data-code="fife">
+                        <span class="code-letter">5</span>
+                        <span class="code-label">Fife</span>
+                    </button>
                 </div>
             </div>
+        </section>
+
+        <!-- ACTIVITY 2: Multiple Choice -->
+        <section class="activity-card mcq-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <div class="activity-number">2</div>
+                    <div class="header-text">
+                        <h3>Ship Name Decoder</h3>
+                        <p>Identify the ship name being spelled</p>
+                    </div>
+                </div>
+                <button id="play-mcq-audio" class="play-audio-btn">
+                    <i class="fas fa-play"></i>
+                    <span>Play Audio</span>
+                </button>
+            </div>
+
+            <div class="activity-body">
+                <div class="captain-display">
+                    <img src="{{ url_for('static', filename='img/Captain-Radio Check2.png') }}" alt="Captain Speaking" class="captain-speaking">
+                    <div class="speech-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="instruction-text">
+                    <i class="fas fa-headphones"></i>
+                    <p>What is the ship name spelled by the Captain?</p>
+                </div>
+
+                <form class="mcq-form">
+                    <label class="mcq-option">
+                        <input type="radio" name="shipname" value="SAILOR">
+                        <span class="option-content">
+                            <span class="option-letter">A</span>
+                            <span class="option-text">SAILOR</span>
+                            <i class="fas fa-check option-icon"></i>
+                        </span>
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="shipname" value="SAILEX">
+                        <span class="option-content">
+                            <span class="option-letter">B</span>
+                            <span class="option-text">SAILEX</span>
+                            <i class="fas fa-check option-icon"></i>
+                        </span>
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="shipname" value="SAIPEN">
+                        <span class="option-content">
+                            <span class="option-letter">C</span>
+                            <span class="option-text">SAIPEN</span>
+                            <i class="fas fa-check option-icon"></i>
+                        </span>
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="shipname" value="SAILEN">
+                        <span class="option-content">
+                            <span class="option-letter">D</span>
+                            <span class="option-text">SAILEN</span>
+                            <i class="fas fa-check option-icon"></i>
+                        </span>
+                    </label>
+                </form>
+
+                <div class="feedback-box" id="mcq-feedback" style="display: none;">
+                    <i class="feedback-icon"></i>
+                    <p class="feedback-text"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Continue Button -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_alphabet') }}" class="btn-continue">
+                <span>Continue to Next Activity</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-    </div>
 
+    </main>
 
-</main>
+</div>
 
 {% endblock %}
 

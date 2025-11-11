@@ -1,165 +1,293 @@
-// static/js/noticing_intro.js  (data-driven)
+/* ========================================
+   MODERN NOTICING JAVASCRIPT
+   Interactive & Animated
+======================================== */
+
 document.addEventListener('DOMContentLoaded', () => {
-  const SECTION = window.SECTION_CONTENT || {};
-  const langToggle = document.getElementById('notice-lang-toggle');
-  const noticeText = document.getElementById('notice-text');
-  const audioBtn = document.getElementById('notice-audio-btn');
-  const startBtn = document.getElementById('start-noticing-btn');
-  const noticeAudio = document.getElementById('notice-audio');
+    console.log('🎙️ Modern Noticing Module Initialized!');
 
-  // texts from SECTION (fallbacks)
-  const texts = {
-    en: SECTION.intro_en || "Now let’s look more closely at the alphabet and numbers. Some of them sound different in Maritime English. Listen and compare.",
-    id: SECTION.intro_id || "Sekarang mari kita lihat lebih dekat alfabet dan angka. Beberapa bunyinya berbeda dalam Bahasa Inggris Maritim. Dengarkan dan bandingkan."
-  };
+    // ==================================================
+    // === 1. DEKLARASI ELEMEN ===
+    // ==================================================
 
-  // If audio src wasn't set in template, allow SECTION to supply it here
-  if (noticeAudio && (!noticeAudio.src || noticeAudio.src === window.location.href)) {
-    if (SECTION.audio_en) noticeAudio.src = SECTION.audio_en;
-  }
+    // --- [DIKEMBALIKAN] Kontrol Popup ---
+    const openBtn = document.getElementById('open-popup-btn');
+    const closeBtn = document.getElementById('close-popup-btn');
+    const popupOverlay = document.getElementById('learn-more-popup');
 
-  let currentLang = 'en';
-  let playedOnce = false;
-  let isPlaying = false;
+    // --- Kontrol Sidebar ---
+    const audioBtn_sidebar = document.querySelector('.captain-instruction-card .audio-btn');
+    const audioIcon_sidebar = audioBtn_sidebar ? audioBtn_sidebar.querySelector('i') : null;
+    const translateBtn_sidebar = document.querySelector('.captain-instruction-card .translate-btn');
+    const speechText_sidebar = document.querySelector('.speech-text-noticing');
+    
+    // --- Kontrol Teks Instruksi ---
+    const instructionText_activity = document.querySelector('.instruction-banner .instruction-text-noticing');
 
-  // visual hint: keep start glowing until audio played once
-  if (startBtn) startBtn.classList.add('btn-start-glow');
+    // --- Efek Visual ---
+    const radioWaves = document.querySelectorAll('.radio-waves span');
+    const captainAvatar = document.querySelector('.captain-avatar');
+    
+    // --- Objek Audio ---
+    const audio_sidebar = new Audio();
+    const allAudios = [audio_sidebar]; // Hanya 1 audio di halaman ini
+    
+    let isTranslated = false;
+    let currentPlayingAudio = null;
 
-  // initialize text
-  if (noticeText) noticeText.textContent = texts.en;
-  if (langToggle) langToggle.textContent = 'EN';
+    // ==================================================
+    // === 1.A. [DIKEMBALIKAN] LOGIKA POPUP ===
+    // ==================================================
+    if (openBtn && closeBtn && popupOverlay) {
+        // Buka popup
+        openBtn.addEventListener('click', () => {
+            popupOverlay.style.display = 'flex';
+        });
+        
+        // Tutup popup
+        closeBtn.addEventListener('click', () => {
+            popupOverlay.style.display = 'none';
+        });
 
-  // Toggle texts only (audio remains EN default per spec)
-  if (langToggle) {
-    langToggle.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'id' : 'en';
-      langToggle.textContent = currentLang.toUpperCase();
-      langToggle.setAttribute('aria-pressed', currentLang === 'id' ? 'true' : 'false');
-      if (noticeText) {
-        // animate update
-        noticeText.classList.remove('fade-text');
-        void noticeText.offsetWidth;
-        noticeText.textContent = texts[currentLang];
-        noticeText.classList.add('fade-text');
-      }
-    });
-  }
+        // Tutup popup saat klik di luar area konten
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                popupOverlay.style.display = 'none';
+            }
+        });
+    } else {
+        console.warn('Elemen popup (open, close, overlay) tidak ditemukan.');
+    }
 
-  // Play / Pause audio
-  if (audioBtn) {
-    audioBtn.addEventListener('click', async () => {
-      if (!noticeAudio || !noticeAudio.src) {
-        console.warn('No audio source for noticing intro (SECTION.audio_en).');
-        alert('Audio tidak tersedia. Periksa file audio di server.');
-        return;
-      }
-      if (isPlaying) {
-        noticeAudio.pause();
-        isPlaying = false;
-        audioBtn.classList.remove('playing');
-        audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-      } else {
-        try {
-          await noticeAudio.play();
-          isPlaying = true;
-          audioBtn.classList.add('playing');
-          audioBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        } catch (err) {
-          console.warn('Audio play failed', err);
-          alert('Audio gagal diputar. Cek console (F12) dan Network tab untuk detail.');
+    // ==================================================
+    // === 2. KONTEN & PATH AUDIO (Dari JS Asli Anda) ===
+    // ==================================================
+
+    // Teks Sidebar
+    const originalText_sidebar = `"Cadet, this time we'll study how radio messages are built! Every call at sea follows a clear order, 1) opening, 2) middle, and 3) closing. Let's read both sides and see how real sailors do it."`;
+    const translatedText_sidebar = `"Kadet, kali ini kita akan mempelajari bagaimana pesan radio dibuat! Setiap panggilan di laut mengikuti urutan yang jelas, 1) pembukaan, 2) isi, dan 3) penutup. Mari kita baca kedua sisi dan lihat bagaimana pelaut sejati melakukannya."`;
+
+    // Teks Instruksi
+    const originalText_instruction = `"Read both messages carefully. Notice the structure of each radio exchange. Click Learn More to see the Captain's notes."`;
+    const translatedText_instruction = `"Baca kedua pesan dengan saksama. Perhatikan struktur dari setiap pertukaran radio. Klik 'Learn More' untuk melihat catatan Kapten."`;
+
+    // Path Audio
+    const audioPath_sidebar = '/static/data/audio/unit1/noticing_intro.wav'; // Ganti dengan path audio Anda
+
+    // ==================================================
+    // === 3. FUNGSI KONTROL AUDIO (Dari Referensi) ===
+    // ==================================================
+
+    function stopAllAudio() {
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+        
+        if (audioIcon_sidebar) {
+            audioIcon_sidebar.classList.remove('fa-pause');
+            audioIcon_sidebar.classList.add('fa-play');
         }
-      }
-    });
-  }
-
-  // on ended / play events -> unlock Start
-  if (noticeAudio) {
-    noticeAudio.addEventListener('ended', () => {
-      isPlaying = false;
-      if (audioBtn) {
-        audioBtn.classList.remove('playing');
-        audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }
-      playedOnce = true;
-      unlockStart();
-    });
-
-    noticeAudio.addEventListener('play', () => {
-      playedOnce = true;
-      unlockStart();
-    });
-
-    noticeAudio.addEventListener('error', (ev) => {
-      console.error('Notice audio error', ev);
-      // provide gentle UI hint
-      if (audioBtn) audioBtn.classList.remove('playing');
-      showInlineNotice('Audio file tidak tersedia. Cek folder static/data/audio.');
-    });
-  }
-
-  function unlockStart() {
-    if (!startBtn) return;
-    if (playedOnce) {
-      startBtn.disabled = false;
-      startBtn.setAttribute('aria-disabled', 'false');
-      startBtn.classList.remove('btn-start-glow');
+        if (audioBtn_sidebar) {
+             removePulseEffect(audioBtn_sidebar);
+        }
+        
+        currentPlayingAudio = null;
     }
-  }
 
-  // Start button click -> navigate via data-next
-  if (startBtn) {
-    startBtn.addEventListener('click', () => {
-      if (!playedOnce) {
-        alert(SECTION.listen_first_message || 'Please listen to the intro at least once before starting.');
-        return;
-      }
-      const nextUrl = startBtn.dataset.next;
-      if (nextUrl) {
-        window.location.href = nextUrl;
-      } else {
-        console.warn('No next URL provided on Start button (data-next).');
-      }
-    });
-  }
+    // ==================================================
+    // === 4. EVENT LISTENERS (Gabungan) ===
+    // ==================================================
 
-  // keyboard: support Enter/Space on buttons
-  [audioBtn, startBtn, langToggle].forEach(el => {
-    if (!el) return;
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        el.click();
-      }
-    });
-  });
+    // Cek jika semua elemen penting ada
+    if (audioBtn_sidebar && translateBtn_sidebar && speechText_sidebar && instructionText_activity) {
+        
+        // --- Tombol Play Sidebar (Ditingkatkan) ---
+        audioBtn_sidebar.addEventListener('click', function() {
+            if (audio_sidebar.paused) {
+                stopAllAudio(); // Hentikan audio lain
+                
+                audio_sidebar.src = audioPath_sidebar;
+                audio_sidebar.play()
+                    .then(() => {
+                        audioIcon_sidebar.classList.remove('fa-play');
+                        audioIcon_sidebar.classList.add('fa-pause');
+                        addPulseEffect(this); // Efek dari referensi
+                        animateRadioWaves();  // Efek dari referensi
+                        currentPlayingAudio = audio_sidebar;
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this); // Efek dari referensi
+                    });
+            } else {
+                audio_sidebar.pause();
+                audioIcon_sidebar.classList.remove('fa-pause');
+                audioIcon_sidebar.classList.add('fa-play');
+                removePulseEffect(this);
+            }
+        });
 
-  // helper: small non-blocking notice
-  function showInlineNotice(msg) {
-    let el = document.getElementById('notice-inline-msg');
-    if (!el) {
-      el = document.createElement('div');
-      el.id = 'notice-inline-msg';
-      el.setAttribute('role','status');
-      el.style.cssText = 'position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:8px 12px; border-radius:8px; z-index:9999;';
-      document.body.appendChild(el);
+        // --- Audio Sidebar Selesai ---
+        audio_sidebar.addEventListener('ended', () => {
+            audioIcon_sidebar.classList.remove('fa-pause');
+            audioIcon_sidebar.classList.add('fa-play');
+            removePulseEffect(audioBtn_sidebar);
+            currentPlayingAudio = null;
+        });
+
+        // --- Tombol Terjemahan (Ditingkatkan) ---
+        translateBtn_sidebar.addEventListener('click', function() {
+            stopAllAudio(); // Hentikan audio saat menerjemahkan
+            addClickEffect(this); // Efek dari referensi
+            
+            isTranslated = !isTranslated; // Toggle status
+            
+            // Terapkan teks baru
+            const newSidebarText = isTranslated ? translatedText_sidebar : originalText_sidebar;
+            const newInstructionText = isTranslated ? translatedText_instruction : originalText_instruction;
+
+            // Gunakan transisi fade (dari referensi)
+            fadeTransition(speechText_sidebar, () => {
+                speechText_sidebar.textContent = newSidebarText;
+            });
+            
+            fadeTransition(instructionText_activity, () => {
+                instructionText_activity.textContent = newInstructionText;
+            });
+        });
+
+    } else {
+        console.warn('Beberapa elemen UI untuk Noticing (audio, translate, text) tidak ditemukan.');
     }
-    el.textContent = msg;
-    el.style.opacity = '1';
-    clearTimeout(el._hideTO);
-    el._hideTO = setTimeout(()=> { el.style.opacity = '0'; }, 3200);
-  }
 
-  // small helper CSS injection for fade-text/start glow if not present
-  (function injectHelpers() {
-    const s = document.createElement('style');
-    s.innerHTML = `
-      .fade-text { animation: fadeInText 0.38s ease; }
-      @keyframes fadeInText { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:translateY(0);} }
-      .btn-start-glow { box-shadow: 0 8px 28px rgba(37,99,235,0.22); animation: pulseStart 1.6s infinite; }
-      @keyframes pulseStart { 0% { box-shadow:0 0 0 0 rgba(37,99,235,0.16);} 70% { box-shadow:0 0 0 12px rgba(37,99,235,0);} 100% { box-shadow:0 0 0 0 rgba(37,99,235,0);} }
-      .audio-play-btn.playing { transform: scale(0.98); }
-    `;
-    document.head.appendChild(s);
-  })();
+    // ==================================================
+    // === 5. FUNGSI HELPER & EFEK (Dari Referensi) ===
+    // ==================================================
 
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => { element.style.animation = ''; }, 500);
+    }
+
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.classList.add('playing');
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.classList.remove('playing');
+    }
+
+    function addClickEffect(element) {
+        if (!element) return;
+        element.style.transform = 'scale(0.95)';
+        setTimeout(() => { element.style.transform = ''; }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    function animateRadioWaves() {
+        if (!radioWaves || radioWaves.length === 0) return;
+        radioWaves.forEach((wave, index) => {
+            wave.style.animation = 'none';
+            setTimeout(() => {
+                wave.style.animation = `radioWave 2s ease-out infinite`;
+                wave.style.animationDelay = `${index * 0.7}s`;
+            }, 10);
+        });
+    }
+
+    // ==================================================
+    // === 6. INTERAKSI & ANIMASI HOVER (Dari Referensi) ===
+    // ==================================================
+
+    const continueBtn = document.querySelector('.btn-continue');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', () => {
+            continueBtn.style.transform = 'translateY(-3px)';
+        });
+        continueBtn.addEventListener('mouseleave', () => {
+            continueBtn.style.transform = 'translateY(0)';
+        });
+    }
+
+    if (captainAvatar) {
+        captainAvatar.addEventListener('click', () => {
+            if (audioBtn_sidebar) audioBtn_sidebar.click();
+        });
+    }
+
+    // ==================================================
+    // === 7. ANIMASI SCROLL-IN (Dari Referensi) ===
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.text);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    const animatedElements = document.querySelectorAll(
+        '.message-card, .instruction-banner, .continue-wrapper, .conversation-arrow, .learn-more-section'
+    );
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        observer.observe(el);
+    });
+
+    // ==================================================
+    // === 8. TIPS KEYBOARD (Dari Referensi) ===
+    // ==================================================
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === 'INPUT') return; // Jangan jalankan jika sedang mengetik
+
+        if (e.key.toLowerCase() === 't') {
+            e.preventDefault();
+            if (translateBtn_sidebar) translateBtn_sidebar.click();
+        }
+        if (e.key.toLowerCase() === 'c') {
+            e.preventDefault();
+            if (audioBtn_sidebar) audioBtn_sidebar.click();
+        }
+        // [BARU] 'L' untuk Learn More
+        if (e.key.toLowerCase() === 'l') {
+             e.preventDefault();
+             if (openBtn) openBtn.click();
+        }
+        // [BARU] 'Escape' untuk menutup popup
+        if (e.key === 'Escape') {
+             e.preventDefault();
+             if (closeBtn && popupOverlay.style.display === 'flex') {
+                closeBtn.click();
+             }
+        }
+    });
+
+    console.log('✅ Modern Noticing Module Ready! (with Popup)');
+    console.log('💡 Tips: Tekan C (Audio), T (Translate), L (Learn More), Escape (Close Popup).');
 });

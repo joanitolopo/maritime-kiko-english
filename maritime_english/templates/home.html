@@ -1,191 +1,165 @@
 {% extends 'base.html' %}
 {% block title %}Home - Maritime English{% endblock %}
+
 {% block page_css %}
-    <!-- 
-      Sekarang kita hanya memuat satu file CSS 
-      yang berisi SEMUA style untuk halaman ini 
-    -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock %}
 
 {% block content %}
-<header class="bg-primary text-white py-3">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div class="logo d-flex align-items-center">
-            <!-- 
-              Menghapus style inline dan menggantinya dengan kelas 'logo-img' 
-              (yang sudah kita buat di global.css, tapi kita tambahkan juga di home.css
-              untuk memastikan)
-            -->
-            <img src="{{ url_for('static', filename='img/anchor.png') }}" alt="Maritime English Logo" class="logo-img">
-            <span class="ms-2 fs-4">Maritime English</span>
-        </div>
+<!-- 1. HEADER / NAVBAR BARU -->
+<header class="main-header shadow-sm">
+    <nav class="container navbar navbar-expand-lg">
+        <div class="container-fluid p-0">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Maritime English Logo" class="logo-img">
+            </a>
 
-        <div class="user-info">
-            {% if current_user.is_authenticated %}
-                <a class="nav-link dropdown-toggle text-white" 
-                   href="#" 
-                   id="userDropdown" 
-                   role="button" 
-                   data-bs-toggle="dropdown" 
-                   aria-expanded="false">
-                    <i class="fas fa-user me-2"></i> {{ current_user.username }}
-                </a>
-                
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
-                            <i class="fas fa-sign-out-alt me-2"></i> Logout
-                        </a>
+            <!-- Tombol Toggle Mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+
+            <!-- Menu Navigasi -->
+            <div class="collapse navbar-collapse" id="mainNav">
+                <!-- Link di Tengah -->
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.home') }}">Home</a>
                     </li>
-                </ul>              
-            {% else %}
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">
-                    Login
-                </a>
-            {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('learning.courses_page') }}">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+
+                <!-- Info User di Kanan -->
+                <div class="user-info">
+                    {% if current_user.is_authenticated %}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" 
+                               href="#" 
+                               id="userDropdown" 
+                               role="button" 
+                               data-bs-toggle="dropdown" 
+                               aria-expanded="false">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </a>
+                            
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#">
+                                    Signed in as <strong>{{ current_user.username }}</strong>
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    </div>
+    </nav>
 </header>
 
-<main class="container my-5">
-    <div class="character-container d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded shadow-sm">
-        <!-- 
-          Menghapus style inline dan membiarkan 'character-img' 
-          mengambil alih dari file CSS 
-        -->
-        <img src="{{ url_for('static', filename='img/kapten-kiko.png') }}" alt="Kapten Kiko" class="character-img rounded-circle">
-        <div>
-          <div class="character-text h4 mb-1 text-primary">Ahoy, Nakama! ⚓</div>
-          <p class="text-muted mb-0">Choose a unit to start your maritime adventure — or jump straight into one of its intro sections.</p>
+<!-- 2. KONTEN UTAMA HALAMAN -->
+<main class="container my-4">
+
+    <!-- 2.1. BANNER SAMBUTAN -->
+    <section class="welcome-banner">
+        <!-- GANTI 'src' DENGAN GAMBAR KADET WANITA ANDA -->
+        <img src="/static/img/Captain female-2.png" alt="Cadet" class="cadet-img d-none d-md-block" id="cadet-female">
+        
+        <div class="welcome-text">
+            <h2>Welcome aboard, Cadet {{ current_user.username }}!</h2>
+            <p>Let's begin your first voyage in Maritime English</p>
+            <!-- Anda perlu mengarahkan 'href' ini ke unit pertama -->
+            <a href="#" class="btn btn-start-voyage">Start Voyage</a>
         </div>
-    </div>
+        
+        <!-- GANTI 'src' DENGAN GAMBAR KADET PRIA ANDA -->
+        <img src="/static/img/Captain male-3.png" alt="Cadet" class="cadet-img d-none d-md-block" id="cadet-male">
+    </section>
 
-    <h2 class="text-center mb-4 text-primary fw-bold">Learning Units 📚</h2>
+    <!-- 2.2. PETA & SIDEBAR STATISTIK -->
+    <section class="row mt-4">
 
-    <!-- 
-      Layout ini sudah bagus, style inline 'max-width' 
-      membantu di desktop, dan 'row-cols-1' sudah 
-      default untuk mobile.
-    -->
-    <div class="row row-cols-1 g-4" style="max-width: 900px; margin-left: auto; margin-right: auto;">
-        {% for unit in units %}
-            <div class="col">
-                <div class="card h-100 shadow-lg border-0">
-                    <div class="card-body p-4">
-                        <!-- 
-                          Kita tambahkan kelas 'unit-card-header' 
-                          agar bisa ditargetkan di CSS 
-                        -->
-                        <div class="d-flex justify-content-between align-items-start unit-card-header">
-                            <div>
-                                <h5 class="card-title mb-1 text-dark fw-bold">Unit {{ unit.id }}: {{ unit.title }}</h5>
-                                <p class="card-text text-secondary mb-2">Learn essential maritime English skills!</p>
-                            </div>
-                            <div class="text-end">
-                                <button class="btn btn-success start-btn-toggle fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#unit-sections-{{ unit.id }}" aria-expanded="false" aria-controls="unit-sections-{{ unit.id }}">
-                                    Start Unit
-                                </button>
-                            </div>
-                        </div>
+        <!-- KOLOM KIRI: PETA PERJALANAN -->
+        <div class="col-lg-8">
+            <div class="voyage-map-container">
+                <!-- 
+                  PENTING: GANTI 'src' DI BAWAH INI 
+                  DENGAN GAMBAR PETA PERJALANAN (VOYAGE MAP) ANDA 
+                -->
+                <img src="/static/img/map_journey.png" 
+                     alt="Voyage Map" 
+                     class="voyage-map-img">
+            </div>
+        </div>
 
-                        <!-- COLLAPSE: list of intro-style sections -->
-                        <div class="collapse unit-sections-list" id="unit-sections-{{ unit.id }}">
-                            <div class="mt-3 border-top pt-3">
-                                {% if unit.id == 1 %}
-                                    <div class="mb-2 small text-muted fw-bold">Intro sections for Unit 1:</div>
-                                    
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.unit_introduction', unit_id=unit.id, section='introduction') }}">Introduction</a>
-                                            <div class="text-muted small">Quick warm-up activity</div></div>
-                                        <div class="section-badge">warmup</div>
-                                    </div>
+        <!-- KOLOM KANAN: SIDEBAR STATISTIK -->
+        <aside class="col-lg-4">
+            <div class="sidebar-cards">
+                
+                <!-- Card 1: Current Voyage -->
+                <div class="info-card">
+                    <div class="info-icon" style="color: #0052cc;">
+                        <i class="fas fa-anchor fa-2x"></i>
+                    </div>
+                    <div class="info-text">
+                        <strong>Current Voyage</strong>
+                        <!-- Ganti ini dengan data dinamis -->
+                        <p>Unit 1 - Spelling the Sea</p>
+                    </div>
+                </div>
 
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='input_intro') }}">Input: Introduction</a>
-                                            <div class="text-muted small">Overview & audio intro (Alphabet & Numbers)</div></div>
-                                        <div class="section-badge">input_intro</div>
-                                    </div>
-
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='noticing_intro') }}">Noticing: Intro</a>
-                                            <div class="text-muted small">Listen & compare pronunciations</div></div>
-                                        <div class="section-badge">noticing_intro</div>
-                                    </div>
-
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='controlled_practice_intro') }}">Controlled Practice: Intro</a>
-                                            <div class="text-muted small">Controlled exercises start</div></div>
-                                        <div class="section-badge">controlled_practice_intro</div>
-                                    </div>
-
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='guided_intro') }}">Guided Practice: Intro</a>
-                                            <div class="text-muted small">Instructor-guided tasks</div></div>
-                                        <div class="section-badge">guided_intro</div>
-                                    </div>
-
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='authentic_intro') }}">Authentic Task: Intro</a>
-                                            <div class="text-muted small">Simulation introduction</div></div>
-                                        <div class="section-badge">authentic_intro</div>
-                                    </div>
-
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.learning_unit', unit_id=unit.id, section='assessment_intro') }}">Assessment: Intro</a>
-                                            <div class="text-muted small">Quiz introduction</div></div>
-                                        <div class="section-badge">assessment_intro</div>
-                                    </div>
-                                    <div class="mt-3 small text-muted text-center">(Click any section to open it.)</div>
-
-                                {% else %}
-                                    <div class="mb-2 small text-muted fw-bold">Start this unit:</div>
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.unit_introduction', unit_id=unit.id) }}">Unit Introduction</a>
-                                            <div class="text-muted small">Overview of this unit</div></div>
-                                        <div class="section-badge">introduction</div>
-                                    </div>
-                                    <div class="unit-section-item">
-                                        <div><a href="{{ url_for('learning.warmup_introduction', unit_id=unit.id) }}">Warm-up</a>
-                                            <div class="text-muted small">Quick warm-up activity</div></div>
-                                        <div class="section-badge">warmup</div>
-                                    </div>
-                                    <div class="mt-3 small text-muted text-center">(More sections available after completing the Warm-up.)</div>
-                                {% endif %}
-                            </div>
+                <!-- Card 2: Progress -->
+                <div class="info-card">
+                    <div class="info-icon" style="color: #6a00c9;">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <div class="info-text">
+                        <strong>Progress</strong>
+                        <!-- Ganti ini dengan data dinamis -->
+                        <p>0 of 6 units completed</p>
+                        <div class="progress" style="height: 10px;">
+                             <!-- Ganti 'width' dengan persentase dinamis -->
+                            <div class="progress-bar" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-</main>
-{% endblock %}
 
-{% block page_js %}
-{{ super() }} <!-- Memastikan JS dari base.html (termasuk bootstrap) dimuat -->
-<script>
-// Ini adalah logika JavaScript yang sudah terbukti berfungsi sebagai pengganti data-bs-parent 
-// di tata letak grid, yang memastikan hanya satu unit yang terbuka pada satu waktu.
-document.addEventListener('DOMContentLoaded', function () {
-    const unitCollapses = document.querySelectorAll('.unit-sections-list.collapse');
-    
-    if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
-        unitCollapses.forEach(c => {
-          c.addEventListener('show.bs.collapse', function (event) {
-            // Tutup semua collapse lain yang sedang terbuka
-            unitCollapses.forEach(x => { 
-                if (x !== c && x.classList.contains('show')) { 
-                    bootstrap.Collapse.getOrCreateInstance(x).hide(); 
-                }
-            });
-          });
-        });
-    } else {
-        console.warn('Bootstrap JavaScript object "bootstrap" not found. Please ensure bootstrap.bundle.min.js is loaded in base.html.');
-    }
-});
-</script>
+                <!-- Card 3: Learning Time -->
+                <div class="info-card">
+                    <div class="info-icon" style="color: #c90076;">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                    <div class="info-text">
+                        <strong>Learning Time</strong>
+                        <!-- Ganti ini dengan data dinamis -->
+                        <p>Total 00 minutes</p>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+    </section>
+
+</main>
 {% endblock %}

@@ -1,28 +1,50 @@
 {% extends 'base.html' %}
 {% block title %}Maritime English Learning{% endblock %}
-{% block content %}
-<header class="bg-primary text-white py-3">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div class="logo d-flex align-items-center">
-            <!-- Menambahkan class 'logo-img' untuk kontrol ukuran gambar --><img src="{{ url_for('static', filename='img/anchor.png') }}" alt="Maritime English Logo" class="logo-img">
-            <span class="ms-2 fs-4">Maritime English</span>
-        </div>
-        <!-- Anda bisa menambahkan elemen lain di sini jika ada, misalnya menu hamburger --></div>
-</header>
 
-<main class="container my-5">
-    <div class="row align-items-center">
-        <div class="col-md-6 order-md-2">
-            <!-- Gambar Kapten Kiko --><img src="{{ url_for('static', filename='img/kapten_kiko2.png') }}" alt="Kapten Kiko" class="img-fluid kapten-kiko-illustration">
-        </div>
-        <div class="col-md-6 order-md-1 text-center text-md-start">
-            <h1>The free, fun, and effective way to learn Maritime English!</h1>
-            <p>Master maritime vocabulary and phrases for navigation, safety, and communication at sea.</p>
-            <div class="buttons mt-4 d-flex flex-column flex-md-row gap-2">
-                <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-lg">GET YOUR TICKET</a>
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">I ALREADY HAVE A TICKET</a>
-            </div>
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-sm py-1">
+    <div class="container d-flex justify-content-start align-items-center">
+        <div class="logo d-flex align-items-center">
+            <img src="{{ url_for('static', filename='img/logo_website_2.png') }}" alt="Maritime English Logo" class="logo-img">
         </div>
     </div>
+</header>
+
+<main class="container-fluid my-5">
+  <div class="container hero-content">
+    <div class="row align-items-center">
+        <div class="col-lg-7 d-none d-lg-block"></div>
+        <div class="col-lg-5">
+            <h1 class="hero-title">Learn Maritime English for Nautical Growth</h1>
+            <div class="hero-sub my-3">
+                <span><i class="fas fa-anchor me-2"></i>Interactive Lesson</span>
+                <span class="mx-2">·</span>
+                <span><i class="fas fa-ship me-2"></i>Real Ship Communication</span>
+                <span class="mx-2">·</span>
+                <span><i class="fas fa-comments me-2"></i>Direct Feedback</span>
+            </div>
+
+            <div class="hero-ctas mt-4">
+                <div class="mb-3">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-start btn-lg w-100">Start</a>
+                    <p class="hero-helper-text mt-2">
+                        New here? Click 'Start' to create your free account
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-login btn-lg w-100">Log In</a>
+                    <p class="hero-helper-text mt-2">
+                        Already part of the crew? Click 'Log In' to continue your voyage
+                    </p>
+                </div>
+            </div> 
+        </div>
+    </div>
+  </div>
 </main>
 {% endblock %}

@@ -1,162 +1,351 @@
-// Improved introduction.js
+// ========================================
+// MODERN MARITIME LEARNING JAVASCRIPT
+// Enhanced with smooth interactions
+// ========================================
+
 document.addEventListener('DOMContentLoaded', () => {
-  const dialogueTextEl = document.getElementById('dialogue-text');
-  const nextBtn = document.getElementById('next-btn');
-  const continueLink = document.getElementById('continue-btn');
-  const introAudio = document.getElementById('intro-audio');
-  const langToggleBtn = document.getElementById('lang-toggle-btn');
-  const audioBtn = document.getElementById('audio-btn');
+    console.log('🌊 Maritime Learning System Initialized!');
 
-  const dialogueSentences = [
-    { en: "Ahoy, cadets! Welcome aboard.", id: "Halo, kadet! Selamat datang di kapal.", audio: "/static/data/audio/tts-audio01.wav" },
-    { en: "This unit is about the alphabet and numbers we use at sea.", id: "Unit ini tentang alfabet dan angka yang digunakan di laut.", audio: "/static/data/audio/tts-audio02.wav" },
-    { en: "On ships, we don’t just say A, B, C… or one, two, three.", id: "Di kapal, kami tidak hanya mengatakan A, B, C... atau satu, dua, tiga.", audio: "/static/data/audio/tts-audio03.wav" },
-    { en: "We use a special system to keep our messages clear, even in storms or noisy conditions.", id: "Kami menggunakan sistem khusus agar pesan tetap jelas, bahkan saat badai atau kondisi bising.", audio: "/static/data/audio/tts-audio04.wav" },
-    { en: "It’s called the NATO Phonetic Alphabet.", id: "Sistem ini disebut Alfabet Fonetik NATO.", audio: "/static/data/audio/tts-audio05.wav" },
-    { en: "Let’s start with a quick warm-up!", id: "Mari mulai dengan pemanasan singkat!", audio: "/static/data/audio/tts-audio06.wav" }
-  ];
+    // ==================================================
+    // === CAPTAIN'S WELCOME (LEFT SECTION)
+    // ==================================================
+    
+    const playBtn_captain = document.querySelector('.welcome-bubble .play-btn i');
+    const translateBtn_captain = document.querySelector('.welcome-bubble .translate-btn');
+    const speechText_captain = document.querySelector('.speech-text');
+    const audio_captain = new Audio('/static/data/audio/unit1/captain_welcome.wav');
+    
+    const originalText_captain = `"Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. On ships, we don't just say A, B, C… or one, two, three. We use a special system, so our messages are always clear, even in storms or noisy conditions. It's called the NATO Phonetic Alphabet — NATO stands for North Atlantic Treaty Organization"`;
+    
+    const translatedText_captain = `"Halo, kadet! Selamat datang di kapal. Unit ini tentang alfabet dan angka yang kita gunakan di laut. Di kapal, kita tidak hanya mengatakan A, B, C… atau satu, dua, tiga. Kita menggunakan sistem khusus supaya pesan selalu jelas, bahkan saat badai atau kondisi bising. Sistem ini disebut Alfabet Fonetik NATO — NATO adalah singkatan dari North Atlantic Treaty Organization"`;
 
-  let index = 0;
-  let typing = false;
-  let currentLang = 'en';
-  let playedOnce = false;
+    let isTranslated_captain = false;
+    let isPlaying_captain = false;
 
-  // Accessibility init
-  if (continueLink) {
-    continueLink.classList.add('btn-disabled');
-    continueLink.setAttribute('aria-disabled','true');
-  }
+    // ==================================================
+    // === OFFICER'S LEARNING JOURNEY (RIGHT SECTION)
+    // ==================================================
 
-  // Typing function (adds/removes .typing class)
-  function typeText(text, callback) {
-    typing = true;
-    dialogueTextEl.classList.remove('no-cursor');
-    dialogueTextEl.classList.add('typing');
-    dialogueTextEl.textContent = '';
-    let i = 0;
-    const speed = 28; // ms per char (adjust)
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        dialogueTextEl.textContent += text.charAt(i);
-        i++;
-      } else {
-        clearInterval(timer);
-        typing = false;
-        dialogueTextEl.classList.remove('typing');
-        dialogueTextEl.classList.add('no-cursor');
-        if (typeof callback === 'function') callback();
-      }
-    }, speed);
-  }
+    const playBtn_officer = document.querySelector('.audio-controls-objectives .play-btn i');
+    const translateBtn_officer = document.querySelector('.audio-controls-objectives .translate-btn');
+    const speechText_officer = document.querySelector('.translatable-text-officer');
+    const audio_officer = new Audio('/static/data/audio/unit1/learning_objectives.wav');
 
-  // show a sentence (play audio + type)
-  async function showSentence(i) {
-    if (i < 0 || i >= dialogueSentences.length) return;
-    const s = dialogueSentences[i];
-    const text = s[currentLang];
-    // set audio src and attempt to play
-    if (introAudio) {
-      introAudio.src = s.audio;
-      introAudio.muted = false;
-      try {
-        // try to play (user click required in some browsers). we catch errors.
-        await introAudio.play();
-        playedOnce = true;
-      } catch (err) {
-        console.warn('Audio play blocked or missing:', err);
-      }
-    }
-    // show typed text
-    typeText(text, () => {
-      // after typing completes: if last sentence -> enable continue else show next
-      if (i === dialogueSentences.length - 1) {
-        // enable continue link
-        if (continueLink) {
-          continueLink.classList.remove('btn-disabled');
-          continueLink.setAttribute('aria-disabled','false');
+    const originalText_officer_HTML = `
+        <div class="intro-paragraph">
+            <i class="fas fa-ship"></i>
+            <p>During this voyage, you'll learn how sailors around the world spell ship names, call signs, and numbers clearly over the radio. You'll practice saying them the maritime way - just like real officers on the bridge.</p>
+        </div>
+
+        <div class="objectives-section">
+            <h3><i class="fas fa-bullseye"></i> Learning Objectives</h3>
+            <p>By the end of this unit, you'll be able to:</p>
+            <ol class="objectives-list">
+                <li>
+                    <span class="list-number">1</span>
+                    <span>Identify and pronounce the Maritime Alphabet and numbers correctly in radio communication.</span>
+                </li>
+                <li>
+                    <span class="list-number">2</span>
+                    <span>Exchange vessel identification (call sign and MMSI) confidently and accurately through short radio simulations.</span>
+                </li>
+            </ol>
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-icon">
+                <i class="fas fa-anchor"></i>
+            </div>
+            <p><strong>Now, get ready to tune your ears and voice - it's time to spell the sea!</strong></p>
+        </div>`;
+    
+    const translatedText_officer_HTML = `
+        <div class="intro-paragraph">
+            <i class="fas fa-ship"></i>
+            <p>Selama pelayaran ini, Anda akan belajar bagaimana pelaut di seluruh dunia mengeja nama kapal, tanda panggilan, dan angka dengan jelas melalui radio. Anda akan berlatih mengucapkannya ala maritim - seperti perwira sungguhan di anjungan.</p>
+        </div>
+
+        <div class="objectives-section">
+            <h3><i class="fas fa-bullseye"></i> Tujuan Pembelajaran</h3>
+            <p>Di akhir unit ini, Anda akan dapat:</p>
+            <ol class="objectives-list">
+                <li>
+                    <span class="list-number">1</span>
+                    <span>Mengidentifikasi dan mengucapkan Alfabet Maritim dan angka dengan benar dalam komunikasi radio.</span>
+                </li>
+                <li>
+                    <span class="list-number">2</span>
+                    <span>Melakukan pertukaran identifikasi kapal (call sign dan MMSI) dengan percaya diri dan akurat melalui simulasi radio singkat.</span>
+                </li>
+            </ol>
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-icon">
+                <i class="fas fa-anchor"></i>
+            </div>
+            <p><strong>Sekarang, siapkan telinga dan suara Anda - saatnya mengeja lautan!</strong></p>
+        </div>`;
+    
+    let isTranslated_officer = false;
+    let isPlaying_officer = false;
+
+    // ==================================================
+    // === AUDIO CONTROL (PREVENT OVERLAP)
+    // ==================================================
+    
+    audio_captain.addEventListener('play', () => {
+        if (!audio_officer.paused) {
+            audio_officer.pause();
+            audio_officer.currentTime = 0;
+            updatePlayButton(playBtn_officer, false);
+            isPlaying_officer = false;
         }
-        nextBtn.textContent = 'Done';
-      }
-      nextBtn.disabled = false;
     });
-  }
 
-  // initial show after small delay
-  setTimeout(() => {
-    nextBtn.disabled = true;
-    showSentence(index);
-    index++;
-  }, 600);
-
-  // Next handler
-  nextBtn.addEventListener('click', () => {
-    if (typing) return;
-    if (index >= dialogueSentences.length) {
-      // already at end - navigate to warmup
-      if (continueLink && continueLink.href && continueLink.getAttribute('aria-disabled') !== 'true') {
-        window.location.href = continueLink.href;
-      }
-      return;
-    }
-    nextBtn.disabled = true;
-    showSentence(index);
-    index++;
-  });
-
-  // Play / Pause audio button
-  audioBtn.addEventListener('click', async () => {
-    if (!introAudio.src) return;
-    if (!introAudio.paused) {
-      introAudio.pause();
-      audioBtn.classList.remove('playing');
-      audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-    } else {
-      try {
-        await introAudio.play();
-        audioBtn.classList.add('playing');
-        audioBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        playedOnce = true;
-        // if last sentence already typed, enable continue
-        if (index >= dialogueSentences.length && continueLink) {
-          continueLink.classList.remove('btn-disabled');
-          continueLink.setAttribute('aria-disabled','false');
+    audio_officer.addEventListener('play', () => {
+        if (!audio_captain.paused) {
+            audio_captain.pause();
+            audio_captain.currentTime = 0;
+            updatePlayButton(playBtn_captain, false);
+            isPlaying_captain = false;
         }
-      } catch (err) {
-        console.warn('Audio play failed:', err);
-        // friendly UI hint
-        alert('Cannot play audio now. Please check your sound or play once on the page.');
-      }
+    });
+
+    // ==================================================
+    // === CAPTAIN'S CONTROLS
+    // ==================================================
+
+    if (playBtn_captain) {
+        playBtn_captain.parentElement.addEventListener('click', function() {
+            if (audio_captain.paused) {
+                audio_captain.play();
+                updatePlayButton(playBtn_captain, true);
+                addPulseEffect(this);
+                isPlaying_captain = true;
+            } else {
+                audio_captain.pause();
+                updatePlayButton(playBtn_captain, false);
+                removePulseEffect(this);
+                isPlaying_captain = false;
+            }
+        });
     }
-  });
 
-  introAudio.addEventListener('ended', () => {
-    audioBtn.classList.remove('playing');
-    audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-    // show positive toast (non-blocking)
-  });
+    audio_captain.addEventListener('ended', () => {
+        updatePlayButton(playBtn_captain, false);
+        removePulseEffect(playBtn_captain?.parentElement);
+        isPlaying_captain = false;
+    });
 
-  // Language toggle: switch on-screen text only (audio remains EN)
-  langToggleBtn.addEventListener('click', () => {
-    currentLang = currentLang === 'en' ? 'id' : 'en';
-    langToggleBtn.textContent = currentLang.toUpperCase();
-    // update currently visible sentence immediately
-    const visibleIndex = Math.max(0, index - 1);
-    if (visibleIndex < dialogueSentences.length) {
-      const txt = dialogueSentences[visibleIndex][currentLang];
-      // if typing in progress, abort typing and show translation
-      if (typing) {
-        // fast stop typing
-        dialogueTextEl.classList.remove('typing');
-        dialogueTextEl.classList.add('no-cursor');
-        typing = false;
-      }
-      dialogueTextEl.textContent = txt;
+    if (translateBtn_captain) {
+        translateBtn_captain.addEventListener('click', function() {
+            if (!audio_captain.paused) {
+                audio_captain.pause();
+                audio_captain.currentTime = 0;
+                updatePlayButton(playBtn_captain, false);
+                isPlaying_captain = false;
+            }
+            
+            fadeTransition(speechText_captain, () => {
+                if (isTranslated_captain) {
+                    speechText_captain.textContent = originalText_captain;
+                    isTranslated_captain = false;
+                } else {
+                    speechText_captain.textContent = translatedText_captain;
+                    isTranslated_captain = true;
+                }
+            });
+            
+            addClickEffect(this);
+        });
     }
-  });
 
-  // keyboard support for Next (Enter)
-  nextBtn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextBtn.click(); }
-  });
+    // ==================================================
+    // === OFFICER'S CONTROLS
+    // ==================================================
 
+    if (playBtn_officer) {
+        playBtn_officer.parentElement.addEventListener('click', function() {
+            if (audio_officer.paused) {
+                audio_officer.play();
+                updatePlayButton(playBtn_officer, true);
+                addPulseEffect(this);
+                isPlaying_officer = true;
+            } else {
+                audio_officer.pause();
+                updatePlayButton(playBtn_officer, false);
+                removePulseEffect(this);
+                isPlaying_officer = false;
+            }
+        });
+    }
+
+    audio_officer.addEventListener('ended', () => {
+        updatePlayButton(playBtn_officer, false);
+        removePulseEffect(playBtn_officer?.parentElement);
+        isPlaying_officer = false;
+    });
+
+    if (translateBtn_officer) {
+        translateBtn_officer.addEventListener('click', function() {
+            if (!audio_officer.paused) {
+                audio_officer.pause();
+                audio_officer.currentTime = 0;
+                updatePlayButton(playBtn_officer, false);
+                isPlaying_officer = false;
+            }
+            
+            fadeTransition(speechText_officer, () => {
+                if (isTranslated_officer) {
+                    speechText_officer.innerHTML = originalText_officer_HTML;
+                    isTranslated_officer = false;
+                } else {
+                    speechText_officer.innerHTML = translatedText_officer_HTML;
+                    isTranslated_officer = true;
+                }
+            });
+            
+            addClickEffect(this);
+        });
+    }
+
+    // ==================================================
+    // === HELPER FUNCTIONS
+    // ==================================================
+
+    function updatePlayButton(iconElement, isPlaying) {
+        if (!iconElement) return;
+        
+        if (isPlaying) {
+            iconElement.classList.remove('fa-play');
+            iconElement.classList.add('fa-pause');
+        } else {
+            iconElement.classList.remove('fa-pause');
+            iconElement.classList.add('fa-play');
+        }
+    }
+
+    function addPulseEffect(button) {
+        if (!button) return;
+        button.classList.add('playing');
+    }
+
+    function removePulseEffect(button) {
+        if (!button) return;
+        button.classList.remove('playing');
+    }
+
+    function addClickEffect(button) {
+        if (!button) return;
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            button.style.transform = '';
+        }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    // ==================================================
+    // === DYNAMIC STYLES
+    // ==================================================
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .control-btn.playing {
+            animation: buttonPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+                transform: scale(1.02);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // ==================================================
+    // === SMOOTH INTERACTIONS
+    // ==================================================
+
+    // Continue button hover
+    const continueBtn = document.querySelector('.continue-button');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.02)';
+        });
+        
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    }
+
+    // Character hover effects
+    const captainImg = document.querySelector('.captain-img');
+    const officerImg = document.querySelector('.officer-img');
+
+    if (captainImg) {
+        captainImg.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.05)';
+        });
+        captainImg.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    if (officerImg) {
+        officerImg.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.05)';
+        });
+        officerImg.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // ==================================================
+    // === ENTRANCE ANIMATIONS
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const animatedElements = document.querySelectorAll(
+        '.unit-hero-card, .learning-journey-card, .continue-section'
+    );
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+        observer.observe(el);
+    });
+
+    console.log('✅ All interactive features ready!');
+    console.log('🎵 Audio players initialized');
+    console.log('🌐 Translation system active');
 });

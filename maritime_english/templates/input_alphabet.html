@@ -1,91 +1,338 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - {{ section_content.title or "NATO Phonetic Alphabet A–Z" }}{% endblock %}
+{% block title %}Unit 1: Input Alphabet{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/input_alphabet.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="container my-4 alphabet-page">
-
-  <!-- --- PERUBAHAN BARU --- -->
-  <!-- Tombol Navigasi Kustom -->
-  
-  <!-- Tombol Previous (kembali ke input_intro) -->
-  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_intro') }}" class="scene-prev-button" aria-label="Previous section">
-      <i class="fas fa-arrow-left"></i>
-  </a>
-  
-  <!-- Tombol Close (kembali ke home/daftar unit) -->
-  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
-  <!-- --- AKHIR PERUBAHAN --- -->
-
-
-  <div class="instruction-scene shadow-lg" role="region" aria-label="NATO Phonetic Alphabet">
-    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="avatar-small" />
-    <div class="instruction-box">
-      <div class="lang-toggle">
-        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
-      <p id="instruction-text" class="lead">Click a letter to hear its NATO phonetic code word. Then, repeat it aloud.</p>
-    </div>
-
-    <div class="chart-area">
-      <div class="alphabet-grid" id="alphabet-grid" role="grid" aria-label="Alphabet grid">
-        {% set letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] %}
-        {% for i in range(30) %}
-          <div class="grid-cell" role="gridcell">
-            {% if i < letters|length %}
-              {% set ch = letters[i] %}
-              <button type="button"
-                      class="letter-tile"
-                      data-letter="{{ ch }}"
-                      aria-label="Letter {{ ch }}"
-                      aria-pressed="false"
-                      title="{{ ch }}">
-                <span class="letter">{{ ch }}</span>
-                <span class="tile-audio" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
-              </button>
-            {% else %}
-              <div class="grid-empty" aria-hidden="true"></div>
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
-
-      <div class="practice-area">
-        <div class="practice-box">
-          <div class="practice-text" id="practice-text">
-            {{ section_content.practice_text if section_content and section_content.practice_text else "Example: ANTARA" }}
-          </div>
-          <button id="practice-replay" class="btn btn-practice" aria-label="Replay practice prompt">
-            <i class="fas fa-redo"></i> Replay
-          </button>
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.courses_page') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - Input Alphabet</span>
         </div>
-      </div>
 
-      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
-        <div class="fb-arrow"></div>
-        <div class="fb-content">Great! Keep going.</div>
-      </div>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
     </div>
+</header>
 
-    <div class="footer-cta">
-      <button id="next-btn"
-              class="btn btn-next"
-              type="button"
-              aria-label="Next to numbers section"
-              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}">
-        Next
-      </button>
-      <a id="continue-link" class="visually-hidden"
-         href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"></a>
-    </div>
-  </div>
-</main>
+<!-- MAIN CONTENT -->
+<div class="alphabet-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="alphabet-sidebar">
+        
+        <!-- Activity Badge -->
+        <div class="activity-badge">
+            <div class="badge-icon">
+                <i class="fas fa-spell-check"></i>
+            </div>
+            <div class="badge-text">
+                <h4>Master the Code</h4>
+                <p>Activity 2: Alphabet A-Z</p>
+            </div>
+        </div>
+
+        <!-- Captain Card -->
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain" class="captain-avatar">
+                <div class="sound-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="instruction-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-microphone-alt"></i>
+                    <span>Captain's Instructions</span>
+                </div>
+                <p class="speech-text-activity2">
+                    "Cadet, it's time to master our code words at sea! Shadow each code word you hear, let's hear you sound like a true mariner!"
+                </p>
+                <div class="activity2-controls">
+                    <button class="control-btn audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <!-- <div class="progress-card">
+            <div class="progress-header">
+                <i class="fas fa-chart-line"></i>
+                <span>Your Progress</span>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="letters-played">0</span>
+                    <span class="stat-label">Letters Played</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">26</span>
+                    <span class="stat-label">Total Letters</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div> -->
+
+    </aside>
+
+    <!-- RIGHT CONTENT -->
+    <main class="alphabet-main">
+        
+        <!-- Alphabet Grid Card -->
+        <section class="alphabet-card">
+            <div class="alphabet-header">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>NATO Phonetic Alphabet</h3>
+                        <p>Click any letter to hear its code word</p>
+                    </div>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search letter...">
+                </div>
+            </div>
+
+            <div class="alphabet-body">
+                <!-- Instruction Banner -->
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="banner-text">
+                        <h4>Interactive Learning</h4>
+                        <p>Click on any letter to hear how it sounds in radio communication</p>
+                    </div>
+                </div>
+
+                <!-- Alphabet Grid -->
+                <div class="alphabet-grid">
+                    <!-- A-Z Letters -->
+                    <button class="letter-box" data-code="alpha" data-letter="A">
+                        <span class="letter-main">A</span>
+                        <span class="letter-code">Alfa</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="bravo" data-letter="B">
+                        <span class="letter-main">B</span>
+                        <span class="letter-code">Bravo</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="charlie" data-letter="C">
+                        <span class="letter-main">C</span>
+                        <span class="letter-code">Charlie</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="delta" data-letter="D">
+                        <span class="letter-main">D</span>
+                        <span class="letter-code">Delta</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="echo" data-letter="E">
+                        <span class="letter-main">E</span>
+                        <span class="letter-code">Echo</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="foxtrot" data-letter="F">
+                        <span class="letter-main">F</span>
+                        <span class="letter-code">Foxtrot</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="golf" data-letter="G">
+                        <span class="letter-main">G</span>
+                        <span class="letter-code">Golf</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="hotel" data-letter="H">
+                        <span class="letter-main">H</span>
+                        <span class="letter-code">Hotel</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="india" data-letter="I">
+                        <span class="letter-main">I</span>
+                        <span class="letter-code">India</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="juliett" data-letter="J">
+                        <span class="letter-main">J</span>
+                        <span class="letter-code">Juliett</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="kilo" data-letter="K">
+                        <span class="letter-main">K</span>
+                        <span class="letter-code">Kilo</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="lima" data-letter="L">
+                        <span class="letter-main">L</span>
+                        <span class="letter-code">Lima</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="mike" data-letter="M">
+                        <span class="letter-main">M</span>
+                        <span class="letter-code">Mike</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="november" data-letter="N">
+                        <span class="letter-main">N</span>
+                        <span class="letter-code">November</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="oscar" data-letter="O">
+                        <span class="letter-main">O</span>
+                        <span class="letter-code">Oscar</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="papa" data-letter="P">
+                        <span class="letter-main">P</span>
+                        <span class="letter-code">Papa</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="quebec" data-letter="Q">
+                        <span class="letter-main">Q</span>
+                        <span class="letter-code">Quebec</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="romeo" data-letter="R">
+                        <span class="letter-main">R</span>
+                        <span class="letter-code">Romeo</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="sierra" data-letter="S">
+                        <span class="letter-main">S</span>
+                        <span class="letter-code">Sierra</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="tango" data-letter="T">
+                        <span class="letter-main">T</span>
+                        <span class="letter-code">Tango</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="uniform" data-letter="U">
+                        <span class="letter-main">U</span>
+                        <span class="letter-code">Uniform</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="victor" data-letter="V">
+                        <span class="letter-main">V</span>
+                        <span class="letter-code">Victor</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="whiskey" data-letter="W">
+                        <span class="letter-main">W</span>
+                        <span class="letter-code">Whiskey</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="xray" data-letter="X">
+                        <span class="letter-main">X</span>
+                        <span class="letter-code">X-ray</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="yankee" data-letter="Y">
+                        <span class="letter-main">Y</span>
+                        <span class="letter-code">Yankee</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                    <button class="letter-box" data-code="zulu" data-letter="Z">
+                        <span class="letter-main">Z</span>
+                        <span class="letter-code">Zulu</span>
+                        <div class="letter-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Continue Button -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_numbers') }}" class="btn-continue">
+                <span>Continue to Numbers</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </main>
+
+</div>
+
 {% endblock %}
 
 {% block page_js %}
-<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
 <script src="{{ url_for('static', filename='js/input_alphabet.js') }}"></script>
 {% endblock %}

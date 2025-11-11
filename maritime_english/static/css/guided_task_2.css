@@ -1,52 +1,566 @@
-/* guided_task_2.css - minimal, matching project palette */
-.guided-task2-container { font-family: "Open Sans", Arial, sans-serif; }
+/* ========================================
+   MODERN GUIDED TASK 2 CSS
+   Logbook Reflection - Disesuaikan dengan Gaya Task 1
+======================================== */
 
-.scene {
-  background: linear-gradient(180deg,#0f1724 0%, #111827 100%);
-  color: #F9FAFB;
-  border-radius: 12px;
-  padding: 16px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap');
+
+/* Variabel Warna dari Task 1 */
+:root {
+    --ocean-blue: #0B5A8F;
+    --ocean-deep: #064273;
+    --sky-light: #e3f4ff;
+    --coral: #10b981;
+    --coral-dark: #059669;
+    --indigo: #6366f1;
+    --indigo-dark: #4f46e5;
+    --purple: #8b5cf6;
+    --purple-dark: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --white: #ffffff;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
 }
 
-/* instruction box */
-.instruction-box { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; background: rgba(249,250,251,0.92); color:#0B3D91; padding:10px;border-radius:10px; }
-.audio-controls .audio-btn { background:#2563EB; color:white; border:none; padding:8px 10px; border-radius:8px; font-weight:600; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* interactive area layout */
-.interactive-area { display:flex; flex-direction:column; gap:14px; align-items:center; }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-/* ship prompt */
-.ship-prompt { text-align:center; margin-bottom:6px; }
-.ship-name { font-family: 'Montserrat', sans-serif; font-weight:700; font-size:22px; color:#0B3D91; background:#F9FAFB; color:#0B3D91; padding:8px 12px; border-radius:8px; display:inline-block; }
-.ship-spelling { font-size:13px; color:#374151; margin-top:6px; }
+/* ======== HEADER (Salin dari Task 1) ======== */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    animation: slideDown 0.5s ease-out;
+}
 
-/* letter grid */
-.letter-grid { display:grid; grid-template-columns: repeat(8, 1fr); gap:8px; max-width:760px; width:100%; justify-items:center; }
-.letter-btn { width:60px; height:60px; background:#2563EB; color:white; border:none; border-radius:6px; font-weight:800; font-size:18px; cursor:pointer; transition: box-shadow .12s, transform .08s; }
-.letter-btn:hover { box-shadow: 0 8px 20px rgba(59,130,246,0.18); transform: translateY(-3px); }
-.letter-btn.active { background:#10B981; }
+.header-right-group {
+    gap: 0.75rem;
+}
 
-/* output area */
-.output-area { width:100%; max-width:760px; background: rgba(249,250,251,0.95); color:#0B3D91; padding:10px; border-radius:10px; box-shadow: 0 8px 20px rgba(2,6,23,0.08); display:flex; flex-direction:column; gap:8px; }
-.output-box { min-height:52px; border-radius:8px; padding:8px; background:#fff; color:#0B3D91; font-weight:600; display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-.output-word { background: rgba(59,130,246,0.08); padding:6px 8px; border-radius:6px; font-weight:700; color:#0B3D91; }
+.btn-learn-nav {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-/* replay small */
-.audio-btn.small { padding:6px 8px; font-size:13px; }
+.btn-learn-nav.btn-back {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+}
 
-/* feedback bubble */
-.feedback-bubble { position:absolute; left:22px; bottom:22px; max-width:260px; background:white; color:#0B3D91; padding:10px; border-radius:10px; box-shadow:0 8px 24px rgba(2,6,23,0.12); }
-.feedback-bubble .fb-arrow { position:absolute; left:18px; bottom:-8px; width:14px; height:14px; transform:rotate(45deg); background:white; }
+.btn-learn-nav.btn-back:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
 
-.footer-cta { display:flex; justify-content:center; margin-top:10px; }
-.btn-next { width:80%; max-width:560px; background:#10B981; color:white; border:none; padding:12px 16px; border-radius:10px; font-weight:700; cursor:pointer; opacity:0.9; }
-.btn-next[disabled] { opacity:0.45; cursor:not-allowed; }
+.btn-learn-nav.btn-home {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    padding: 0.6rem;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    justify-content: center;
+}
 
-.visually-hidden { display:none !important; }
-.pop-visible { animation: popIn .34s ease; }
-@keyframes popIn { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
+.btn-learn-nav.btn-home:hover {
+    transform: translateY(-3px) rotate(5deg);
+}
 
-@media (max-width:800px) {
-  .letter-grid { grid-template-columns: repeat(6,1fr); }
-  .ship-name { font-size:18px; }
+.current-unit-title {
+    font-weight: 700;
+    color: var(--ocean-blue);
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+
+/* ======== MAIN CONTENT (Salin dari Task 1) ======== */
+.main-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* ======== SIDEBAR (Salin dari Task 1) ======== */
+.task-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: sticky;
+    top: 20px;
+}
+
+/* Title Container (Salin dari Task 1) */
+.title-container {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(11, 90, 143, 0.3);
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.main-title {
+    color: var(--white);
+    padding: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.main-title i {
+    font-size: 1.5rem;
+}
+
+.sub-title {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: var(--white);
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Captain Image (Salin dari Task 1) */
+.captain-image {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
+    animation: float 3s ease-in-out infinite;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Speech Bubble (Salin dari Task 1) */
+.task-bubble {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    position: relative;
+    animation: fadeInUp 0.7s ease-out 0.2s both;
+}
+
+.task-bubble::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid var(--white);
+}
+
+.speech-text-task {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.task-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding-top: 15px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.task-controls i {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.task-controls .fa-play,
+.task-controls .fa-pause {
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.task-controls .fa-language {
+    background: var(--white);
+    color: var(--text-dark);
+    border: 2px solid #e5e7eb;
+}
+
+.task-controls i:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+/* ======== ACTIVITY AREA (Salin dari Task 1) ======== */
+.activity-area {
+    background: var(--white);
+    border-radius: 25px;
+    padding: 35px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.7s ease-out 0.4s both;
+}
+
+/* Activity Header (Salin dari Task 1) */
+.activity-area-title {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid var(--ocean-blue);
+    border-radius: 16px;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(11, 90, 143, 0.1);
+}
+
+.activity-area-title i {
+    width: 55px;
+    height: 55px;
+    background: rgba(11, 90, 143, 0.1);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--ocean-blue);
+    flex-shrink: 0;
+}
+
+.instruction-text-task {
+    font-size: 1rem;
+    color: var(--text-dark);
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 500;
+}
+
+.instruction-text-task strong {
+    color: var(--indigo);
+    font-weight: 700;
+}
+
+/* ======== [BARU] LOGBOOK FORM CONTAINER ======== */
+.logbook-form-container {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.part-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ocean-blue);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.assessment-list,
+.reflection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Jarak antar item */
+    margin-bottom: 30px;
+}
+
+.assessment-item,
+.reflection-item {
+    background: var(--white);
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.assessment-item:hover,
+.reflection-item:hover {
+    border-color: var(--indigo);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+/* Gaya untuk item yang sudah selesai (diisi) */
+.assessment-item.completed,
+.reflection-item.completed {
+    border-color: var(--success);
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.item-text {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.item-number {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* [BARU] SKALA LIKERT (Gaya Tombol dari Task 1) */
+.likert-scale {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.likert-scale label {
+    display: block;
+}
+
+.likert-scale input[type="radio"] {
+    display: none; /* Sembunyikan radio button asli */
+}
+
+.likert-scale input[type="radio"] + span {
+    display: block;
+    padding: 15px;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.likert-scale input[type="radio"]:hover + span {
+    border-color: var(--indigo);
+    background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+    transform: translateY(-3px);
+}
+
+.likert-scale input[type="radio"]:checked + span {
+    border-color: var(--indigo-dark);
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transform: translateY(-3px);
+}
+
+/* [BARU] AREA REFLEKSI (Gaya Input dari Task 1) */
+.item-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    display: block;
+    font-size: 1rem;
+}
+
+.item-input { /* Textarea */
+    width: 100%;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.item-input:focus {
+    outline: none;
+    border-color: var(--indigo);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* [BARU] TOMBOL SAVE (Gaya dari Task 1) */
+.save-logbook-button {
+    width: 100%;
+    padding: 18px 30px;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    margin-top: 20px;
+}
+
+.save-logbook-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+/* ======== FOOTER (Salin dari Task 1) ======== */
+.footer-nav {
+    text-align: right;
+    margin: 30px 20px 20px;
+}
+
+.continue-button {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    border: none;
+    padding: 18px 45px;
+    border-radius: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.continue-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+/* ======== ANIMATIONS (Salin dari Task 1) ======== */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* ======== RESPONSIVE (Salin dari Task 1) ======== */
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 320px 1fr;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    .task-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        margin: 15px;
+        padding: 12px 15px;
+    }
+    .current-unit-title span {
+        display: none;
+    }
+    .captain-image {
+        max-width: 200px;
+    }
+    .activity-area {
+        padding: 20px;
+    }
+    .activity-area-title {
+        flex-direction: column;
+        text-align: center;
+    }
+    .logbook-form-container {
+        padding: 20px;
+    }
+    .likert-scale {
+        grid-template-columns: repeat(2, 1fr); /* 2 kolom di tablet */
+    }
+    .footer-nav {
+        text-align: center;
+    }
+    .continue-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .likert-scale {
+        grid-template-columns: 1fr; /* 1 kolom di HP */
+    }
+    .item-text {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .item-number {
+        margin-bottom: 10px;
+    }
 }

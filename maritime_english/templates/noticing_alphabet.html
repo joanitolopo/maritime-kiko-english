@@ -1,108 +1,219 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Noticing — Alphabet Differences' }}{% endblock %}
+{% block title %}Unit {{ unit_id }} - Radio Spelling Practice{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_alphabet.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container my-4 noticing-alphabet-container" aria-live="polite">
-  <div class="noticing-scene shadow-lg">
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}" class="btn-learn-nav btn-back" aria-label="Back to Noticing Intro">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - Radio Spelling</span>
+        </div>
 
-    <!-- Avatar OS Lina (bottom-left) -->
-    <!-- <img src="{{ url_for('static', filename=section_content.avatar or 'img/kiko.png') }}"
-         alt="{{ section_content.avatar_alt or 'OS Lina' }}" class="oslina-avatar"> -->
-
-    <!-- Instruction Box -->
-    <div class="instruction-box">
-      <div class="lang-toggle">
-        <button id="alphabet-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
-      <p id="alphabet-instruction" class="lead">
-        {{ section_content.instruction_en or 'Click each pair to hear the difference.' }}
-      </p>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
     </div>
+</header>
 
-    <!-- Two-column table -->
-    <div class="table-wrap">
-      <table class="diff-table" role="table" aria-label="Alphabet differences: General English vs Maritime English">
-        <thead>
-          <tr>
-            <th>General English</th>
-            <th></th>
-            <th>Maritime English</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="pairs-body">
-          {# generate rows from JSON; if none provided, show a few example rows #}
-          {% if section_content.pairs %}
-            {% for pair in section_content.pairs %}
-              <tr data-pair="{{ pair.letter }}">
-                <td class="cell-general">{{ pair.general }}</td>
-                <td class="cell-action">
-                  <button class="audio-btn small pair-btn-general" data-src="{{ pair.general_audio }}" aria-label="Play {{ pair.general }}">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                  </button>
-                </td>
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="drill-sidebar">
+        
+        <!-- Title Container -->
+        <div class="title-container">
+            <div class="main-title">
+                <i class="fa-solid fa-anchor"></i>
+                Drill it Like a Sailor
+            </div>
+            <div class="sub-title">
+                Activity 6: Radio Spelling Practice
+            </div>
+        </div>
 
-                <td class="cell-maritime">{{ pair.maritime }}</td>
-                <td class="cell-action">
-                  <button class="audio-btn small pair-btn-maritime" data-src="{{ pair.maritime_audio }}" aria-label="Play {{ pair.maritime }}">
-                    <i class="fas fa-volume-up" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            <!-- fallback: a few sample rows -->
-            <tr data-pair="A">
-              <td class="cell-general">Bee</td>
-              <td class="cell-action">
-                <button class="audio-btn small pair-btn-general" data-src="/static/data/audio/noticing/alphabet/bee.wav" aria-label="Play Bee"><i class="fas fa-volume-up"></i></button>
-              </td>
-              <td class="cell-maritime">Bravo</td>
-              <td class="cell-action">
-                <button class="audio-btn small pair-btn-maritime" data-src="/static/data/audio/noticing/alphabet/bravo.wav" aria-label="Play Bravo"><i class="fas fa-volume-up"></i></button>
-              </td>
-            </tr>
-            <tr data-pair="C">
-              <td class="cell-general">See</td>
-              <td class="cell-action">
-                <button class="audio-btn small pair-btn-general" data-src="/static/data/audio/noticing/alphabet/see.wav" aria-label="Play See"><i class="fas fa-volume-up"></i></button>
-              </td>
-              <td class="cell-maritime">Charlie</td>
-              <td class="cell-action">
-                <button class="audio-btn small pair-btn-maritime" data-src="/static/data/audio/noticing/alphabet/charlie.wav" aria-label="Play Charlie"><i class="fas fa-volume-up"></i></button>
-              </td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
-    </div>
+        <!-- Captain Section -->
+        <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-image">
+        
+        <!-- Speech Bubble -->
+        <div class="drill-bubble">
+            <p class="speech-text-drill">
+                "Cadets, it's time to drill your pronunciation! Listen carefully to OS Lina's example, then spell and say each vessel's identification clearly - just like a real seafarer!"
+            </p>
+            
+            <div class="drill-controls">
+                <i class="fa-solid fa-play"></i>
+                <i class="fa-solid fa-language"></i>
+            </div>
+        </div>
+        
+    </aside>
 
-    <!-- Feedback bubble (hidden until first click) -->
-    <div id="alphabet-feedback" class="feedback-bubble d-none" role="status" aria-live="polite">
-      <img src="{{ url_for('static', filename=section_content.feedback_avatar or 'img/kiko.png') }}" alt="" class="fb-avatar">
-      <div id="fb-text">{{ section_content.feedback_text_en or 'Good listening! See the difference?' }}</div>
-    </div>
+    <!-- RIGHT CONTENT -->
+    <main class="activity-area">
+        
+        <!-- Activity Header -->
+        <div class="activity-area-title">
+            <i class="fa-solid fa-headphones"></i>
+            <p class="instruction-text-drill">
+                Listen to the example carefully. Then, read each card and say the ship's name, MMSI, and Call Sign clearly into your microphone.
+            </p>
+        </div>
+        
+        <!-- Activity Columns Container -->
+        <div class="activity-columns-container">
+            
+            <!-- LEFT COLUMN: Example -->
+            <div class="activity-wrapper">
+                
+                <!-- Example Window -->
+                <div class="example-window">
+                    <div class="window-header">
+                        <div class="header-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="window-title">Example</span>
+                    </div>
+                    
+                    <div class="window-body">
+                        <p>
+                            <span class="data-label">Vessel's Name:</span>
+                            <span class="data-value">ANTARES</span>
+                        </p>
+                        <p>
+                            <span class="data-label">MMSI:</span>
+                            <span class="data-value">257689000</span>
+                        </p>
+                        <p>
+                            <span class="data-label">Call Sign:</span>
+                            <span class="data-value">LAPW5</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Media Player -->
+                <div class="media-player-centered small">
+                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="OS Lina" class="media-image">
+                    <button id="play-example-audio" class="play-now-button">
+                        <i class="fa-solid fa-play"></i>
+                        <i class="fa-solid fa-pause"></i>
+                        <span class="btn-text">PLAY NOW</span>
+                    </button>
+                </div>
+                
+                <!-- Transcript Bubble -->
+                <div class="transcript-bubble small">
+                    "This is two-five-seven-six-eight-nine-zero-zero-zero, Motor Vessel ANTARES Alfa November Tango Alfa Romeo Echo Sierra, Call Sign Lima Alfa Papa Whisky Five"
+                </div>
+                
+            </div>
+            
+            <!-- RIGHT COLUMN: Practice Cards -->
+            <div class="activity-wrapper">
+                
+                <!-- Practice Card 1 -->
+                <div class="practice-card-group" data-card-index="0">
+                    <div class="example-window practice-card">
+                        <div class="window-header">
+                            <div class="header-dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="window-title">Card 1</span>
+                        </div>
+                        
+                        <div class="window-body">
+                            <p>
+                                <span class="data-label">Vessel's Name:</span>
+                                <span class="data-value">APOLLON</span>
+                            </p>
+                            <p>
+                                <span class="data-label">MMSI:</span>
+                                <span class="data-value">237002600</span>
+                            </p>
+                            <p>
+                                <span class="data-label">Call Sign:</span>
+                                <span class="data-value">SWFP</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mic-turn-box">
+                        <i class="fa-solid fa-microphone mic-icon-large"></i>
+                        <span>Your Turn</span>
+                    </div>
+                </div>
+                
+                <!-- Practice Card 2 -->
+                <div class="practice-card-group" data-card-index="1">
+                    <div class="example-window practice-card">
+                        <div class="window-header">
+                            <div class="header-dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="window-title">Card 2</span>
+                        </div>
+                        
+                        <div class="window-body">
+                            <p>
+                                <span class="data-label">Vessel's Name:</span>
+                                <span class="data-value">BAYSTAR</span>
+                            </p>
+                            <p>
+                                <span class="data-label">MMSI:</span>
+                                <span class="data-value">440983000</span>
+                            </p>
+                            <p>
+                                <span class="data-label">Call Sign:</span>
+                                <span class="data-value">DSON9</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mic-turn-box">
+                        <i class="fa-solid fa-microphone mic-icon-large"></i>
+                        <span>Your Turn</span>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </main>
 
-    <!-- Next Button -->
-    <div class="footer-action text-center">
-      <button id="alphabet-next" class="btn btn-success btn-lg d-none"
-              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section if section_content.start_next_section else 'noticing_numbers') }}">
-        {{ section_content.next_label or 'Next' }} <i class="fas fa-arrow-right ms-1"></i>
-      </button>
-    </div>
-
-    <!-- shared audio element used by JS -->
-    <audio id="pair-audio" preload="auto"></audio>
-
-  </div>
 </div>
+
+<!-- FOOTER -->
+<footer class="footer-nav">
+    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_numbers') }}" class="continue-button">
+        <span>Continue</span>
+        <i class="fas fa-chevron-right ms-1"></i>
+    </a>
+</footer>
+
 {% endblock %}
 
 {% block page_js %}
-<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
-<script src="{{ url_for('static', filename='js/noticing_alphabet.js') }}" defer></script>
+<script>
+    window.UNIT_CONTENT = {{ (content or {})|tojson|safe }};
+    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
+<script src="{{ url_for('static', filename='js/noticing_alphabet.js') }}"></script>
 {% endblock %}

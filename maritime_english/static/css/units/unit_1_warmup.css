@@ -1,594 +1,937 @@
-/* ============================================
-   GLOBAL STYLE & TYPOGRAPHY
-   Catatan: Ini sebaiknya ada di file CSS global (seperti base.css)
-   agar tidak perlu di-load di setiap halaman.
-============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans:wght@400;600&display=swap');
+/* ========================================
+   MODERN WARMUP PAGE CSS
+   Catchy, Dynamic & Responsive Design
+======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+:root {
+    --ocean-blue: #0B5A8F;
+    --ocean-deep: #064273;
+    --sky-light: #e3f4ff;
+    --coral: #10b981;
+    --coral-dark: #059669;
+    --gold: #f59e0b;
+    --success: #10b981;
+    --error: #ef4444;
+    --white: #ffffff;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: #F9FAFB;
-    color: #111827;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+    min-height: 100vh;
 }
 
-h1, h2 {
-    font-family: 'Montserrat', sans-serif;
-    color: #0B3D91;
-}
-
-/* --- PERUBAHAN BARU --- */
-/* Sembunyikan nav 'Back to Home' dari base.html */
-nav.navbar {
-  display: none !important;
-}
-
-/* Style untuk Tombol 'X' (Close Scene) */
-.scene-close-button {
-  position: absolute;
-  top: 1rem; /* Beda dari scene intro, ini relatif ke container */
-  right: 1.5rem; 
-  font-size: 2.5rem;
-  font-weight: 300;
-  color: #0B3D91; /* Buat warna biru tua agar terlihat di background putih */
-  opacity: 0.6;
-  text-decoration: none;
-  line-height: 1;
-  z-index: 100; /* Di atas segalanya */
-  transition: opacity 0.2s ease;
-}
-.scene-close-button:hover {
-  opacity: 1;
-}
-/* --- Akhir Perubahan --- */
-
-/* ============================================
-   LAYOUT & SHARED COMPONENTS
-============================================ */
-.intro-scene, .wrapup-scene {
-    position: relative;
-    width: 100%;
-    background: linear-gradient(180deg, #1E3A8A 0%, #3B82F6 100%);
-    border-radius: 16px;
-    padding: 2rem;
+/* ======== HEADER (SAMA SEPERTI INTRO) ======== */
+.top-bar {
     display: flex;
-    align-items: flex-end;
-    min-height: 70vh;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
-.character-img, .wrapup-avatar {
-    position: absolute;
-    bottom: 0;
-    left: 40px;
-    height: 70%;
-    max-height: 420px;
-    object-fit: contain;
-    animation: slideUp 1s ease-out forwards;
-    transform: translateY(100%);
-    z-index: 2;
-}
-/* Khusus untuk avatar di wrap-up */
-.wrapup-avatar {
-    height: auto;
-    width: 200px; /* Ukuran lebih kecil untuk wrap-up */
-    max-height: none;
+.header-right-group {
+    gap: 0.75rem;
 }
 
-
-.dialogue-box, .wrapup-dialogue-box {
-    position: relative;
-    background: rgba(255,255,255,0.85);
-    border-radius: 16px;
-    padding: 1.5rem;
-    width: 55%;
-    margin-left: 30%;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    animation: fadeIn 1.2s ease-out forwards;
-    z-index: 3;
-}
-.wrapup-dialogue-box {
-    width: auto;
-    max-width: 600px;
-    margin-left: 260px; /* Beri ruang untuk avatar */
-    margin-bottom: 0;
-    text-align: center;
-}
-
-.dialogue-box p {
-    font-size: 18px;
-    line-height: 1.6;
-}
-
-/* Tombol ganti bahasa yang konsisten */
-.lang-toggle {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    z-index: 5;
-}
-.toggle-pill {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #E5E7EB;
-    color: #111827;
-    border: none;
-    border-radius: 999px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-.toggle-pill:hover { background-color: #DBEAFE; }
-
-/* ============================================
-   SHARED BUTTONS
-============================================ */
-
-/* Tombol Aksi Utama (Kuning & Hijau) */
-.dialogue-footer {
-    margin-top: 1.5rem;
-    text-align: center;
-}
-
-.btn-start-game {
-    /* Ini akan menimpa .btn-success */
-    background-color: #FACC15;
-    color: #111827;
-    border-color: #FACC15;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+.btn-learn-nav {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
     border-radius: 12px;
-    padding: 0.9rem 1rem;
-    font-size: 18px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    animation: bounceIn 1s ease-out;
-    transition: transform 0.2s, background-color 0.3s;
-}
-.btn-start-game:hover {
-    background-color: #EAB308;
-    color: #111827;
-    border-color: #EAB308;
-    transform: translateY(-2px);
-}
-
-/* Tombol Hijau (Next/Continue/Finish) */
-.btn-action-next {
-    /* Style ini untuk #to-activity-2, #to-activity-3, #go-input-btn */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    border-radius: 12px;
-    padding: 0.8rem 1rem;
-    width: 70%;
-    max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-.btn-action-next:hover {
-    transform: translateY(-2px);
-}
-
-/* Tombol Audio (Bulat) */
-.audio-play-btn, .audio-btn {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background-color: #2563EB;
-    border: none;
-    color: #fff;
-    font-size: 1.2rem;
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-learn-nav.btn-back {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+}
+
+.btn-learn-nav.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.current-unit-title {
+    font-weight: 700;
+    color: var(--ocean-blue);
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-learn-nav.btn-home {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    padding: 0.6rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    width: 45px;
+    height: 45px;
     justify-content: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.audio-play-btn:hover, .audio-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 12px rgba(37,99,255,0.6);
 }
 
-/* ============================================
-   ACTIVITY 1: QUICK PICK GAME
-============================================ */
-#warmup-game {
-    background: linear-gradient(180deg, #1E3A8A 0%, #3B82F6 100%);
-    border-radius: 18px;
-    padding: 2rem;
+.btn-learn-nav.btn-home:hover {
+    transform: translateY(-2px) rotate(5deg);
+}
+
+/* ======== WARMUP CONTAINER ======== */
+.warmup-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* ======== LEFT SIDEBAR ======== */
+.warmup-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: sticky;
+    top: 20px;
+}
+
+/* Activity Badge */
+.activity-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.badge-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--white);
+}
+
+.badge-text h4 {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.badge-text p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Captain Instruction Card */
+.captain-instruction-card {
+    animation: fadeInUp 0.7s ease-out 0.2s both;
+}
+
+.captain-avatar-wrapper {
+    text-align: center;
     position: relative;
-    min-height: 75vh;
-    color: #fff; /* Teks default putih di game */
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-}
-
-/* Avatar Kiko di dalam game */
-#warmup-game::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 40px;
-    width: 180px;
-    height: 280px;
-    background: url("../img/kiko.png") bottom left / contain no-repeat;
+    margin-bottom: -50px;
     z-index: 2;
 }
 
-#warmup-game .alert-info {
-    background: rgba(255, 255, 255, 0.85);
-    border: 2px solid #2563EB;
-    border-radius: 16px;
-    color: #111827;
-    font-size: 18px;
-    font-weight: 500;
-    text-align: center;
-    width: 80%;
-    margin: 0 auto 1.5rem auto;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+.captain-avatar {
+    height: 250px;
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
+    animation: float 3s ease-in-out infinite;
 }
 
-/* Tombol Grid Game */
-.game-grid-container {
+/* Radio Waves Animation */
+.radio-waves {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+}
+
+.radio-waves span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    animation: radioWave 2s ease-out infinite;
+}
+
+.radio-waves span:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.radio-waves span:nth-child(3) {
+    animation-delay: 1.4s;
+}
+
+/* Instruction Bubble */
+.instruction-bubble {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 60px 25px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    position: relative;
+}
+
+.instruction-bubble::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid var(--white);
+    filter: drop-shadow(0 -3px 3px rgba(0, 0, 0, 0.05));
+}
+
+.bubble-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.bubble-header i {
+    color: var(--ocean-blue);
+    font-size: 1.2rem;
+}
+
+.bubble-header span {
+    font-weight: 700;
+    color: var(--ocean-blue);
+    font-size: 1rem;
+}
+
+.speech-text-warmup {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.warmup-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 15px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.control-btn.audio-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.control-btn.audio-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.control-btn.translate-btn {
+    background: var(--white);
+    color: var(--text-dark);
+    border: 2px solid #e5e7eb;
+}
+
+.control-btn.translate-btn:hover {
+    border-color: var(--ocean-blue);
+    background: #f9fafb;
+}
+
+/* ======== MAIN CONTENT ======== */
+.warmup-main {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeInUp 0.7s ease-out 0.4s both;
+}
+
+/* Activity Card */
+.activity-card {
+    background: var(--white);
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Activity Header */
+.activity-header {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.activity-number {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.header-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.header-text p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.play-audio-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background: var(--white);
+    color: var(--ocean-blue);
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.play-audio-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.play-audio-btn.playing {
+    background: #ef4444;
+    color: var(--white);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+/* Activity Body */
+.activity-body {
+    padding: 35px;
+}
+
+/* Radio Display */
+.radio-display {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.radio-img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Audio Wave Animation */
+.audio-wave {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 5px;
+    margin-top: 15px;
+    height: 40px;
 }
-.game-grid {
-    max-width: 600px;
+
+.audio-wave span {
+    width: 4px;
+    height: 20px;
+    background: var(--ocean-blue);
+    border-radius: 4px;
+    animation: audioWave 1.2s ease-in-out infinite;
+}
+
+.audio-wave span:nth-child(2) { animation-delay: 0.2s; }
+.audio-wave span:nth-child(3) { animation-delay: 0.4s; }
+.audio-wave span:nth-child(4) { animation-delay: 0.6s; }
+.audio-wave span:nth-child(5) { animation-delay: 0.8s; }
+
+/* Instruction Text */
+.instruction-text {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
-}
-.letter-btn {
-    background-color: #3B82F6;
-    color: #fff;
-    border: none;
+    gap: 10px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     border-radius: 12px;
-    width: 100%;
-    min-width: 80px;
-    min-height: 80px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 28px;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: all 0.25s ease;
-}
-.letter-btn:hover {
-    background-color: #2563EB;
-    transform: scale(1.05);
-    box-shadow: 0 0 12px rgba(59,130,246,0.6);
-}
-.letter-btn:active {
-    transform: scale(0.95);
-}
-.letter-btn .btn-icon {
-    position: absolute;
-    bottom: 6px;
-    right: 6px;
-    width: 22px;
-    height: 22px;
-    opacity: 0.85;
+    margin-bottom: 25px;
 }
 
-/* Feedback Tombol */
-.btn-correct {
-    background-color: #10B981 !important;
-    animation: pop-in 0.3s ease;
-}
-.btn-wrong {
-    background-color: #EF4444 !important;
-    animation: shake 0.3s ease;
+.instruction-text i {
+    font-size: 1.5rem;
+    color: var(--ocean-blue);
 }
 
-/* Speech Bubble Feedback */
-#feedback {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #2563EB;
-    border-radius: 16px;
-    padding: 1rem 1.5rem;
-    width: fit-content;
-    max-width: 300px;
-    position: absolute;
-    bottom: 130px;
-    left: 180px;
-    font-size: 16px;
-    color: #111827;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 10;
-
-    /* animasi gabungan: muncul lalu hilang */
-    animation: pop-in 0.4s ease-out, fade-out 0.4s ease-in 2.4s forwards;
-    /* ↑ fade-out mulai setelah 2.4 detik (jadi tampil sekitar 2 detik sebelum hilang) */
+.instruction-text p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
 }
 
-/* animasi muncul */
-@keyframes pop-in {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+/* Code Grid */
+.code-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
 }
 
-/* animasi hilang */
-@keyframes fade-out {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.95);
-        pointer-events: none;
-    }
-}
-
-
-/* Tombol Play Audio (Kompas) */
-.btn-compass {
-    background: linear-gradient(135deg, #3B82F6, #2563EB);
-    color: #fff;
+.code-btn {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
     border: none;
-    border-radius: 50%;
-    width: 90px;
-    height: 90px;
+    border-radius: 16px;
+    padding: 25px 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(6, 66, 115, 0.3);
+}
+
+.code-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(6, 66, 115, 0.4);
+}
+
+.code-letter {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.code-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.code-btn.playing {
+    background: linear-gradient(135deg, var(--gold) 0%, #d97706 100%);
+    animation: pulse 0.5s ease;
+}
+
+.code-btn.correct {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    animation: success-bounce 0.5s ease;
+}
+
+.code-btn.incorrect {
+    background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
+    animation: shake 0.5s ease;
+}
+
+/* Captain Display */
+.captain-display {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.captain-speaking {
+    height: 220px;
+    object-fit: contain;
+    animation: float 3s ease-in-out infinite 0.5s;
+}
+
+/* Speech Indicator */
+.speech-indicator {
+    display: flex;
     justify-content: center;
     gap: 6px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    margin-top: 15px;
+}
+
+.speech-indicator span {
+    width: 10px;
+    height: 10px;
+    background: var(--ocean-blue);
+    border-radius: 50%;
+    animation: speechBubble 1s ease-in-out infinite;
+}
+
+.speech-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.speech-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+/* MCQ Form */
+.mcq-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mcq-option {
     cursor: pointer;
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(37,99,235,0.4);
+}
+
+.mcq-option input[type="radio"] {
+    display: none;
+}
+
+.option-content {
+    background: var(--white);
+    border: 3px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     transition: all 0.3s ease;
-    animation: pulse-wave 2.2s infinite;
-}
-.btn-compass img {
-    width: 36px;
-    height: 36px;
-    animation: rotate-slow 4s linear infinite;
-}
-.btn-compass:hover {
-    transform: scale(1.07);
-    box-shadow: 0 0 25px rgba(59,130,246,0.6);
-    background: linear-gradient(135deg, #60A5FA, #2563EB);
-}
-.btn-compass:active {
-    transform: scale(0.95);
 }
 
-
-/* ============================================
-   ACTIVITY 2: VIDEO & QUIZ
-============================================ */
-.quiz-box {
-    background: rgba(255,255,255,0.9);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+.mcq-option:hover .option-content {
+    border-color: var(--ocean-blue);
+    background: #f9fafb;
+    transform: translateX(5px);
 }
 
-iframe {
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(37,99,235,0.5);
-    transition: box-shadow 0.3s ease;
-    border: none;
-    width: 75%;
-    max-width: 800px; /* Batas maks video */
-}
-iframe:hover {
-    box-shadow: 0 0 30px rgba(37,99,235,0.7);
-}
-
-.quiz-label {
+.option-letter {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background: #E5E7EB;
-    border-radius: 12px;
-    padding: 0.8rem 1rem;
-    margin: 0.5rem auto;
-    width: 100%;
-    max-width: 500px; /* Batasi lebar opsi kuis */
-    transition: background 0.3s;
-    cursor: pointer;
-}
-.quiz-label:hover {
-    background-color: #DBEAFE;
-}
-.quiz-radio {
-    accent-color: #2563EB;
-    transform: scale(1.3);
-}
-.quiz-radio:checked + span {
-    color: #2563EB;
+    font-size: 1.3rem;
     font-weight: 700;
+    flex-shrink: 0;
 }
 
-
-/* ============================================
-   ACTIVITY 3: WRAP-UP
-   (Style utama sudah di bagian atas)
-============================================ */
-/* Animasi pulse khusus untuk tombol "Go" */
-.pulse-green {
-    animation: pulse-green 1.6s infinite;
-}
-@keyframes pulse-green {
-    0% { box-shadow: 0 0 0 0 rgba(16,185,129, 0.6); }
-    70% { box-shadow: 0 0 0 10px rgba(16,185,129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16,185,129, 0); }
+.option-text {
+    flex: 1;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
-/* ============================================
-   ANIMASI
-============================================ */
-
-/* Animasi umum */
-@keyframes slideUp {
-    to { transform: translateY(0); }
-}
-@keyframes fadeIn { 
-    from { opacity: 0; transform: translateY(20px);} 
-    to { opacity: 1; transform: translateY(0);} 
-}
-@keyframes pop-in {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
-}
-
-/* Animasi Tombol */
-@keyframes bounceIn {
-    0% { transform: scale(0.9); opacity: 0; }
-    60% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); }
-}
-@keyframes pulse-wave {
-    0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
-    50% { box-shadow: 0 0 0 15px rgba(37,99,235,0); }
-    100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
-}
-@keyframes rotate-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* ============================================
-   RESPONSIVE
-============================================ */
-@media (max-width: 768px) {
-    .intro-scene, .wrapup-scene {
-        min-height: 80vh;
-        align-items: flex-start; /* Mulai dari atas di HP */
-        padding-top: 4rem;
-    }
-    .dialogue-box, .wrapup-dialogue-box {
-        width: 100%;
-        margin-left: 0;
-        margin-bottom: 1rem;
-    }
-    .wrapup-dialogue-box {
-        margin-left: 0;
-        margin-top: 220px; /* Beri ruang untuk avatar di bawah */
-    }
-
-    .character-img {
-        left: 50%;
-        transform: translateX(-50%) translateY(100%);
-        height: 50%;
-        max-height: 280px;
-        top: auto;
-        bottom: 0; /* Pindahkan ke bawah */
-        animation: slideUp 1s ease-out forwards; /* Animasi tetap sama */
-    }
-    .wrapup-avatar {
-        left: 50%;
-        transform: translateX(-50%) translateY(100%);
-        width: 180px;
-        top: 20px; /* Posisikan di atas dialogue box */
-        bottom: auto;
-        animation: fadeIn 1s ease-out; /* Ganti animasi */
-    }
-
-    #warmup-game::before {
-      display: none; 
-    }
-
-    #feedback {
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 20px;
-        width: 90%;
-    }
-
-    .btn-action-next {
-        width: 90%;
-    }
-
-    iframe {
-        width: 100%;
-        height: 250px;
-    }
-    .quiz-label {
-        width: 95%;
-    }
-}
-
-@media (max-width: 576px) {
-  h1 {
+.option-icon {
     font-size: 1.5rem;
-    margin-top: 1.25rem;
-    line-height: 1.3;
-  }
-  
-  .intro-scene, .wrapup-scene {
-    padding: 1rem;
-    padding-top: 3rem;
-    min-height: 75vh;
-  }
-  .wrapup-dialogue-box {
-    margin-top: 180px; /* Kurangi margin atas */
-  }
-  .wrapup-avatar {
-    width: 150px; /* Kecilkan avatar */
-    top: 15px;
-  }
-  
-  .dialogue-box p {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  .btn-start-game, .btn-action-next {
-    font-size: 16px;
-    padding: 0.75rem 1rem;
-  }
-
-  .letter-btn {
-    min-height: 70px;
-    font-size: 24px;
-  }
-
-  .btn-compass {
-    width: 80px;
-    height: 80px;
-    font-size: 12px;
-    gap: 4px;
-  }
-  .btn-compass img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .quiz-label {
-    padding: 0.7rem 1rem;
-  }
-
-  #warmup-game .alert-info {
-    font-size: 16px;
-    width: 95%;
-  }
-
-  .scene-close-button {
-    font-size: 2.25rem;
-  }
+    color: var(--success);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
+/* MCQ Selected State */
+.mcq-option input[type="radio"]:checked + .option-content {
+    border-color: var(--ocean-blue);
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+/* MCQ Correct Answer */
+.mcq-option.correct .option-content {
+    border-color: var(--success);
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    animation: success-bounce 0.5s ease;
+}
+
+.mcq-option.correct .option-icon {
+    opacity: 1;
+}
+
+/* MCQ Incorrect Answer */
+.mcq-option.incorrect .option-content {
+    border-color: var(--error);
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    animation: shake 0.5s ease;
+}
+
+.mcq-option.incorrect .option-icon {
+    opacity: 1;
+    color: var(--error);
+}
+
+/* Disabled state */
+.mcq-form.answered .mcq-option {
+    cursor: not-allowed;
+}
+
+.mcq-form.answered .mcq-option:not(.correct):not(.incorrect) {
+    opacity: 0.5;
+}
+
+/* Feedback Box */
+.feedback-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: slideInUp 0.5s ease;
+}
+
+.feedback-box.success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: 2px solid var(--success);
+}
+
+.feedback-box.error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border: 2px solid var(--error);
+}
+
+.feedback-icon {
+    font-size: 2rem;
+}
+
+.feedback-box.success .feedback-icon {
+    color: var(--success);
+}
+
+.feedback-box.error .feedback-icon {
+    color: var(--error);
+}
+
+.feedback-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Continue Wrapper */
+.continue-wrapper {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.btn-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    border-radius: 18px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-continue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-continue:hover::before {
+    left: 100%;
+}
+
+.btn-continue:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+/* ======== ANIMATIONS ======== */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes radioWave {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes audioWave {
+    0%, 100% {
+        height: 20px;
+    }
+    50% {
+        height: 45px;
+    }
+}
+
+@keyframes speechBubble {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes success-bounce {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 1200px) {
+    .warmup-container {
+        grid-template-columns: 320px 1fr;
+    }
+}
+
+@media (max-width: 992px) {
+    .warmup-container {
+        grid-template-columns: 1fr;
+    }
+
+    .warmup-sidebar {
+        position: static;
+    }
+
+    .code-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        margin: 15px;
+    }
+
+    .current-unit-title span {
+        display: none;
+    }
+
+    .activity-badge {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .captain-avatar {
+        height: 200px;
+    }
+
+    .activity-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .play-audio-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .code-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .code-btn {
+        padding: 20px 10px;
+    }
+
+    .code-letter {
+        font-size: 2rem;
+    }
+
+    .captain-speaking {
+        height: 180px;
+    }
+
+    .option-text {
+        font-size: 1rem;
+    }
+
+    .continue-wrapper {
+        text-align: center;
+    }
+
+    .btn-continue {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .warmup-container {
+        padding: 0 10px 30px;
+    }
+
+    .activity-body {
+        padding: 20px;
+    }
+
+    .radio-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .code-grid {
+        gap: 10px;
+    }
+
+    .code-btn {
+        padding: 15px 8px;
+    }
+
+    .code-letter {
+        font-size: 1.8rem;
+    }
+
+    .code-label {
+        font-size: 0.75rem;
+    }
+
+    .option-letter {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
+    .option-text {
+        font-size: 0.95rem;
+    }
+}

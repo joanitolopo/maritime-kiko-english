@@ -1,108 +1,301 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - NATO Numbers 0–9{% endblock %}
+{% block title %}Unit {{ unit_id }} - NATO Numbers 0-9{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/input_numbers.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="container my-4 numbers-page">
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_alphabet') }}" class="btn-learn-nav btn-back" aria-label="Back to alphabet">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - NATO Numbers</span>
+        </div>
 
-  <!-- --- PERUBAHAN BARU --- -->
-  <!-- Tombol Navigasi Kustom -->
-  
-  <!-- Tombol Previous (kembali ke input_alphabet) -->
-  <!-- (Pastikan 'input_alphabet' adalah nama section yang benar) -->
-  <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_alphabet') }}" class="scene-prev-button" aria-label="Previous section">
-      <i class="fas fa-arrow-left"></i>
-  </a>
-  
-  <!-- Tombol Close (kembali ke home/daftar unit) -->
-  <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
-  <!-- --- AKHIR PERUBAHAN --- -->
-
-  <div class="numbers-scene shadow-lg" role="region" aria-label="NATO Numbers 0 to 9">
-    <!-- Decorative radio panel background -->
-    <div class="radio-panel-bg" aria-hidden="true"></div>
-
-    <!-- Avatar OS Lina (bottom-left) -->
-    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="OS Lina" class="avatar-lina" />
-
-    <!-- Instruction Box -->
-    <div class="instruction-box">
-      <div class="lang-toggle">
-        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
-
-      <p id="instruction-text" class="lead">
-        Click a number to hear how it is said on the radio.
-      </p>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
     </div>
+</header>
 
-    <!-- Interactive grid (2 x 5) -->
-    <div class="grid-area">
-      <div class="numbers-grid" id="numbers-grid" role="grid" aria-label="Numbers grid">
-        {% for n in range(10) %}
-        <div class="grid-cell" role="gridcell">
-          <button type="button"
-                  class="number-tile"
-                  data-number="{{ n }}"
-                  aria-label="Number {{ n }}"
-                  aria-pressed="false"
-                  title="{{ n }}">
-            <span class="num">{{ n }}</span>
-            <span class="tile-audio" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
-          </button>
+<!-- MAIN CONTENT -->
+<div class="numbers-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="numbers-sidebar">
+        
+        <!-- Activity Badge -->
+        <div class="activity-badge">
+            <div class="badge-icon">
+                <i class="fas fa-hashtag"></i>
+            </div>
+            <div class="badge-text">
+                <h4>Master the Numbers</h4>
+                <p>Activity 3: Numbers 0-9</p>
+            </div>
         </div>
-        {% endfor %}
-      </div>
 
-      <!-- Radio panel with blinking indicator -->
-      <div class="radio-panel">
-        <div class="radio-screen" id="radio-screen" aria-hidden="true">
-          <div class="screen-number" id="screen-number">—</div>
+        <!-- Captain Card -->
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captain-radio_check_3.png') }}" alt="Captain" class="captain-avatar">
+                <div class="number-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="instruction-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>Captain's Instructions</span>
+                </div>
+                <p class="speech-text-numbers">
+                    "Cadet, you've mastered the alphabet — well done! Now, let's train your ears for numbers at sea! Echo each number you hear and keep your radio voice steady!"
+                </p>
+                <div class="numbers-controls">
+                    <button class="control-btn audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="radio-indicators">
-          <div class="indicator" id="radio-indicator" aria-hidden="true"></div>
-          <div class="indicator-label">Radio</div>
+
+        <!-- Progress Indicator -->
+        <!-- <div class="progress-card">
+            <div class="progress-header">
+                <i class="fas fa-trophy"></i>
+                <span>Your Progress</span>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="numbers-played">0</span>
+                    <span class="stat-label">Numbers Played</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">Total Numbers</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="achievement-badge" id="achievement" style="display: none;">
+                <i class="fas fa-medal"></i>
+                <span>All Numbers Mastered!</span>
+            </div>
+        </div> -->
+
+    </aside>
+
+    <!-- RIGHT CONTENT -->
+    <main class="numbers-main">
+        
+        <!-- Numbers Grid Card -->
+        <section class="numbers-card">
+            <div class="numbers-header">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fas fa-sort-numeric-up"></i>
+                    </div>
+                    <div class="header-text">
+                        <h3>NATO Phonetic Numbers</h3>
+                        <p>Master radio communication numbers 0-9</p>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn" id="play-all-btn" title="Play all numbers">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Play All</span>
+                    </button>
+                    <button class="action-btn" id="test-mode-btn" title="Test your knowledge">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Test Mode</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="numbers-body">
+                <!-- Instruction Banner -->
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-radio"></i>
+                    </div>
+                    <div class="banner-text">
+                        <h4>Radio Communication Practice</h4>
+                        <p>Click any number to hear its radio pronunciation. Practice saying it clearly!</p>
+                    </div>
+                </div>
+
+                <!-- Numbers Grid -->
+                <div class="numbers-grid">
+                    <button class="number-box" data-code="zeero" data-number="0">
+                        <div class="number-display">
+                            <span class="number-main">0</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">ZE-RO</span>
+                        <div class="number-phonetic">Zee-roh</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="wun" data-number="1">
+                        <div class="number-display">
+                            <span class="number-main">1</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">WUN</span>
+                        <div class="number-phonetic">Wun</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="too" data-number="2">
+                        <div class="number-display">
+                            <span class="number-main">2</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">TOO</span>
+                        <div class="number-phonetic">Too</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="tree" data-number="3">
+                        <div class="number-display">
+                            <span class="number-main">3</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">TREE</span>
+                        <div class="number-phonetic">Tree</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="fower" data-number="4">
+                        <div class="number-display">
+                            <span class="number-main">4</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">FOWER</span>
+                        <div class="number-phonetic">Fow-er</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="fife" data-number="5">
+                        <div class="number-display">
+                            <span class="number-main">5</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">FIFE</span>
+                        <div class="number-phonetic">Fife</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="six" data-number="6">
+                        <div class="number-display">
+                            <span class="number-main">6</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">SIX</span>
+                        <div class="number-phonetic">Six</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="seven" data-number="7">
+                        <div class="number-display">
+                            <span class="number-main">7</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">SEVEN</span>
+                        <div class="number-phonetic">Sev-en</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="eight" data-number="8">
+                        <div class="number-display">
+                            <span class="number-main">8</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">AIT</span>
+                        <div class="number-phonetic">Ait</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+
+                    <button class="number-box" data-code="niner" data-number="9">
+                        <div class="number-display">
+                            <span class="number-main">9</span>
+                            <div class="number-pulse"></div>
+                        </div>
+                        <span class="number-code">NINER</span>
+                        <div class="number-phonetic">Nin-er</div>
+                        <div class="number-sound">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Practice Section -->
+                <div class="practice-section" id="practice-section" style="display: none;">
+                    <div class="practice-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h4>Quick Practice</h4>
+                    </div>
+                    <div class="practice-question">
+                        <p>What number is: <strong id="practice-code"></strong>?</p>
+                        <div class="practice-options" id="practice-options"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Continue Button -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_mmsi') }}" class="btn-continue">
+                <span>Continue to MMSI</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-      </div>
 
-      <!-- Practice prompt and replay -->
-      <div class="practice-area">
-        <div class="practice-box">
-          <div class="practice-text" id="practice-text">
-            Example: YB321
-          </div>
-          <button id="practice-replay" class="btn btn-practice" aria-label="Replay practice prompt">
-            <i class="fas fa-redo"></i> Replay
-          </button>
-        </div>
-      </div>
+    </main>
 
-      <!-- Feedback bubble (OS Lina) -->
-      <div id="feedback-bubble" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
-        <div class="fb-arrow"></div>
-        <div class="fb-content">Good! You sounded clear.</div>
-      </div>
-    </div>
+</div>
 
-    <!-- Footer / Next -->
-    <!-- di bagian footer / Next -->
-    <div class="footer-cta">
-      <button id="next-btn" class="btn btn-next" type="button"
-              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"
-              aria-label="Next to MMSI example">Next</button>
-              
-      <a id="continue-link" class="visually-hidden" 
-        href="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section) if section_content and section_content.start_next_section else '' }}"></a>
-    </div>
-  </div>
-</main>
 {% endblock %}
 
 {% block page_js %}
-<script> window.UNIT_CONTENT = {{ content|tojson|safe }}; window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script>
+    window.UNIT_CONTENT = {{ (content or {})|tojson|safe }};
+    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
 <script src="{{ url_for('static', filename='js/input_numbers.js') }}"></script>
 {% endblock %}
-

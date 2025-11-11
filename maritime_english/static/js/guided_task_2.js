@@ -1,259 +1,266 @@
-// static/js/guided_task_2.js
-// Behavior: replay example, letter grid -> play NATO audio + append NATO word to output with typing effect,
-// enable Next when student completes target name. Uses SECTION_CONTENT to get example name/spelling.
+// ========================================
+// MODERN GUIDED TASK 2 JAVASCRIPT
+// Logbook Reflection
+// ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const SECTION = window.SECTION_CONTENT || {};
-  const UNIT = window.UNIT_CONTENT || {};
-  const exampleName = (SECTION.example_name || 'PACIFIC STAR').replace(/^MV\s*/i, '').trim().toUpperCase();
-  const exampleSequence = SECTION.example_sequence || (SECTION.example_spelling || '').split(/\s*[,–\-–]\s*|\s+/).filter(Boolean);
-  const audioExample = document.getElementById('audio-example');
-  const btnReplayExample = document.getElementById('replay-example');
-  const letterGrid = document.getElementById('letter-grid');
-  const spellingOutput = document.getElementById('spelling-output');
-  const replayOutputBtn = document.getElementById('replay-output');
-  const feedback = document.getElementById('gt2-feedback');
-  const fbContent = feedback ? feedback.querySelector('.fb-content') : null;
-  const nextBtn = document.getElementById('gt2-next');
-  const langToggle = document.getElementById('gt2-lang-toggle');
-  const instructionEl = document.getElementById('gt2-instruction');
+    console.log('📋 Logbook Reflection Initialized!');
 
-  // NATO word map (audio filenames follow project's pattern)
-  const NATO_WORDS = {
-    A: {word:'Alpha', audio:'/static/data/audio/alphabet/a_alpha.wav'},
-    B: {word:'Bravo', audio:'/static/data/audio/alphabet/b_bravo.wav'},
-    C: {word:'Charlie', audio:'/static/data/audio/alphabet/c_charlie.wav'},
-    D: {word:'Delta', audio:'/static/data/audio/alphabet/d_delta.wav'},
-    E: {word:'Echo', audio:'/static/data/audio/alphabet/e_echo.wav'},
-    F: {word:'Foxtrot', audio:'/static/data/audio/alphabet/f_foxtrot.wav'},
-    G: {word:'Golf', audio:'/static/data/audio/alphabet/g_golf.wav'},
-    H: {word:'Hotel', audio:'/static/data/audio/alphabet/h_hotel.wav'},
-    I: {word:'India', audio:'/static/data/audio/alphabet/i_india.wav'},
-    J: {word:'Juliett', audio:'/static/data/audio/alphabet/j_juliett.wav'},
-    K: {word:'Kilo', audio:'/static/data/audio/alphabet/k_kilo.wav'},
-    L: {word:'Lima', audio:'/static/data/audio/alphabet/l_lima.wav'},
-    M: {word:'Mike', audio:'/static/data/audio/alphabet/m_mike.wav'},
-    N: {word:'November', audio:'/static/data/audio/alphabet/n_november.wav'},
-    O: {word:'Oscar', audio:'/static/data/audio/alphabet/o_oscar.wav'},
-    P: {word:'Papa', audio:'/static/data/audio/alphabet/p_papa.wav'},
-    Q: {word:'Quebec', audio:'/static/data/audio/alphabet/q_quebec.wav'},
-    R: {word:'Romeo', audio:'/static/data/audio/alphabet/r_romeo.wav'},
-    S: {word:'Sierra', audio:'/static/data/audio/alphabet/s_sierra.wav'},
-    T: {word:'Tango', audio:'/static/data/audio/alphabet/t_tango.wav'},
-    U: {word:'Uniform', audio:'/static/data/audio/alphabet/u_uniform.wav'},
-    V: {word:'Victor', audio:'/static/data/audio/alphabet/v_victor.wav'},
-    W: {word:'Whiskey', audio:'/static/data/audio/alphabet/w_whiskey.wav'},
-    X: {word:'X-ray', audio:'/static/data/audio/alphabet/x_xray.wav'},
-    Y: {word:'Yankee', audio:'/static/data/audio/alphabet/y_yankee.wav'},
-    Z: {word:'Zulu', audio:'/static/data/audio/alphabet/z_zulu.wav'}
-  };
+    // ==================================================
+    // ELEMENTS & STATE
+    // ==================================================
+    const playBtn_sidebar = document.querySelector('.task-controls .fa-play');
+    const translateBtn_sidebar = document.querySelector('.task-controls .fa-language');
+    const speechText_sidebar = document.querySelector('.speech-text-task');
+    const instructionText_activity = document.querySelector('.instruction-text-task');
 
-  // preload letter audio objects for responsiveness
-  const audioCache = {};
-  Object.keys(NATO_WORDS).forEach(letter => {
-    try {
-      const src = NATO_WORDS[letter].audio;
-      const a = new Audio(src);
-      a.preload = 'auto';
-      audioCache[letter] = a;
-    } catch(e) { console.warn('preload failed for', letter, e); }
-  });
+    const likertInputs = document.querySelectorAll('.likert-scale input[type="radio"]');
+    const textInputs = document.querySelectorAll('.item-input');
+    const saveButton = document.querySelector('.save-logbook-button');
 
-  // util: create span element for NATO word in output
-  function appendOutputWord(word) {
-    const span = document.createElement('span');
-    span.className = 'output-word';
-    span.textContent = word;
-    spellingOutput.appendChild(span);
-  }
+    const audio_sidebar = new Audio();
+    let isTranslated = false;
 
-  // typing animation for adding word (very small)
-  function typeAppend(word) {
-    // append quickly character by character into a temporary element, then replace with full word to keep simple
-    const temp = document.createElement('span');
-    temp.className = 'output-word';
-    temp.textContent = '';
-    spellingOutput.appendChild(temp);
-    let i = 0;
-    const step = () => {
-      if (i >= word.length) return;
-      temp.textContent += word[i++];
-      setTimeout(step, 22);
-    };
-    step();
-  }
+    // Ambil konten dari window object (didefinisikan di HTML)
+    const originalText_sidebar = window.SIDEBAR_CONTENT?.original || '"Error: Teks tidak dimuat"';
+    const translatedText_sidebar = window.SIDEBAR_CONTENT?.translated || '"Error: Teks tidak dimuat"';
+    const audioPath_sidebar = window.SIDEBAR_CONTENT?.audioPath || '';
 
-  // Reset output and enable visual states
-  function clearOutput() {
-    spellingOutput.innerHTML = '';
-  }
-
-  // Check completion: compare spelled NATO sequence to expected for exampleName
-  function checkCompletion(targetName) {
-    // derive letters from current output
-    const words = Array.from(spellingOutput.querySelectorAll('.output-word')).map(n => n.textContent.trim());
-    // if no expected sequence provided, derive from targetName letters mapping to NATO_WORDS
-    let expected = [];
-    if (Array.isArray(exampleSequence) && exampleSequence.length) {
-      expected = exampleSequence.map(s => (''+s).trim());
-    } else {
-      expected = targetName.split('').map(ch => {
-        if (ch === ' ') return null;
-        const L = ch.toUpperCase();
-        return NATO_WORDS[L] ? NATO_WORDS[L].word : L;
-      }).filter(Boolean);
-    }
-    // compare lengths and items (case-insensitive)
-    if (words.length !== expected.length) return false;
-    for (let i=0;i<expected.length;i++){
-      if (!words[i]) return false;
-      if (words[i].toLowerCase() !== expected[i].toLowerCase()) return false;
-    }
-    return true;
-  }
-
-  // Play letter: flash button, play audio, append NATO word
-  function handleLetterPress(letterBtn) {
-    const letter = (letterBtn.dataset.letter || '').toUpperCase();
-    if (!letter) return;
-    const nato = NATO_WORDS[letter];
-    if (!nato) return;
-    // visual flash
-    letterBtn.classList.add('active');
-    setTimeout(()=> letterBtn.classList.remove('active'), 420);
-
-    // play audio if cached
-    const aud = audioCache[letter];
-    if (aud) {
-      aud.currentTime = 0;
-      aud.play().catch(err => { /* ignore play error */ });
-    }
-
-    // append NATO word with tiny typing
-    typeAppend(nato.word);
-
-    // after appending, check if completed
-    setTimeout(() => {
-      if (checkCompletion(exampleName)) {
-        // show feedback, enable Next
-        showFeedback(SECTION.feedback_good || 'Well done! You spelled it clearly.');
-        if (nextBtn) { nextBtn.disabled = false; nextBtn.classList.add('ready'); }
-      }
-    }, 450);
-  }
-
-  // attach grid handlers
-  if (letterGrid) {
-    letterGrid.addEventListener('click', (ev) => {
-      const btn = ev.target.closest('.letter-btn');
-      if (!btn) return;
-      handleLetterPress(btn);
-    });
-
-    // keyboard support
-    letterGrid.querySelectorAll('.letter-btn').forEach(btn => {
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
-      });
-    });
-  }
-
-  // Replay example spelled audio
-  if (btnReplayExample && audioExample) {
-    btnReplayExample.addEventListener('click', async () => {
-      try {
-        audioExample.currentTime = 0;
-        await audioExample.play();
-      } catch (err) {
-        console.warn('example audio play failed', err);
-        // fall back: play example sequence via letter audio if example_sequence present
-        if (Array.isArray(exampleSequence) && exampleSequence.length) {
-          // exampleSequence may contain letters or NATO words; attempt to map letters to audio
-          (async () => {
-            for (let i=0;i<exampleSequence.length;i++){
-              const token = exampleSequence[i];
-              const letter = (token || '').toString().trim().charAt(0).toUpperCase();
-              const a = audioCache[letter];
-              if (a) {
-                a.currentTime = 0;
-                try { await a.play(); await new Promise(res => a.addEventListener('ended', res, {once:true})); } catch(e){}
-              } else {
-                await new Promise(r => setTimeout(r, 180));
-              }
+    // ==================================================
+    // SIDEBAR CONTROLS (Disesuaikan dari Task 1)
+    // ==================================================
+    if (playBtn_sidebar) {
+        playBtn_sidebar.addEventListener('click', function() {
+            if (audio_sidebar.paused) {
+                audio_sidebar.src = audioPath_sidebar;
+                audio_sidebar.play()
+                    .then(() => {
+                        playBtn_sidebar.classList.remove('fa-play');
+                        playBtn_sidebar.classList.add('fa-pause');
+                    })
+                    .catch(error => {
+                        console.error('Audio error:', error);
+                        showNotification('Audio file not found or failed to play.', 'error');
+                    });
+            } else {
+                audio_sidebar.pause();
+                playBtn_sidebar.classList.remove('fa-pause');
+                playBtn_sidebar.classList.add('fa-play');
             }
-          })();
+        });
+
+        audio_sidebar.addEventListener('ended', () => {
+            playBtn_sidebar.classList.remove('fa-pause');
+            playBtn_sidebar.classList.add('fa-play');
+        });
+    }
+
+    if (translateBtn_sidebar) {
+        translateBtn_sidebar.addEventListener('click', function() {
+            if (isTranslated) {
+                speechText_sidebar.textContent = originalText_sidebar;
+                isTranslated = false;
+            } else {
+                speechText_sidebar.textContent = translatedText_sidebar;
+                isTranslated = true;
+            }
+        });
+    }
+
+    // ==================================================
+    // FORM INTERACTIVITY
+    // ==================================================
+
+    // 1. Umpan balik Skala Likert
+    likertInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            const item = input.closest('.assessment-item');
+            if (item) {
+                item.classList.add('completed');
+                playSuccessSound();
+            }
+        });
+    });
+
+    // 2. Umpan balik Textarea
+    textInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            const item = input.closest('.reflection-item');
+            if (item) {
+                if (input.value.trim() !== '') {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            }
+        });
+    });
+
+    // ==================================================
+    // SAVE LOGBOOK VALIDATION
+    // ==================================================
+    if (saveButton) {
+        saveButton.addEventListener('click', () => {
+            if (validateForm()) {
+                // Sukses
+                showNotification('Logbook saved successfully!', 'success');
+                // Di aplikasi nyata, di sinilah Anda akan mengirim data ke server
+                // saveButton.disabled = true;
+                // saveButton.querySelector('span').textContent = 'Saving...';
+            } else {
+                // Gagal
+                showNotification('Please complete all fields before saving.', 'error');
+                shakeElement(saveButton);
+            }
+        });
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        // Validasi Part A (Likert)
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        const q3 = document.querySelector('input[name="q3"]:checked');
+
+        if (!q1) {
+            document.querySelector('.assessment-item[data-question="q1"]').classList.add('error-shake');
+            isValid = false;
         }
-      }
-    });
-  }
-
-  // Replay output: replay the sequence just produced (sequentially)
-  if (replayOutputBtn) {
-    replayOutputBtn.addEventListener('click', async () => {
-      const spans = Array.from(spellingOutput.querySelectorAll('.output-word'));
-      if (!spans.length) return;
-      for (let i=0;i<spans.length;i++){
-        const word = spans[i].textContent.trim();
-        // find letter by matching NATO_WORDS
-        const letter = Object.keys(NATO_WORDS).find(L => NATO_WORDS[L].word.toLowerCase() === word.toLowerCase());
-        if (letter) {
-          const aud = audioCache[letter];
-          if (aud) {
-            try {
-              aud.currentTime = 0;
-              await aud.play();
-              await new Promise(res => aud.addEventListener('ended', res, {once:true}));
-            } catch(e){ /* ignore */ }
-          }
-        } else {
-          await new Promise(r => setTimeout(r, 160));
+        if (!q2) {
+             document.querySelector('.assessment-item[data-question="q2"]').classList.add('error-shake');
+            isValid = false;
         }
-      }
-    });
-  }
+        if (!q3) {
+             document.querySelector('.assessment-item[data-question="q3"]').classList.add('error-shake');
+            isValid = false;
+        }
+        
+        // Validasi Part B (Textarea)
+        const r1 = document.getElementById('r1').value.trim();
+        const r2 = document.getElementById('r2').value.trim();
+        const r3 = document.getElementById('r3').value.trim();
 
-  // Next button navigation
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (nextBtn.disabled) {
-        alert('Please finish spelling the example name correctly to continue.');
-        return;
-      }
-      const href = nextBtn.dataset.next;
-      if (href) {
-        nextBtn.classList.add('glow-redirect');
-        setTimeout(()=> window.location.href = href, 180);
-      }
-    });
-  }
+        if (r1 === '') {
+            document.querySelector('.reflection-item[data-question="r1"]').classList.add('error-shake');
+            isValid = false;
+        }
+        if (r2 === '') {
+            document.querySelector('.reflection-item[data-question="r2"]').classList.add('error-shake');
+            isValid = false;
+        }
+        if (r3 === '') {
+            document.querySelector('.reflection-item[data-question="r3"]').classList.add('error-shake');
+            isValid = false;
+        }
+        
+        // Hapus animasi shake setelah selesai
+        setTimeout(() => {
+            document.querySelectorAll('.error-shake').forEach(el => el.classList.remove('error-shake'));
+        }, 500);
 
-  // feedback helper
-  function showFeedback(msg) {
-    if (!feedback) return;
-    const content = feedback.querySelector('.fb-content');
-    if (content) content.textContent = msg;
-    feedback.classList.remove('visually-hidden');
-    feedback.classList.add('pop-visible');
-    setTimeout(() => { feedback.classList.add('visually-hidden'); feedback.classList.remove('pop-visible'); }, 3200);
-  }
+        return isValid;
+    }
 
-  // language toggle: swap instruction and example spelling text
-  if (langToggle) {
-    langToggle.addEventListener('click', () => {
-      const isEn = langToggle.textContent.trim().toUpperCase() === 'EN';
-      const next = isEn ? 'ID' : 'EN';
-      langToggle.textContent = next;
-      // swap instruction text
-      if (instructionEl) instructionEl.textContent = (next === 'EN') ? (SECTION.instruction_en || instructionEl.textContent) : (SECTION.instruction_id || instructionEl.textContent);
-      // swap example spelling display if provided translations
-      const exampleSpellingText = next === 'EN' ? (SECTION.example_spelling || SECTION.example_spelling_en || '') : (SECTION.example_spelling_id || '');
-      if (document.getElementById('ship-spelling-example')) {
-        document.getElementById('ship-spelling-example').textContent = exampleSpellingText || document.getElementById('ship-spelling-example').textContent;
-      }
-    });
-  }
 
-  // initial reset
-  clearOutput();
+    // ==================================================
+    // HELPER FUNCTIONS (Salin dari Task 1)
+    // ==================================================
+    
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
+    }
 
+    function playSuccessSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            setTimeout(() => oscillator.stop(), 200);
+        } catch (e) {
+            console.log('Success sound not available');
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle',
+            warning: 'fa-exclamation-triangle'
+        };
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+        
+        notification.innerHTML = `
+            <i class="fas ${icons[type]}"></i>
+            <span>${message}</span>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid ${colors[type]};
+            color: ${colors[type]};
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    console.log('✅ Logbook Reflection Ready!');
 });
+
+// Tambahkan animasi notifikasi (Salin dari Task 1)
+const styles = document.createElement('style');
+styles.textContent = `
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(100px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideOutRight {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(100px); }
+    }
+
+    .error-shake {
+        animation: shake 0.5s;
+    }
+`;
+document.head.appendChild(styles);

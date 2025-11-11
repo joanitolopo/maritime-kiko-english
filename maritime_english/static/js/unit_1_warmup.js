@@ -1,222 +1,408 @@
-// =========================
-// Activity 1: Quick Pick Game
-// =========================
-document.addEventListener('DOMContentLoaded', function() {
-    const intro = document.getElementById('warmup-intro');
-    const game = document.getElementById('warmup-game');
-    const startBtn = document.getElementById('start-game-btn');
-    const playBtn = document.getElementById('play-audio');
-    const feedback = document.getElementById('feedback');
-    const roundSpan = document.getElementById('round');
-    const nextBtn = document.getElementById('to-activity-2');
-    const langToggleBtn = document.getElementById('lang-toggle-btn');
-    const dialogueTextEl = document.getElementById('dialogue-text');
+// ========================================
+// MODERN WARMUP PAGE JAVASCRIPT
+// Enhanced with smooth interactions
+// ========================================
 
-    const dialogueSentences = [
-        {
-            en: "Hi friends! I just joined this ship as an Ordinary Seaman. I’m still learning, just like you. Let’s play a quick game before we learn the full alphabet and numbers. You’ll hear a sound — like ‘Sierra’ or ‘Niner’ — and you need to click the correct letter or number. Don’t worry, it’s just for fun. Ready? Let’s go!",
-            id: "Hai teman-teman! Saya baru saja bergabung dengan kapal ini sebagai Pelaut Biasa. Aku masih belajar, sama seperti kalian. Mari kita mainkan permainan singkat sebelum kita mempelajari alfabet dan angka lengkap. Anda akan mendengar suara - seperti 'Sierra' atau 'Niner' - dan Anda harus mengklik huruf atau angka yang benar. Jangan khawatir, ini hanya untuk bersenang-senang. Siap? Ayo mulai!",
-            audio: "/static/data/audio/tts-audio01.wav"
-        }
-    ];
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🎯 Warmup Activity Initialized!');
 
-    const questions = [
-        { term: "Sierra", answer: "S" },
-        { term: "Oscar", answer: "O" },
-        { term: "Alpha", answer: "A" },
-        { term: "Charlie", answer: "C" },
-        { term: "ZEE-ro", answer: "0" },
-        { term: "WUN", answer: "1" },
-        { term: "FIFE", answer: "5" },
-        { term: "NIN-er", answer: "9" }
-    ];
+    // ==================================================
+    // ELEMENTS & AUDIO PLAYERS
+    // ==================================================
 
-    const audioFiles = {
-        "Sierra": "sierra.wav",
-        "Oscar": "oscar.wav",
-        "Alpha": "alpha.wav",
-        "Charlie": "charlie.wav",
-        "ZEE-ro": "zero.wav",
-        "WUN": "one.wav",
-        "FIFE": "five.wav",
-        "NIN-er": "niner.wav"
-    };
+    // Sidebar Controls
+    const audioBtn_warmup = document.querySelector('.warmup-controls .audio-btn i');
+    const translateBtn_warmup = document.querySelector('.warmup-controls .translate-btn');
+    const speechText_warmup = document.querySelector('.speech-text-warmup');
 
-    let currentRound = 0;
-    let currentAnswer = null;
-    let currentLang = 'en';
-    let gameActive = false;
+    // Activity 1: Grid
+    const playBtn_grid = document.getElementById('play-grid-audio');
+    const codeButtons = document.querySelectorAll('.code-btn');
 
-    // 🚀 Start Activity 1
-    startBtn.addEventListener('click', () => {
-        intro.classList.add('d-none');
-        game.classList.remove('d-none');
-        roundSpan.textContent = "1";
-        feedback.classList.add('d-none');
-        gameActive = true;
-    });
+    // Activity 2: MCQ
+    const playBtn_mcq = document.getElementById('play-mcq-audio');
+    const mcqForm = document.querySelector('.mcq-form');
+    const mcqOptions = document.querySelectorAll('.mcq-option');
+    const radioButtons = document.querySelectorAll('.mcq-form input[name="shipname"]');
+    const feedbackBox = document.getElementById('mcq-feedback');
 
-    // 🌐 Toggle Language
-    langToggleBtn.addEventListener('click', () => {
-        currentLang = currentLang === 'en' ? 'id' : 'en';
-        langToggleBtn.textContent = currentLang.toUpperCase();
-        dialogueTextEl.textContent = dialogueSentences[0][currentLang];
-    });
+    // Audio Players
+    const audio_warmup = new Audio();
+    const audio_grid_main = new Audio();
+    const audio_mcq_main = new Audio();
+    const audio_code_item = new Audio();
 
-    // 🎧 Play sound untuk soal aktif
-    playBtn.addEventListener('click', () => {
-        if (!gameActive || currentRound >= questions.length) return;
+    const allAudios = [audio_warmup, audio_grid_main, audio_mcq_main, audio_code_item];
+    
+    let currentActiveButton = null;
+    let currentPlayingCode = null;
 
-        const q = questions[currentRound];
-        currentAnswer = q.answer;
+    // ==================================================
+    // CONTENT & AUDIO PATHS
+    // ==================================================
 
-        const audioPath = `/static/data/audio/warmup/${audioFiles[q.term]}`;
-        const audio = new Audio(audioPath);
-        audio.play().catch(err => console.error("Audio play failed:", err));
+    // Text Content
+    const originalText_warmup = `"Cadet, tune your ears to the radio! Identify each code word you hear, let's see if your radio ears are sharp!"`;
+    const translatedText_warmup = `"Taruna, arahkan pendengaranmu ke radio! Kenali setiap kode kata yang kamu dengar — mari kita lihat seberapa tajam pendengaran radionya!"`;
+    let isTranslated_warmup = false;
 
-        // Reset feedback dan warna tombol
-        feedback.classList.add('d-none');
-        document.querySelectorAll('.letter-btn').forEach(b => {
-            b.classList.remove('btn-correct', 'btn-wrong');
-        });
-    });
+    // Audio Paths
+    const audioPath_warmup = '/static/data/audio/unit1/warmup_intro.wav';
+    const audioPath_grid_main = '/static/data/audio/unit1/warmup_radio_check_1.wav';
+    const audioPath_mcq_main = '/static/data/audio/unit1/warmup_spell_ship_name.wav';
+    const natoAudioBasePath = '/static/data/audio/nato/';
 
-    // 🎯 User menjawab
-    document.querySelectorAll('.letter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (!gameActive || !currentAnswer) return;
+    // Correct Answer
+    const correctAnswerMCQ = 'SAILEX';
 
-            document.querySelectorAll('.letter-btn').forEach(b => {
-                b.classList.remove('btn-correct', 'btn-wrong');
-            });
+    // ==================================================
+    // MAIN AUDIO CONTROL FUNCTIONS
+    // ==================================================
 
-            if (btn.dataset.value === currentAnswer) {
-                // ✅ Benar
-                btn.classList.add('btn-correct');
-                feedback.className = "alert alert-success mt-3";
-                feedback.textContent = "✅ Correct! Well done, Cadet.";
-                feedback.classList.remove("d-none");
-
-                // Lanjut ke ronde berikut
-                currentRound++;
-                if (currentRound < questions.length) {
-                    roundSpan.textContent = currentRound + 1;
-                    currentAnswer = null; // supaya harus tekan Play lagi
-                } else {
-                    // 🎉 Semua selesai
-                    roundSpan.textContent = questions.length;
-                    feedback.textContent = "🏁 Great job! You've completed the warm-up!";
-                    playBtn.disabled = true;
-                    nextBtn.classList.remove('d-none');
-                    gameActive = false;
-                }
-            } else {
-                // ❌ Salah
-                btn.classList.add('btn-wrong');
-                feedback.className = "alert alert-danger mt-3";
-                feedback.textContent = "❌ Not quite. Try again.";
-                feedback.classList.remove("d-none");
-                setTimeout(() => btn.classList.remove('btn-wrong'), 400);
+    function stopAllAudio() {
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
             }
         });
-    });
+        
+        // Reset sidebar button
+        if (audioBtn_warmup) {
+            audioBtn_warmup.classList.remove('fa-pause');
+            audioBtn_warmup.classList.add('fa-play');
+        }
 
-    // ⏩ Next ke Activity 2
-    nextBtn.addEventListener('click', () => {
-        document.getElementById('activity-1').classList.add('d-none');
-        document.getElementById('activity-2').classList.remove('d-none');
-    });
+        // Reset play buttons
+        if (playBtn_grid) {
+            playBtn_grid.classList.remove('playing');
+            playBtn_grid.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
+        }
+        if (playBtn_mcq) {
+            playBtn_mcq.classList.remove('playing');
+            playBtn_mcq.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
+        }
+        
+        // Reset code buttons
+        codeButtons.forEach(btn => btn.classList.remove('playing'));
+        
+        currentActiveButton = null;
+        currentPlayingCode = null;
+    }
 
-    // =========================
-    // Activity 2: Video + Quiz
-    // =========================
-    const quizForm = document.getElementById('quiz-form');
-    const quizFeedback = document.getElementById('quiz-feedback');
-    const toActivity3Btn = document.getElementById('to-activity-3');
-    let wrongCount = 0;
-
-    quizForm.addEventListener('change', (e) => {
-    const selected = e.target.value;
-    if (!selected) return;
-
-    if (selected === "SAILEX") {
-        quizFeedback.className = "alert alert-success mt-3 animate-pop";
-        quizFeedback.textContent = "✅ Excellent! You caught it.";
-        quizFeedback.classList.remove("d-none");
-        toActivity3Btn.classList.remove('d-none');
-    } else {
-        wrongCount++;
-        quizFeedback.className = "alert alert-danger mt-3 animate-pop";
-        quizFeedback.textContent = "❌ Not quite. Watch again carefully.";
-        quizFeedback.classList.remove("d-none");
-
-        if (wrongCount >= 2) {
-        quizFeedback.innerHTML += `<br><button id="retry-video" class="btn btn-outline-primary mt-2">Retry Video</button>`;
-        document.getElementById('retry-video').addEventListener('click', () => {
-            const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src; // reload video
-            wrongCount = 0;
-            quizFeedback.classList.add('d-none');
-        });
+    function playMainAudio(button, audioPlayer, audioSrc) {
+        if (currentActiveButton === button && !audioPlayer.paused) {
+            // Pause
+            audioPlayer.pause();
+            button.classList.remove('playing');
+            button.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
+            currentActiveButton = null;
+        } else {
+            // Play
+            stopAllAudio();
+            audioPlayer.src = audioSrc;
+            audioPlayer.play()
+                .then(() => {
+                    button.classList.add('playing');
+                    button.innerHTML = '<i class="fas fa-pause"></i><span>Playing...</span>';
+                    currentActiveButton = button;
+                })
+                .catch(error => {
+                    console.error('❌ Audio playback error:', error);
+                    shakeElement(button);
+                });
         }
     }
-    });
 
-    // 🚀 Move ke Activity 3
-    toActivity3Btn.addEventListener('click', () => {
-        console.log("➡️ Moving to Wrap-up..."); // optional untuk debugging
-        document.getElementById('activity-2').classList.add('d-none');
-        document.getElementById('activity-3').classList.remove('d-none');
-    });
-
-    // =========================
-    // Activity 3: Wrap-up
-    // =========================
-    const wrapupTextEl = document.getElementById('wrapup-text');
-    const wrapupLangToggle = document.getElementById('wrapup-lang-toggle');
-    const wrapupPlayBtn = document.getElementById('wrapup-play');
-    const goInputBtn = document.getElementById('go-input-btn');
-
-    const wrapupAudio = new Audio("/static/data/audio/wrapup_lina_en.wav");
-
-    const wrapupTexts = {
-        en: "Great job! You’ve just tried the special alphabet and numbers used on ships. Next, Captain Ray will show you the full version so you can use it like real sailors.",
-        id: "Kerja bagus! Kalian baru saja mencoba alfabet dan angka khusus yang digunakan di kapal. Selanjutnya, Kapten Ray akan menunjukkan versi lengkapnya supaya kalian bisa menggunakannya seperti pelaut sungguhan."
-    };
-
-    let currentWrapLang = 'en';
-    let isPlaying = false;
-
-    // 🎧 Audio play/pause
-    wrapupPlayBtn.addEventListener('click', () => {
-    if (!isPlaying) {
-        wrapupAudio.play();
-        isPlaying = true;
-        wrapupPlayBtn.classList.add('pulse');
-        wrapupPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-        wrapupAudio.pause();
-        isPlaying = false;
-        wrapupPlayBtn.classList.remove('pulse');
-        wrapupPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+    function resetMCQForm() {
+        if (mcqForm) {
+            mcqForm.reset();
+            mcqForm.classList.remove('answered');
+        }
+        mcqOptions.forEach(option => {
+            option.classList.remove('correct', 'incorrect', 'selected');
+        });
+        radioButtons.forEach(radio => {
+            radio.disabled = false;
+        });
+        if (feedbackBox) {
+            feedbackBox.style.display = 'none';
+        }
     }
+
+    function showFeedback(isCorrect, message) {
+        if (!feedbackBox) return;
+        
+        const icon = feedbackBox.querySelector('.feedback-icon');
+        const text = feedbackBox.querySelector('.feedback-text');
+        
+        feedbackBox.className = 'feedback-box';
+        feedbackBox.classList.add(isCorrect ? 'success' : 'error');
+        
+        icon.className = 'feedback-icon fas ' + (isCorrect ? 'fa-check-circle' : 'fa-times-circle');
+        text.textContent = message;
+        
+        feedbackBox.style.display = 'flex';
+    }
+
+    // ==================================================
+    // SIDEBAR WARMUP CONTROLS
+    // ==================================================
+
+    if (audioBtn_warmup) {
+        audioBtn_warmup.parentElement.addEventListener('click', function() {
+            if (audio_warmup.paused) {
+                stopAllAudio();
+                audio_warmup.src = audioPath_warmup;
+                audio_warmup.play()
+                    .then(() => {
+                        audioBtn_warmup.classList.remove('fa-play');
+                        audioBtn_warmup.classList.add('fa-pause');
+                        addPulseEffect(this);
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this);
+                    });
+            } else {
+                audio_warmup.pause();
+                audioBtn_warmup.classList.remove('fa-pause');
+                audioBtn_warmup.classList.add('fa-play');
+                removePulseEffect(this);
+            }
+        });
+
+        audio_warmup.addEventListener('ended', () => {
+            audioBtn_warmup.classList.remove('fa-pause');
+            audioBtn_warmup.classList.add('fa-play');
+            removePulseEffect(audioBtn_warmup.parentElement);
+        });
+    }
+
+    if (translateBtn_warmup) {
+        translateBtn_warmup.addEventListener('click', function() {
+            stopAllAudio();
+            
+            fadeTransition(speechText_warmup, () => {
+                if (isTranslated_warmup) {
+                    speechText_warmup.textContent = originalText_warmup;
+                    isTranslated_warmup = false;
+                } else {
+                    speechText_warmup.textContent = translatedText_warmup;
+                    isTranslated_warmup = true;
+                }
+            });
+            
+            addClickEffect(this);
+        });
+    }
+
+    // ==================================================
+    // ACTIVITY 1: CODE GRID
+    // ==================================================
+
+    if (playBtn_grid) {
+        playBtn_grid.addEventListener('click', function() {
+            playMainAudio(this, audio_grid_main, audioPath_grid_main);
+        });
+
+        audio_grid_main.addEventListener('ended', () => {
+            playBtn_grid.classList.remove('playing');
+            playBtn_grid.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
+            currentActiveButton = null;
+        });
+    }
+
+    // Code Button Clicks
+    codeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const code = this.dataset.code;
+            if (!code) return;
+
+            // Stop other audio but allow this to play
+            if (currentPlayingCode !== this) {
+                codeButtons.forEach(btn => btn.classList.remove('playing'));
+            }
+
+            audio_code_item.src = `${natoAudioBasePath}${code}.wav`;
+            audio_code_item.play()
+                .then(() => {
+                    this.classList.add('playing');
+                    currentPlayingCode = this;
+                })
+                .catch(error => {
+                    console.error('❌ Code audio error:', error);
+                    shakeElement(this);
+                });
+
+            audio_code_item.onended = () => {
+                this.classList.remove('playing');
+                currentPlayingCode = null;
+            };
+        });
     });
 
-    // reset when audio ends
-    wrapupAudio.addEventListener('ended', () => {
-    isPlaying = false;
-    wrapupPlayBtn.classList.remove('pulse');
-    wrapupPlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+    // ==================================================
+    // ACTIVITY 2: MCQ
+    // ==================================================
+
+    if (playBtn_mcq) {
+        playBtn_mcq.addEventListener('click', function() {
+            resetMCQForm();
+            playMainAudio(this, audio_mcq_main, audioPath_mcq_main);
+        });
+
+        audio_mcq_main.addEventListener('ended', () => {
+            playBtn_mcq.classList.remove('playing');
+            playBtn_mcq.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
+            currentActiveButton = null;
+        });
+    }
+
+    // MCQ Answer Checking
+    if (mcqForm) {
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                stopAllAudio();
+
+                const selectedValue = this.value;
+                const selectedOption = this.closest('.mcq-option');
+
+                // Disable all options
+                radioButtons.forEach(btn => btn.disabled = true);
+                mcqForm.classList.add('answered');
+                selectedOption.classList.add('selected');
+
+                if (selectedValue === correctAnswerMCQ) {
+                    // Correct Answer
+                    selectedOption.classList.add('correct');
+                    showFeedback(true, '🎉 Excellent! That\'s the correct ship name!');
+                } else {
+                    // Incorrect Answer
+                    selectedOption.classList.add('incorrect');
+                    showFeedback(false, '❌ Not quite right. Listen again and try!');
+                    
+                    // Show correct answer
+                    setTimeout(() => {
+                        mcqOptions.forEach(option => {
+                            const radio = option.querySelector('input[type="radio"]');
+                            if (radio.value === correctAnswerMCQ) {
+                                option.classList.add('correct');
+                            }
+                        });
+                    }, 500);
+                }
+            });
+        });
+    }
+
+    // ==================================================
+    // HELPER FUNCTIONS
+    // ==================================================
+
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
+    }
+
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.classList.add('playing');
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.classList.remove('playing');
+    }
+
+    function addClickEffect(element) {
+        if (!element) return;
+        element.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 150);
+    }
+
+    function fadeTransition(element, callback) {
+        if (!element) return;
+        
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            callback();
+            element.style.opacity = '1';
+        }, 300);
+    }
+
+    // ==================================================
+    // SMOOTH INTERACTIONS
+    // ==================================================
+
+    // Continue button hover
+    const continueBtn = document.querySelector('.btn-continue');
+    if (continueBtn) {
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    }
+
+    // Character hover effects
+    const captainAvatar = document.querySelector('.captain-avatar');
+    const captainSpeaking = document.querySelector('.captain-speaking');
+
+    if (captainAvatar) {
+        captainAvatar.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        captainAvatar.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    if (captainSpeaking) {
+        captainSpeaking.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        captainSpeaking.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // ==================================================
+    // ENTRANCE ANIMATIONS
+    // ==================================================
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     });
 
-    // 🌐 Toggle Language
-    wrapupLangToggle.addEventListener('click', () => {
-    currentWrapLang = currentWrapLang === 'en' ? 'id' : 'en';
-    wrapupLangToggle.textContent = currentWrapLang.toUpperCase();
-    wrapupTextEl.classList.remove('fade-in');
-    void wrapupTextEl.offsetWidth; // reflow for animation
-    wrapupTextEl.textContent = wrapupTexts[currentWrapLang];
-    wrapupTextEl.classList.add('fade-in');
+    const animatedElements = document.querySelectorAll('.activity-card, .continue-wrapper');
+    
+    animatedElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+        observer.observe(el);
     });
 
+    console.log('✅ All warmup features ready!');
+    console.log('🎵 Audio systems initialized');
+    console.log('🎯 Interactive activities loaded');
 });

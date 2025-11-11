@@ -1,65 +1,217 @@
-/* Style untuk Desktop (default):
-  Membuat form login tampil sebagai 'card' yang rapi di tengah.
-*/
-.login-form-wrapper {
-    position: relative; /* PENTING: Agar tombol 'X' bisa diposisikan */
-    max-width: 450px; /* Lebar maksimum form, menggantikan 'w-50' */
-    margin: 2rem auto 0 auto; /* Menengahkan form dan memberi jarak atas */
-    padding: 2.5rem;
-    background-color: #ffffff;
-    border-radius: 8px; /* Sudut membulat */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bayangan halus */
-    border: 1px solid #dee2e6; /* Garis tepi tipis */
+/* login.css */
+/* CSS LAMA DIHAPUS TOTAL DAN DIGANTI DENGAN INI */
+
+/* Latar belakang halaman (abu-abu muda) */
+body {
+  background-color: #f0f2f5;
 }
 
-/* --- STYLE UNTUK TOMBOL 'X' BARU --- */
-.close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    font-size: 2rem; /* Ukuran ikon 'x' */
-    font-weight: 300; /* Membuat 'x' terlihat lebih tipis/modern */
-    color: #aaa;
+/* Header (garis putus-putus, sama seperti index/register) */
+.hero-header {
+  border-bottom: 2px dashed #003087;
+  background: #fff !important;
+}
+
+.hero-header .logo-img {
+    height: 45px; /* Standarisasi tinggi logo */
+}
+
+/* Wrapper untuk memberi padding */
+.login-page-wrapper {
+  padding: 3rem 0;
+}
+
+/* Kotak putih utama yang membungkus konten */
+.login-box {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #dee2e6;
+}
+
+/* Judul "Log In" */
+.login-title {
+  color: #003087;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+/* Label Form: "Email", "Password" */
+.form-label {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Input Form */
+.form-control-lg {
+  padding: 0.75rem 1.1rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+}
+
+.form-control-lg:focus {
+    border-color: #003087;
+    box-shadow: 0 0 0 0.25rem rgba(0, 48, 135, 0.25);
+}
+
+/* Link "Forgot Password?" */
+.forgot-password-link {
+    font-size: 0.9rem;
+    font-family: 'Open Sans', sans-serif;
+    color: #003087;
     text-decoration: none;
-    line-height: 1;
-    transition: color 0.2s ease;
 }
 
-.close-button:hover {
-    color: #333; /* Warna saat di-hover */
-}
-/* --- AKHIR STYLE TOMBOL 'X' --- */
-
-
-.login-form-wrapper h1 {
-    margin-bottom: 1.5rem; /* Jarak antara judul 'Login' dan form */
+.forgot-password-link:hover {
+    text-decoration: underline;
 }
 
+/* Garis Pemisah Vertikal */
+.vertical-divider {
+  border-left: 2px solid #003087;
+  height: 100%;
+  min-height: 150px; /* Tinggi minimum */
+}
 
-/* Style untuk Mobile (Responsive):
-  Menargetkan layar di bawah 768px.
+/* Tombol "Enter" (Biru Muda) */
+.btn-login {
+  background: #e6f0ff; /* Biru muda */
+  color: #003087; /* Teks biru tua */
+  border: 1px solid #b3d1ff; /* Border biru sedikit lebih tua */
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background: #cce4ff; /* Sedikit lebih gelap saat hover */
+  color: #003087;
+}
+
+/* Link "New here?" */
+.register-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  color: #555;
+}
+
+.register-link a {
+  font-weight: 600;
+  color: #003087; /* Warna link (bisa diganti ke teal/hijau jika perlu) */
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* --- Penyesuaian Mobile --- */
+@media (max-width: 991.98px) {
+  .login-page-wrapper {
+    padding: 1rem 0;
+  }
+
+  /* Di mobile, hilangkan kotak putih dan bayangan */
+  .login-box {
+    padding: 1rem;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  .login-title {
+    text-align: center;
+  }
+}
+
+/* ==================================
+--- CSS BARU UNTUK FORGOT PASSWORD ---
+==================================
 */
-@media (max-width: 767.98px) {
-    .login-form-wrapper {
-        position: relative; /* PENTING: Tetap relative di mobile */
-        /* Di mobile, kita hilangkan tampilan 'card' agar form 
-          terlihat natural dan menyatu dengan halaman.
-          Bootstrap '.container' di 'main' sudah memberi padding di sisi kiri/kanan.
-        */
-        padding: 0;
-        margin-top: 1rem; /* Kurangi jarak atas di mobile */
-        background-color: transparent; /* Hapus latar belakang putih */
-        box-shadow: none; /* Hapus bayangan */
-        border: none; /* Hapus garis tepi */
-        max-width: 100%; /* Pastikan form tidak melebihi lebar layar */
-    }
 
-    /* Sesuaikan posisi tombol 'X' di mobile */
-    .close-button {
-        top: 0rem; /* Lebih dekat ke atas */
-        right: 0.5rem; /* Lebih dekat ke tepi */
-        font-size: 2.5rem; /* Sedikit lebih besar agar mudah di-tap */
-        color: #888;
-    }
+/* Ini adalah kotak putih untuk "Forgot Password" */
+.forgot-box {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #dee2e6;
+  max-width: 550px; /* Sedikit lebih lebar dari login box biasa */
+  margin: 0 auto; /* Otomatis ke tengah */
+}
+
+.forgot-title {
+  color: #003087;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.forgot-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Tombol "Send Reset Link" (Hijau, style dari register.css) */
+.btn-send-reset {
+  background: #7ed957;
+  color: #10315a;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-send-reset:hover {
+  background: #2dab4d;
+  color: #fff;
+}
+
+/* Link "Remember your password? Log in" */
+.back-to-login-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  color: #555;
+}
+
+.back-to-login-link a {
+  font-weight: 600;
+  color: #003087;
+  text-decoration: none;
+}
+
+.back-to-login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Penyesuaian Mobile untuk Forgot Box */
+@media (max-width: 991.98px) {
+  .forgot-box {
+    padding: 1rem;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
 }
 

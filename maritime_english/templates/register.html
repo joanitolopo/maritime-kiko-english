@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Register - Maritime English{% endblock %}
+{% block title %}Create Account - Maritime English{% endblock %}
 
 {% block page_css %}
 <!-- Memuat file CSS khusus untuk halaman register -->
@@ -7,46 +7,81 @@
 {% endblock %}
 
 {% block content %}
-<main class="container my-5">
-
-    <!-- Kontainer untuk karakter dan teksnya -->
-    <div class="character-container">
-        <!-- TOMBOL 'X' BARU, sama seperti di login.html -->
-        <a href="{{ url_for('main.index') }}" class="close-button">&times;</a>
-        <img src="{{ url_for('static', filename='img/kapten-kiko.png') }}" alt="Kapten Kiko" class="character-img">
-        <!-- 
-          Teks kita bungkus dengan div 'speech-bubble' 
-          agar bisa diberi style gelembung ucapan 
-        -->
-        <div class="speech-bubble">
-            Join the crew, Nakama! Fill in your details!
+<!-- Header: Hanya logo di kiri, sesuai instruksi Anda -->
+<header class="bg-white shadow-sm py-1">
+    <div class="container d-flex justify-content-start align-items-center">
+        <div class="logo d-flex align-items-center">
+            <img src="{{ url_for('static', filename='img/logo_website_2.png') }}" alt="Maritime English Logo" class="logo-img">
         </div>
     </div>
+</header>
 
-    <!-- 
-      Kita ganti 'w-50 mx-auto' dengan kelas kustom 'register-form-wrapper'.
-      CSS kita akan menangani styling dan penempatannya.
-    -->
-    <div class="register-form-wrapper">
-        <h1 class="text-center">Register</h1>
-        
-        <form method="POST">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+<!-- Wrapper Halaman Utama -->
+<div class="register-page-wrapper">
+    <div class="container">
+        <!-- Kotak Konten Utama (putih) -->
+        <div class="register-box">
+            
+            <!-- Judul Halaman -->
+            <h1 class="register-title mb-4">Create Account</h1>
+
+            <div class="row">
+                <!-- ========================== -->
+                <!-- Kolom Form (Kiri) -->
+                <!-- ========================== -->
+                <div class="col-lg-7">
+                    <!-- Form membutuhkan ID agar bisa di-submit dari kolom lain -->
+                    <form method="POST" id="register-form">
+                        
+                        <!-- Ganti dari Username -> Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                        </div>
+                        
+                        <!-- Tombol ini HANYA MUNCUL di mobile -->
+                        <button type="submit" class="btn btn-start btn-lg w-100 mt-4 d-lg-none">Create My Account</button>
+                    </form>
+                </div>
+
+                <!-- ========================== -->
+                <!-- Divider (Tengah) -->
+                <!-- ========================== -->
+                <div class="col-lg-1 d-none d-lg-flex justify-content-center align-items-center">
+                    <div class="vertical-divider"></div>
+                </div>
+
+                <!-- ========================== -->
+                <!-- Kolom Tombol & Link (Kanan) -->
+                <!-- ========================== -->
+                <div class="col-lg-4 d-none d-lg-flex flex-column justify-content-center">
+                    
+                    <!-- Tombol ini HANYA MUNCUL di desktop -->
+                    <!-- Atribut 'form' menunjuk ke ID form di kolom kiri -->
+                    <button type="submit" form="register-form" class="btn btn-start btn-lg w-100 mb-3">Create My Account</button>
+                    
+                    <p class="login-link text-center">
+                        Already part of the crew? <br> <a href="{{ url_for('auth.login') }}">Log In</a>
+                    </p>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-success btn-lg w-100">Register</button>
-        </form>
-        
-        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
-    </div>
-</main>
+            
+            <!-- Link login ini HANYA MUNCUL di mobile -->
+            <p class="login-link text-center mt-3 d-lg-none">
+                Already part of the crew? <a href="{{ url_for('auth.login') }}">Log In</a>
+            </p>
+
+        </div> <!-- / .register-box -->
+    </div> <!-- / .container -->
+</div> <!-- / .register-page-wrapper -->
 {% endblock %}

@@ -1,142 +1,209 @@
-/* --- Style Header --- */
-/* (Kita ulangi style logo di sini untuk memastikan) */
-.logo-img {
-    height: 40px;
+/* * CSS UNTUK HALAMAN HOME (DESAIN BARU)
+ * Menghapus semua style lama
+ */
+
+/* 1. HEADER / NAVBAR BARU */
+.main-header {
+    background-color: #0077aa; /* Warna biru tua dari gambar */
+    padding: 0.5rem 0;
 }
 
-/* --- Style Kapten Kiko --- */
-.character-img {
-    height: 84px;
-    width: 84px;
-    object-fit: cover;
-    /* Kita pindahkan animasi dari CSS Anda ke sini */
-    animation: bounce 2s infinite; 
+.main-header .logo-img {
+    height: 45px; /* Sesuaikan ukuran logo */
 }
 
-/* Animasi Bounce dari file CSS Anda */
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    60% {
-        transform: translateY(-5px);
-    }
+/* Style link navigasi di tengah */
+.main-header .navbar-nav .nav-link {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
 
-/* File CSS Anda memiliki style '.character-text' 
-  yang membuat gelembung ucapan. 
-  HTML baru Anda menggunakan '.character-text' sebagai judul (h4).
-  Saya akan biarkan style h4 dari Bootstrap mengambil alih, 
-  karena style gelembung ucapan tidak cocok dengan desain 'card' baru.
-*/
+.main-header .navbar-nav .nav-link:hover,
+.main-header .navbar-nav .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+}
 
-/* --- Style List Sections (dari inline <style> Anda) --- */
-.unit-sections-list { 
-    margin-top: .75rem; 
+/* Style link "Home" yang aktif */
+.main-header .navbar-nav .nav-link.active {
+    background-color: #e3f4ff;
+    color: #003087;
+    font-weight: 700;
 }
-.unit-section-item { 
-    display:flex; 
-    justify-content:space-between; 
-    align-items:center; 
-    padding:.55rem .65rem; 
-    border-radius:8px; 
-    background:#fff; 
-    box-shadow:0 6px 18px rgba(2,6,23,0.04); 
-    margin-bottom:.5rem; 
+
+/* Style ikon user di kanan */
+.main-header .user-info .nav-link {
+    padding: 0;
 }
-.unit-section-item a { 
-    text-decoration:none; 
-    color:#0B3D91; 
-    font-weight:600; 
+.main-header .user-info .fa-user-circle {
+    color: #ffffff;
 }
-.unit-section-meta { 
-    font-size:.85rem; 
-    color:#6B7280; 
+
+/* Tombol Toggler Mobile */
+.navbar-toggler {
+    border: none;
 }
-.start-btn-toggle { 
-    width:140px; 
-}
-.section-badge { 
-    font-size:.72rem; 
-    background:#F3F4F6; 
-    color:#111827; 
-    padding:.18rem .5rem; 
-    border-radius:999px; 
+.navbar-toggler:focus {
+    box-shadow: none;
 }
 
 
-/* --- RESPONSIVE UNTUK MOBILE --- */
-@media (max-width: 767.98px) {
-    
-    /* --- Header Mobile --- */
-    .logo-img {
-        height: 30px; /* Kecilkan logo */
-    }
-    .logo span {
-        font-size: 1.25rem !important; /* Kecilkan teks logo */
-    }
-    .user-info .nav-link {
-        font-size: 0.9rem; /* Kecilkan teks user */
-        padding-right: 0 !important;
-    }
+/* 2. BANNER SAMBUTAN */
+.welcome-banner {
+    background-color: #b6e2fd; /* Latar belakang biru muda */
+    border: 1px solid #bce6ff;
+    border-radius: 12px;
+    padding: 1.1rem 2rem 0.1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
 
-    /* --- Kapten Kiko Mobile --- */
-    .character-container {
-        /* Tumpuk gambar di atas teks */
-        flex-direction: column; 
+.welcome-banner .welcome-text h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #fcfcfc;
+    font-weight: 700;
+}
+.welcome-banner .welcome-text p {
+    font-size: 1.1rem;
+    color: #10315a;
+    margin-bottom: 1rem;
+}
+
+.welcome-text {
+    flex-grow: 1;
+    padding: 2rem 2rem 2rem 2rem;
+}
+
+/* Tombol Hijau (seperti di index.css) */
+.btn-start-voyage {
+  background: #34c759;
+  color: #10315a;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(52,199,89,0.12);
+  transition: all 0.3s ease;
+}
+.btn-start-voyage:hover {
+  background: #2dab4d;
+  color: #fff;
+}
+
+.cadet-img {
+  height: 170px;
+  width: auto;
+  object-fit: contain;
+  align-self: flex-end; /* jaga tetap di bawah */
+  z-index: 2;
+}
+
+/* 3. PETA & SIDEBAR */
+.voyage-map-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+}
+.voyage-map-img {
+    width: 100%;
+    height: 340px;
+    border-radius: 8px;
+}
+
+.sidebar-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.info-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.info-card .info-icon {
+    flex-shrink: 0;
+    width: 50px; /* Memberi ruang tetap untuk ikon */
+    text-align: center;
+}
+.info-card .info-text {
+    flex-grow: 1;
+}
+.info-card .info-text strong {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+}
+.info-card .info-text p {
+    font-family: 'Open Sans', sans-serif;
+    color: #555;
+    margin-bottom: 0;
+}
+
+/* Progress bar kustom */
+.progress {
+    background-color: #e9ecef;
+    border-radius: 10px;
+}
+.progress-bar {
+    background-color: #6a00c9; /* Warna ungu dari ikon */
+    border-radius: 10px;
+}
+
+
+/* 4. RESPONSIVE MOBILE */
+@media (max-width: 991.98px) {
+    /* Tengahkan item navbar saat mobile */
+    .main-header .navbar-nav {
         text-align: center;
-        gap: 0.5rem !important;
-    }
-    .character-img {
-        height: 60px; /* Kecilkan gambar Kiko */
-        width: 60px;
-        animation: none; /* Hentikan animasi di mobile (hemat baterai) */
-    }
-    .character-text {
-        font-size: 1.25rem; /* Sesuaikan ukuran judul Kiko */
-    }
-    .character-container p {
-        font-size: 0.9rem; /* Kecilkan teks paragraf Kiko */
-    }
-
-    /* --- Unit Card Mobile --- */
-    .card-body {
-        padding: 1.25rem !important; /* Kurangi padding di dalam card */
-    }
-    .unit-card-header {
-        /* Tumpuk judul di atas tombol 'Start' */
-        flex-direction: column;
-        align-items: stretch !important; /* Buat kedua item memenuhi lebar */
-    }
-    .unit-card-header > div:first-child {
-        text-align: center; /* Tengahkan teks judul */
-    }
-    .unit-card-header > div:last-child {
-        text-align: center; /* Tengahkan tombol */
-    }
-    .start-btn-toggle {
-        width: 100%; /* Buat tombol 'Start' penuh */
         margin-top: 1rem;
     }
+    .main-header .user-info {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+    }
+    /* Pindahkan sidebar ke bawah peta */
+    .sidebar-cards {
+        margin-top: 2rem;
+    }
+}
 
-    /* --- List Section (dalam Collapse) Mobile --- */
-    .unit-section-item {
-        /* Tumpuk judul section di atas badge */
-        flex-direction: column;
-        align-items: flex-start; /* Ratakan kiri */
-        gap: 0.25rem;
-        padding: 0.75rem;
+@media (max-width: 767.98px) {
+    .welcome-banner {
+        padding: 1.5rem 1rem;
     }
-    .unit-section-item a {
-        font-size: 0.95rem;
+    .welcome-banner .welcome-text h2 {
+        font-size: 1.5rem;
     }
-    .unit-section-item .text-muted.small {
-        font-size: 0.8rem;
+    .welcome-banner .welcome-text p {
+        font-size: 0.9rem;
     }
-    .section-badge {
-        margin-top: 0.25rem;
+    .btn-start-voyage {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    /* Sembunyikan salah satu kadet agar tidak penuh */
+    #cadet-male {
+        display: none !important;
+    }
+    .cadet-img {
+        height: 90px;
     }
 }

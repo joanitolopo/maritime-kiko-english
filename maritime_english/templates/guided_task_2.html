@@ -1,85 +1,145 @@
 {% extends 'base.html' %}
-{% block title %}Unit {{ unit_id }} - {{ section_content.title or 'Task 2: Spelling Ship Name' }}{% endblock %}
+{% block title %}Unit {{ unit_id }} - Logbook Reflection{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_2.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="container my-4 guided-task2-container" aria-live="polite">
-
-  <div class="scene shadow-lg" role="region" aria-label="Task 2: Spelling Ship Name">
-
-    <!-- Top instruction row -->
-    <div class="top-row">
-      <div class="instruction-box">
-        <div class="lang-toggle">
-          <button id="gt2-lang-toggle" class="toggle-pill" aria-pressed="false">EN</button>
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='guided_intro') }}" class="btn-learn-nav btn-back" aria-label="Back to Intro">
+            <i class="fas fa-chevron-left me-1"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
+            <i class="fas fa-anchor me-2"></i>
+            <span>Unit {{ unit_id }} - Logbook</span>
         </div>
-        <div id="gt2-instruction" class="instruction-text">
-          {{ section_content.instruction_en or "Listen to the spelling. Then, try spelling another ship name by clicking the letters in the correct order." }}
+
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+</header>
+
+<div class="main-content">
+    
+    <aside class="task-sidebar">
+        
+        <div class="title-container">
+            <div class="main-title">
+                <i class="fa-solid fa-book-journal-whills"></i>
+                Log Your Journey
+            </div>
+            <div class="sub-title">
+                Activity 10: Log Your Voyage
+            </div>
         </div>
-        <div class="audio-controls">
-          <button id="replay-example" class="btn audio-btn" aria-label="Replay example spelling">
-            <i class="fas fa-play" aria-hidden="true"></i> Replay Example
-          </button>
+
+        <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-image">
+        
+        <div class="task-bubble">
+            <p class="speech-text-task">
+                "Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."
+            </p>
+            
+            <div class="task-controls">
+                <i class="fa-solid fa-play" data-audio-src="{{ url_for('static', filename='data/audio/unit1/logbook_intro.wav') }}"></i>
+                <i class="fa-solid fa-language"></i>
+            </div>
         </div>
-      </div>
-    </div>
+        
+    </aside>
 
-    <!-- Center interactive area -->
-    <div class="interactive-area">
-      <!-- Prompt / target ship name -->
-      <div class="ship-prompt">
-        <div class="ship-label">Example</div>
-        <div class="ship-name" id="ship-name-display">{{ section_content.example_name or 'MV PACIFIC STAR' }}</div>
-        <div class="ship-spelling small muted" id="ship-spelling-example">{{ section_content.example_spelling_text or 'Papa – Alpha – Charlie – India – Foxtrot – India – Charlie – Sierra – Tango – Alpha – Romeo' }}</div>
-      </div>
-
-      <!-- Letter grid -->
-      <div class="letter-grid" id="letter-grid" role="grid" aria-label="Letter grid A to Z">
-        {% set letters = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z') %}
-        {% for ch in letters %}
-        <button class="letter-btn" data-letter="{{ ch }}" aria-label="Letter {{ ch }}" title="{{ ch }}">{{ ch }}</button>
-        {% endfor %}
-      </div>
-
-      <!-- Output box (typing NATO words) -->
-      <div class="output-area">
-        <div class="output-label">Your spelling (NATO words)</div>
-        <div class="output-box" id="spelling-output" aria-live="polite"></div>
-        <div class="output-audio">
-          <button id="replay-output" class="btn audio-btn small" aria-label="Replay spelled audio">
-            <i class="fas fa-play"></i> Replay
-          </button>
+    <main class="activity-area">
+        
+        <div class="activity-area-title">
+            <i class="fa-solid fa-list-check"></i>
+            <p class="instruction-text-task">
+                Your reflection will appear in your Report Page.
+                <strong>1)</strong> Rate yourself honestly.
+                <strong>2)</strong> Write down your reflection notes.
+                <strong>3)</strong> Click 'Save to Logbook' when you finish.
+            </p>
         </div>
-      </div>
-    </div>
 
-    <!-- Feedback bubble -->
-    <div id="gt2-feedback" class="feedback-bubble visually-hidden" role="status" aria-live="polite">
-      <div class="fb-arrow"></div>
-      <div class="fb-content">Well done! You spelled it clearly.</div>
-    </div>
+        <div class="logbook-form-container">
+            
+            <h3 class="part-title">Part A: Self-Assessment</h3>
+            <div class="assessment-list">
+                <div class="assessment-item" data-question="q1">
+                    <p class="item-text"><span class="item-number">1</span> I can spell names and numbers clearly using the Maritime Alphabet.</p>
+                    <div class="likert-scale" role="radiogroup" aria-labelledby="q1-label">
+                        <label><input type="radio" name="q1" value="1"><span>1</span></label>
+                        <label><input type="radio" name="q1" value="2"><span>2</span></label>
+                        <label><input type="radio" name="q1" value="3"><span>3</span></label>
+                        <label><input type="radio" name="q1" value="4"><span>4</span></label>
+                    </div>
+                </div>
+                <div class="assessment-item" data-question="q2">
+                    <p class="item-text"><span class="item-number">2</span> I can understand vessel identification messages on the radio.</p>
+                    <div class="likert-scale" role="radiogroup" aria-labelledby="q2-label">
+                        <label><input type="radio" name="q2" value="1"><span>1</span></label>
+                        <label><input type="radio" name="q2" value="2"><span>2</span></label>
+                        <label><input type="radio" name="q2" value="3"><span>3</span></label>
+                        <label><input type="radio" name="q2" value="4"><span>4</span></label>
+                    </div>
+                </div>
+                <div class="assessment-item" data-question="q3">
+                    <p class="item-text"><span class="item-number">3</span> I feel more confident speaking on the radio after this unit.</p>
+                    <div class="likert-scale" role="radiogroup" aria-labelledby="q3-label">
+                        <label><input type="radio" name="q3" value="1"><span>1</span></label>
+                        <label><input type="radio" name="q3" value="2"><span>2</span></label>
+                        <label><input type="radio" name="q3" value="3"><span>3</span></label>
+                        <label><input type="radio" name="q3" value="4"><span>4</span></label>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Footer next (disabled until example completed) -->
-    <div class="footer-cta">
-      <button id="gt2-next" class="btn btn-next" disabled
-              data-next="{{ url_for('learning.learning_unit', unit_id=unit_id, section=section_content.start_next_section or 'guided_task_3') }}">
-        Next Task <i class="fas fa-arrow-right ms-2"></i>
-      </button>
-    </div>
+            <h3 class="part-title">Part B: Reflection Notes</h3>
+            <div class="reflection-list">
+                <div class="reflection-item" data-question="r1">
+                    <label for="r1" class="item-label">1. What did you find easiest during this unit?</label>
+                    <textarea id="r1" name="r1" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                </div>
+                <div class="reflection-item" data-question="r2">
+                    <label for="r2" class="item-label">2. What part did you struggle with, and why?</label>
+                    <textarea id="r2" name="r2" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                </div>
+                <div class="reflection-item" data-question="r3">
+                    <label for="r3" class="item-label">3. What will you do differently next time to improve?</label>
+                    <textarea id="r3" name="r3" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                </div>
+            </div>
 
-  </div>
+            <button class="save-logbook-button">
+                <i class="fas fa-paper-plane"></i>
+                <span>Save to Logbook</span>
+            </button>
+        </div> 
 
-  <!-- Audio sources -->
-  <audio id="audio-example" preload="auto" src="{{ section_content.audio_example or '/static/data/audio/unit_1/guided_task2_example_en.wav' }}"></audio>
-  <audio id="audio-output" preload="auto" src=""></audio> <!-- dynamically generated/played if desired -->
+    </main>
+</div>
 
-</main>
+<footer class="footer-nav">
+    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='next_section_name') }}" class="continue-button">
+        <span>Continue</span>
+        <i class="fas fa-chevron-right ms-1"></i>
+    </a>
+</footer>
 {% endblock %}
 
 {% block page_js %}
-<script> window.SECTION_CONTENT = {{ section_content|tojson|safe }}; window.UNIT_CONTENT = {{ content|tojson|safe }}; window.UNIT_ID = {{ unit_id }}; </script>
+<script>
+    // Menyediakan data untuk JS, seperti path audio (jika ada)
+    window.SIDEBAR_CONTENT = {
+        original: `"Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."`,
+        translated: `"Kadet, setiap pelayaran mengajarkan kita sesuatu. Sebelum Anda berlayar ke unit berikutnya, luangkan waktu sejenak untuk menulis di buku catatan Anda. Renungkan apa yang menantang Anda dan apa yang akan Anda tingkatkan lain kali."`,
+        audioPath: "{{ url_for('static', filename='data/audio/unit1/logbook_intro.wav') }}" 
+    };
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
 <script src="{{ url_for('static', filename='js/guided_task_2.js') }}" defer></script>
 {% endblock %}

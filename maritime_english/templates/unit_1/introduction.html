@@ -1,60 +1,188 @@
 {% extends 'base.html' %}
-{% block title %}Unit 1 - Introduction: Spelling and Numbers{% endblock %}
+{% block title %}Unit {{ unit_id }} - Introduction{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/units/unit_1_introduction.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container my-4 intro-scene-container" aria-live="polite">
-  <div class="intro-scene shadow-lg" role="region" aria-label="Unit 1 introduction">
+<!-- HEADER -->
+<header class="top-bar">
+    <div class="container d-flex justify-content-end align-items-center header-right-group">
+        <a href="{{ url_for('learning.courses_page') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+            <i class="fas fa-chevron-left me-1" aria-hidden="true"></i>
+            <span class="btn-text">Back</span>
+        </a>
+        
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3" aria-hidden="false">
+            <i class="fas fa-anchor me-2" aria-hidden="true"></i>
+            <span>Unit {{ unit_id }} - {{ unit_data.title }}</span>
+        </div>
 
-    <!-- 
-      --- PERUBAHAN DI SINI ---
-      Tombol 'X' baru ditambahkan, mengarah kembali ke 'main.home'
-      (daftar unit).
-    -->
-    <a href="{{ url_for('main.home') }}" class="scene-close-button" aria-label="Back to unit list">&times;</a>
-
-    <!-- Avatar -->
-    <img src="{{ url_for('static', filename='img/kiko.png') }}" alt="Captain Ray" class="captain-ray">
-
-    <!-- Dialogue box -->
-    <div class="dialogue-box" aria-labelledby="dialogue-text" role="article">
-      <div class="lang-toggle">
-        <button id="lang-toggle-btn" class="toggle-pill" aria-pressed="false">EN</button>
-      </div>
-
-      <div id="dialogue-content">
-        <p id="dialogue-text" class="no-cursor" tabindex="0" aria-live="polite"></p>
-      </div>
-
-      <div class="audio-control" aria-hidden="false">
-        <button id="audio-btn" class="audio-play-btn" aria-label="Play introduction audio" title="Play">
-          <i class="fas fa-play" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <div class="dialogue-footer">
-        <button id="next-btn" class="btn btn-primary" aria-label="Next sentence">Next <i class="fas fa-chevron-right ms-1"></i></button>
-      </div>
+        <a href="{{ url_for('main.home') }}" class="btn-learn-nav btn-home" aria-label="Home">
+            <i class="fas fa-home" aria-hidden="true"></i>
+        </a>
     </div>
+</header>
 
-    <!-- Continue Button (visible but disabled until last sentence) -->
-    <div class="continue-container text-center">
-      <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}"
-         id="continue-btn" class="continue-btn btn-disabled" aria-disabled="true">
-        Continue to Warm-up <i class="fas fa-arrow-right ms-2"></i>
-      </a>
-    </div>
-  </div>
+<!-- MAIN CONTENT -->
+<div class="page-container">
+    
+    <!-- LEFT SECTION -->
+    <aside class="left-section">
+        
+        <!-- Voyage Banner -->
+        <div class="voyage-banner">
+            <div class="voyage-icon-box">
+                <i class="fa-solid fa-anchor"></i>
+            </div>
+            <div class="voyage-title">
+                <h4>Set Sail for</h4>
+                <p>Today's Voyage</p>
+            </div>
+        </div>
 
-  <!-- audio element (keep audio src set by JS) -->
-  <audio id="intro-audio" preload="auto"></audio>
+        <!-- Captain Welcome Card -->
+        <div class="captain-welcome-card">
+            <div class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain" class="captain-img">
+                <div class="avatar-badge">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="welcome-bubble">
+                <div class="bubble-header">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Captain's Welcome</span>
+                </div>
+                <p class="speech-text">
+                    "Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. 
+                    On ships, we don't just say A, B, C… or one, two, three. 
+                    We use a special system, so our messages are always clear, even in storms or noisy conditions. 
+                    It's called the NATO Phonetic Alphabet — NATO stands for North Atlantic Treaty Organization."
+                </p>
+                <div class="audio-controls">
+                    <button class="control-btn play-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- RIGHT SECTION -->
+    <main class="right-section">
+        
+        <!-- Unit Hero Card -->
+        <div class="unit-hero-card">
+            <div class="hero-left">
+                <div class="hero-icon">
+                    <img src="{{ url_for('static', filename='img/abc_intro.png') }}" alt="Unit Icon">
+                </div>
+                <div class="hero-text">
+                    <span class="unit-label">UNIT {{ unit_id }}</span>
+                    <h1>SPELL THE SEA</h1>
+                    <p>Maritime Alphabet and Numbers</p>
+                </div>
+            </div>
+            <div class="wave-decoration">
+                <i class="fas fa-water"></i>
+            </div>
+        </div>
+
+        <!-- Learning Journey Card -->
+        <div class="learning-journey-card">
+            <div class="journey-header">
+                <div class="header-icon">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h2>Your Learning Journey</h2>
+            </div>
+
+            <div class="journey-content">
+                <div class="content-wrapper">
+                    
+                    <!-- Learning Text -->
+                    <div class="learning-text translatable-text-officer">
+                        <div class="intro-paragraph">
+                            <i class="fas fa-ship"></i>
+                            <p>During this voyage, you'll learn how sailors around the world spell ship names, call signs, and numbers clearly over the radio. You'll practice saying them the maritime way - just like real officers on the bridge.</p>
+                        </div>
+
+                        <div class="objectives-section">
+                            <h3><i class="fas fa-bullseye"></i> Learning Objectives</h3>
+                            <p>By the end of this unit, you'll be able to:</p>
+                            <ol class="objectives-list">
+                                <li>
+                                    <span class="list-number">1</span>
+                                    <span>Identify and pronounce the Maritime Alphabet and numbers correctly in radio communication.</span>
+                                </li>
+                                <li>
+                                    <span class="list-number">2</span>
+                                    <span>Exchange vessel identification (call sign and MMSI) confidently and accurately through short radio simulations.</span>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="cta-section">
+                            <div class="cta-icon">
+                                <i class="fas fa-anchor"></i>
+                            </div>
+                            <p><strong>Now, get ready to tune your ears and voice - it's time to spell the sea!</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Officer Character -->
+                    <div class="officer-character">
+                        <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Officer" class="officer-img">
+                        <div class="character-badge">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Audio Controls -->
+                <div class="audio-controls-objectives">
+                    <button class="control-btn play-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue Button -->
+        <div class="continue-section">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}" class="continue-button">
+                <span>Continue to Warmup</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </main>
+
 </div>
+
+<!-- Audio element -->
+<audio id="intro-audio-player" preload="auto"></audio>
+
 {% endblock %}
 
 {% block page_js %}
-<script src="{{ url_for('static', filename='js/unit_1_introduction.js') }}" defer></script>
+<script>
+    window.FULL_CONTENT = {{ (content or {})|tojson|safe }};
+    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
+    window.UNIT_ID = {{ unit_id | default(0) }};
+</script>
+<script src="{{ url_for('static', filename='js/unit_1_introduction.js') }}"></script>
 {% endblock %}
-
