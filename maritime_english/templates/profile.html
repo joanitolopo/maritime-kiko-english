@@ -2,14 +2,11 @@
 {% block title %}My Profile - Maritime English{% endblock %}
 
 {% block page_css %}
-    <!-- Memuat CSS utama untuk header & variabel -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <!-- CSS khusus untuk halaman profile -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
 {% block content %}
-<!-- 1. HEADER (Dimodifikasi sedikit agar 'Profile' bisa aktif jika diinginkan di navbar utama) -->
 <header class="main-header">
     <nav class="navbar navbar-expand-lg container">
         <div class="container-fluid p-0">
@@ -25,15 +22,12 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}"><i class="fas fa-home me-1"></i> Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.courses_page') }}"><i class="fas fa-book-open me-1"></i> Courses</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('learning.report') }}"><i class="fas fa-chart-bar me-1"></i> Report</a></li>
-                    <!-- Menu Profile ditambahkan di sini agar terlihat aktif sesuai gambar referensi -->
                     <li class="nav-item"><a class="nav-link active" href="{{ url_for('main.profile') }}"><i class="fas fa-user-circle me-1"></i> Profile</a></li>
                 </ul>
                 
-                <!-- User Info Kanan (Tetap ada untuk konsistensi) -->
-                 <div class="user-actions d-flex align-items-center">
+                <div class="user-actions d-flex align-items-center">
                     <div class="dropdown">
                         <a class="user-profile-btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <!-- Avatar menggunakan inisial nama user -->
                             <img src="https://ui-avatars.com/api/?name={{ current_user.username }}&background=0B5A8F&color=fff" alt="{{ current_user.username }}" class="user-avatar">
                             <span class="d-none d-md-inline-block ms-2">{{ current_user.username }}</span>
                         </a>
@@ -42,21 +36,17 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </nav>
 </header>
 
-<!-- 2. KONTEN UTAMA: PROFILE CARD -->
 <main class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             
-            <!-- KARTU IDENTITAS KRU MODERN -->
             <div class="profile-card fade-in-up">
                 
-                <!-- Header Kartu -->
                 <div class="profile-header">
                     <h2 class="profile-title">
                         <i class="fas fa-id-card-alt me-2"></i> Crew Identity
@@ -67,11 +57,13 @@
                 <div class="profile-body">
                     <div class="row">
                         
-                        <!-- KOLOM KIRI: FOTO & STATUS -->
                         <div class="col-md-4 text-center profile-left-col">
                             <div class="profile-picture-container">
-                                <!-- Ganti src dengan foto profil user jika ada -->
-                                <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Profile Picture" class="profile-picture">
+                                {% if user_info.gender == 'Female' %}
+                                    <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Profile Picture" class="profile-picture">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Profile Picture" class="profile-picture">
+                                {% endif %}
                                 <button class="btn-edit-photo" title="Change Photo">
                                     <i class="fas fa-camera"></i>
                                 </button>
@@ -82,7 +74,6 @@
                             </div>
                         </div>
 
-                        <!-- KOLOM KANAN: DETAIL INFORMASI -->
                         <div class="col-md-8 profile-right-col">
                             <div class="info-grid">
                                 
@@ -94,6 +85,11 @@
                                 <div class="info-item">
                                     <label class="info-label">Email Address</label>
                                     <div class="info-value">{{ current_user.email }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <label class="info-label">Gender</label>
+                                    <div class="info-value">{{ user_info.gender }}</div>
                                 </div>
 
                                 <div class="info-item">
@@ -113,12 +109,11 @@
 
                             </div>
 
-                            <!-- Tombol Aksi -->
                             <div class="profile-actions mt-4">
-                                <button class="btn-action btn-edit">
+                                <button class="btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                     <i class="fas fa-edit me-2"></i> Edit Profile
                                 </button>
-                                <button class="btn-action btn-password">
+                                <button class="btn-action btn-password" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                     <i class="fas fa-key me-2"></i> Change Password
                                 </button>
                                 <a href="{{ url_for('auth.logout') }}" class="btn-action btn-logout">
@@ -128,20 +123,250 @@
 
                         </div>
                     </div>
-                </div> <!-- /profile-body -->
+                </div>
 
-            </div> <!-- /profile-card -->
+            </div>
 
         </div>
     </div>
 </main>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--ocean-blue), var(--indigo)); color: white;">
+                <h5 class="modal-title" id="editProfileModalLabel">
+                    <i class="fas fa-user-edit me-2"></i> Edit Profile
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Username</label>
+                            <input type="text" class="form-control" name="username" value="{{ current_user.username }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ current_user.email }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Gender</label>
+                            <select class="form-select" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="Male" {% if user_info.gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if user_info.gender == 'Female' %}selected{% endif %}>Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Grade</label>
+                            <select class="form-select" name="grade">
+                                <option value="">Select Grade</option>
+                                <option value="X" {% if user_info.grade == 'X' %}selected{% endif %}>X (10th Grade)</option>
+                                <option value="XI" {% if user_info.grade == 'XI' %}selected{% endif %}>XI (11th Grade)</option>
+                                <option value="XII" {% if user_info.grade == 'XII' %}selected{% endif %}>XII (12th Grade)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">School / Institution</label>
+                            <input type="text" class="form-control" name="school_name" value="{{ current_user.school_name or '' }}" placeholder="Enter your school name">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Major</label>
+                            <input type="text" class="form-control" name="major" value="{{ current_user.major or '' }}" placeholder="e.g., Nautical Science, Marine Engineering">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveProfileBtn" style="background: var(--ocean-blue); border: none;">
+                    <i class="fas fa-save me-2"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--indigo), #4f46e5); color: white;">
+                <h5 class="modal-title" id="changePasswordModalLabel">
+                    <i class="fas fa-key me-2"></i> Change Password
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Current Password</label>
+                        <input type="password" class="form-control" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">New Password</label>
+                        <input type="password" class="form-control" name="new_password" required minlength="6">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Confirm New Password</label>
+                        <input type="password" class="form-control" name="confirm_password" required minlength="6">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePasswordBtn" style="background: var(--indigo); border: none;">
+                    <i class="fas fa-lock me-2"></i> Update Password
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_js %}
-    <!-- Animasi fade-in dari home.js atau bisa pakai inline kecil jika hanya untuk ini -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelector('.profile-card').classList.add('is-visible');
-        });
-    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector('.profile-card').classList.add('is-visible');
+        
+        // Save Profile Handler
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', async () => {
+                const form = document.getElementById('editProfileForm');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                saveProfileBtn.disabled = true;
+                saveProfileBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Saving...';
+                
+                try {
+                    const response = await fetch('/update_profile', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showNotification('Profile updated successfully!', 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    showNotification('Failed to update profile: ' + error.message, 'error');
+                    saveProfileBtn.disabled = false;
+                    saveProfileBtn.innerHTML = '<i class="fas fa-save me-2"></i> Save Changes';
+                }
+            });
+        }
+        
+        // Change Password Handler
+        const savePasswordBtn = document.getElementById('savePasswordBtn');
+        if (savePasswordBtn) {
+            savePasswordBtn.addEventListener('click', async () => {
+                const form = document.getElementById('changePasswordForm');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                if (data.new_password !== data.confirm_password) {
+                    showNotification('Passwords do not match!', 'error');
+                    return;
+                }
+                
+                savePasswordBtn.disabled = true;
+                savePasswordBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Updating...';
+                
+                try {
+                    const response = await fetch('/change_password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showNotification('Password changed successfully!', 'success');
+                        bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
+                        form.reset();
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    showNotification('Failed to change password: ' + error.message, 'error');
+                } finally {
+                    savePasswordBtn.disabled = false;
+                    savePasswordBtn.innerHTML = '<i class="fas fa-lock me-2"></i> Update Password';
+                }
+            });
+        }
+    });
+    
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            info: '#3b82f6'
+        };
+        
+        notification.innerHTML = `
+            <i class="fas ${icons[type]}"></i>
+            <span>${message}</span>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid ${colors[type]};
+            color: ${colors[type]};
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+</script>
+<style>
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(100px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOutRight {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(100px); }
+    }
+</style>
 {% endblock %}

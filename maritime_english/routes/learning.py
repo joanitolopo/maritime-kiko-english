@@ -772,3 +772,4 @@ def generate_captain_feedback(level, easiest, struggle, improvement):
     
     else:  # Emerging Skills
         return f"""You're just starting out, Cadet, and that's perfectly okay. Every sailor begins somewhere — even the best captains were once beginners like you. What matters is that you completed this unit and took time to reflect on your learning. It's good that "{easiest}" gave you something to hold onto — small strengths make a difference. And even though "{struggle}" felt difficult, your willingness to name it shows courage. Your plan to "{improvement}" is the right direction forward. Keep your pace steady, focus on one skill at a time, and don't worry about perfection — with each voyage, you'll grow stronger and more confident."""
+    

@@ -138,3 +138,4 @@ def request_password_reset():
     
     # Jika seseorang mencoba mengakses URL ini dengan GET, redirect saja
     return redirect(url_for('auth.login'))
+
