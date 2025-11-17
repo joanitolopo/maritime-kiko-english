@@ -14,7 +14,7 @@
         </a>
         
         <div class="current-unit-title d-flex align-items-center ms-3 me-3" aria-hidden="false">
-            <i class="fas fa-ship me-2" aria-hidden="true"></i>
+            <i class="fas fa-anchor me-2" aria-hidden="true"></i>
             <span>Unit {{ unit_id }} - {{ unit_data.title }}</span>
         </div>
 
@@ -33,8 +33,8 @@
                 <i class="fa-solid fa-compass"></i>
             </div>
             <div class="badge-text">
-                <h4>Navigate the Language</h4>
-                <p>Activity 5: Decode the Message!</p>
+                <h4>D. Navigate the Language</h4>
+                <p>Activity 5. Decode the Message!</p>
             </div>
         </div>
 
@@ -49,14 +49,8 @@
             </div>
 
             <div class="instruction-bubble">
-                <div class="bubble-header">
-                    <i class="fas fa-satellite-dish"></i>
-                    <span>Captain's Instructions</span>
-                </div>
                 <p class="speech-text-noticing">
-                    "Cadet, this time we'll study how radio messages are built!
-                    Every call at sea follows a clear order, 1) opening, 2) middle, and
-                    3) closing. Let's read both sides and see how real sailors do it."
+                    Cadet, this time we'll study how radio messages are built! Every call at sea follows a clear order, opening, middle, and closing. Let's read both sides and see how real sailors do it.
                 </p>
                 <div class="vhf-controls noticing-controls">
                     <button class="control-btn audio-btn">
@@ -70,7 +64,7 @@
             </div>
         </div>
         
-        </aside>
+    </aside>
 
     <main class="vhf-main">
         
@@ -99,29 +93,39 @@
 
                 <div class="conversation-timeline">
                     
+                    <!-- CALLER MESSAGE - NEW STRUCTURED FORMAT -->
                     <div class="message-wrapper caller-message">
-                        <div class="message-card">
-                            <div class="message-header">
-                                <div class="vessel-info">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Caller" class="vessel-avatar">
-                                    <div class="vessel-details">
-                                        <h4>CALLER</h4>
-                                        <span class="vessel-role">Motor Vessel Blue Horizon</span>
+                        <div class="message-card-structured">
+                            <div class="message-header-structured caller-header">
+                                <div class="vessel-avatar-small">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Caller">
+                                </div>
+                                <h4 class="message-title">Caller's Message</h4>
+                            </div>
+                            <div class="message-body-structured">
+                                <div class="structure-row">
+                                    <div class="structure-number">1.</div>
+                                    <div class="structure-label">Opening</div>
+                                    <div class="structure-content">
+                                        This is Motor Vessel Horizon,<br>
+                                        Call Sign Yankee Bravo Oscar November Niner.<br>
+                                        MMSI too-fower-ait-wun-zeero-fife-niner-zeero-zeero.
                                     </div>
                                 </div>
-                                <button class="message-play-btn" aria-label="Play caller message" disabled>
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                            <div class="message-content">
-                                <div class="message-bubble">
-                                    <p class="message-text">
-                                        1. This is Motor Vessel Blue Horizon, Call Sign YBON9, MMSI two-four-eight-one-zero-five-nine-zero-zero.
-                                        <br>
-                                        2. Calling Motor Vessel Antares, Call Sign LAPW5
-                                        <br>
-                                        3. Channel one-six. Over.
-                                    </p>
+                                <div class="structure-row">
+                                    <div class="structure-number">2.</div>
+                                    <div class="structure-label">Middle</div>
+                                    <div class="structure-content">
+                                        Calling Motor Vessel Antares.<br>
+                                        Call Sign Lima Alfa Papa Whisky Fife.
+                                    </div>
+                                </div>
+                                <div class="structure-row">
+                                    <div class="structure-number">3.</div>
+                                    <div class="structure-label">Closing</div>
+                                    <div class="structure-content">
+                                        Channel wun six. Over."
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -135,29 +139,36 @@
                         <div class="arrow-label">Exchange</div>
                     </div>
 
+                    <!-- RECEIVER MESSAGE - NEW STRUCTURED FORMAT -->
                     <div class="message-wrapper receiver-message">
-                        <div class="message-card">
-                            <div class="message-header">
-                                <button class="message-play-btn" aria-label="Play receiver message" disabled>
-                                    <i class="fas fa-play"></i>
-                                </button>
-                                <div class="vessel-info">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Receiver" class="vessel-avatar">
-                                    <div class="vessel-details">
-                                        <h4>RECEIVER</h4>
-                                        <span class="vessel-role">Motor Vessel Antares</span>
+                        <div class="message-card-structured">
+                            <div class="message-header-structured receiver-header">
+                                <div class="vessel-avatar-small">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Receiver">
+                                </div>
+                                <h4 class="message-title">Receiver's Message</h4>
+                            </div>
+                            <div class="message-body-structured">
+                                <div class="structure-row">
+                                    <div class="structure-number">1.</div>
+                                    <div class="structure-label">Opening</div>
+                                    <div class="structure-content">
+                                        "Motor Vessel Horizon, this is Antares.
                                     </div>
                                 </div>
-                            </div>
-                            <div class="message-content">
-                                <div class="message-bubble">
-                                    <p class="message-text">
-                                        1. Motor Vessel Blue Horizon, this is Antares
-                                        <br>
-                                        2. Receiving you loud and clear.
-                                        <br>
-                                        3. Over.
-                                    </p>
+                                <div class="structure-row">
+                                    <div class="structure-number">2.</div>
+                                    <div class="structure-label">Middle</div>
+                                    <div class="structure-content">
+                                        Receiving you loud and clear.
+                                    </div>
+                                </div>
+                                <div class="structure-row">
+                                    <div class="structure-number">3.</div>
+                                    <div class="structure-label">Closing</div>
+                                    <div class="structure-content">
+                                        Over."
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -175,9 +186,8 @@
         </section>
 
         <div class="continue-wrapper">
-            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_alphabet') }}" class="btn-continue">
-                <span>Continue</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=4) }}" class="continue-button">
+                <span>Continue Sailing</span>
             </a>
         </div>
     </main>
@@ -187,43 +197,49 @@
     <div class="popup-content">
         <div class="popup-header">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <h3>Radio Message Structure & Function</h3>
-            <button class="popup-close" id="close-popup-btn">&times;</button>
+            <h3 class="popup-title-text">Radio Message Structure & Function</h3>
+            <div class="popup-header-controls">
+                <button class="popup-translate-btn" id="popup-translate-btn">
+                    <i class="fa-solid fa-language"></i>
+                    <span>ID</span>
+                </button>
+                <button class="popup-close" id="close-popup-btn">&times;</button>
+            </div>
         </div>
         <div class="popup-body">
             <div class="popup-section">
                 <span class="popup-number">1</span>
                 <div class="popup-text">
-                    <h4>Opening</h4>
-                    <p>Used by both caller and receiver to start the communication clearly.</p>
-                    <ul>
-                        <li><strong>Caller:</strong> "This is [Ship Name], Call Sign..., MMSI..."</li>
-                        <li><strong>Receiver:</strong> "[Ship Name], this is [Your Ship]."</li>
-                        <li><strong>Function:</strong> Identify yourself and the ship you are contacting.</li>
+                    <h4 class="popup-section-title">Opening</h4>
+                    <p class="popup-section-desc">Used by both caller and receiver to start the communication clearly.</p>
+                    <ul class="popup-section-list">
+                        <li><strong>Caller:</strong> <span class="popup-example">"This is [Ship Name], Call Sign..., MMSI..."</span></li>
+                        <li><strong>Receiver:</strong> <span class="popup-example">"[Ship Name], this is [Your Ship]."</span></li>
+                        <li><strong>Function:</strong> <span class="popup-function">Identify yourself and the ship you are contacting.</span></li>
                     </ul>
                 </div>
             </div>
             <div class="popup-section">
                 <span class="popup-number">2</span>
                 <div class="popup-text">
-                    <h4>Middle</h4>
-                    <p>The core part of the message – giving or confirming information.</p>
-                    <ul>
-                        <li><strong>Caller:</strong> "Calling Motor Vessel [Name]."</li>
-                        <li><strong>Receiver:</strong> "Receiving you loud and clear."</li>
-                        <li><strong>Function:</strong> Deliver or acknowledge the main content.</li>
+                    <h4 class="popup-section-title">Middle</h4>
+                    <p class="popup-section-desc">The core part of the message – giving or confirming information.</p>
+                    <ul class="popup-section-list">
+                        <li><strong>Caller:</strong> <span class="popup-example">"Calling Motor Vessel [Name]."</span></li>
+                        <li><strong>Receiver:</strong> <span class="popup-example">"Receiving you loud and clear."</span></li>
+                        <li><strong>Function:</strong> <span class="popup-function">Deliver or acknowledge the main content.</span></li>
                     </ul>
                 </div>
             </div>
             <div class="popup-section">
                 <span class="popup-number">3</span>
                 <div class="popup-text">
-                    <h4>Closing</h4>
-                    <p>Marks the end of your turn in radio communication.</p>
-                    <ul>
-                        <li><strong>Caller:</strong> "Channel one-six. Over."</li>
-                        <li><strong>Receiver:</strong> "Over."</li>
-                        <li><strong>Function:</strong> End your turn and signal readiness for response.</li>
+                    <h4 class="popup-section-title">Closing</h4>
+                    <p class="popup-section-desc">Marks the end of your turn in radio communication.</p>
+                    <ul class="popup-section-list">
+                        <li><strong>Caller:</strong> <span class="popup-example">"Channel one-six. Over."</span></li>
+                        <li><strong>Receiver:</strong> <span class="popup-example">"Over."</span></li>
+                        <li><strong>Function:</strong> <span class="popup-function">End your turn and signal readiness for response.</span></li>
                     </ul>
                 </div>
             </div>

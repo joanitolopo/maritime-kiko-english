@@ -77,4 +77,35 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleForms(loginContainer, forgotContainer);
         });
     }
+
+    // --- BARU: Logika untuk Modal Registrasi ---
+    const registerForm = document.getElementById('register-form');
+    const openModalBtnSm = document.getElementById('open-modal-btn-sm');
+    const openModalBtnLg = document.getElementById('open-modal-btn-lg');
+    const registerModalEl = document.getElementById('registerDetailModal');
+
+    // Pastikan kita berada di halaman register
+    if (registerForm && openModalBtnSm && openModalBtnLg && registerModalEl) {
+        
+        // Buat instance modal Bootstrap
+        const registerModal = new bootstrap.Modal(registerModalEl);
+ 
+        // Fungsi untuk menangani klik tombol "Create My Account"
+        const handleOpenModalClick = (event) => {
+            event.preventDefault(); // Hentikan aksi default
+
+            // 1. Validasi form utama (Nama, Email, Password)
+            if (!registerForm.checkValidity()) {
+                // 2. Jika tidak valid, tampilkan pesan error bawaan browser
+                registerForm.reportValidity();
+            } else {
+                // 3. Jika valid, tampilkan modal
+                registerModal.show();
+            }
+        };
+
+        // Terapkan listener ke kedua tombol (mobile dan desktop)
+        openModalBtnSm.addEventListener('click', handleOpenModalClick);
+        openModalBtnLg.addEventListener('click', handleOpenModalClick);
+    }
 });

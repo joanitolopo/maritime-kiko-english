@@ -9,13 +9,13 @@
 <!-- HEADER -->
 <header class="top-bar">
     <div class="container d-flex justify-content-end align-items-center header-right-group">
-        <a href="{{ url_for('learning.courses_page') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+        <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
             <i class="fas fa-chevron-left me-1"></i>
             <span class="btn-text">Back</span>
         </a>
         
-        <div class="current-unit-title d-flex align-items-center ms-3 me-3">
-            <i class="fas fa-anchor me-2"></i>
+        <div class="current-unit-title d-flex align-items-center ms-3 me-3" aria-hidden="false">
+            <i class="fas fa-anchor me-2" aria-hidden="true"></i>
             <span>Unit {{ unit_id }} - {{ unit_data.title }}</span>
         </div>
 
@@ -37,7 +37,7 @@
                 <i class="fas fa-bullseye"></i>
             </div>
             <div class="badge-text">
-                <h4>Get Ready to Sail</h4>
+                <h4>B. Get Ready to Sail</h4>
                 <p>Activity 1: Radio Check!</p>
             </div>
         </div>
@@ -54,12 +54,8 @@
             </div>
 
             <div class="instruction-bubble">
-                <div class="bubble-header">
-                    <i class="fas fa-broadcast-tower"></i>
-                    <span>Captain's Instructions</span>
-                </div>
                 <p class="speech-text-warmup">
-                    "Cadet, tune your ears to the radio! Identify each code word you hear, let's see if your radio ears are sharp!"
+                    Cadet, tune your ears to the radio! Identify each code word you hear, let's see if your radio ears are sharp!
                 </p>
                 <div class="warmup-controls">
                     <button class="control-btn audio-btn">
@@ -88,13 +84,14 @@
                         <p>Listen and select the correct code</p>
                     </div>
                 </div>
-                <button id="play-grid-audio" class="play-audio-btn">
-                    <i class="fas fa-play"></i>
-                    <span>Play Audio</span>
-                </button>
             </div>
 
             <div class="activity-body">
+                <div class="instruction-text">
+                    <i class="fas fa-headphones"></i>
+                    <p>Listen carefully! Click the correct letter or number</p>
+                </div>
+
                 <div class="radio-display">
                     <img src="{{ url_for('static', filename='img/walkie-talkies.png') }}" alt="Radio" class="radio-img">
                     <div class="audio-wave">
@@ -106,44 +103,53 @@
                     </div>
                 </div>
 
-                <div class="instruction-text">
+                <button id="play-grid-audio" class="play-audio-btn">
+                    <i class="fas fa-play"></i>
+                    <span>Play Audio</span>
+                </button>
+
+                <!-- <div class="instruction-text">
                     <i class="fas fa-headphones"></i>
                     <p>Listen carefully! Click the correct letter or number</p>
-                </div>
+                </div> -->
 
                 <div class="code-grid">
                     <button class="code-btn" data-code="oscar">
                         <span class="code-letter">O</span>
-                        <span class="code-label">Oscar</span>
+                        <!-- <span class="code-label">Oscar</span> -->
                     </button>
                     <button class="code-btn" data-code="charlie">
                         <span class="code-letter">C</span>
-                        <span class="code-label">Charlie</span>
+                        <!-- <span class="code-label">Charlie</span> -->
                     </button>
                     <button class="code-btn" data-code="sierra">
                         <span class="code-letter">S</span>
-                        <span class="code-label">Sierra</span>
+                        <!-- <span class="code-label">Sierra</span> -->
                     </button>
                     <button class="code-btn" data-code="alpha">
                         <span class="code-letter">A</span>
-                        <span class="code-label">Alpha</span>
+                        <!-- <span class="code-label">Alpha</span> -->
                     </button>
                     <button class="code-btn" data-code="zeero">
                         <span class="code-letter">0</span>
-                        <span class="code-label">Zero</span>
+                        <!-- <span class="code-label">Zero</span> -->
                     </button>
                     <button class="code-btn" data-code="wun">
                         <span class="code-letter">1</span>
-                        <span class="code-label">One</span>
+                        <!-- <span class="code-label">One</span> -->
                     </button>
                     <button class="code-btn" data-code="niner">
                         <span class="code-letter">9</span>
-                        <span class="code-label">Niner</span>
+                        <!-- <span class="code-label">Niner</span> -->
                     </button>
                     <button class="code-btn" data-code="fife">
                         <span class="code-letter">5</span>
-                        <span class="code-label">Fife</span>
+                        <!-- <span class="code-label">Fife</span> -->
                     </button>
+                </div>
+                <div class="feedback-box" id="grid-feedback" style="display: none;">
+                    <i class="feedback-icon"></i>
+                    <p class="feedback-text"></p>
                 </div>
             </div>
         </section>
@@ -158,13 +164,13 @@
                         <p>Identify the ship name being spelled</p>
                     </div>
                 </div>
-                <button id="play-mcq-audio" class="play-audio-btn">
-                    <i class="fas fa-play"></i>
-                    <span>Play Audio</span>
-                </button>
             </div>
 
             <div class="activity-body">
+                <div class="instruction-text">
+                    <i class="fas fa-headphones"></i>
+                    <p>What is the ship name spelled by the Captain?</p>
+                </div>
                 <div class="captain-display">
                     <img src="{{ url_for('static', filename='img/Captain-Radio Check2.png') }}" alt="Captain Speaking" class="captain-speaking">
                     <div class="speech-indicator">
@@ -174,10 +180,12 @@
                     </div>
                 </div>
 
-                <div class="instruction-text">
-                    <i class="fas fa-headphones"></i>
-                    <p>What is the ship name spelled by the Captain?</p>
-                </div>
+                <button id="play-mcq-audio" class="play-audio-btn">
+                    <i class="fas fa-play"></i>
+                    <span>Play Audio</span>
+                </button>
+
+                
 
                 <form class="mcq-form">
                     <label class="mcq-option">
@@ -223,12 +231,10 @@
 
         <!-- Continue Button -->
         <div class="continue-wrapper">
-            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_alphabet') }}" class="btn-continue">
-                <span>Continue to Next Activity</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=2) }}" class="continue-button">
+                <span>Continue Sailing </span>
             </a>
         </div>
-
     </main>
 
 </div>

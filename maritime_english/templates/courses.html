@@ -80,7 +80,8 @@
                     <div class="stat-icon"><i class="fas fa-trophy"></i></div>
                     <div class="stat-info">
                         <h6>Total Progress</h6>
-                        <h3>1 / 6 Units</h3> <small class="text-muted">Keep sailing!</small>
+                        <h3>1 / 6 Units</h3>
+                        <small class="text-muted">Keep sailing!</small>
                     </div>
                 </div>
 
@@ -88,7 +89,16 @@
                     <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
                     <div class="stat-info">
                         <h6>Learning Time</h6>
-                        <h3><span id="learning-minutes">45</span> Mins</h3> <small class="text-success"><i class="fas fa-arrow-up me-1"></i> +15m today</small>
+                        <h3><span id="learning-minutes">{{current_user.stats.total_learning_time_minutes}}</span> Mins</h3>
+                        {% if current_user.stats.minutes_today and current_user.stats.minutes_today > 0 %}
+                            <small class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i> 
+                                +{{ current_user.stats.minutes_today }}m today
+                            </small>
+                        {% else %}
+                            <!-- Tampilkan pesan 'semangat' jika hari ini belum belajar -->
+                            <small class="text-muted">Let's start learning today!</small>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -99,27 +109,51 @@
             <section class="course-page-banner fade-in-up">
                 <div class="banner-content">
                     <h2 class="banner-title">Maritime English Courses</h2>
-                    <p class="banner-subtitle">Choose your next destination and continue your training, Cadet!</p>
+                    <p class="banner-subtitle">Choose your next destination and continue your training at sea.</p>
                 </div>
                 <div class="banner-icon">
-                    <i class="fas fa-book-open"></i>
+                    <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Course Character">
                 </div>
             </section>
 
-            <div class="row row-cols-1 row-cols-md-2 g-4 mt-2 course-grid">
+            <div class="row row-cols-2 row-cols-md-2 g-4 mt-2 course-grid">
                 
-                {% for unit_id, unit_info in units_data.items() %}
+                {% for unit_id_str, unit_info in units_data.items() %}
                     
-                    {% set is_active = (unit_id == 1) %}
-                    {% set is_in_progress = (unit_id == 2) %}
-                    {% set is_locked = (not is_active and not is_in_progress) %}
-                    {% set unit_progress = 40 %} <div class="col fade-in-up">
+                    {% set unit_id = unit_id_str|int %}
+                    
+                    {% set unit_progress_data = progress_data.get(unit_id, {}) %}
+                    
+                    {% set status = unit_progress_data.get('status', 'not_started') %}
+                    {% set unit_progress = unit_progress_data.get('progress_percent', 0) %}
+                    {% set completed_subunits = unit_progress_data.get('completed_subunits', 0) %}
+                    
+                    {% set is_active = (status == 'not_started' and unit_id == 1) %} {% set is_in_progress = (status == 'in_progress') %}
+                    {% set is_completed = (status == 'completed') %}
+                    
+                    {% set is_locked = (status == 'not_started' and unit_id != 1) %}
+                    
+                    <div class="col fade-in-up">
                         <div class="unit-card 
                                     {% if is_locked %}is-locked{% endif %}
                                     {% if is_active %}is-active{% endif %}
-                                    {% if is_in_progress %}is-in-progress{% endif %}">
+                                    {% if is_in_progress %}is-in-progress{% endif %}"
+                             data-unit-id="{{ unit_id }}"
+                             data-unit-title="{{ unit_info.title }}"
+                             data-completed-subunits="{{ completed_subunits }}">
                             
-                            <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) if not is_locked }}" class="unit-card-image">
+                            <div class="unit-card-image" 
+                                 {% if not is_locked %}
+                                 role="button" 
+                                 tabindex="0"
+                                 onclick="openSubunitModal(
+                                                {{ unit_id }}, 
+                                                '{{ unit_info.title }}', 
+                                                {{ completed_subunits }},
+                                                '{{ url_for('learning.unit_introduction', unit_id=unit_id) }}',
+                                                '{{ url_for('learning.subunit_page', unit_id=unit_id, subunit_index=999) }}'
+                                            )"
+                                 {% endif %}>
                                 <img src="{{ url_for('static', filename='img/' + unit_info.image) }}" 
                                      alt="{{ unit_info.title }}">
                                 {% if is_locked %}
@@ -127,7 +161,7 @@
                                 {% elif is_in_progress %}
                                     <span class="status-icon in-progress"><i class="fas fa-spinner fa-spin"></i></span>
                                 {% endif %}
-                            </a>
+                            </div>
 
                             <div class="unit-card-content">
                                 <span class="unit-card-id">Unit {{ unit_id }}</span>
@@ -137,19 +171,39 @@
 
                             <div class="unit-card-footer">
                                 {% if is_active %}
-                                    <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) }}" class="btn-card-action btn-start">
-                                        <i class="fas fa-play me-2"></i> Start Voyage
-                                    </a>
+                                    <button type="button" 
+                                            class="btn-card-action btn-start"
+                                            onclick="openSubunitModal(
+                                                        {{ unit_id }}, 
+                                                        '{{ unit_info.title }}', 
+                                                        {{ completed_subunits }},
+                                                        '{{ url_for('learning.unit_introduction', unit_id=unit_id) }}',
+                                                        '{{ url_for('learning.subunit_page', unit_id=unit_id, subunit_index=999) }}'
+                                            )">
+                                            <i class="fas fa-play me-2"></i> Start
+                                    </button>
                                 {% elif is_in_progress %}
                                     <div class="progress-info">
                                         <small>Progress: {{ unit_progress }}%</small>
-                                        <div class="progress custom-progress mt-1 mb-2">
+                                        <!-- <div class="progress custom-progress mt-1 mb-2">
                                             <div class="progress-bar bg-indigo" role="progressbar" style="width: {{ unit_progress }}%" aria-valuenow="{{ unit_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div> -->
+
+                                        <div class="progress custom-progress mt-1 mb-2">
+                                            <div class="progress-bar bg-coral" role="progressbar" style="width: 0%" data-target-width="{{current_user.stats.current_unit_progress}}%" aria-valuenow="{{current_user.stats.current_unit_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
-                                    <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) }}" class="btn-card-action btn-continue">
-                                        <i class="fas fa-arrow-right me-2"></i> Continue Unit
-                                    </a>
+                                    <button type="button" 
+                                            class="btn-card-action btn-continue"
+                                            onclick="openSubunitModal(
+                                                        {{ unit_id }}, 
+                                                        '{{ unit_info.title }}', 
+                                                        {{ completed_subunits }},
+                                                        '{{ url_for('learning.unit_introduction', unit_id=unit_id) }}',
+                                                        '{{ url_for('learning.subunit_page', unit_id=unit_id, subunit_index=999) }}'
+                                            )">
+                                            Continue
+                                    </button>
                                 {% elif is_locked %}
                                     <div class="status-locked-badge">
                                         <i class="fas fa-lock me-1"></i> Locked
@@ -161,7 +215,51 @@
                     </div>
                 {% endfor %}
                 
-            </div> </div> </div> </main>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Subunit Preview Modal -->
+<div class="modal fade" id="subunitModal" tabindex="-1" aria-labelledby="subunitModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content subunit-modal-content">
+            <div class="modal-header subunit-modal-header">
+                <div class="modal-header-content">
+                    <span class="modal-unit-badge">Unit <span id="modalUnitNumber">1</span></span>
+                    <h5 class="modal-title" id="subunitModalLabel">Spelling the Sea</h5>
+                </div>
+                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body subunit-modal-body">
+                <div class="voyage-progress-header">
+                    <div class="voyage-progress-info">
+                        <i class="fas fa-route me-2"></i>
+                        <span>Your Voyage Progress</span>
+                    </div>
+                    <div class="voyage-progress-stats">
+                        <span id="completedCount">0</span> / 9 Completed
+                    </div>
+                </div>
+                
+                <div class="subunit-list" id="subunitList">
+                    <!-- Subunits will be injected here by JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer subunit-modal-footer">
+                <button type="button" class="btn btn-secondary-outline" data-bs-dismiss="modal">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Courses
+                </button>
+                <button type="button" class="btn btn-start-voyage" id="startVoyageBtn">
+                    <i class="fas fa-ship me-2"></i> Start Voyage
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_js %}

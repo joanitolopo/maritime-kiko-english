@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Unit 1: Input Alphabet{% endblock %}
+{% block title %}Unit 1: NATO Phonetic Code{% endblock %}
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/input_alphabet.css') }}">
@@ -9,7 +9,7 @@
 <!-- HEADER -->
 <header class="top-bar">
     <div class="container d-flex justify-content-end align-items-center header-right-group">
-        <a href="{{ url_for('learning.courses_page') }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
+        <a href="{{ url_for('learning.unit_introduction', unit_id=unit_id) }}" class="btn-learn-nav btn-back" aria-label="Back to courses">
             <i class="fas fa-chevron-left me-1"></i>
             <span class="btn-text">Back</span>
         </a>
@@ -26,19 +26,19 @@
 </header>
 
 <!-- MAIN CONTENT -->
-<div class="alphabet-container">
+<div class="phonetic-container">
     
     <!-- LEFT SIDEBAR -->
-    <aside class="alphabet-sidebar">
+    <aside class="phonetic-sidebar">
         
         <!-- Activity Badge -->
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fas fa-spell-check"></i>
+                <i class="fas fa-keyboard"></i>
             </div>
             <div class="badge-text">
-                <h4>Master the Code</h4>
-                <p>Activity 2: Alphabet A-Z</p>
+                <h4>C. Sail into Real Communication</h4>
+                <p>Activity 2. Learn the Codes</p>
             </div>
         </div>
 
@@ -54,14 +54,11 @@
             </div>
 
             <div class="instruction-bubble">
-                <div class="bubble-header">
-                    <i class="fas fa-microphone-alt"></i>
-                    <span>Captain's Instructions</span>
-                </div>
-                <p class="speech-text-activity2">
-                    "Cadet, it's time to master our code words at sea! Shadow each code word you hear, let's hear you sound like a true mariner!"
+                <p class="speech-text-phonetic">
+                    Cadet, it's time to master our code words at sea! In this activity, you'll train your ears and voice to handle both the maritime alphabet and numbers. 
+                    Shadow each code word and echo each number you hear — keep your radio voice steady and sound like a true mariner!
                 </p>
-                <div class="activity2-controls">
+                <div class="phonetic-controls">
                     <button class="control-btn audio-btn">
                         <i class="fa-solid fa-play"></i>
                     </button>
@@ -73,52 +70,62 @@
             </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <!-- <div class="progress-card">
+        <!-- Progress Card -->
+        <div class="progress-card">
             <div class="progress-header">
                 <i class="fas fa-chart-line"></i>
                 <span>Your Progress</span>
             </div>
             <div class="progress-stats">
                 <div class="stat-item">
-                    <span class="stat-number" id="letters-played">0</span>
-                    <span class="stat-label">Letters Played</span>
+                    <span class="stat-number" id="total-played">0</span>
+                    <span class="stat-label">Mastered</span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
-                    <span class="stat-number">26</span>
-                    <span class="stat-label">Total Letters</span>
+                    <span class="stat-number">36</span>
+                    <span class="stat-label">Total Keys</span>
                 </div>
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
-        </div> -->
+            <div class="achievement-badge" id="achievement" style="display: none;">
+                <i class="fas fa-trophy"></i>
+                <span>All Keys Mastered!</span>
+            </div>
+        </div>
 
     </aside>
 
     <!-- RIGHT CONTENT -->
-    <main class="alphabet-main">
+    <main class="phonetic-main">
         
-        <!-- Alphabet Grid Card -->
-        <section class="alphabet-card">
-            <div class="alphabet-header">
+        <!-- Keyboard Card -->
+        <section class="keyboard-card">
+            <div class="keyboard-header">
                 <div class="header-left">
                     <div class="header-icon">
-                        <i class="fas fa-font"></i>
+                        <i class="fas fa-keyboard"></i>
                     </div>
                     <div class="header-text">
-                        <h3>NATO Phonetic Alphabet</h3>
-                        <p>Click any letter to hear its code word</p>
+                        <h3>NATO Phonetic Keyboard</h3>
+                        <p>Click or press any key to hear its radio code</p>
                     </div>
                 </div>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder="Search letter...">
+                <div class="mode-toggle">
+                    <button class="mode-btn active" data-mode="learn">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Learn</span>
+                    </button>
+                    <button class="mode-btn" data-mode="test">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Test</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="alphabet-body">
+            <div class="keyboard-body">
                 <!-- Instruction Banner -->
                 <div class="instruction-banner">
                     <div class="banner-icon">
@@ -126,204 +133,223 @@
                     </div>
                     <div class="banner-text">
                         <h4>Interactive Learning</h4>
-                        <p>Click on any letter to hear how it sounds in radio communication</p>
+                        <p>Use your physical keyboard or click on keys to practice radio communication codes</p>
                     </div>
                 </div>
 
-                <!-- Alphabet Grid -->
-                <div class="alphabet-grid">
-                    <!-- A-Z Letters -->
-                    <button class="letter-box" data-code="alpha" data-letter="A">
-                        <span class="letter-main">A</span>
-                        <span class="letter-code">Alfa</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
+                <!-- Display Area -->
+                <div class="display-area">
+                    <div class="current-key-display" id="current-display">
+                        <span class="display-char">-</span>
+                        <span class="display-phonetic">Click a key to start</span>
+                    </div>
+                </div>
+
+                <!-- QWERTY Keyboard -->
+                <div class="keyboard-wrapper">
+                    <!-- Number Row -->
+                    <div class="keyboard-row number-row">
+                        <button class="key-btn number-key" data-key="1" data-code="wun" data-phonetic="WUN">
+                            <span class="key-char">1</span>
+                            <!-- <span class="key-label">Wun</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="2" data-code="too" data-phonetic="TOO">
+                            <span class="key-char">2</span>
+                            <!-- <span class="key-label">Too</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="3" data-code="tree" data-phonetic="TREE">
+                            <span class="key-char">3</span>
+                            <!-- <span class="key-label">Tree</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="4" data-code="fower" data-phonetic="FOWER">
+                            <span class="key-char">4</span>
+                            <!-- <span class="key-label">Fower</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="5" data-code="fife" data-phonetic="FIFE">
+                            <span class="key-char">5</span>
+                            <!-- <span class="key-label">Fife</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="6" data-code="six" data-phonetic="SIX">
+                            <span class="key-char">6</span>
+                            <!-- <span class="key-label">Six</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="7" data-code="seven" data-phonetic="SEVEN">
+                            <span class="key-char">7</span>
+                            <!-- <span class="key-label">Seven</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="8" data-code="eight" data-phonetic="AIT">
+                            <span class="key-char">8</span>
+                            <!-- <span class="key-label">Ait</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="9" data-code="niner" data-phonetic="NINER">
+                            <span class="key-char">9</span>
+                            <!-- <span class="key-label">Niner</span> -->
+                        </button>
+                        <button class="key-btn number-key" data-key="0" data-code="zeero" data-phonetic="ZE-RO">
+                            <span class="key-char">0</span>
+                            <!-- <span class="key-label">Zeero</span> -->
+                        </button>
+                    </div>
+
+                    <!-- Top Row: Q W E R T Y U I O P -->
+                    <div class="keyboard-row">
+                        <button class="key-btn" data-key="Q" data-code="quebec" data-phonetic="KEH-BECK">
+                            <span class="key-char">Q</span>
+                            <!-- <span class="key-label">Quebec</span> -->
+                        </button>
+                        <button class="key-btn" data-key="W" data-code="whiskey" data-phonetic="WISS-KEY">
+                            <span class="key-char">W</span>
+                            <!-- <span class="key-label">Whiskey</span> -->
+                        </button>
+                        <button class="key-btn" data-key="E" data-code="echo" data-phonetic="ECK-OH">
+                            <span class="key-char">E</span>
+                            <!-- <span class="key-label">Echo</span> -->
+                        </button>
+                        <button class="key-btn" data-key="R" data-code="romeo" data-phonetic="ROW-ME-OH">
+                            <span class="key-char">R</span>
+                            <!-- <span class="key-label">Romeo</span> -->
+                        </button>
+                        <button class="key-btn" data-key="T" data-code="tango" data-phonetic="TANG-GO">
+                            <span class="key-char">T</span>
+                            <!-- <span class="key-label">Tango</span> -->
+                        </button>
+                        <button class="key-btn" data-key="Y" data-code="yankee" data-phonetic="YANG-KEY">
+                            <span class="key-char">Y</span>
+                            <!-- <span class="key-label">Yankee</span> -->
+                        </button>
+                        <button class="key-btn" data-key="U" data-code="uniform" data-phonetic="YOU-NEE-FORM">
+                            <span class="key-char">U</span>
+                            <!-- <span class="key-label">Uniform</span> -->
+                        </button>
+                        <button class="key-btn" data-key="I" data-code="india" data-phonetic="IN-DEE-AH">
+                            <span class="key-char">I</span>
+                            <!-- <span class="key-label">India</span> -->
+                        </button>
+                        <button class="key-btn" data-key="O" data-code="oscar" data-phonetic="OSS-CAH">
+                            <span class="key-char">O</span>
+                            <!-- <span class="key-label">Oscar</span> -->
+                        </button>
+                        <button class="key-btn" data-key="P" data-code="papa" data-phonetic="PAH-PAH">
+                            <span class="key-char">P</span>
+                            <!-- <span class="key-label">Papa</span> -->
+                        </button>
+                    </div>
+
+                    <!-- Middle Row: A S D F G H J K L -->
+                    <div class="keyboard-row">
+                        <button class="key-btn" data-key="A" data-code="alpha" data-phonetic="AL-FAH">
+                            <span class="key-char">A</span>
+                            <!-- <span class="key-label">Alfa</span> -->
+                        </button>
+                        <button class="key-btn" data-key="S" data-code="sierra" data-phonetic="SEE-AIR-RAH">
+                            <span class="key-char">S</span>
+                            <!-- <span class="key-label">Sierra</span> -->
+                        </button>
+                        <button class="key-btn" data-key="D" data-code="delta" data-phonetic="DELL-TAH">
+                            <span class="key-char">D</span>
+                            <!-- <span class="key-label">Delta</span> -->
+                        </button>
+                        <button class="key-btn" data-key="F" data-code="foxtrot" data-phonetic="FOKS-TROT">
+                            <span class="key-char">F</span>
+                            <!-- <span class="key-label">Foxtrot</span> -->
+                        </button>
+                        <button class="key-btn" data-key="G" data-code="golf" data-phonetic="GOLF">
+                            <span class="key-char">G</span>
+                            <!-- <span class="key-label">Golf</span> -->
+                        </button>
+                        <button class="key-btn" data-key="H" data-code="hotel" data-phonetic="HOH-TEL">
+                            <span class="key-char">H</span>
+                            <!-- <span class="key-label">Hotel</span> -->
+                        </button>
+                        <button class="key-btn" data-key="J" data-code="juliett" data-phonetic="JEW-LEE-ETT">
+                            <span class="key-char">J</span>
+                            <!-- <span class="key-label">Juliett</span> -->
+                        </button>
+                        <button class="key-btn" data-key="K" data-code="kilo" data-phonetic="KEY-LOH">
+                            <span class="key-char">K</span>
+                            <!-- <span class="key-label">Kilo</span> -->
+                        </button>
+                        <button class="key-btn" data-key="L" data-code="lima" data-phonetic="LEE-MAH">
+                            <span class="key-char">L</span>
+                            <!-- <span class="key-label">Lima</span> -->
+                        </button>
+                    </div>
+
+                    <!-- Bottom Row: Z X C V B N M -->
+                    <div class="keyboard-row">
+                        <button class="key-btn" data-key="Z" data-code="zulu" data-phonetic="ZOO-LOO">
+                            <span class="key-char">Z</span>
+                            <!-- <span class="key-label">Zulu</span> -->
+                        </button>
+                        <button class="key-btn" data-key="X" data-code="xray" data-phonetic="ECKS-RAY">
+                            <span class="key-char">X</span>
+                            <!-- <span class="key-label">X-ray</span> -->
+                        </button>
+                        <button class="key-btn" data-key="C" data-code="charlie" data-phonetic="CHAR-LEE">
+                            <span class="key-char">C</span>
+                            <!-- <span class="key-label">Charlie</span> -->
+                        </button>
+                        <button class="key-btn" data-key="V" data-code="victor" data-phonetic="VIK-TAH">
+                            <span class="key-char">V</span>
+                            <!-- <span class="key-label">Victor</span> -->
+                        </button>
+                        <button class="key-btn" data-key="B" data-code="bravo" data-phonetic="BRAH-VOH">
+                            <span class="key-char">B</span>
+                            <!-- <span class="key-label">Bravo</span> -->
+                        </button>
+                        <button class="key-btn" data-key="N" data-code="november" data-phonetic="NO-VEM-BER">
+                            <span class="key-char">N</span>
+                            <!-- <span class="key-label">November</span> -->
+                        </button>
+                        <button class="key-btn" data-key="M" data-code="mike" data-phonetic="MIKE">
+                            <span class="key-char">M</span>
+                            <!-- <span class="key-label">Mike</span> -->
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" id="play-all-btn">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Play All</span>
                     </button>
-                    <button class="letter-box" data-code="bravo" data-letter="B">
-                        <span class="letter-main">B</span>
-                        <span class="letter-code">Bravo</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
+                    <button class="action-btn" id="reset-btn">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Progress</span>
                     </button>
-                    <button class="letter-box" data-code="charlie" data-letter="C">
-                        <span class="letter-main">C</span>
-                        <span class="letter-code">Charlie</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
+                    <button class="action-btn" id="random-btn">
+                        <i class="fas fa-random"></i>
+                        <span>Random Key</span>
                     </button>
-                    <button class="letter-box" data-code="delta" data-letter="D">
-                        <span class="letter-main">D</span>
-                        <span class="letter-code">Delta</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="echo" data-letter="E">
-                        <span class="letter-main">E</span>
-                        <span class="letter-code">Echo</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="foxtrot" data-letter="F">
-                        <span class="letter-main">F</span>
-                        <span class="letter-code">Foxtrot</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="golf" data-letter="G">
-                        <span class="letter-main">G</span>
-                        <span class="letter-code">Golf</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="hotel" data-letter="H">
-                        <span class="letter-main">H</span>
-                        <span class="letter-code">Hotel</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="india" data-letter="I">
-                        <span class="letter-main">I</span>
-                        <span class="letter-code">India</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="juliett" data-letter="J">
-                        <span class="letter-main">J</span>
-                        <span class="letter-code">Juliett</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="kilo" data-letter="K">
-                        <span class="letter-main">K</span>
-                        <span class="letter-code">Kilo</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="lima" data-letter="L">
-                        <span class="letter-main">L</span>
-                        <span class="letter-code">Lima</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="mike" data-letter="M">
-                        <span class="letter-main">M</span>
-                        <span class="letter-code">Mike</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="november" data-letter="N">
-                        <span class="letter-main">N</span>
-                        <span class="letter-code">November</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="oscar" data-letter="O">
-                        <span class="letter-main">O</span>
-                        <span class="letter-code">Oscar</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="papa" data-letter="P">
-                        <span class="letter-main">P</span>
-                        <span class="letter-code">Papa</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="quebec" data-letter="Q">
-                        <span class="letter-main">Q</span>
-                        <span class="letter-code">Quebec</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="romeo" data-letter="R">
-                        <span class="letter-main">R</span>
-                        <span class="letter-code">Romeo</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="sierra" data-letter="S">
-                        <span class="letter-main">S</span>
-                        <span class="letter-code">Sierra</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="tango" data-letter="T">
-                        <span class="letter-main">T</span>
-                        <span class="letter-code">Tango</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="uniform" data-letter="U">
-                        <span class="letter-main">U</span>
-                        <span class="letter-code">Uniform</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="victor" data-letter="V">
-                        <span class="letter-main">V</span>
-                        <span class="letter-code">Victor</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="whiskey" data-letter="W">
-                        <span class="letter-main">W</span>
-                        <span class="letter-code">Whiskey</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="xray" data-letter="X">
-                        <span class="letter-main">X</span>
-                        <span class="letter-code">X-ray</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="yankee" data-letter="Y">
-                        <span class="letter-main">Y</span>
-                        <span class="letter-code">Yankee</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
-                    <button class="letter-box" data-code="zulu" data-letter="Z">
-                        <span class="letter-main">Z</span>
-                        <span class="letter-code">Zulu</span>
-                        <div class="letter-sound">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Mode Section (Hidden by default) -->
+        <section class="test-section" id="test-section" style="display: none;">
+            <div class="test-header">
+                <i class="fas fa-clipboard-check"></i>
+                <h3>Test Your Knowledge</h3>
+            </div>
+            <div class="test-body">
+                <div class="test-question">
+                    <p>What key has this phonetic code?</p>
+                    <div class="phonetic-display" id="test-phonetic">ALFA</div>
+                </div>
+                <div class="test-options" id="test-options">
+                    <!-- Options will be generated by JS -->
+                </div>
+                <div class="test-score">
+                    <span>Score: <strong id="test-score">0</strong> / <strong id="test-total">0</strong></span>
                 </div>
             </div>
         </section>
 
         <!-- Continue Button -->
         <div class="continue-wrapper">
-            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_numbers') }}" class="btn-continue">
-                <span>Continue to Numbers</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_mmsi') }}" class="continue-button">
+                <span>Continue Sailing</span>
             </a>
         </div>
 

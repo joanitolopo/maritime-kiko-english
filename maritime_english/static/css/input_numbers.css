@@ -827,6 +827,11 @@ body {
         margin: 15px;
     }
 
+    .header-right-group {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+
     .current-unit-title span {
         display: none;
     }
@@ -873,7 +878,7 @@ body {
         text-align: center;
     }
 
-    .btn-continue {
+    .continue-button {
         width: 100%;
         justify-content: center;
     }
@@ -885,7 +890,7 @@ body {
     }
 
     .numbers-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 12px;
     }
 

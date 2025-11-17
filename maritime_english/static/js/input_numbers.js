@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SMOOTH INTERACTIONS
     // ==================================================
 
-    const continueBtn = document.querySelector('.btn-continue');
+    const continueBtn = document.querySelector('.continue-button');
     if (continueBtn) {
         continueBtn.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-3px)';

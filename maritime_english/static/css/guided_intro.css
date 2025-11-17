@@ -1,6 +1,7 @@
 /* ========================================
    MODERN GUIDED INTRO CSS
    Radio Watch Duty - Storytelling Interface
+   (Sidebar styles adapted from noticing_alphabet.css)
 ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap');
@@ -107,7 +108,11 @@ body {
     align-items: start;
 }
 
-/* ======== SIDEBAR ======== */
+/* ========================================
+   ======== SIDEBAR (ADAPTED FROM NOTICING_ALPHABET.CSS) ========
+   ======================================== */
+
+/* DIUBAH: Menggunakan style .drill-sidebar untuk .guided-sidebar */
 .guided-sidebar {
     display: flex;
     flex-direction: column;
@@ -116,58 +121,102 @@ body {
     top: 20px;
 }
 
-/* Title Container */
-.title-container {
-    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+/* DITAMBAHKAN: Style .activity-badge dari referensi */
+.activity-badge {
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, #1e40af 100%);
     border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(11, 90, 143, 0.3);
-    animation: slideInLeft 0.6s ease-out;
-}
-
-.main-title {
-    color: var(--white);
     padding: 20px;
-    font-size: 1.3rem;
-    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
+    animation: slideInLeft 0.6s ease-out;
 }
-
-.main-title i {
-    font-size: 1.5rem;
-}
-
-.sub-title {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
+.badge-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
     color: var(--white);
-    padding: 15px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+.badge-text h4 {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+.badge-text p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    margin: 0;
 }
 
-/* Captain Image */
-.captain-image {
-    width: 100%;
-    max-width: 280px;
-    height: auto;
+/* DITAMBAHKAN: Style .captain-instruction-card dari referensi */
+.captain-instruction-card {
+    animation: fadeInUp 0.7s ease-out 0.2s both;
+}
+
+.captain-avatar-wrapper {
+    text-align: center;
+    position: relative;
+    margin-bottom: -50px;
+    z-index: 2;
+}
+
+.captain-avatar {
+    height: 250px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
     animation: float 3s ease-in-out infinite;
-    margin: 0 auto;
-    display: block;
+    transition: transform 0.3s ease;
 }
 
-/* Speech Bubble */
+.captain-avatar:hover {
+    transform: scale(1.05);
+}
+
+.radio-waves {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+}
+
+.radio-waves span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(6, 182, 212, 0.3);
+    border-radius: 50%;
+    animation: radioWave 2s ease-out infinite;
+}
+
+.radio-waves span:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.radio-waves span:nth-child(3) {
+    animation-delay: 1.4s;
+}
+
+
+/* DIUBAH: .guided-bubble diganti dengan style .instruction-bubble */
 .guided-bubble {
     background: var(--white);
     border-radius: 20px;
-    padding: 25px;
+    padding: 60px 25px 25px; /* Disesuaikan untuk avatar */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     position: relative;
-    animation: fadeInUp 0.7s ease-out 0.2s both;
+    /* animation: fadeInUp 0.7s ease-out 0.2s both; (Sudah ada di card) */
 }
 
 .guided-bubble::before {
@@ -181,6 +230,7 @@ body {
     border-bottom: 20px solid var(--white);
 }
 
+/* DIUBAH: .speech-text-guided diganti dengan style .speech-text-drill */
 .speech-text-guided {
     font-size: 0.95rem;
     line-height: 1.8;
@@ -189,43 +239,61 @@ body {
     font-style: italic;
 }
 
+/* DIUBAH: .guided-controls diganti dengan style .drill-controls */
 .guided-controls {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
     padding-top: 15px;
     border-top: 2px solid #e5e7eb;
 }
 
-.guided-controls i {
-    width: 45px;
-    height: 45px;
+/* DIUBAH: .control-btn dan variannya diganti dengan style dari referensi */
+.control-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1.2rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.guided-controls .fa-play,
-.guided-controls .fa-pause {
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+/* Style untuk .play-btn (dari HTML) disamakan dengan .audio-btn (dari referensi) */
+.control-btn.play-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: var(--white);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    padding: 10px;
+    width: 45px;
+    height: 45px;
+    justify-content: center;
+    font-size: 1.1rem;
 }
 
-.guided-controls .fa-language {
+.control-btn.play-btn.playing {
+    animation: playPulse 1s ease infinite;
+}
+
+.control-btn.translate-btn {
     background: var(--white);
     color: var(--text-dark);
     border: 2px solid #e5e7eb;
 }
 
-.guided-controls i:hover {
-    transform: scale(1.1) translateY(-3px);
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+.control-btn:hover {
+    transform: translateY(-2px);
 }
+
+
+/* ========================================
+   ======== END OF SIDEBAR ADAPTATION ========
+   ======================================== */
+
 
 /* ======== ACTIVITY AREA ======== */
 .activity-area {
@@ -541,79 +609,146 @@ body {
     animation: arrowPulse 2s ease infinite;
 }
 
-/* ======== TASKS SECTION ======== */
-.tasks-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.task-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    background: var(--white);
-    border: 2px solid #e5e7eb;
+/* ======== ROLE SELECTION SECTION ======== */
+.role-selection-section {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid #86efac;
     border-radius: 16px;
-    transition: all 0.3s ease;
+    padding: 25px;
+    margin-bottom: 20px;
 }
 
-.task-item:hover {
-    border-color: var(--indigo);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-}
-
-.task-question {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-}
-
-.task-num {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-    color: var(--white);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-}
-
-.task-question p {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin: 0;
-}
-
-.mic-btn-task {
-    padding: 12px 25px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    color: var(--white);
-    border: none;
-    border-radius: 12px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
+.role-selection-title {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.role-selection-title i {
+    color: var(--coral);
+}
+
+.role-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.role-select-btn {
+    padding: 18px 25px;
+    border: 3px solid #e5e7eb;
+    border-radius: 16px;
+    background: var(--white);
+    cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.role-select-btn i {
+    width: 50px;
+    height: 50px;
+    background: #f3f4f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.role-select-btn[data-role="caller"] i {
+    color: var(--caller-blue);
+}
+
+.role-select-btn[data-role="receiver"] i {
+    color: var(--receiver-green);
+}
+
+.role-select-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.role-select-btn[data-role="caller"]:hover {
+    border-color: var(--caller-blue);
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.role-select-btn[data-role="caller"]:hover i {
+    background: var(--caller-blue);
+    color: var(--white);
+}
+
+.role-select-btn[data-role="receiver"]:hover {
+    border-color: var(--receiver-green);
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.role-select-btn[data-role="receiver"]:hover i {
+    background: var(--receiver-green);
+    color: var(--white);
+}
+
+/* ======== RECORDING SECTION ======== */
+.recording-section {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.selected-role-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--white);
+    border-radius: 12px;
+    font-weight: 600;
+    color: #78350f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.selected-role-info i {
+    color: var(--amber);
+    font-size: 1.2rem;
+}
+
+.mic-btn-task {
+    padding: 15px 35px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
 }
 
 .mic-btn-task:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
 }
 
 .mic-btn-task.listening {
@@ -622,7 +757,33 @@ body {
 }
 
 .mic-btn-task i {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+}
+
+.change-role-btn {
+    padding: 10px 20px;
+    background: var(--white);
+    color: var(--text-dark);
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.change-role-btn:hover {
+    background: #f3f4f6;
+    border-color: var(--text-light);
+    transform: translateY(-2px);
+}
+
+.change-role-btn i {
+    color: var(--indigo);
 }
 
 /* ======== FOOTER ======== */
@@ -651,6 +812,29 @@ body {
 .continue-button:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+.continue-wrapper {
+    text-align: right;
+    margin-top: 25px;
+}
+.btn-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    border-radius: 18px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+}
+.btn-continue:hover {
+    transform: translateY(-3px);
     color: var(--white);
 }
 
@@ -826,6 +1010,17 @@ body {
     }
 }
 
+/* DITAMBAHKAN: Animasi dari referensi */
+@keyframes radioWave {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+@keyframes playPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+/* ----- */
+
 @keyframes cardFadeIn {
     from {
         opacity: 0;
@@ -895,22 +1090,98 @@ body {
     .arrow-exchange {
         transform: rotate(90deg);
     }
+
+    .role-buttons {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
+    /* ======== HEADER (Adapted from Reference) ======== */
     .top-bar {
-        margin: 15px;
-        padding: 12px 15px;
+        margin: 0;
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 10px 15px;
+        border-radius: 0;
     }
 
-    .current-unit-title span {
+    .header-right-group {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+
+    /* Styles for mobile header buttons (from ref) */
+    .btn-learn-nav {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .btn-back .btn-text {
         display: none;
     }
+    .btn-back i {
+        margin: 0 !important;
+    }
+    /* ----- */
 
-    .captain-image {
-        max-width: 200px;
+    .current-unit-title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0 10px !important;
+    }
+    .current-unit-title span {
+        font-size: 0.85rem;
     }
 
+    /* ADDED: Padding top for sticky header (from ref) */
+    .main-content {
+        padding: 70px 15px 30px;
+    }
+
+
+    /* ======== SIDEBAR (Adapted from Reference) ======== */
+    .captain-avatar {
+        height: 250px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* UPDATED: .guided-bubble uses .instruction-bubble style */
+    .guided-bubble {
+        margin-top: -80px; /* Was -50px, changed to match ref */
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        z-index: 2;
+    }
+
+    .activity-badge {
+        padding: 16px;
+        gap: 12px;
+    }
+    .badge-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    .badge-text h4 {
+        font-size: 1rem;
+    }
+    .badge-text p {
+        font-size: 0.9rem;
+    }
+
+    /* ======== ACTIVITY AREA (Combined) ======== */
     .activity-area {
         padding: 20px;
     }
@@ -933,21 +1204,27 @@ body {
     .story-scene {
         flex-direction: column;
     }
-
-    .task-item {
-        flex-direction: column;
-        align-items: stretch;
+    
+    /* ADDED: Responsive rules from 992px block */
+    .vessels-display {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .arrow-exchange {
+        transform: rotate(90deg);
+        margin: 0 auto; /* Center the arrow */
     }
 
-    .mic-btn-task {
-        width: 100%;
-        justify-content: center;
+    .role-buttons {
+        grid-template-columns: 1fr;
     }
 
+    /* ======== FOOTER (Adapted from Reference) ======== */
     .footer-nav {
         text-align: center;
     }
-
+    
     .continue-button {
         width: 100%;
         justify-content: center;
@@ -967,7 +1244,12 @@ body {
         font-size: 0.75rem;
     }
 
-    .task-question p {
-        font-size: 0.9rem;
+    .role-select-btn {
+        padding: 15px 20px;
+    }
+
+    .mic-btn-task {
+        padding: 12px 25px;
+        font-size: 1rem;
     }
 }

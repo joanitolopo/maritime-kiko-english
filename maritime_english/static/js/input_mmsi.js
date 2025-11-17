@@ -1,6 +1,7 @@
 // ========================================
 // MODERN MMSI PAGE JAVASCRIPT
 // Ship Identity & Radio Communication
+// (Refactored for multiple players)
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,30 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioBtn_sidebar = document.querySelector('.mmsi-controls .audio-btn i');
     const translateBtn_sidebar = document.querySelector('.mmsi-controls .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-mmsi');
-    const instructionText = document.querySelector('.instruction-text-mmsi p');
+    const instructionTexts = document.querySelectorAll('.instruction-text-mmsi p'); // Sekarang ada lebih dari satu
 
-    // Radio Player
-    const playButton = document.getElementById('play-mmsi-example');
-    const playButtonIcon = playButton ? playButton.querySelector('i') : null;
-    const playButtonText = playButton ? playButton.querySelector('span') : null;
-    const statusDot = document.querySelector('.status-dot');
-    const statusText = document.querySelector('.status-indicator span:last-child');
+    // Radio Players (BARU: Menggunakan querySelectorAll)
+    const playButtons = document.querySelectorAll('.play-example-btn');
+    const allRadioCards = document.querySelectorAll('.radio-card');
 
     // Audio Players
     const audio_sidebar = new Audio();
-    const audio_example = new Audio();
-
-    const allAudios = [audio_sidebar, audio_example];
+    const audio_examples = []; // (BARU: Array untuk menampung audio player dinamis)
     
-    let isPlayingExample = false;
+    let activeExampleAudio = null; // (BARU: Melacak audio yang sedang aktif)
 
+    const allAudios = [audio_sidebar]; // (MODIFIKASI: Hanya berisi audio sidebar)
+    
     // ==================================================
     // CONTENT & AUDIO PATHS
     // ==================================================
 
     // Text Content
-    const originalText_sidebar = `"Cadet, every ship at sea has its own identity! We use a Call Sign (a special code made of letters and numbers) and an MMSI number (a digital ID for radio communication). Let's listen to how sailors use them when spelling names and sending messages!"`;
-    const translatedText_sidebar = `"Kadet, setiap kapal di laut punya identitas sendiri! Kita menggunakan Call Sign (kode khusus dari huruf dan angka) dan nomor MMSI (ID digital untuk komunikasi radio). Mari dengarkan bagaimana pelaut menggunakannya saat mengeja nama dan mengirim pesan!"`;
+    const originalText_sidebar = "Cadet, every ship at sea has its own identity! We use a Call Sign — a special code made of letters and numbers — and an MMSI number — a digital ID for radio communication. Let's listen to how sailors use them when spelling names and sending messages!";
+    const translatedText_sidebar = "Taruna, setiap kapal di laut memiliki identitasnya sendiri! Kami menggunakan Call Sign — kode khusus yang terdiri dari huruf dan angka — serta MMSI number — ID digital untuk komunikasi radio. Sekarang, mari dengarkan bagaimana para pelaut menggunakannya saat mengeja nama dan mengirim pesan!";
 
     const originalText_instruction = `Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.`;
     const translatedText_instruction = `Dengarkan contoh komunikasi radio. Perhatikan bagaimana Call Sign dan MMSI dieja dan diucapkan. Lalu, ulangi masing-masing dengan jelas menggunakan suaramu sendiri.`;
@@ -46,14 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Audio Paths
     const audioPath_sidebar = '/static/data/audio/unit1/mmsi_intro.wav';
-    const audioPath_example = '/static/data/audio/unit1/mmsi_example.wav';
+    // (MODIFIKASI: audioPath_example sekarang ada di atribut data-audio-src HTML)
 
     // ==================================================
     // MAIN AUDIO CONTROL FUNCTIONS
     // ==================================================
 
     function stopAllAudio() {
-        allAudios.forEach(audio => {
+        // (MODIFIKASI: Menggabungkan sidebar audio dan semua example audio)
+        [...allAudios, ...audio_examples].forEach(audio => {
             if (!audio.paused) {
                 audio.pause();
                 audio.currentTime = 0;
@@ -66,23 +65,37 @@ document.addEventListener('DOMContentLoaded', () => {
             audioBtn_sidebar.classList.add('fa-play');
         }
 
-        // Reset play button
-        if (playButton) {
-            playButton.classList.remove('playing');
-            if (playButtonIcon) {
-                playButtonIcon.classList.remove('fa-pause');
-                playButtonIcon.classList.add('fa-play');
+        // (MODIFIKASI: Reset semua play button)
+        playButtons.forEach(btn => {
+            btn.classList.remove('playing');
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            if (icon) {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
             }
-            if (playButtonText) {
-                playButtonText.textContent = 'Play Example';
+            if (text) {
+                // Teks kembali ke 'Play Example' atau 'Play Again' tergantung state sebelumnya
+                if (text.textContent === 'Stop') {
+                    text.textContent = 'Play Example';
+                }
             }
-        }
+        });
 
-        isPlayingExample = false;
-        updateStatus('ready');
+        // (MODIFIKASI: Reset status semua card)
+        allRadioCards.forEach(card => {
+            updateStatus('ready', card);
+        });
+        
+        activeExampleAudio = null;
     }
 
-    function updateStatus(state) {
+    // (MODIFIKASI: Sekarang menerima elemen card sebagai parameter)
+    function updateStatus(state, cardElement) {
+        if (!cardElement) return;
+        const statusDot = cardElement.querySelector('.status-dot');
+        const statusText = cardElement.querySelector('.status-indicator span:last-child');
+        
         if (!statusDot || !statusText) return;
 
         switch(state) {
@@ -108,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (audioBtn_sidebar) {
         audioBtn_sidebar.parentElement.addEventListener('click', function() {
             if (audio_sidebar.paused) {
-                stopAllAudio();
+                stopAllAudio(); // Ini akan menghentikan audio example jika sedang play
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
@@ -139,100 +152,122 @@ document.addEventListener('DOMContentLoaded', () => {
         translateBtn_sidebar.addEventListener('click', function() {
             stopAllAudio();
             
-            // Fade transition for both texts
+            // Fade transition untuk sidebar
             fadeTransition(speechText_sidebar, () => {
                 if (isTranslated) {
                     speechText_sidebar.textContent = originalText_sidebar;
-                    if (instructionText) {
-                        instructionText.textContent = originalText_instruction;
-                    }
-                    isTranslated = false;
                 } else {
                     speechText_sidebar.textContent = translatedText_sidebar;
-                    if (instructionText) {
-                        instructionText.textContent = translatedText_instruction;
-                    }
-                    isTranslated = true;
                 }
             });
-            
+
+            // (MODIFIKASI: Update semua teks instruksi)
+            instructionTexts.forEach(instructionText => {
+                if(instructionText) {
+                    fadeTransition(instructionText, () => {
+                        if (isTranslated) {
+                            instructionText.textContent = originalText_instruction;
+                        } else {
+                            instructionText.textContent = translatedText_instruction;
+                        }
+                    });
+                }
+            });
+
+            isTranslated = !isTranslated; // Toggle status
             addClickEffect(this);
         });
     }
 
     // ==================================================
-    // RADIO COMMUNICATION PLAYER
+    // RADIO COMMUNICATION PLAYER (REFAKTORED)
     // ==================================================
 
-    if (playButton) {
-        playButton.addEventListener('click', function() {
-            if (isPlayingExample) {
-                // Stop playing
-                audio_example.pause();
-                audio_example.currentTime = 0;
-                this.classList.remove('playing');
+    playButtons.forEach(button => {
+        const audio = new Audio();
+        audio_examples.push(audio); // Tambahkan ke daftar untuk dikelola
+        const audioSrc = button.dataset.audioSrc;
+        
+        // (BARU: Cari elemen relatif terhadap tombol)
+        const card = button.closest('.radio-card'); 
+        const buttonIcon = button.querySelector('i');
+        const buttonText = button.querySelector('span');
+
+        button.addEventListener('click', function() {
+            if (activeExampleAudio === audio) {
+                // Audio ini sedang diputar, jadi hentikan
+                audio.pause();
+                audio.currentTime = 0;
+                button.classList.remove('playing');
                 
-                if (playButtonIcon) {
-                    playButtonIcon.classList.remove('fa-pause');
-                    playButtonIcon.classList.add('fa-play');
+                if (buttonIcon) {
+                    buttonIcon.classList.remove('fa-pause');
+                    buttonIcon.classList.add('fa-play');
                 }
-                if (playButtonText) {
-                    playButtonText.textContent = 'Play Example';
+                if (buttonText) {
+                    buttonText.textContent = 'Play Example';
                 }
                 
-                isPlayingExample = false;
-                updateStatus('ready');
+                activeExampleAudio = null;
+                updateStatus('ready', card);
             } else {
-                // Start playing
+                // Audio lain (atau tidak ada) yang diputar. Hentikan semua dulu.
                 stopAllAudio();
-                audio_example.src = audioPath_example;
-                audio_example.play()
+                
+                // Mulai putar audio ini
+                audio.src = audioSrc;
+                audio.play()
                     .then(() => {
-                        this.classList.add('playing');
+                        button.classList.add('playing');
                         
-                        if (playButtonIcon) {
-                            playButtonIcon.classList.remove('fa-play');
-                            playButtonIcon.classList.add('fa-pause');
+                        if (buttonIcon) {
+                            buttonIcon.classList.remove('fa-play');
+                            buttonIcon.classList.add('fa-pause');
                         }
-                        if (playButtonText) {
-                            playButtonText.textContent = 'Stop';
+                        if (buttonText) {
+                            buttonText.textContent = 'Stop';
                         }
                         
-                        isPlayingExample = true;
-                        updateStatus('playing');
+                        activeExampleAudio = audio; // Set sebagai audio aktif
+                        updateStatus('playing', card);
                         
-                        // Animate transcript lines
-                        animateTranscript();
+                        // (MODIFIKASI: Kirim card ke fungsi animasi)
+                        animateTranscript(card);
                     })
                     .catch(error => {
                         console.error('❌ Playback error:', error);
                         shakeElement(this);
+                        updateStatus('ready', card); // Reset status card ini jika error
                     });
             }
         });
 
-        audio_example.addEventListener('ended', () => {
-            playButton.classList.remove('playing');
+        audio.addEventListener('ended', () => {
+            button.classList.remove('playing');
             
-            if (playButtonIcon) {
-                playButtonIcon.classList.remove('fa-pause');
-                playButtonIcon.classList.add('fa-play');
+            if (buttonIcon) {
+                buttonIcon.classList.remove('fa-pause');
+                buttonIcon.classList.add('fa-play');
             }
-            if (playButtonText) {
-                playButtonText.textContent = 'Play Again';
+            if (buttonText) {
+                buttonText.textContent = 'Play Again';
             }
             
-            isPlayingExample = false;
-            updateStatus('completed');
+            activeExampleAudio = null;
+            updateStatus('completed', card);
         });
-    }
+    });
 
     // ==================================================
     // TRANSCRIPT ANIMATION
     // ==================================================
 
-    function animateTranscript() {
-        const transcriptLines = document.querySelectorAll('.transcript-line');
+    // (MODIFIKASI: Menerima cardElement agar hanya menganimasi transcript di card yang benar)
+    function animateTranscript(cardElement) {
+        if (!cardElement) return;
+        
+        // (MODIFIKASI: Hanya mencari .transcript-line di dalam cardElement)
+        const transcriptLines = cardElement.querySelectorAll('.transcript-line');
         
         transcriptLines.forEach((line, index) => {
             setTimeout(() => {
@@ -252,11 +287,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // INFO CARD INTERACTIONS
+    // INFO CARD INTERACTIONS (REFAKTORED)
     // ==================================================
 
     const infoRows = document.querySelectorAll('.info-row');
     
+    // Ini sudah benar karena menggunakan querySelectorAll
     infoRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
             this.style.transform = 'translateX(5px)';
@@ -268,11 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Copy to clipboard functionality
-    const mmsiNumber = document.querySelector('.mmsi-number');
-    const callSign = document.querySelector('.call-sign');
+    // Copy to clipboard functionality (MODIFIKASI: Di-loop)
+    const mmsiNumbers = document.querySelectorAll('.mmsi-number');
+    const callSigns = document.querySelectorAll('.call-sign');
 
-    if (mmsiNumber) {
+    mmsiNumbers.forEach(mmsiNumber => {
         mmsiNumber.style.cursor = 'pointer';
         mmsiNumber.title = 'Click to copy';
         
@@ -280,9 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
             copyToClipboard(this.textContent);
             showCopyFeedback(this, 'MMSI copied!');
         });
-    }
+    });
 
-    if (callSign) {
+    callSigns.forEach(callSign => {
         callSign.style.cursor = 'pointer';
         callSign.title = 'Click to copy';
         
@@ -290,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             copyToClipboard(this.textContent);
             showCopyFeedback(this, 'Call sign copied!');
         });
-    }
+    });
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
@@ -313,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // HELPER FUNCTIONS
+    // HELPER FUNCTIONS (Tidak berubah)
     // ==================================================
 
     function shakeElement(element) {
@@ -355,10 +391,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // SMOOTH INTERACTIONS
+    // SMOOTH INTERACTIONS (Tidak berubah)
     // ==================================================
 
-    const continueBtn = document.querySelector('.btn-continue');
+    const continueBtn = document.querySelector('.continue-button');
     if (continueBtn) {
         continueBtn.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-3px)';
@@ -380,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // ENTRANCE ANIMATIONS
+    // ENTRANCE ANIMATIONS (Tidak berubah)
     // ==================================================
 
     const observer = new IntersectionObserver((entries) => {
@@ -396,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '0px 0px -50px 0px'
     });
 
+    // (MODIFIKASI: .radio-card sekarang ada 2, animasi akan jalan berurutan)
     const animatedElements = document.querySelectorAll('.radio-card, .continue-wrapper');
     
     animatedElements.forEach((el, index) => {
@@ -413,7 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Space to play/pause
         if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
             e.preventDefault();
-            if (playButton) playButton.click();
+            // (MODIFIKASI: Klik tombol pertama jika ada)
+            if (playButtons.length > 0) playButtons[0].click();
         }
     });
 
@@ -421,8 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // CONSOLE TIPS
     // ==================================================
 
-    console.log('✅ MMSI Page Ready!');
-    console.log('💡 Tip: Press Space to play/pause the example');
+    console.log('✅ MMSI Page Ready! (Refactored for multiple players)');
+    console.log('💡 Tip: Press Space to play/pause the first example');
     console.log('💡 Tip: Click on MMSI or Call Sign to copy');
-    console.log('📻 Radio communication example loaded');
+    console.log('📻 Radio communication examples loaded');
 });

@@ -13,11 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn_captain = document.querySelector('.welcome-bubble .play-btn i');
     const translateBtn_captain = document.querySelector('.welcome-bubble .translate-btn');
     const speechText_captain = document.querySelector('.speech-text');
-    const audio_captain = new Audio('/static/data/audio/unit1/captain_welcome.wav');
+    const audio_captain = new Audio('/static/data/audio/unit1/introduction_intro.wav');
+    const indicator = document.getElementById('scroll-indicator');
     
-    const originalText_captain = `"Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. On ships, we don't just say A, B, C… or one, two, three. We use a special system, so our messages are always clear, even in storms or noisy conditions. It's called the NATO Phonetic Alphabet — NATO stands for North Atlantic Treaty Organization"`;
+    const originalText_captain = "Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. On ships, we don’t just say A, B, C… or one, two, three. We use a special system so our messages are always clear, even in storms or noisy conditions. It’s called the IMO Standard Phonetic Alphabet and Numbers, developed by the International Maritime Organization to make sure every word and number is understood correctly in radio communication at sea."
     
-    const translatedText_captain = `"Halo, kadet! Selamat datang di kapal. Unit ini tentang alfabet dan angka yang kita gunakan di laut. Di kapal, kita tidak hanya mengatakan A, B, C… atau satu, dua, tiga. Kita menggunakan sistem khusus supaya pesan selalu jelas, bahkan saat badai atau kondisi bising. Sistem ini disebut Alfabet Fonetik NATO — NATO adalah singkatan dari North Atlantic Treaty Organization"`;
+    const translatedText_captain = "Ahoy, taruna! Selamat datang di atas kapal. Unit ini membahas tentang alfabet dan angka yang kita gunakan di laut. Di kapal, kita tidak hanya menyebut A, B, C… atau satu, dua, tiga. Kita menggunakan sistem khusus agar pesan kita selalu jelas, bahkan saat badai atau kondisi bising. Sistem ini disebut IMO Standard Phonetic Alphabet and Numbers, yang dikembangkan oleh International Maritime Organization untuk memastikan setiap huruf dan angka dapat dipahami dengan benar dalam komunikasi radio di laut."
 
     let isTranslated_captain = false;
     let isPlaying_captain = false;
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn_officer = document.querySelector('.audio-controls-objectives .play-btn i');
     const translateBtn_officer = document.querySelector('.audio-controls-objectives .translate-btn');
     const speechText_officer = document.querySelector('.translatable-text-officer');
-    const audio_officer = new Audio('/static/data/audio/unit1/learning_objectives.wav');
+    const audio_officer = new Audio('/static/data/audio/unit1/introduction_guide.wav');
 
     const originalText_officer_HTML = `
         <div class="intro-paragraph">
@@ -62,20 +63,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const translatedText_officer_HTML = `
         <div class="intro-paragraph">
             <i class="fas fa-ship"></i>
-            <p>Selama pelayaran ini, Anda akan belajar bagaimana pelaut di seluruh dunia mengeja nama kapal, tanda panggilan, dan angka dengan jelas melalui radio. Anda akan berlatih mengucapkannya ala maritim - seperti perwira sungguhan di anjungan.</p>
+            <p>Dalam pelayaran ini, kamu akan belajar bagaimana para pelaut di seluruh dunia mengeja nama kapal, kode panggilan, dan angka dengan jelas melalui radio. Kamu juga akan berlatih mengucapkannya dengan cara maritim — seperti perwira sejati di anjungan kapal.</p>
         </div>
 
         <div class="objectives-section">
             <h3><i class="fas fa-bullseye"></i> Tujuan Pembelajaran</h3>
-            <p>Di akhir unit ini, Anda akan dapat:</p>
+            <p>Di akhir unit ini, kamu akan mampu untuk:</p>
             <ol class="objectives-list">
                 <li>
                     <span class="list-number">1</span>
-                    <span>Mengidentifikasi dan mengucapkan Alfabet Maritim dan angka dengan benar dalam komunikasi radio.</span>
+                    <span>Mengidentifikasi dan mengucapkan IMO Standard Phonetic Alphabet and Numbers dengan benar dalam komunikasi radio.</span>
                 </li>
                 <li>
                     <span class="list-number">2</span>
-                    <span>Melakukan pertukaran identifikasi kapal (call sign dan MMSI) dengan percaya diri dan akurat melalui simulasi radio singkat.</span>
+                    <span>Melakukan pertukaran identitas kapal (call sign dan MMSI) dengan percaya diri dan akurat melalui simulasi radio singkat.</span>
                 </li>
             </ol>
         </div>
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="cta-icon">
                 <i class="fas fa-anchor"></i>
             </div>
-            <p><strong>Sekarang, siapkan telinga dan suara Anda - saatnya mengeja lautan!</strong></p>
+            <p><strong>Sekarang, siapkan telinga dan suaramu — saatnya mengeja lautan!</strong></p>
         </div>`;
     
     let isTranslated_officer = false;
@@ -315,6 +316,27 @@ document.addEventListener('DOMContentLoaded', () => {
         officerImg.addEventListener('mouseleave', function() {
             this.style.transform = '';
         });
+    }
+
+    // ==================================================
+    // === Scroll Down Indicator
+    // ==================================================
+
+    if (indicator) {
+        const isScrollable = document.documentElement.scrollHeight > window.innerHeight;
+
+        if (isScrollable) {
+            indicator.classList.add('visible');
+        }
+
+        const hideOnScroll = () => {
+            if (window.scrollY > 50) { 
+                indicator.classList.add('hidden');
+                window.removeEventListener('scroll', hideOnScroll); 
+            }
+        };
+        
+        window.addEventListener('scroll', hideOnScroll);
     }
 
     // ==================================================

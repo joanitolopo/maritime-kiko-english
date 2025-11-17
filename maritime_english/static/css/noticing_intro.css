@@ -1,6 +1,6 @@
 /* ========================================
-   MODERN NOTICING CSS
-   Diadaptasi dari VHF Exchange Style
+   MODERN NOTICING CSS - UPDATED VERSION
+   With Structured Message Cards
 ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap');
@@ -13,9 +13,14 @@
     --coral-dark: #059669;
     --indigo: #6366f1;
     --indigo-dark: #4f46e5;
+    --gold: #f59e0b;
     --white: #ffffff;
     --text-dark: #1f2937;
     --text-light: #6b7280;
+    --caller-blue: #0ea5e9;
+    --caller-blue-dark: #0284c7;
+    --receiver-cyan: #06b6d4;
+    --receiver-cyan-dark: #0891b2;
 }
 
 * {
@@ -30,7 +35,7 @@ body {
     min-height: 100vh;
 }
 
-/* ======== HEADER (Dari Referensi) ======== */
+/* ======== HEADER ======== */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -76,7 +81,7 @@ body {
     padding: 0.5rem 1rem;
 }
 
-/* ======== VHF CONTAINER (Dari Referensi) ======== */
+/* ======== VHF CONTAINER ======== */
 .vhf-container {
     max-width: 1600px;
     margin: 0 auto;
@@ -87,7 +92,7 @@ body {
     align-items: start;
 }
 
-/* ======== LEFT SIDEBAR (Dari Referensi) ======== */
+/* ======== LEFT SIDEBAR ======== */
 .vhf-sidebar {
     display: flex;
     flex-direction: column;
@@ -98,13 +103,13 @@ body {
 
 /* Activity Badge */
 .activity-badge {
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, #1e40af 100%);
     border-radius: 20px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
     animation: slideInLeft 0.6s ease-out;
 }
 .badge-icon {
@@ -165,7 +170,7 @@ body {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    border: 2px solid rgba(99, 102, 241, 0.3);
+    border: 2px solid rgba(6, 182, 212, 0.3);
     border-radius: 50%;
     animation: radioWave 2s ease-out infinite;
 }
@@ -190,28 +195,12 @@ body {
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
 }
-.bubble-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e5e7eb;
-}
-.bubble-header i {
-    color: var(--ocean-blue);
-    font-size: 1.2rem;
-}
-.bubble-header span {
-    font-weight: 700;
-    color: var(--ocean-blue);
-}
 .speech-text-noticing {
     font-size: 0.95rem;
     line-height: 1.8;
     color: var(--text-dark);
     margin-bottom: 20px;
-    font-style: italic;
+    text-align: justify;
 }
 .vhf-controls {
     display: flex;
@@ -251,7 +240,7 @@ body {
 }
 .control-btn:hover { transform: translateY(-2px); }
 
-/* ======== MAIN CONTENT (Dari Referensi) ======== */
+/* ======== MAIN CONTENT ======== */
 .vhf-main {
     display: flex;
     flex-direction: column;
@@ -303,8 +292,8 @@ body {
 
 /* Instruction Banner */
 .instruction-banner {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-left: 4px solid var(--ocean-blue);
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--gold);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -315,30 +304,31 @@ body {
 .banner-icon {
     width: 60px;
     height: 60px;
-    background: rgba(11, 90, 143, 0.1);
+    background: rgba(245, 158, 11, 0.2);
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
-    color: var(--ocean-blue);
+    color: #d97706;
     flex-shrink: 0;
 }
 .instruction-banner p {
     font-size: 1rem;
-    color: var(--text-dark);
+    color: #78350f;
     margin: 0;
     line-height: 1.7;
     font-weight: 600;
     font-style: italic;
 }
 
-/* Conversation Timeline */
+/* ======== NEW STRUCTURED MESSAGE CARDS ======== */
 .conversation-timeline {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
+
 .message-wrapper {
     width: 100%;
     animation: messageSlideIn 0.6s ease-out;
@@ -346,85 +336,112 @@ body {
 .caller-message { animation-delay: 0.2s; }
 .receiver-message { animation-delay: 0.4s; }
 
-/* Message Card */
-.message-card {
-    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+/* Structured Message Card - NEW DESIGN */
+.message-card-structured {
+    background: var(--white);
     border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    border: 2px solid #e5e7eb;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     transition: all 0.3s ease;
 }
-.message-card:hover { transform: scale(1.01); }
-.caller-message .message-card { border-left: 4px solid #3b82f6; }
-.receiver-message .message-card { border-right: 4px solid var(--coral); }
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.message-card-structured:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
 }
-.receiver-message .message-header { flex-direction: row-reverse; }
-.vessel-info {
+
+/* Message Header with Avatar */
+.message-header-structured {
     display: flex;
     align-items: center;
     gap: 15px;
+    padding: 18px 25px;
+    color: var(--white);
+    position: relative;
 }
-.vessel-avatar {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: var(--white);
-    padding: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+.caller-header {
+    background: linear-gradient(135deg, var(--caller-blue) 0%, var(--caller-blue-dark) 100%);
 }
-.vessel-details h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin: 0;
+
+.receiver-header {
+    background: linear-gradient(135deg, var(--receiver-cyan) 0%, var(--receiver-cyan-dark) 100%);
 }
-.vessel-role {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-weight: 600;
-}
-.message-play-btn {
+
+.vessel-avatar-small {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-    color: var(--white);
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
+    overflow: hidden;
+    background: var(--white);
+    padding: 3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.vessel-avatar-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.message-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* Structured Message Body - Table Layout */
+.message-body-structured {
+    padding: 0;
+}
+
+.structure-row {
+    display: grid;
+    grid-template-columns: 50px 100px 1fr;
+    border-bottom: 2px solid #e5e7eb;
+    transition: background-color 0.3s ease;
+}
+
+.structure-row:last-child {
+    border-bottom: none;
+}
+
+.structure-row:hover {
+    background-color: #f8fafc;
+}
+
+.structure-number {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ocean-blue);
+    background: #f1f5f9;
+    padding: 15px 10px;
+    border-right: 2px solid #e5e7eb;
 }
-.message-play-btn:hover { transform: scale(1.1); }
-.message-play-btn:disabled {
-    background: #bdc3c7;
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
+
+.structure-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ocean-deep);
+    background: #f1f5f9;
+    padding: 15px;
+    border-right: 2px solid #e5e7eb;
 }
-.message-play-btn:disabled:hover { transform: none; }
-.message-content { margin-bottom: 10px; }
-.message-bubble {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.message-text {
+
+.structure-content {
     font-family: 'Roboto Mono', monospace;
-    font-size: 1rem;
-    line-height: 1.8;
+    font-size: 0.95rem;
+    line-height: 1.7;
     color: var(--text-dark);
-    margin: 0;
+    padding: 15px 20px;
+    background: var(--white);
 }
 
 /* Conversation Arrow */
@@ -439,7 +456,7 @@ body {
 .arrow-line {
     flex: 1;
     height: 3px;
-    background: linear-gradient(90deg, #3b82f6 0%, var(--coral) 100%);
+    background: linear-gradient(90deg, var(--caller-blue) 0%, var(--receiver-cyan) 100%);
     border-radius: 999px;
 }
 .arrow-icon {
@@ -469,7 +486,7 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* [BARU] Tombol Learn More (Adaptasi dari Play All) */
+/* Learn More Button */
 .learn-more-section {
     text-align: center;
     margin-top: 30px;
@@ -501,7 +518,7 @@ body {
     text-align: right;
     margin-top: 25px;
 }
-.btn-continue {
+.continue-button {
     display: inline-flex;
     align-items: center;
     gap: 15px;
@@ -515,12 +532,50 @@ body {
     box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
     transition: all 0.3s ease;
 }
-.btn-continue:hover {
+.continue-button:hover {
     transform: translateY(-3px);
     color: var(--white);
 }
 
-/* ======== ANIMATIONS (Dari Referensi) ======== */
+/* Popup Header Controls */
+.popup-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popup-translate-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.popup-translate-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.popup-translate-btn i {
+    font-size: 1rem;
+}
+
+.popup-title-text {
+    flex: 1;
+    margin: 0;
+}
+
+/* ======== ANIMATIONS ======== */
 @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-40px); }
     to { opacity: 1; transform: translateX(0); }
@@ -549,65 +604,182 @@ body {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
 }
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-}
 
-/* ======== RESPONSIVE (Dari Referensi) ======== */
+/* ======== RESPONSIVE ======== */
 @media (max-width: 1200px) {
     .vhf-container { grid-template-columns: 320px 1fr; }
 }
+
 @media (max-width: 992px) {
     .vhf-container { grid-template-columns: 1fr; }
     .vhf-sidebar { position: static; }
 }
+
 @media (max-width: 768px) {
-    .top-bar { margin: 15px; }
-    .current-unit-title span { display: none; }
-    .activity-badge { flex-direction: column; text-align: center; }
-    .captain-avatar { height: 200px; }
+    .top-bar {
+        margin: 0;
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 10px 15px;
+        border-radius: 0;
+    }
+    
+    .header-right-group {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+    
+    .btn-learn-nav {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .btn-back .btn-text {
+        display: none;
+    }
+    .btn-back i {
+        margin: 0 !important;
+    }
+    
+    .current-unit-title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0 10px !important;
+    }
+    .current-unit-title span {
+        font-size: 0.85rem;
+    }
+    
+    .vhf-container {
+        padding: 70px 15px 30px;
+    }
+
+    .captain-avatar {
+        height: 250px;
+        position: relative;
+        z-index: 1;
+    }
+    .instruction-bubble {
+        margin-top: -80px;
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        z-index: 2;
+    }
+
     .exchange-header { flex-direction: column; gap: 15px; }
     .instruction-banner { flex-direction: column; text-align: center; }
     .exchange-body { padding: 20px; }
-    .vessel-avatar { width: 50px; height: 50px; }
-    .vessel-details h4 { font-size: 1rem; }
-    .message-text { font-size: 0.9rem; }
-    .continue-wrapper { text-align: center; }
-    .btn-continue { width: 100%; justify-content: center; }
-}
-@media (max-width: 480px) {
-    .message-card { padding: 15px; }
-    .vessel-info { flex-direction: column; text-align: center; }
-    .receiver-message .vessel-info { flex-direction: column-reverse; }
-    .message-header { align-items: flex-start; }
-    .receiver-message .message-header { align-items: flex-start; }
+    
+    /* Responsive Structured Message */
+    .structure-row {
+        grid-template-columns: 40px 80px 1fr;
+    }
+    .structure-number {
+        font-size: 1rem;
+        padding: 12px 8px;
+    }
+    .structure-label {
+        font-size: 0.85rem;
+        padding: 12px 10px;
+    }
+    .structure-content {
+        font-size: 0.85rem;
+        padding: 12px 15px;
+    }
+    .message-title {
+        font-size: 1.1rem;
+    }
+    .vessel-avatar-small {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .continue-wrapper {
+        text-align: center;
+        margin-top: 10px;
+        margin-left: 75px;
+    }
+
+    .continue-button {
+        width: 280px;
+        justify-content: center;
+        font-size: rem;
+    }
+
+    .activity-badge {
+        padding: 16px;
+        gap: 12px;
+    }
+    .badge-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    .badge-text h4 {
+        font-size: 1rem;
+    }
+    .badge-text p {
+        font-size: 0.9rem;
+    }
 }
 
-/* == [DIKEMBALIKAN] POPUP MODAL STYLE (Dari Kode Asli) == */
+@media (max-width: 480px) {
+    .structure-row {
+        grid-template-columns: 35px 70px 1fr;
+    }
+    .structure-number {
+        font-size: 0.9rem;
+        padding: 10px 6px;
+    }
+    .structure-label {
+        font-size: 0.75rem;
+        padding: 10px 8px;
+    }
+    .structure-content {
+        font-size: 0.8rem;
+        padding: 10px 12px;
+        line-height: 1.6;
+    }
+    .message-header-structured {
+        padding: 15px 20px;
+    }
+    .message-title {
+        font-size: 1rem;
+    }
+}
+
+/* ======== POPUP MODAL ======== */
 .popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Sedikit lebih gelap untuk gaya modern */
+    background-color: rgba(0, 0, 0, 0.7);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    backdrop-filter: blur(5px); /* Efek blur modern */
+    backdrop-filter: blur(5px);
 }
 .popup-content {
     background-color: white;
     width: 90%;
     max-width: 600px;
     border-radius: 15px;
-    border: none; /* Hapus border lama */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     overflow: hidden;
-    animation: fadeInUp 0.4s ease-out; /* Animasi muncul */
+    animation: fadeInUp 0.4s ease-out;
 }
 .popup-header {
     display: flex;
@@ -619,13 +791,13 @@ body {
 }
 .popup-header .fa-magnifying-glass {
     font-size: 1.5rem;
-    color: var(--ocean-blue); /* Gunakan variabel warna */
+    color: var(--ocean-blue);
 }
 .popup-header h3 {
     flex-grow: 1;
     text-align: center;
     margin: 0;
-    color: var(--ocean-blue); /* Gunakan variabel warna */
+    color: var(--ocean-blue);
     font-size: 1.2rem;
 }
 .popup-close {
@@ -641,15 +813,15 @@ body {
 }
 .popup-close:hover {
     color: #000;
-    transform: rotate(90deg); /* Efek hover modern */
+    transform: rotate(90deg);
 }
 .popup-body {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-height: 60vh; /* Batas tinggi modern */
-    overflow-y: auto; /* Scroll jika perlu */
+    max-height: 60vh;
+    overflow-y: auto;
 }
 .popup-section {
     display: flex;
@@ -668,15 +840,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--indigo); /* Gaya dari referensi */
+    background-color: var(--indigo);
     border: none;
-    color: var(--white); /* Gaya dari referensi */
-    border-radius: 50%; /* Bulat seperti referensi */
+    color: var(--white);
+    border-radius: 50%;
     font-size: 1.2rem;
     font-weight: bold;
 }
 .popup-text h4 {
-    color: var(--ocean-deep); /* Gunakan variabel warna */
+    color: var(--ocean-deep);
     font-size: 1.1rem;
     margin-top: 0;
     margin-bottom: 5px;

@@ -23,12 +23,12 @@
     <div class="form-container" id="register-container">
         <div class="auth-card register-card fade-in-up">
             
-            <h1 class="auth-title">Create Your Account</h1>
+            <h1 class="auth-title">Create Account</h1>
             <p class="auth-subtitle">Join the crew and start your voyage today.</p>
 
             <div class="row mt-4">
                 <div class="col-lg-7">
-                    <form method="POST" id="register-form">
+                    <form method="POST" id="register-form" novalidate>
                         
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name</label>
@@ -50,11 +50,11 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group-modern">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required>
-                            </div>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required minlength="8">
+                                </div>
                         </div>
                         
-                        <button type="submit" class="btn-action btn-action-primary w-100 mt-4 d-lg-none">
+                        <button type="button" class="btn-action btn-action-primary w-100 mt-4 d-lg-none" id="open-modal-btn-sm">
                             <i class="fas fa-user-plus me-2"></i> Create My Account
                         </button>
                     </form>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="col-lg-4 d-none d-lg-flex flex-column justify-content-center">
-                    <button type="submit" form="register-form" class="btn-action btn-action-primary w-100 mb-4">
+                    <button type="button" class="btn-action btn-action-primary w-100 mb-4" id="open-modal-btn-lg">
                         <i class="fas fa-user-plus me-2"></i> Create My Account
                     </button>
                     <p class="form-link-alt text-center">
@@ -78,7 +78,71 @@
                 Already part of the crew? <a href="{{ url_for('auth.login') }}">Log In</a>
             </p>
 
-        </div> </div> </main> {% endblock %}
+        </div> 
+    </div> 
+</main> 
+
+<div class="modal fade" id="registerDetailModal" tabindex="-1" aria-labelledby="registerDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerDetailModalLabel"> <i class="fas fa-anchor"></i>Before we sail, let's set up your crew identity.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male" form="register-form">
+                            <label class="form-check-label" for="genderMale">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female" form="register-form">
+                            <label class="form-check-label" for="genderFemale">Female</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="school_name" class="form-label">School Name</label>
+                    <input type="text" class="form-control" id="school_name" name="school_name" placeholder="e.g., SMKN 1 Pelayaran" form="register-form">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="major" class="form-label">Major</label>
+                    <select class="form-select" id="major" name="major" form="register-form">
+                        <option value="" selected disabled>Select your major</option>
+                        <option value="Nautika Kapal Niaga">Nautika Kapal Niaga (NKN)</option>
+                        <option value="Teknika Kapal Niaga">Teknika Kapal Niaga (TKN)</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Ilmu Pengetahuan Alam">Ilmu Pengetahuan Alam (IPA)</option>
+                        <option value="Ilmu Pengetahuan Sosial">Ilmu Pengetahuan Sosial (IPS)</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="grade" class="form-label">Grade</label>
+                    <select class="form-select" id="grade" name="grade" form="register-form">
+                        <option value="" selected disabled>Select your grade</option>
+                        <option value="X">X</option>
+                        <option value="XI">XI</option>
+                        <option value="XII">XII</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="register-form">
+                    <i class="fas fa-save me-2"></i> Save My Account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
 
 {% block page_js %}

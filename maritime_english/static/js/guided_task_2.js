@@ -7,11 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Logbook Reflection Initialized!');
 
     // ==================================================
-    // ELEMENTS & STATE
+    // ELEMENTS & STATE (DIUPDATE)
     // ==================================================
-    const playBtn_sidebar = document.querySelector('.task-controls .fa-play');
-    const translateBtn_sidebar = document.querySelector('.task-controls .fa-language');
-    const speechText_sidebar = document.querySelector('.speech-text-task');
+    const playBtn_sidebar = document.querySelector('#captain-audio-btn'); // DIUBAH: Target #id
+    const playIcon_sidebar = playBtn_sidebar ? playBtn_sidebar.querySelector('i') : null; // DITAMBAHKAN: Target <i> di dalam tombol
+    const translateBtn_sidebar = document.querySelector('#translate-btn'); // DIUBAH: Target #id
+    const speechText_sidebar = document.querySelector('.speech-text-drill'); // DIUBAH: .speech-text-drill
     const instructionText_activity = document.querySelector('.instruction-text-task');
 
     const likertInputs = document.querySelectorAll('.likert-scale input[type="radio"]');
@@ -27,16 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioPath_sidebar = window.SIDEBAR_CONTENT?.audioPath || '';
 
     // ==================================================
-    // SIDEBAR CONTROLS (Disesuaikan dari Task 1)
+    // SIDEBAR CONTROLS (DIUPDATE)
     // ==================================================
-    if (playBtn_sidebar) {
+    if (playBtn_sidebar && playIcon_sidebar) { // DIUBAH: Cek kedua elemen
         playBtn_sidebar.addEventListener('click', function() {
             if (audio_sidebar.paused) {
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
-                        playBtn_sidebar.classList.remove('fa-play');
-                        playBtn_sidebar.classList.add('fa-pause');
+                        playIcon_sidebar.classList.remove('fa-play'); // DIUBAH: Target ikon
+                        playIcon_sidebar.classList.add('fa-pause');
+                        playBtn_sidebar.classList.add('playing'); // DIUBAH: Target tombol
                     })
                     .catch(error => {
                         console.error('Audio error:', error);
@@ -44,14 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             } else {
                 audio_sidebar.pause();
-                playBtn_sidebar.classList.remove('fa-pause');
-                playBtn_sidebar.classList.add('fa-play');
+                playIcon_sidebar.classList.remove('fa-pause'); // DIUBAH: Target ikon
+                playIcon_sidebar.classList.add('fa-play');
+                playBtn_sidebar.classList.remove('playing'); // DIUBAH: Target tombol
             }
         });
 
         audio_sidebar.addEventListener('ended', () => {
-            playBtn_sidebar.classList.remove('fa-pause');
-            playBtn_sidebar.classList.add('fa-play');
+            playIcon_sidebar.classList.remove('fa-pause'); // DIUBAH: Target ikon
+            playIcon_sidebar.classList.add('fa-play');
+            playBtn_sidebar.classList.remove('playing'); // DIUBAH: Target tombol
         });
     }
 

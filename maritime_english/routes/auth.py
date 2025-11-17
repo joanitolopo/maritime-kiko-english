@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..__init__ import db, mail
-from ..models import User
+from ..models import User, UserStats
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_mail import Message
 
@@ -29,14 +29,37 @@ def register():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
+
+        gender = request.form.get('gender')
+        school_name = request.form.get('school_name')
+        major = request.form.get('major')
+        grade = request.form.get('grade')
         
         if User.query.filter_by(username=name).first() or User.query.filter_by(email=email).first():
             flash('Username or email already exists.')
             return redirect(url_for('auth.register'))
         
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(username=name, email=email, password=hashed_password)
+        new_user = User(
+            username=name, 
+            email=email, 
+            password=hashed_password,
+            gender=gender,
+            school_name=school_name,
+            major=major,
+            grade=grade
+        )
+        
+        new_stats = UserStats(
+            user=new_user, # Menghubungkan stats ini ke new_user
+            current_unit_name="Spelling the Sea", # Nilai awal
+            current_unit_progress=0,
+            total_units_completed=0,
+            total_learning_time_minutes=0
+        )
         db.session.add(new_user)
+        db.session.add(new_stats)
+        
         db.session.commit()
 
         flash('Registration successful! Please log in.')

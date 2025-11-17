@@ -37,8 +37,8 @@
                 <i class="fas fa-broadcast-tower"></i>
             </div>
             <div class="badge-text">
-                <h4>On-Air Communication</h4>
-                <p>Activity 5: VHF Radio Exchange</p>
+                <h4>C. Sail into Real Communication</h4>
+                <p>Activity 4. On-Air at Sea!</p>
             </div>
         </div>
 
@@ -54,12 +54,8 @@
             </div>
 
             <div class="instruction-bubble">
-                <div class="bubble-header">
-                    <i class="fas fa-satellite-dish"></i>
-                    <span>Captain's Instructions</span>
-                </div>
                 <p class="speech-text-vhf">
-                    "Cadet, remember! Always start with your vessel's name, Call Sign, and MMSI before you speak on the radio. That's how real sailors make sure every message is clear and safe!"
+                    Cadet, remember! Always start with your vessel's name, Call Sign, and MMSI before you speak on the radio. That's how real sailors make sure every message is clear and safe!
                 </p>
                 <div class="vhf-controls">
                     <button class="control-btn audio-btn">
@@ -69,32 +65,6 @@
                         <i class="fa-solid fa-language"></i>
                         <span>Translate</span>
                     </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Protocol Card -->
-        <div class="protocol-card">
-            <div class="protocol-header">
-                <i class="fas fa-list-check"></i>
-                <span>Radio Protocol</span>
-            </div>
-            <div class="protocol-steps">
-                <div class="protocol-step">
-                    <span class="step-number">1</span>
-                    <span>Vessel Name</span>
-                </div>
-                <div class="protocol-step">
-                    <span class="step-number">2</span>
-                    <span>Call Sign</span>
-                </div>
-                <div class="protocol-step">
-                    <span class="step-number">3</span>
-                    <span>MMSI Number</span>
-                </div>
-                <div class="protocol-step">
-                    <span class="step-number">4</span>
-                    <span>Message</span>
                 </div>
             </div>
         </div>
@@ -112,8 +82,8 @@
                         <i class="fas fa-comments"></i>
                     </div>
                     <div class="header-text">
-                        <h3>VHF Radio Exchange</h3>
-                        <p>Listen to a real conversation between two vessels</p>
+                        <h3>VHF Radio Exchange Examples</h3>
+                        <p>Listen to real conversations between vessels</p>
                     </div>
                 </div>
                 <div class="channel-indicator">
@@ -124,133 +94,197 @@
 
             <div class="exchange-body">
                 <!-- Instruction Banner -->
-                <div class="instruction-banner instruction-text-vhf">
+                <div class="instruction-banner">
                     <div class="banner-icon">
                         <i class="fas fa-headphones"></i>
                     </div>
-                    <p>Listen to the example of radio exchange between two vessels. Notice how Call Sign, MMSI, and Channel Number are used in the conversation. Then, echo each line clearly.</p>
+                    <div class="banner-text">
+                        <p>Listen to the examples of radio exchange between two vessels. Notice how Call Sign, MMSI, and Channel Number are used in the conversation. Then, echo each line clearly.</p>
+                    </div>
                 </div>
 
-                <!-- Conversation Timeline -->
-                <div class="conversation-timeline">
+                <!-- Example 1 -->
+                <div class="example-container">
+                    <div class="example-number">
+                        <span>1</span>
+                    </div>
                     
-                    <!-- Message 1: Caller (Blue Horizon) -->
-                    <div class="message-wrapper caller-message">
-                        <div class="message-card">
-                            <div class="message-header">
-                                <div class="vessel-info">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_6.png') }}" alt="Blue Horizon" class="vessel-avatar">
-                                    <div class="vessel-details">
-                                        <h4>MV BLUE HORIZON</h4>
-                                        <span class="vessel-role">Calling Vessel</span>
-                                    </div>
-                                </div>
-                                <button id="play-caller-audio" class="message-play-btn">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                    <div class="exchange-grid">
+                        <!-- Caller Side -->
+                        <div class="vessel-column caller-column">
+                            <div class="column-header">
+                                <span class="column-title">The Caller</span>
                             </div>
-
-                            <div class="message-content">
-                                <div class="message-bubble">
-                                    <p class="message-text">
-                                        "This is Motor Vessel Blue Horizon, Call Sign Bravo Hotel Nine Two Five One. MMSI two-four-eight-one-zero-five-nine-zero-zero. Calling Motor Vessel Antares, Call Sign Yankee Bravo Oscar November Nine, Channel one-six. Over."
-                                    </p>
+                            
+                            <div class="vessel-card">
+                                <div class="vessel-avatar-section">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_6.png') }}" alt="Caller" class="vessel-img">
                                 </div>
-                            </div>
-
-                            <div class="vessel-data-card">
-                                <div class="data-row">
-                                    <i class="fas fa-ship"></i>
-                                    <div class="data-info">
-                                        <label>Vessel Name</label>
-                                        <value>BLUE HORIZON</value>
+                                <div class="vessel-info-box">
+                                    <div class="info-item">
+                                        <label>Vessel's Name:</label>
+                                        <value>HORIZON</value>
                                     </div>
-                                </div>
-                                <div class="data-row">
-                                    <i class="fas fa-hashtag"></i>
-                                    <div class="data-info">
-                                        <label>MMSI</label>
+                                    <div class="info-item">
+                                        <label>MMSI:</label>
                                         <value>248105900</value>
                                     </div>
-                                </div>
-                                <div class="data-row">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                    <div class="data-info">
-                                        <label>Call Sign</label>
-                                        <value>BH9251</value>
+                                    <div class="info-item">
+                                        <label>Call Sign:</label>
+                                        <value>Y8ON5</value>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Connection Arrow -->
-                    <div class="conversation-arrow">
-                        <div class="arrow-line"></div>
-                        <div class="arrow-icon">
+                            <div class="message-box caller-message-box">
+                                <p>This is Motor Vessel Horizon,</p>
+                                <p>Call Sign Bravo Hotel Niner Too Fife Wun.</p>
+                                <p>MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero.</p>
+                                <p>Calling Motor Vessel Antares,</p>
+                                <p>Call Sign Yankee Bravo Oscar November Niner.</p>
+                                <p>Channel wun six. Over.</p>
+                            </div>
+
+                            <button class="play-message-btn" data-audio="vhf_caller">
+                                <i class="fas fa-play"></i>
+                                <span>Play</span>
+                            </button>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="exchange-arrow">
                             <i class="fas fa-exchange-alt"></i>
                         </div>
-                        <div class="arrow-label">Radio Exchange</div>
-                    </div>
 
-                    <!-- Message 2: Receiver (Antares) -->
-                    <div class="message-wrapper receiver-message">
-                        <div class="message-card">
-                            <div class="message-header">
-                                <button id="play-receiver-audio" class="message-play-btn">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                                <div class="vessel-info">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_7.png') }}" alt="Antares" class="vessel-avatar">
-                                    <div class="vessel-details">
-                                        <h4>MV ANTARES</h4>
-                                        <span class="vessel-role">Receiving Vessel</span>
-                                    </div>
-                                </div>
+                        <!-- Receiver Side -->
+                        <div class="vessel-column receiver-column">
+                            <div class="column-header">
+                                <span class="column-title">The Receiver</span>
                             </div>
-
-                            <div class="message-content">
-                                <div class="message-bubble">
-                                    <p class="message-text">
-                                        "Motor Vessel Blue Horizon, this is Antares. Receiving you loud and clear. Over."
-                                    </p>
+                            
+                            <div class="vessel-card">
+                                <div class="vessel-avatar-section">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_7.png') }}" alt="Receiver" class="vessel-img">
                                 </div>
-                            </div>
-
-                            <div class="vessel-data-card">
-                                <div class="data-row">
-                                    <i class="fas fa-ship"></i>
-                                    <div class="data-info">
-                                        <label>Vessel Name</label>
+                                <div class="vessel-info-box">
+                                    <div class="info-item">
+                                        <label>Vessel's Name:</label>
                                         <value>ANTARES</value>
                                     </div>
-                                </div>
-                                <div class="data-row">
-                                    <i class="fas fa-hashtag"></i>
-                                    <div class="data-info">
-                                        <label>MMSI</label>
+                                    <div class="info-item">
+                                        <label>MMSI:</label>
                                         <value>257689000</value>
                                     </div>
-                                </div>
-                                <div class="data-row">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                    <div class="data-info">
-                                        <label>Call Sign</label>
+                                    <div class="info-item">
+                                        <label>Call Sign:</label>
                                         <value>LAPW5</value>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="message-box receiver-message-box">
+                                <p>Motor Vessel Horizon, this is Antares.</p>
+                                <p>Receiving you loud and clear. Over.</p>
+                            </div>
+
+                            <button class="play-message-btn" data-audio="vhf_receiver">
+                                <i class="fas fa-play"></i>
+                                <span>Play</span>
+                            </button>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Play All Button -->
-                <div class="play-all-section">
-                    <button id="play-all-btn" class="play-all-button">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Play Full Conversation</span>
-                    </button>
+                <!-- Example 2 -->
+                <div class="example-container">
+                    <div class="example-number">
+                        <span>2</span>
+                    </div>
+                    
+                    <div class="exchange-grid">
+                        <!-- Caller Side -->
+                        <div class="vessel-column caller-column">
+                            <div class="column-header">
+                                <span class="column-title">The Caller</span>
+                            </div>
+                            
+                            <div class="vessel-card">
+                                <div class="vessel-avatar-section">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_7.png') }}" alt="Caller" class="vessel-img">
+                                </div>
+                                <div class="vessel-info-box">
+                                    <div class="info-item">
+                                        <label>Vessel's Name:</label>
+                                        <value>ANTARES</value>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>MMSI:</label>
+                                        <value>257689000</value>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Call Sign:</label>
+                                        <value>LAPW5</value>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="message-box caller-message-box">
+                                <p>This is Motor Vessel Antares,</p>
+                                <p>Call Sign Lima Alfa Papa Whisky Fife.</p>
+                                <p>MMSI Too Fife Seven Six Ait Niner Zeero Zeero Zeero.</p>
+                                <p>Calling Motor Vessel Horizon,</p>
+                                <p>Call Sign Yankee Bravo Oscar November Fife.</p>
+                                <p>Channel wun six. Over.</p>
+                            </div>
+
+                            <button class="play-message-btn" data-audio="example2-caller">
+                                <i class="fas fa-play"></i>
+                                <span>Play</span>
+                            </button>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="exchange-arrow">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+
+                        <!-- Receiver Side -->
+                        <div class="vessel-column receiver-column">
+                            <div class="column-header">
+                                <span class="column-title">The Receiver</span>
+                            </div>
+                            
+                            <div class="vessel-card">
+                                <div class="vessel-avatar-section">
+                                    <img src="{{ url_for('static', filename='img/captain_radio_check_6.png') }}" alt="Receiver" class="vessel-img">
+                                </div>
+                                <div class="vessel-info-box">
+                                    <div class="info-item">
+                                        <label>Vessel's Name:</label>
+                                        <value>HORIZON</value>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>MMSI:</label>
+                                        <value>248105900</value>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Call Sign:</label>
+                                        <value>Y8ON5</value>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="message-box receiver-message-box">
+                                <p>Motor Vessel Antares, this is Horizon.</p>
+                                <p>Receiving you loud and clear. Over.</p>
+                            </div>
+
+                            <button class="play-message-btn" data-audio="example2-receiver">
+                                <i class="fas fa-play"></i>
+                                <span>Play</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -258,9 +292,8 @@
 
         <!-- Continue Button -->
         <div class="continue-wrapper">
-            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}" class="btn-continue">
-                <span>Continue to Next Section</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=3) }}" class="continue-button">
+                <span>Continue Sailing</span>
             </a>
         </div>
 
@@ -271,10 +304,5 @@
 {% endblock %}
 
 {% block page_js %}
-<script>
-    window.UNIT_CONTENT = {{ (content or {})|tojson|safe }};
-    window.SECTION_CONTENT = {{ (section_content or {})|tojson|safe }};
-    window.UNIT_ID = {{ unit_id | default(0) }};
-</script>
 <script src="{{ url_for('static', filename='js/input_vhf.js') }}"></script>
 {% endblock %}

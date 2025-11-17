@@ -186,7 +186,7 @@ body {
 @media (max-width: 991.98px) {
     .hero-wrapper {
         align-items: flex-start; /* Konten ke atas di mobile */
-        padding-top: 3rem;
+        padding-top: 4.5rem;
     }
     
     .hero-content-card {
@@ -195,11 +195,20 @@ body {
 
     .hero-title {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: 2.3rem;
     }
 
     .feature-list {
-        /* Sembunyikan daftar fitur di mobile agar lebih simpel */
-        display: none; 
+        display: flex;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .feature-list li {
+        flex: 1;
+        font-size: 0.55rem;
+        margin-right: 20px; 
+        
     }
 }

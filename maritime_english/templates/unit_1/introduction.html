@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="voyage-title">
-                <h4>Set Sail for</h4>
+                <h4>A. Set Sail for</h4>
                 <p>Today's Voyage</p>
             </div>
         </div>
@@ -45,22 +45,22 @@
         <!-- Captain Welcome Card -->
         <div class="captain-welcome-card">
             <div class="captain-avatar">
-                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain" class="captain-img">
-                <div class="avatar-badge">
+                <img src="{{ url_for('static', filename='img/Captain male-3-left.png') }}" alt="Captain" class="captain-img">
+                <!-- <div class="avatar-badge">
                     <i class="fas fa-star"></i>
-                </div>
+                </div> -->
             </div>
 
             <div class="welcome-bubble">
-                <div class="bubble-header">
+                <!-- <div class="bubble-header">
                     <i class="fas fa-comment-dots"></i>
                     <span>Captain's Welcome</span>
-                </div>
+                </div> -->
                 <p class="speech-text">
-                    "Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. 
-                    On ships, we don't just say A, B, C… or one, two, three. 
-                    We use a special system, so our messages are always clear, even in storms or noisy conditions. 
-                    It's called the NATO Phonetic Alphabet — NATO stands for North Atlantic Treaty Organization."
+                   Ahoy, cadets! Welcome aboard. This unit is about the alphabet and numbers we use at sea. 
+                   On ships, we don't just say A, B, C… or one, two, three. 
+                   We use a special system so our messages are always clear, even in storms or noisy conditions. 
+                   It's called the IMO Standard Phonetic Alphabet and Numbers, developed by the International Maritime Organization to make sure every word and number is understood correctly in radio communication at sea.
                 </p>
                 <div class="audio-controls">
                     <button class="control-btn play-btn">
@@ -141,9 +141,9 @@
                     <!-- Officer Character -->
                     <div class="officer-character">
                         <img src="{{ url_for('static', filename='img/Captain female-2.png') }}" alt="Officer" class="officer-img">
-                        <div class="character-badge">
+                        <!-- <div class="character-badge">
                             <i class="fas fa-medal"></i>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -163,9 +163,8 @@
 
         <!-- Continue Button -->
         <div class="continue-section">
-            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='warmup') }}" class="continue-button">
-                <span>Continue to Warmup</span>
-                <i class="fas fa-arrow-right"></i>
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=1) }}" class="continue-button">
+                <span>Continue Sailing</span>
             </a>
         </div>
 

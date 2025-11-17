@@ -170,6 +170,143 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* =================================================================== */
+/* ============= 💅 STYLING MODERN UNTUK MODAL REGISTRASI ============= */
+/* =================================================================== */
+/* Menggunakan variabel dan style dari home.css & auth.css */
+
+/* 1. Konten Modal Utama (Matching .auth-card) */
+.modal-content {
+    border-radius: 20px; /* Menyamai border-radius .auth-card */
+    border: none;
+    box-shadow: var(--hover-shadow); /* Bayangan yang lebih kuat, karena ini di atas overlay */
+    background-color: var(--white);
+}
+
+/* 2. Header Modal */
+.modal-header {
+    border-bottom: 1px solid #e5e7eb; /* Garis halus seperti di .input-group-modern */
+    padding: 1.5rem 1.75rem;
+}
+
+.modal-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; /* Menyamai .auth-title */
+    color: var(--ocean-blue); /* Menyamai .auth-title */
+    font-size: 1.25rem;
+}
+
+.modal-title .fa-anchor {
+    margin-right: 0.6rem;
+    color: var(--ocean-blue);
+}
+
+/* 3. Body Modal (Tempat form) */
+.modal-body {
+    padding: 1.5rem 1.75rem;
+}
+
+/* 4. Label Form di dalam Modal (Matching .form-label) */
+.modal-body .form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem; /* Menyamai .form-label */
+    margin-bottom: 0.5rem;
+}
+
+/* 5. Input Teks & Select Dropdown (Matching .input-group-modern .form-control) */
+.modal-body .form-control,
+.modal-body .form-select {
+    padding-left: 1rem; /* Tidak perlu padding ikon */
+    height: 50px;
+    border-radius: 12px;
+    background: #f9fafb; /* Latar belakang input Anda */
+    border: 1px solid #e5e7eb; /* Border input Anda */
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* Efek 'Focus' (Matching .form-control:focus) */
+.modal-body .form-control:focus,
+.modal-body .form-select:focus {
+    background: var(--white);
+    border-color: var(--ocean-blue);
+    box-shadow: 0 0 0 3px rgba(11, 90, 143, 0.1); /* Glow focus Anda */
+}
+
+/* 6. Kustomisasi Panah Dropdown (Select) */
+.modal-body .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); /* Warna panah --text-muted */
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* 7. Radio Button (Gender) */
+.modal-body .form-check-input {
+    border-color: #e5e7eb;
+}
+
+.modal-body .form-check-input:checked {
+    background-color: var(--ocean-blue); /* Warna primer saat dicentang */
+    border-color: var(--ocean-blue);
+}
+
+.modal-body .form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(11, 90, 143, 0.1); /* Glow focus yang sama */
+}
+
+/* 8. Footer Modal (Tempat Tombol) */
+.modal-footer {
+    border-top: 1px solid #e5e7eb; /* Garis halus */
+    padding: 1.5rem 1.75rem;
+    background-color: #f9fafb; /* Latar belakang footer sedikit beda */
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* 9. Tombol di Footer (Matching .btn-action & .btn-action-primary) */
+.modal-footer .btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem; /* Sedikit lebih kecil agar pas */
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Tombol "Save" (Matching .btn-action-primary) */
+.modal-footer .btn-primary {
+    background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.modal-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+/* Tombol "Close" (Tombol sekunder yang konsisten) */
+.modal-footer .btn-secondary {
+    background-color: #e5e7eb; /* Warna border input */
+    border-color: #e5e7eb;
+    color: var(--text-muted);
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #d1d5db; /* Sedikit lebih gelap */
+    border-color: #d1d5db;
+    color: var(--text-dark);
+}
+
 /* Responsive */
 @media (max-width: 991.98px) {
     .auth-page-wrapper {

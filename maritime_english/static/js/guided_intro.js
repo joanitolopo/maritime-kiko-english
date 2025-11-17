@@ -1,6 +1,6 @@
 // ========================================
 // MODERN GUIDED INTRO JAVASCRIPT
-// Radio Watch Duty with Speech Recognition
+// Radio Watch Duty with Role Selection
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,13 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
 
     // Sidebar Controls
-    const playBtn_sidebar = document.querySelector('.guided-controls .fa-play');
-    const translateBtn_sidebar = document.querySelector('.guided-controls .fa-language');
+    const playBtn_sidebar = document.querySelector('.play-btn');
+    const translateBtn_sidebar = document.querySelector('.translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-guided');
     const instructionText_activity = document.querySelector('.instruction-text-guided');
 
-    // Microphone Buttons
-    const micBtns = document.querySelectorAll('.mic-btn-task');
+    // Role Selection Buttons
+    const roleSelectBtns = document.querySelectorAll('.role-select-btn');
+    const changeRoleBtns = document.querySelectorAll('.change-role-btn');
 
     // Audio Players
     const audio_sidebar = new Audio();
@@ -52,11 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
 
     // Text Content
-    const originalText_sidebar = `"Cadet, this time you'll sail through a real-life situation. Read each story carefully and imagine what's happening at sea. Then, decide what to say as the caller and as the receiver. Remember, clear radio messages can save lives!"`;
-    const translatedText_sidebar = `"Kadet, kali ini kamu akan menghadapi situasi kehidupan nyata. Baca setiap cerita dengan hati-hati dan bayangkan apa yang terjadi di laut. Lalu, putuskan apa yang harus dikatakan sebagai pemanggil dan penerima. Ingat, pesan radio yang jelas dapat menyelamatkan nyawa!"`;
+    const originalText_sidebar = "Cadet, this time you’ll sail through a real-life radio situation. Read each story carefully and imagine what’s happening at sea. Then, decide your role — caller or receiver — and practice your radio message. Remember, clear radio communication can save lives!"
+    const translatedText_sidebar = "Taruna, kali ini kamu akan berlayar melalui situasi radio yang nyata. Bacalah setiap cerita dengan cermat dan bayangkan apa yang sedang terjadi di laut. Setelah itu, tentukan peranmu — sebagai pemanggil (caller) atau penerima (receiver) — lalu latih pesan radiomu. Ingat, komunikasi radio yang jelas dapat menyelamatkan nyawa!";
 
-    const originalText_instruction = `Read the situation. Identify your role (caller and receiver). Say both messages aloud using the correct maritime alphabet and number pronunciation.`;
-    const translatedText_instruction = `Baca situasinya. Identifikasi peranmu (pemanggil dan penerima). Ucapkan kedua pesan dengan lantang menggunakan alfabet maritim dan pengucapan angka yang benar.`;
+    const originalText_instruction = `Read the situation. Choose your role (caller or receiver). Then record your radio message using the correct maritime alphabet and number pronunciation.`;
+    const translatedText_instruction = `Baca situasinya. Pilih peranmu (pemanggil atau penerima). Lalu rekam pesan radiomu menggunakan alfabet maritim dan pengucapan angka yang benar.`;
 
     // Audio Paths
     const audioPath_sidebar = '/static/data/audio/unit1/guided_intro.wav';
@@ -64,12 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Target Phrases for Speech Recognition
     const TARGET_PHRASES = {
         // Situation 1
-        'situation1-caller': "This is 538209100 Motor Vessel CORALIS Charlie Lima Foxtrot Whisky 2 calling 312985600 Motor Vessel SILVERWIND Sierra Victor November Papa 4 Channel 16 Over",
+        'situation1-caller': "This is Motor Vessel Coralis, Call Sign Charlie Lima Foxtrot Whisky 2. MMSI 538209100. Calling Motor Vessel Silverwind, Call Sign Sierra Victor November Papa 4. Channel 16. Over.",
         'situation1-receiver': "Motor Vessel CORALIS this is SILVERWIND receiving you loud and clear Over",
         
         // Situation 2
-        'situation2-caller': "This is 239814900 Motor Vessel CRYSTAL WAVE Charlie Whisky Tango Romeo 8 calling 519402300 Motor Vessel EMERALD SKY Echo Mike Sierra Kilo 7 Channel 16 Over",
+        'situation2-caller': "This is Motor Vessel Crystal Wave, Call Sign Charlie Whisky Tango Romeo 8. MMSI 519402300. Calling Motor Vessel Emerald Sky, Call Sign Echo Mike Sierra Kilo 7. Channel 16. Over.",
         'situation2-receiver': "Motor Vessel CRYSTAL WAVE this is EMERALD SKY receiving you loud and clear Over"
+    };
+
+    // Role Info Messages
+    const ROLE_INFO = {
+        'situation1-caller': 'You are the CALLER on MV CORALIS. Initiate contact with MV SILVERWIND.',
+        'situation1-receiver': 'You are the RECEIVER on MV SILVERWIND. Respond to MV CORALIS.',
+        'situation2-caller': 'You are the CALLER on MV CRYSTAL WAVE. Initiate contact with MV EMERALD SKY.',
+        'situation2-receiver': 'You are the RECEIVER on MV EMERALD SKY. Respond to MV CRYSTAL WAVE.'
     };
 
     // ==================================================
@@ -94,16 +103,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (playBtn_sidebar) {
-            playBtn_sidebar.classList.remove('fa-pause');
-            playBtn_sidebar.classList.add('fa-play');
+            const icon = playBtn_sidebar.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
         }
 
-        micBtns.forEach(btn => {
+        document.querySelectorAll('.mic-btn-task').forEach(btn => {
             btn.classList.remove('listening');
             const icon = btn.querySelector('i');
             const text = btn.querySelector('span');
             if (icon) icon.className = 'fas fa-microphone';
-            if (text) text.textContent = 'Record';
+            if (text) text.textContent = 'Record Your Message';
         });
     }
 
@@ -252,13 +264,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (playBtn_sidebar) {
         playBtn_sidebar.addEventListener('click', function() {
+            const icon = this.querySelector('i');
             if (audio_sidebar.paused) {
                 stopAllAudioAndSpeech();
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
-                        playBtn_sidebar.classList.remove('fa-play');
-                        playBtn_sidebar.classList.add('fa-pause');
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
                         addPulseEffect(this);
                     })
                     .catch(error => {
@@ -267,15 +280,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             } else {
                 audio_sidebar.pause();
-                playBtn_sidebar.classList.remove('fa-pause');
-                playBtn_sidebar.classList.add('fa-play');
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
                 removePulseEffect(this);
             }
         });
 
         audio_sidebar.addEventListener('ended', () => {
-            playBtn_sidebar.classList.remove('fa-pause');
-            playBtn_sidebar.classList.add('fa-play');
+            const icon = playBtn_sidebar.querySelector('i');
+            icon.classList.remove('fa-pause');
+            icon.classList.add('fa-play');
             removePulseEffect(playBtn_sidebar);
         });
     }
@@ -303,13 +317,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
+    // ROLE SELECTION CONTROLS
+    // ==================================================
+
+    roleSelectBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const role = this.dataset.role;
+            const situationNum = this.dataset.situation;
+            const taskKey = `situation${situationNum}-${role}`;
+            
+            // Hide role selection, show recording section
+            const roleSelectionSection = this.closest('.role-selection-section');
+            const recordingSection = document.getElementById(`recording-section-${situationNum}`);
+            
+            roleSelectionSection.style.display = 'none';
+            recordingSection.style.display = 'block';
+            
+            // Update recording section info
+            const roleInfoText = recordingSection.querySelector('.selected-role-text');
+            const micBtn = recordingSection.querySelector('.mic-btn-task');
+            
+            roleInfoText.textContent = ROLE_INFO[taskKey];
+            micBtn.dataset.task = taskKey;
+            
+            // Animate the recording section
+            recordingSection.style.animation = 'fadeInUp 0.5s ease';
+            
+            showNotification(`You selected: ${role.toUpperCase()}. Ready to record!`, 'success');
+        });
+    });
+
+    changeRoleBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const situationNum = this.dataset.situation;
+            const recordingSection = document.getElementById(`recording-section-${situationNum}`);
+            const roleSelectionSection = recordingSection.previousElementSibling;
+            
+            // Hide recording section, show role selection
+            recordingSection.style.display = 'none';
+            roleSelectionSection.style.display = 'block';
+            
+            // Reset mic button
+            const micBtn = recordingSection.querySelector('.mic-btn-task');
+            micBtn.dataset.task = '';
+            
+            showNotification('Role selection reset. Choose your role again.', 'info');
+        });
+    });
+
+    // ==================================================
     // MICROPHONE CONTROLS
     // ==================================================
 
-    micBtns.forEach(btn => {
+    document.querySelectorAll('.mic-btn-task').forEach(btn => {
         btn.addEventListener('click', function() {
             if (isListening) {
                 showNotification('Please wait for the current recording to finish', 'warning');
+                return;
+            }
+
+            const taskKey = this.dataset.task;
+            if (!taskKey) {
+                showNotification('Please select a role first', 'warning');
                 return;
             }
 
@@ -317,7 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isListening = true;
             currentMicBtn = this;
             
-            const taskKey = this.dataset.task;
             const targetText = TARGET_PHRASES[taskKey];
 
             if (!targetText) {
@@ -345,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const icon = currentMicBtn.querySelector('i');
                     const text = currentMicBtn.querySelector('span');
                     if (icon) icon.className = 'fas fa-microphone';
-                    if (text) text.textContent = 'Record';
+                    if (text) text.textContent = 'Record Your Message';
                 }
                 currentMicBtn = null;
             };
@@ -359,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const icon = currentMicBtn.querySelector('i');
                     const text = currentMicBtn.querySelector('span');
                     if (icon) icon.className = 'fas fa-microphone';
-                    if (text) text.textContent = 'Record';
+                    if (text) text.textContent = 'Record Your Message';
                 }
                 
                 let errorMessage = 'Could not recognize speech.';
@@ -531,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const animatedElements = document.querySelectorAll(
-        '.situation-card, .task-item'
+        '.situation-card'
     );
     
     animatedElements.forEach((el, index) => {
@@ -553,12 +621,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key.toLowerCase() === 'c') {
             if (playBtn_sidebar) playBtn_sidebar.click();
         }
-
-        // Number keys 1-4 for tasks
-        if (e.key >= '1' && e.key <= '4') {
-            const index = parseInt(e.key) - 1;
-            if (micBtns[index]) micBtns[index].click();
-        }
     });
 
     // ==================================================
@@ -566,7 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
 
     console.log('✅ Radio Watch Duty Ready!');
-    console.log('💡 Tip: Press 1-4 to activate recording for each task');
+    console.log('💡 Tip: Select your role (Caller or Receiver) for each situation');
     console.log('💡 Tip: Press T to translate instructions');
     console.log('💡 Tip: Press C to hear captain\'s voice');
     console.log('🎯 Read each situation carefully and practice realistic radio exchanges!');

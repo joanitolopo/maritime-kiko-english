@@ -1,0 +1,117 @@
+/* ========================================
+   INDIKATOR SCROLL DOWN
+======================================== */
+
+.scroll-down-indicator {
+    position: fixed; /* Menempel di layar */
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999; /* Tampil di atas konten lain */
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; /* Jarak antara ikon dan teks */
+    
+    /* Ganti 'var(--ocean-blue, #0B5A8F)' dengan warna utama Anda jika ada */
+    background-color: rgba(11, 90, 143, 0.9); 
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
+    font-size: 0.8rem;
+    font-weight: 600;
+    
+    /* Sembunyikan secara default */
+    opacity: 0;
+    visibility: hidden;
+    
+    /* Transisi untuk fade-in / fade-out */
+    transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+}
+
+/* Class 'visible' ditambahkan oleh JS jika halaman bisa di-scroll */
+.scroll-down-indicator.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Class 'hidden' ditambahkan oleh JS saat user mulai scroll */
+.scroll-down-indicator.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(20px); /* Efek turun saat hilang */
+}
+
+/* Animasi memantul untuk ikon */
+.scroll-down-indicator i {
+    font-size: 1.1rem;
+    animation: bounce-scroll 2s infinite ease-in-out;
+}
+
+@keyframes bounce-scroll {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-8px);
+    }
+    60% {
+        transform: translateY(-4px);
+    }
+}
+
+/* ======== ANIMATIONS ======== */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.85;
+    }
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}

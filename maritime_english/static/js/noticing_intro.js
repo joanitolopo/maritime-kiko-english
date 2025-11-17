@@ -15,11 +15,71 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('close-popup-btn');
     const popupOverlay = document.getElementById('learn-more-popup');
 
+    const popupTranslateBtn = document.getElementById('popup-translate-btn');
+    const popupTitleText = document.querySelector('.popup-title-text');
+    let isPopupTranslated = false;
+
     // --- Kontrol Sidebar ---
     const audioBtn_sidebar = document.querySelector('.captain-instruction-card .audio-btn');
     const audioIcon_sidebar = audioBtn_sidebar ? audioBtn_sidebar.querySelector('i') : null;
     const translateBtn_sidebar = document.querySelector('.captain-instruction-card .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-noticing');
+
+    // Popup Content - English
+    const popupContent_EN = {
+        title: "Radio Message Structure & Function",
+        sections: [
+            {
+                title: "Opening",
+                desc: "Used by both caller and receiver to start the communication clearly.",
+                caller: '"This is [Ship Name], Call Sign..., MMSI..."',
+                receiver: '"[Ship Name], this is [Your Ship]."',
+                function: "Identify yourself and the ship you are contacting."
+            },
+            {
+                title: "Middle",
+                desc: "The core part of the message – giving or confirming information.",
+                caller: '"Calling Motor Vessel [Name]."',
+                receiver: '"Receiving you loud and clear."',
+                function: "Deliver or acknowledge the main content."
+            },
+            {
+                title: "Closing",
+                desc: "Marks the end of your turn in radio communication.",
+                caller: '"Channel one-six. Over."',
+                receiver: '"Over."',
+                function: "End your turn and signal readiness for response."
+            }
+        ]
+    };
+
+    // Popup Content - Indonesian
+    const popupContent_ID = {
+        title: "Struktur & Fungsi Pesan Radio",
+        sections: [
+            {
+                title: "Pembuka (Opening)",
+                desc: "Dipakai oleh pemanggil maupun penerima untuk memulai komunikasi dengan jelas.",
+                caller: '"This is [Nama Kapal], Call Sign …, MMSI …."',
+                receiver: '"[Nama Kapal Pemanggil], this is [Nama Kapalmu]."',
+                function: "Menyebutkan identitas kapal sendiri dan kapal yang dihubungi."
+            },
+            {
+                title: "Inti Pesan (Middle)",
+                desc: "Bagian utama pesan — menyampaikan atau mengonfirmasi informasi.",
+                caller: '"Calling Motor Vessel [Nama]."',
+                receiver: '"Receiving you loud and clear."',
+                function: "Menyampaikan atau menegaskan isi pesan utama."
+            },
+            {
+                title: "Penutup (Closing)",
+                desc: "Menandai akhir giliran berbicara dalam komunikasi radio.",
+                caller: '"Channel one-six. Over."',
+                receiver: '"Over."',
+                function: "Menutup giliran dan memberi sinyal siap menerima balasan."
+            }
+        ]
+    };
     
     // --- Kontrol Teks Instruksi ---
     const instructionText_activity = document.querySelector('.instruction-banner .instruction-text-noticing');
@@ -55,6 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 popupOverlay.style.display = 'none';
             }
         });
+
+        // Toggle terjemahan popup
+        if (popupTranslateBtn) {
+            popupTranslateBtn.addEventListener('click', function() {
+                isPopupTranslated = !isPopupTranslated;
+                const btnText = this.querySelector('span');
+                
+                if (isPopupTranslated) {
+                    updatePopupContent(popupContent_ID);
+                    if (btnText) btnText.textContent = 'EN';
+                } else {
+                    updatePopupContent(popupContent_EN);
+                    if (btnText) btnText.textContent = 'ID';
+                }
+                
+                addClickEffect(this);
+            });
+        }
     } else {
         console.warn('Elemen popup (open, close, overlay) tidak ditemukan.');
     }
@@ -64,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
 
     // Teks Sidebar
-    const originalText_sidebar = `"Cadet, this time we'll study how radio messages are built! Every call at sea follows a clear order, 1) opening, 2) middle, and 3) closing. Let's read both sides and see how real sailors do it."`;
-    const translatedText_sidebar = `"Kadet, kali ini kita akan mempelajari bagaimana pesan radio dibuat! Setiap panggilan di laut mengikuti urutan yang jelas, 1) pembukaan, 2) isi, dan 3) penutup. Mari kita baca kedua sisi dan lihat bagaimana pelaut sejati melakukannya."`;
+    const originalText_sidebar = "Cadet, this time we’ll study how radio messages are built! Every call at sea follows a clear order, opening, middle, and closing. Let’s read both sides and see how real sailors do it.";
+    const translatedText_sidebar = "Taruna, kali ini kita akan mempelajari bagaimana pesan radio disusun! Setiap panggilan di laut mengikuti urutan yang jelas: pembuka, isi, dan penutup. Mari kita baca kedua sisi percakapan dan lihat bagaimana para pelaut melakukannya di dunia nyata!";
 
     // Teks Instruksi
     const originalText_instruction = `"Read both messages carefully. Notice the structure of each radio exchange. Click Learn More to see the Captain's notes."`;
@@ -95,6 +173,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         currentPlayingAudio = null;
+    }
+
+
+    function updatePopupContent(content) {
+        if (popupTitleText) {
+            popupTitleText.textContent = content.title;
+        }
+        
+        const sectionTitles = document.querySelectorAll('.popup-section-title');
+        const sectionDescs = document.querySelectorAll('.popup-section-desc');
+        const sectionLists = document.querySelectorAll('.popup-section-list');
+        
+        content.sections.forEach((section, index) => {
+            if (sectionTitles[index]) {
+                sectionTitles[index].textContent = section.title;
+            }
+            if (sectionDescs[index]) {
+                sectionDescs[index].textContent = section.desc;
+            }
+            if (sectionLists[index]) {
+                const items = sectionLists[index].querySelectorAll('li');
+                if (items[0]) items[0].innerHTML = `<strong>Caller:</strong> <span class="popup-example">${section.caller}</span>`;
+                if (items[1]) items[1].innerHTML = `<strong>Receiver:</strong> <span class="popup-example">${section.receiver}</span>`;
+                if (items[2]) items[2].innerHTML = `<strong>Function:</strong> <span class="popup-function">${section.function}</span>`;
+            }
+        });
     }
 
     // ==================================================
@@ -215,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 6. INTERAKSI & ANIMASI HOVER (Dari Referensi) ===
     // ==================================================
 
-    const continueBtn = document.querySelector('.btn-continue');
+    const continueBtn = document.querySelector('.continue-button');
     if (continueBtn) {
         continueBtn.addEventListener('mouseenter', () => {
             continueBtn.style.transform = 'translateY(-3px)';

@@ -61,8 +61,15 @@
         {% endwith %}
         
         {% block content %}{% endblock %}
+    
     <!-- </div> -->
+    <div class="scroll-down-indicator" id="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+        <span>Scroll Down</span>
+    </div>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/learning_timer.js') }}"></script>
     {% block page_js %}{% endblock %}
 </body>
 </html>

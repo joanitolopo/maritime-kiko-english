@@ -1,18 +1,18 @@
 /* ========================================
    MODERN COURSES PAGE CSS
    Konsisten dengan palette Home & Guided Tasks
-================================S======== */
+======================================== */
 
 /* Variabel warna & font sudah diimpor dari home.css */
 
 body {
-    background-color: #f3f6f9; /* Latar belakang abu-abu muda yang konsisten */
+    background-color: #f3f6f9;
 }
 
 /* ======== SIDEBAR KIRI ======== */
 .course-sidebar {
     position: sticky;
-    top: 110px; /* Di bawah header (88px) + margin */
+    top: 110px;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -24,11 +24,6 @@ body {
     padding-bottom: 10px;
     border-bottom: 2px solid #e5e7eb;
 }
-
-/* Style untuk .stat-card, .stat-icon, .stat-info
-  diambil secara otomatis dari home.css yang sudah di-load.
-  Tidak perlu menuliskannya lagi!
-*/
 
 /* ======== HEADER KONTEN KANAN ======== */
 .course-page-banner {
@@ -55,22 +50,28 @@ body {
 }
 
 .banner-icon {
-    font-size: 3rem;
-    opacity: 0.2;
-    transform: rotate(-15deg);
+    width: 120px;
+    height: 120px;
+    opacity: 0.5;
+}
+
+.banner-icon img {
+    width: 152px;
+    height: 152px;
+    object-fit: contain;
 }
 
 /* ======== GRID KARTU KURSUS ======== */
 .unit-card {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Penting untuk layout flex */
+    height: 100%;
     background: var(--white);
     border-radius: 20px;
     box-shadow: var(--card-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid transparent;
-    overflow: hidden; /* Memastikan gambar tidak keluar dari radius */
+    overflow: hidden;
 }
 
 .unit-card:not(.is-locked):hover {
@@ -78,16 +79,15 @@ body {
     box-shadow: var(--hover-shadow);
 }
 
-/* Efek Status Card */
 .unit-card.is-active:hover { border-color: var(--coral); }
 .unit-card.is-in-progress:hover { border-color: var(--indigo); }
 
-/* Gambar Card */
 .unit-card-image {
     display: block;
     height: 180px;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .unit-card-image img {
@@ -101,7 +101,6 @@ body {
     transform: scale(1.1);
 }
 
-/* Ikon status di atas gambar */
 .status-icon {
     position: absolute;
     top: 12px;
@@ -117,15 +116,14 @@ body {
     font-size: 0.9rem;
     backdrop-filter: blur(5px);
 }
+
 .status-icon.in-progress {
     background: var(--indigo);
 }
 
-
-/* Konten Card */
 .unit-card-content {
     padding: 1.5rem;
-    flex-grow: 1; /* Mendorong footer ke bawah */
+    flex-grow: 1;
 }
 
 .unit-card-id {
@@ -151,7 +149,6 @@ body {
     margin: 0;
 }
 
-/* Footer Card (Tombol Aksi & Status) */
 .unit-card-footer {
     padding: 1.5rem;
     border-top: 1px solid #f3f4f6;
@@ -171,44 +168,45 @@ body {
     text-decoration: none;
     color: var(--white);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-/* Tombol Start */
 .btn-start {
     background: linear-gradient(135deg, var(--coral), var(--coral-dark));
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
+
 .btn-start:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     color: var(--white);
 }
 
-/* Tombol Continue */
 .btn-continue {
-    background: linear-gradient(135deg, var(--indigo), var(--indigo-dark));
+    background: linear-gradient(135deg, var(--indigo), #4f46e5);
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
+
 .btn-continue:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
     color: var(--white);
 }
 
-/* Progress Bar (In-Progress) */
 .progress-info small {
     font-weight: 600;
     color: var(--text-muted);
 }
+
 .custom-progress {
     height: 8px;
     background-color: #e5e7eb;
     border-radius: 10px;
     overflow: hidden;
 }
+
 .bg-indigo { background-color: var(--indigo) !important; }
 
-/* Status Terkunci */
 .status-locked-badge {
     text-align: center;
     font-weight: 600;
@@ -216,15 +214,18 @@ body {
     font-size: 1rem;
 }
 
-/* Style untuk Card Terkunci */
 .unit-card.is-locked {
     cursor: not-allowed;
-    background: #f9fafb; /* Sedikit lebih gelap dari putih */
+    background: #f9fafb;
 }
 
 .unit-card.is-locked:hover {
     transform: none;
     box-shadow: var(--card-shadow);
+}
+
+.unit-card.is-locked .unit-card-image {
+    cursor: not-allowed;
 }
 
 .unit-card.is-locked .unit-card-image img {
@@ -234,10 +235,318 @@ body {
 
 .unit-card.is-locked .unit-card-content h5,
 .unit-card.is-locked .unit-card-content p {
-    color: #9ca3af; /* Abu-abu muted */
+    color: #9ca3af;
 }
 
-/* ======== ANIMASI FADE-IN (dari home.css) ======== */
+/* ======== SUBUNIT MODAL STYLES ======== */
+.subunit-modal-content {
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.subunit-modal-header {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--indigo) 100%);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    border: none;
+    position: relative;
+}
+
+.modal-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-unit-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: fit-content;
+    backdrop-filter: blur(10px);
+}
+
+.subunit-modal-header .modal-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.btn-close-custom {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: var(--white);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-close-custom:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.subunit-modal-body {
+    padding: 1.5rem 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.voyage-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.voyage-progress-info {
+    font-weight: 600;
+    color: var(--ocean-blue);
+    font-size: 1rem;
+}
+
+.voyage-progress-stats {
+    background: var(--sky-light);
+    color: var(--ocean-blue);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.subunit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.subunit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 16px;
+    background: #f9fafb;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.subunit-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #d1d5db;
+    border-radius: 0 4px 4px 0;
+}
+
+.subunit-item.completed {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.subunit-item.completed::before {
+    background: var(--coral);
+}
+
+.subunit-item.current {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.subunit-item.current::before {
+    background: #3b82f6;
+}
+
+.subunit-item.locked {
+    opacity: 0.7;
+}
+
+.subunit-item.locked::before {
+    background: #d1d5db;
+}
+
+.subunit-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    font-weight: 700;
+}
+
+.subunit-item.completed .subunit-icon {
+    background: var(--coral);
+    color: var(--white);
+}
+
+.subunit-item.current .subunit-icon {
+    background: #3b82f6;
+    color: var(--white);
+    animation: pulse-icon 2s infinite;
+}
+
+.subunit-item.locked .subunit-icon {
+    background: #e5e7eb;
+    color: #9ca3af;
+}
+
+@keyframes pulse-icon {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+}
+
+.subunit-content {
+    flex: 1;
+}
+
+.subunit-letter {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.subunit-title {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+
+.subunit-item.locked .subunit-title {
+    color: #9ca3af;
+}
+
+.subunit-description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.subunit-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 8px;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.status-badge.completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.current {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.locked {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.subunit-modal-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.btn-secondary-outline {
+    background: transparent;
+    border: 2px solid #e5e7eb;
+    color: var(--text-muted);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary-outline:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: var(--text-dark);
+}
+
+.btn-start-voyage {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    border: none;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-start-voyage:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    color: var(--white);
+}
+
+.btn-start-voyage:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Custom Scrollbar for Modal */
+.subunit-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.subunit-modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.subunit-modal-body::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+.subunit-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* ======== ANIMASI FADE-IN ======== */
 .fade-in-up {
     opacity: 0;
     transform: translateY(30px);
@@ -249,20 +558,57 @@ body {
     transform: translateY(0);
 }
 
-/* Responsive */
+/* ======== RESPONSIVE ======== */
 @media (max-width: 991.98px) {
     .course-sidebar {
         position: static;
         flex-direction: row;
         gap: 1.5rem;
     }
+    
     .course-sidebar .stat-card {
-        flex: 1; /* Buat stat card jadi 50/50 */
+        flex: 1;
+    }
+    
+    .banner-title {
+        display: none;
+    }
+
+    .unit-card {
+        height: 350px;
     }
 }
 
 @media (max-width: 767.98px) {
     .course-sidebar {
         flex-direction: column;
+    }
+    
+    .subunit-modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn-secondary-outline,
+    .btn-start-voyage {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .subunit-item {
+        padding: 0.8rem;
+    }
+    
+    .subunit-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .subunit-title {
+        font-size: 0.9rem;
+    }
+    
+    .subunit-description {
+        font-size: 0.8rem;
     }
 }

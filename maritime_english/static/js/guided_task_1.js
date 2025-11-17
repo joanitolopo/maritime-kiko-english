@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // ELEMENTS & STATE
     // ==================================================
-    const playBtn_sidebar = document.querySelector('.task-controls .fa-play');
-    const translateBtn_sidebar = document.querySelector('.task-controls .fa-language');
+    const playBtn_sidebar = document.getElementById('captain-audio-btn');
+    const translateBtn_sidebar = document.getElementById('translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-task');
     const instructionText_activity = document.querySelector('.instruction-text-task');
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskPanels = document.querySelectorAll('.task-panel');
     
     const vesselOptions = document.querySelectorAll('.vessel-option');
-    const mmsiInputs = document.querySelectorAll('.mmsi-input');
+    const callsignInputs = document.querySelectorAll('.callsign-input');
     const checkBtns = document.querySelectorAll('.check-btn');
     const callsignMicBtns = document.querySelectorAll('.mic-btn-callsign');
     
@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendReportBtn = document.querySelector('.send-report-btn');
 
     const audio_sidebar = new Audio();
-    const allAudios = [audio_sidebar];
+    const audio_task = new Audio(); // <-- TAMBAHKAN INI
+    const allAudios = [audio_sidebar, audio_task]; // <-- UBAH INI
     
     let isTranslated = false;
     let isListening = false;
@@ -60,8 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // CONTENT & AUDIO PATHS
     // ==================================================
-    const originalText_sidebar = `"Cadet, this is your final radio test before taking the watch! You'll listen once to each radio message. Each includes a vessel's name, MMSI number, and call sign. Identify the correct vessel, type the MMSI you hear, then spell the call sign aloud. Remember, one clear message can save a ship!"`;
-    const translatedText_sidebar = `"Kadet, ini adalah tes radio terakhirmu sebelum mengambil tugas jaga! Kamu akan mendengarkan setiap pesan radio sekali. Setiap pesan mencakup nama kapal, nomor MMSI, dan call sign. Identifikasi kapal yang benar, ketik nomor MMSI yang kamu dengar, lalu eja call sign dengan lantang. Ingat, satu pesan yang jelas dapat menyelamatkan kapal!"`;
+    const originalText_sidebar = "Cadet, this is your final radio test before taking the watch! You'll listen once to each radio message. Each includes a vessel's name, MMSI number, and call sign. Identify the correct vessel's name, type the MMSI you hear, then spell the call sign aloud. Remember — one clear message can save a ship!";
+    const translatedText_sidebar = "Taruna, ini adalah tes radio terakhir sebelum kamu bertugas jaga! Kamu akan mendengarkan setiap pesan radio satu kali. Setiap pesan berisi nama kapal, nomor MMSI, dan call sign. Pilih nama kapal yang benar, ketik MMSI yang kamu dengar, lalu eja call sign dengan lantang. Ingat — satu pesan yang jelas dapat menyelamatkan kapal!";
 
     const originalText_instruction = `Listen carefully to each radio message. For each transmission: <strong>1)</strong> Click the correct vessel name, <strong>2)</strong> Type the MMSI number, <strong>3)</strong> Spell the Call Sign aloud. You will only hear each message once.`;
     const translatedText_instruction = `Dengarkan dengan saksama setiap pesan radio. Untuk setiap transmisi: <strong>1)</strong> Klik nama kapal yang benar, <strong>2)</strong> Ketik nomor MMSI, <strong>3)</strong> Eja Call Sign dengan lantang. Kamu hanya akan mendengar setiap pesan sekali.`;
@@ -128,14 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==================================================
-    // TASK 2: MMSI NUMBERS
+    // TASK 2: CALL SIGNS (Letters & Numbers)
     // ==================================================
     checkBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
             const question = btn.closest('.task-question');
-            const input = question.querySelector('.mmsi-input');
+            const input = question.querySelector('.callsign-input');
             const correct = input.dataset.correct;
-            const value = input.value.trim();
+            const value = input.value.trim().toUpperCase();
 
             if (value === correct) {
                 input.classList.remove('incorrect');
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 question.classList.add('completed');
                 updateProgress('task2', 1);
                 playSuccessSound();
-                showNotification('Correct MMSI!', 'success');
+                showNotification('Correct Call Sign!', 'success');
             } else {
                 input.classList.remove('correct');
                 input.classList.add('incorrect');
@@ -153,17 +154,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Enter key for MMSI inputs
-    mmsiInputs.forEach((input, index) => {
+    // Enter key for Call Sign inputs
+    callsignInputs.forEach((input, index) => {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 checkBtns[index].click();
             }
         });
 
-        // Only allow numbers
+        // Allow letters and numbers only, auto uppercase
         input.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
         });
     });
 
@@ -374,31 +375,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     audioPlayBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            stopAllAudio();
             const audioKey = this.dataset.audio;
             const audioPath = `/static/data/audio/unit1/${audioKey}.wav`;
-            
-            const audio = new Audio(audioPath);
-            this.classList.add('playing');
-            const icon = this.querySelector('i');
-            const text = this.querySelector('span');
-            if (icon) icon.className = 'fas fa-pause';
-            if (text) text.textContent = 'Playing...';
 
-            audio.play().catch(error => {
-                console.error('Audio error:', error);
-                shakeElement(this);
-            });
+            // Cek apakah audio ini sedang diputar
+            const isPlayingThis = !audio_task.paused && audio_task.src.includes(audioPath);
 
-            audio.addEventListener('ended', () => {
-                this.classList.remove('playing');
-                if (icon) icon.className = 'fas fa-play';
-                if (text) text.textContent = 'Play Audio';
-            });
+            stopAllAudio(); // Hentikan semua audio & reset UI
+
+            if (isPlayingThis) {
+                // Jika audio ini tadi diputar, stopAllAudio sudah menghentikannya.
+                // Klik tombol yang sama lagi akan berfungsi sebagai "stop".
+            } else {
+                // Jika audio lain diputar (atau tidak ada), putar yang ini.
+                audio_task.src = audioPath;
+                audio_task.play().catch(error => {
+                    console.error('Audio error:', error);
+                    shakeElement(this);
+                });
+
+                // Update UI tombol *ini*
+                this.classList.add('playing');
+                const icon = this.querySelector('i');
+                const text = this.querySelector('span');
+                if (icon) icon.className = 'fas fa-pause';
+                if (text) text.textContent = 'Playing...';
+            }
         });
     });
 
+// Tambahkan listener 'ended' untuk audio_task
+audio_task.addEventListener('ended', () => {
+    stopAllAudio(); // Reset UI saat audio selesai
+});
+
     function stopAllAudio() {
+        // 1. Hentikan semua objek audio
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+
+        // 2. Reset semua tombol audio di dalam task
         audioPlayBtns.forEach(btn => {
             btn.classList.remove('playing');
             const icon = btn.querySelector('i');
@@ -406,38 +426,58 @@ document.addEventListener('DOMContentLoaded', () => {
             if (icon) icon.className = 'fas fa-play';
             if (text) text.textContent = 'Play Audio';
         });
-    }
+
+        // 3. Reset tombol audio sidebar
+        if (playBtn_sidebar) {
+            const icon = playBtn_sidebar.querySelector('i');
+            if(icon) {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        }
+}
 
     // ==================================================
     // SIDEBAR CONTROLS
     // ==================================================
     if (playBtn_sidebar) {
+        const icon = playBtn_sidebar.querySelector('i'); // Dapatkan icon di dalam tombol
+
         playBtn_sidebar.addEventListener('click', function() {
-            if (audio_sidebar.paused) {
+            const isPlayingThis = !audio_sidebar.paused;
+
+            stopAllAudio(); // Hentikan audio task jika sedang main
+
+            if (isPlayingThis) {
+                audio_sidebar.pause();
+                audio_sidebar.currentTime = 0;
+                // Icon akan di-reset oleh stopAllAudio()
+            } else {
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
-                        playBtn_sidebar.classList.remove('fa-play');
-                        playBtn_sidebar.classList.add('fa-pause');
-                    })
-                    .catch(error => console.error('Audio error:', error));
-            } else {
-                audio_sidebar.pause();
-                playBtn_sidebar.classList.remove('fa-pause');
-                playBtn_sidebar.classList.add('fa-play');
-            }
-        });
+                            if (icon) {
+                            icon.classList.remove('fa-play');
+                                icon.classList.add('fa-pause');
+                        }
+                            })
+                            .catch(error => console.error('Audio error:', error));
+                }
+            });
 
-        audio_sidebar.addEventListener('ended', () => {
-            playBtn_sidebar.classList.remove('fa-pause');
-            playBtn_sidebar.classList.add('fa-play');
-        });
-    }
+            audio_sidebar.addEventListener('ended', () => {
+                if(icon) {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                }
+            });
+        }
 
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
+            stopAllAudio(); // Hentikan audio saat menerjemahkan
             if (isTranslated) {
-                speechText_sidebar.textContent = originalText_sidebar;
+                    speechText_sidebar.textContent = originalText_sidebar;
                 instructionText_activity.innerHTML = originalText_instruction;
                 isTranslated = false;
             } else {

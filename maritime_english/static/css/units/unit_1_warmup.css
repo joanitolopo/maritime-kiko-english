@@ -1,6 +1,6 @@
 /* ========================================
-   MODERN WARMUP PAGE CSS
-   Catchy, Dynamic & Responsive Design
+   MODERN WARMUP PAGE CSS - UPDATED
+   Activity Cards with Proper Order
 ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
@@ -31,7 +31,7 @@ body {
     min-height: 100vh;
 }
 
-/* ======== HEADER (SAMA SEPERTI INTRO) ======== */
+/* ======== HEADER ======== */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -112,12 +112,12 @@ body {
 
 /* Activity Badge */
 .activity-badge {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, #1e40af 100%);
     border-radius: 20px;
     padding: 20px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
     box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
     animation: slideInLeft 0.6s ease-out;
 }
@@ -125,7 +125,7 @@ body {
 .badge-icon {
     width: 60px;
     height: 60px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -218,27 +218,6 @@ body {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
-    filter: drop-shadow(0 -3px 3px rgba(0, 0, 0, 0.05));
-}
-
-.bubble-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.bubble-header i {
-    color: var(--ocean-blue);
-    font-size: 1.2rem;
-}
-
-.bubble-header span {
-    font-weight: 700;
-    color: var(--ocean-blue);
-    font-size: 1rem;
 }
 
 .speech-text-warmup {
@@ -278,7 +257,6 @@ body {
 
 .control-btn.audio-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
 .control-btn.translate-btn {
@@ -289,7 +267,6 @@ body {
 
 .control-btn.translate-btn:hover {
     border-color: var(--ocean-blue);
-    background: #f9fafb;
 }
 
 /* ======== MAIN CONTENT ======== */
@@ -308,14 +285,14 @@ body {
     overflow: hidden;
 }
 
-/* Activity Header */
+/* Activity Header - UPDATED FOR INSTRUCTION */
 .activity-header {
     background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
     color: var(--white);
-    padding: 25px 30px;
+    padding: 20px 30px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 0;
 }
 
 .header-left {
@@ -334,6 +311,7 @@ body {
     justify-content: center;
     font-size: 1.8rem;
     font-weight: 800;
+    flex-shrink: 0;
 }
 
 .header-text h3 {
@@ -348,50 +326,53 @@ body {
     margin: 0;
 }
 
-.play-audio-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 25px;
-    background: var(--white);
-    color: var(--ocean-blue);
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.play-audio-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.play-audio-btn.playing {
-    background: #ef4444;
-    color: var(--white);
-    animation: pulse 1s ease-in-out infinite;
-}
-
 /* Activity Body */
 .activity-body {
-    padding: 35px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
-/* Radio Display */
+/* Instruction Text - TOP OF ACTIVITY BODY */
+.instruction-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    margin: 0;
+}
+
+.instruction-text i {
+    font-size: 1.6rem;
+    color: #d97706;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.instruction-text p {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #78350f;
+    margin: 0;
+}
+
+/* Radio Display - CENTERED */
 .radio-display {
     text-align: center;
-    margin-bottom: 30px;
     position: relative;
+    padding: 20px 0;
 }
 
 .radio-img {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     object-fit: contain;
     animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
 }
 
 /* Audio Wave Animation */
@@ -417,28 +398,43 @@ body {
 .audio-wave span:nth-child(4) { animation-delay: 0.6s; }
 .audio-wave span:nth-child(5) { animation-delay: 0.8s; }
 
-/* Instruction Text */
-.instruction-text {
+/* Play Audio Button - BELOW IMAGE */
+.play-audio-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 15px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-radius: 12px;
-    margin-bottom: 25px;
+    gap: 12px;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+    margin: 0 auto;
+    min-width: 200px;
 }
 
-.instruction-text i {
-    font-size: 1.5rem;
-    color: var(--ocean-blue);
+.play-audio-btn i {
+    font-size: 1.1rem;
 }
 
-.instruction-text p {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin: 0;
+.play-audio-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45);
+}
+
+.play-audio-btn.playing {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    animation: pulse 1s ease-in-out infinite;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+}
+
+.play-audio-btn.playing i::before {
+    content: "\f04c"; /* Pause icon */
 }
 
 /* Code Grid */
@@ -497,14 +493,15 @@ body {
 /* Captain Display */
 .captain-display {
     text-align: center;
-    margin-bottom: 25px;
     position: relative;
+    padding: 20px 0;
 }
 
 .captain-speaking {
-    height: 220px;
+    height: 200px;
     object-fit: contain;
     animation: float 3s ease-in-out infinite 0.5s;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
 }
 
 /* Speech Indicator */
@@ -530,7 +527,7 @@ body {
 .mcq-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .mcq-option {
@@ -546,7 +543,7 @@ body {
     background: var(--white);
     border: 3px solid #e5e7eb;
     border-radius: 16px;
-    padding: 18px 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -555,7 +552,7 @@ body {
 
 .mcq-option:hover .option-content {
     border-color: var(--ocean-blue);
-    background: #f9fafb;
+    background: #f0f9ff;
     transform: translateX(5px);
 }
 
@@ -578,6 +575,7 @@ body {
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-dark);
+    letter-spacing: 2px;
 }
 
 .option-icon {
@@ -587,13 +585,11 @@ body {
     transition: opacity 0.3s ease;
 }
 
-/* MCQ Selected State */
 .mcq-option input[type="radio"]:checked + .option-content {
     border-color: var(--ocean-blue);
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
 }
 
-/* MCQ Correct Answer */
 .mcq-option.correct .option-content {
     border-color: var(--success);
     background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
@@ -604,7 +600,6 @@ body {
     opacity: 1;
 }
 
-/* MCQ Incorrect Answer */
 .mcq-option.incorrect .option-content {
     border-color: var(--error);
     background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
@@ -616,7 +611,10 @@ body {
     color: var(--error);
 }
 
-/* Disabled state */
+.mcq-option.incorrect .option-icon::before {
+    content: "\f00d"; /* X icon */
+}
+
 .mcq-form.answered .mcq-option {
     cursor: not-allowed;
 }
@@ -627,9 +625,8 @@ body {
 
 /* Feedback Box */
 .feedback-box {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 16px;
+    padding: 18px 20px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -647,7 +644,7 @@ body {
 }
 
 .feedback-icon {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 .feedback-box.success .feedback-icon {
@@ -659,22 +656,23 @@ body {
 }
 
 .feedback-text {
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 0;
 }
 
 /* Continue Wrapper */
 .continue-wrapper {
-    text-align: right;
+    text-align: center;
     margin-top: 10px;
+    margin-left: auto;
 }
 
-.btn-continue {
+.continue-button {
     display: inline-flex;
     align-items: center;
     gap: 15px;
-    padding: 15px 40px;
+    padding: 14px 24px;
     background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
     color: var(--white);
     border-radius: 18px;
@@ -687,7 +685,7 @@ body {
     overflow: hidden;
 }
 
-.btn-continue::before {
+.continue-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -698,14 +696,74 @@ body {
     transition: left 0.6s ease;
 }
 
-.btn-continue:hover::before {
+.continue-button:hover::before {
     left: 100%;
 }
 
-.btn-continue:hover {
+.continue-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
     color: var(--white);
+}
+
+/* ==========================
+   ACTIVITY 1 - GRID FEEDBACK
+   ========================== */
+
+/* Style untuk tombol saat ditebak benar */
+.code-btn.correct {
+    background-color: var(--success-light);
+    border: 2px solid var(--success-dark);
+    color: var(--success-dark);
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.code-btn.correct .code-letter {
+    color: var(--success-dark);
+}
+
+/* Style untuk tombol saat ditebak salah */
+.code-btn.incorrect {
+    background-color: var(--danger-light);
+    border: 2px solid var(--danger-dark);
+    color: var(--danger-dark);
+    animation: shake 0.5s; /* Menggunakan animasi shake yang ada */
+}
+
+.code-btn.incorrect .code-letter {
+    color: var(--danger-dark);
+}
+
+/* Style untuk tombol yang sudah selesai ditebak (completed) */
+.code-btn.completed {
+    background-color: var(--grey-200);
+    border-color: var(--grey-300);
+    color: var(--grey-500);
+    opacity: 0.7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.code-btn.completed:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.code-btn.completed .code-letter {
+    color: var(--grey-500);
+}
+
+/* Pastikan feedback box dari activity 1 juga di-style */
+#grid-feedback.success {
+    background-color: var(--success-light);
+    border-left: 5px solid var(--success-dark);
+    color: var(--success-dark);
+}
+
+#grid-feedback.error {
+    background-color: var(--danger-light);
+    border-left: 5px solid var(--danger-dark);
+    color: var(--danger-dark);
 }
 
 /* ======== ANIMATIONS ======== */
@@ -781,27 +839,15 @@ body {
 }
 
 @keyframes success-bounce {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 @keyframes shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    25% {
-        transform: translateX(-10px);
-    }
-    75% {
-        transform: translateX(10px);
-    }
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
 }
 
 @keyframes slideInUp {
@@ -830,99 +876,162 @@ body {
     .warmup-sidebar {
         position: static;
     }
-
-    .code-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
 }
 
 @media (max-width: 768px) {
     .top-bar {
-        margin: 15px;
+        margin: 0;
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 10px 15px;
+        border-radius: 0;
+    }
+
+    .header-right-group {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+
+    .current-unit-title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0 25px !important;
     }
 
     .current-unit-title span {
+        font-size: 0.85rem;
+    }
+
+    .btn-learn-nav {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .btn-back .btn-text {
         display: none;
     }
 
+    .btn-back i {
+        margin: 0 !important;
+    }
+
+    .warmup-container {
+        padding: 70px 15px 30px;
+        gap: 20px;
+    }
+
     .activity-badge {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .captain-avatar {
-        height: 200px;
-    }
-
-    .activity-header {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .play-audio-btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .code-grid {
-        grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
         gap: 12px;
     }
 
+    .badge-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .badge-text h4 {
+        font-size: 1rem;
+    }
+
+    .badge-text p {
+        font-size: 0.9rem;
+    }
+
+    .captain-avatar {
+        height: 250px; /* Anda bisa sesuaikan tingginya */
+        position: relative;
+        z-index: 1; /* PERUBAHAN 1: Ubah 100 menjadi 1 (di belakang) */}
+
+    .instruction-bubble {
+        margin-top: -80px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        z-index: 2; /* PERUBAHAN 3: Tambahkan z-index 2 (di depan) */
+    }
+
+    .activity-header {
+        padding: 18px 20px;
+    }
+
+    .activity-number {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+    }
+
+    .header-text h3 {
+        font-size: 1.25rem;
+    }
+
+    .header-text p {
+        font-size: 0.85rem;
+    }
+
+    .activity-body {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .instruction-text {
+        padding: 14px 16px;
+    }
+
+    .instruction-text i {
+        font-size: 1.4rem;
+    }
+
+    .instruction-text p {
+        font-size: 0.95rem;
+    }
+
+    .radio-img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .play-audio-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .code-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
     .code-btn {
-        padding: 20px 10px;
+        padding: 18px 10px;
     }
 
     .code-letter {
         font-size: 2rem;
     }
 
-    .captain-speaking {
-        height: 180px;
-    }
-
-    .option-text {
-        font-size: 1rem;
-    }
-
-    .continue-wrapper {
-        text-align: center;
-    }
-
-    .btn-continue {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .warmup-container {
-        padding: 0 10px 30px;
-    }
-
-    .activity-body {
-        padding: 20px;
-    }
-
-    .radio-img {
-        width: 150px;
-        height: 150px;
-    }
-
-    .code-grid {
-        gap: 10px;
-    }
-
-    .code-btn {
-        padding: 15px 8px;
-    }
-
-    .code-letter {
-        font-size: 1.8rem;
-    }
-
     .code-label {
         font-size: 0.75rem;
+    }
+
+    .captain-speaking {
+        height: 160px;
+    }
+
+    .option-content {
+        padding: 14px 16px;
     }
 
     .option-letter {
@@ -932,6 +1041,75 @@ body {
     }
 
     .option-text {
+        font-size: 1.05rem;
+        letter-spacing: 1.5px;
+    }
+
+    .continue-wrapper {
+        text-align: center;
+        margin-top: 10px;
+        margin-left: 170px;
+    }
+
+    .continue-wrapper {
+        text-align: center;
+    }
+
+    .continue-button {
+        width: 100%;
+        justify-content: center;
+        font-size: 1.1rem;
+        padding: 14px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .warmup-container {
+        padding: 65px 12px 24px;
+    }
+
+    .activity-body {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .radio-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .code-grid {
+        gap: 8px;
+    }
+
+    .code-btn {
+        padding: 14px 8px;
+    }
+
+    .code-letter {
+        font-size: 1.7rem;
+    }
+
+    .code-label {
+        font-size: 0.7rem;
+    }
+
+    .captain-speaking {
+        height: 140px;
+    }
+
+    .option-letter {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .option-text {
         font-size: 0.95rem;
+    }
+
+    .continue-button {
+        font-size: 1rem;
+        padding: 12px 24px;
     }
 }

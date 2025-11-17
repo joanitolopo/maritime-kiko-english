@@ -1,6 +1,7 @@
 /* ========================================
-   MODERN VHF EXCHANGE CSS
-   Radio Communication Conversation Style
+   VHF RADIO EXCHANGE CSS - MODERN LAYOUT
+   Side-by-Side Caller & Receiver Design
+   Updated Version with Text Play Buttons
 ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap');
@@ -13,6 +14,7 @@
     --coral-dark: #059669;
     --indigo: #6366f1;
     --indigo-dark: #4f46e5;
+    --gold: #f59e0b;
     --white: #ffffff;
     --text-dark: #1f2937;
     --text-light: #6b7280;
@@ -42,10 +44,6 @@ body {
     margin: 20px;
 }
 
-.header-right-group {
-    gap: 0.75rem;
-}
-
 .btn-learn-nav {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -56,7 +54,6 @@ body {
     display: inline-flex;
     align-items: center;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-learn-nav.btn-back {
@@ -65,10 +62,10 @@ body {
 
 .btn-learn-nav.btn-home {
     background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
-    padding: 0.6rem;
     border-radius: 50%;
     width: 45px;
     height: 45px;
+    padding: 0;
     justify-content: center;
 }
 
@@ -76,7 +73,6 @@ body {
     font-weight: 700;
     color: var(--ocean-blue);
     font-size: 1.1rem;
-    padding: 0.5rem 1rem;
 }
 
 /* ======== VHF CONTAINER ======== */
@@ -99,16 +95,14 @@ body {
     top: 20px;
 }
 
-/* Activity Badge */
 .activity-badge {
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, #1e40af 100%);
     border-radius: 20px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
-    animation: slideInLeft 0.6s ease-out;
 }
 
 .badge-icon {
@@ -123,24 +117,22 @@ body {
     color: var(--white);
 }
 
-.badge-text h4 {
+.badge-text h4, .badge-text p {
     color: var(--white);
-    font-size: 1.1rem;
-    font-weight: 700;
     margin: 0;
+}
+
+.badge-text h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
 }
 
 .badge-text p {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.95rem;
-    margin: 0;
+    font-size: 0.80rem;
+    opacity: 0.9;
 }
 
 /* Captain Card */
-.captain-instruction-card {
-    animation: fadeInUp 0.7s ease-out 0.2s both;
-}
-
 .captain-avatar-wrapper {
     text-align: center;
     position: relative;
@@ -154,7 +146,6 @@ body {
     animation: float 3s ease-in-out infinite;
 }
 
-/* Radio Waves */
 .radio-waves {
     position: absolute;
     top: 50%;
@@ -177,15 +168,9 @@ body {
     animation: radioWave 2s ease-out infinite;
 }
 
-.radio-waves span:nth-child(2) {
-    animation-delay: 0.7s;
-}
+.radio-waves span:nth-child(2) { animation-delay: 0.7s; }
+.radio-waves span:nth-child(3) { animation-delay: 1.4s; }
 
-.radio-waves span:nth-child(3) {
-    animation-delay: 1.4s;
-}
-
-/* Instruction Bubble */
 .instruction-bubble {
     background: var(--white);
     border-radius: 20px;
@@ -205,30 +190,12 @@ body {
     border-bottom: 20px solid var(--white);
 }
 
-.bubble-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.bubble-header i {
-    color: var(--ocean-blue);
-    font-size: 1.2rem;
-}
-
-.bubble-header span {
-    font-weight: 700;
-    color: var(--ocean-blue);
-}
-
 .speech-text-vhf {
     font-size: 0.95rem;
     line-height: 1.8;
     color: var(--text-dark);
     margin-bottom: 20px;
+    text-align: justify;
 }
 
 .vhf-controls {
@@ -247,7 +214,6 @@ body {
     border: none;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Poppins', sans-serif;
@@ -256,7 +222,6 @@ body {
 .control-btn.audio-btn {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: var(--white);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .control-btn.translate-btn {
@@ -265,62 +230,13 @@ body {
     border: 2px solid #e5e7eb;
 }
 
-/* Protocol Card */
-.protocol-card {
-    background: var(--white);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    animation: fadeInUp 0.7s ease-out 0.4s both;
-}
-
-.protocol-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: var(--indigo);
-    font-weight: 700;
-}
-
-.protocol-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.protocol-step {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-    border-radius: 12px;
-    border-left: 4px solid var(--indigo);
-}
-
-.step-number {
-    width: 30px;
-    height: 30px;
-    background: var(--indigo);
-    color: var(--white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-
 /* ======== MAIN CONTENT ======== */
 .vhf-main {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    animation: fadeInUp 0.7s ease-out 0.6s both;
 }
 
-/* Exchange Card */
 .exchange-card {
     background: var(--white);
     border-radius: 25px;
@@ -328,7 +244,6 @@ body {
     overflow: hidden;
 }
 
-/* Exchange Header */
 .exchange-header {
     background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
     color: var(--white);
@@ -356,7 +271,7 @@ body {
 }
 
 .header-text h3 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
 }
@@ -377,300 +292,250 @@ body {
     font-weight: 700;
 }
 
-/* Exchange Body */
 .exchange-body {
-    padding: 35px;
+    padding: 30px;
 }
 
-/* Instruction Banner */
 .instruction-banner {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-left: 4px solid var(--ocean-blue);
-    border-radius: 16px;
-    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
     margin-bottom: 30px;
 }
 
 .banner-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(11, 90, 143, 0.1);
-    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    background: rgba(245, 158, 11, 0.2);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    color: var(--ocean-blue);
+    font-size: 1.5rem;
+    color: #d97706;
     flex-shrink: 0;
 }
 
-.instruction-banner p {
-    font-size: 1rem;
-    color: var(--text-dark);
+.banner-text p {
+    font-size: 0.95rem;
+    color: #78350f;
     margin: 0;
     line-height: 1.7;
 }
 
-/* Conversation Timeline */
-.conversation-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-/* Message Wrapper */
-.message-wrapper {
-    width: 100%;
-    animation: messageSlideIn 0.6s ease-out;
-}
-
-.caller-message {
-    animation-delay: 0.2s;
-}
-
-.receiver-message {
-    animation-delay: 0.4s;
-}
-
-/* Message Card */
-.message-card {
-    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+/* ======== EXAMPLE CONTAINER ======== */
+.example-container {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    border: 2px solid #e5e7eb;
+    margin-bottom: 25px;
+    position: relative;
+    box-shadow: 0 8px 30px rgba(6, 66, 115, 0.3);
 }
 
-.caller-message .message-card {
-    border-left: 4px solid #3b82f6;
-}
-
-.receiver-message .message-card {
-    border-right: 4px solid var(--coral);
-}
-
-/* Message Header */
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.receiver-message .message-header {
-    flex-direction: row-reverse;
-}
-
-.vessel-info {
+.example-number {
+    position: absolute;
+    top: -15px;
+    left: 25px;
+    width: 45px;
+    height: 45px;
+    background: var(--gold);
+    border-radius: 12px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+/* ======== EXCHANGE GRID ======== */
+.exchange-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.vessel-column {
+    display: flex;
+    flex-direction: column;
     gap: 15px;
 }
 
-.vessel-avatar {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
+.column-header {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.column-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Vessel Card */
+.vessel-card {
     background: var(--white);
-    padding: 8px;
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.vessel-details h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin: 0;
-}
-
-.vessel-role {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-weight: 600;
-}
-
-.message-play-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-    color: var(--white);
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.message-play-btn:hover {
-    transform: scale(1.1);
-}
-
-.message-play-btn.playing {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    animation: playPulse 1s ease infinite;
-}
-
-/* Message Content */
-.message-content {
-    margin-bottom: 20px;
-}
-
-.message-bubble {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.message-text {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--text-dark);
-    margin: 0;
-}
-
-/* Vessel Data Card */
-.vessel-data-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.data-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    background: #f9fafb;
-    border-radius: 10px;
-}
-
-.data-row i {
-    width: 35px;
-    height: 35px;
-    background: var(--indigo);
-    color: var(--white);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.vessel-avatar-section {
     flex-shrink: 0;
 }
 
-.data-info {
-    display: flex;
-    flex-direction: column;
+.vessel-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #f3f4f6;
 }
 
-.data-info label {
-    font-size: 0.8rem;
+.vessel-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-item label {
+    font-size: 0.75rem;
     color: var(--text-light);
     font-weight: 600;
 }
 
-.data-info value {
+.info-item value {
     font-family: 'Roboto Mono', monospace;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-dark);
+    letter-spacing: 1px;
 }
 
-/* Conversation Arrow */
-.conversation-arrow {
+/* Message Box */
+.message-box {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 160px;
+    transition: all 0.3s ease;
+}
+
+.message-box p {
+    margin: 0 0 6px 0;
+}
+
+.message-box p:last-child {
+    margin-bottom: 0;
+}
+
+.caller-message-box {
+    border-left: 4px solid #3b82f6;
+}
+
+.receiver-message-box {
+    border-left: 4px solid var(--coral);
+}
+
+.message-box.highlighted {
+    background: #fef3c7;
+    border-left-color: var(--gold);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+}
+
+/* Play Button - Updated to match MMSI */
+.play-message-btn {
+    background: var(--white);
+    border: none;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    padding: 20px 0;
-    position: relative;
+    gap: 10px;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--indigo);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
 }
 
-.arrow-line {
-    flex: 1;
-    height: 3px;
-    background: linear-gradient(90deg, #3b82f6 0%, var(--coral) 100%);
-    border-radius: 999px;
+.play-message-btn:hover {
+    transform: translateY(-2px);
+    background: var(--indigo);
+    color: var(--white);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
 }
 
-.arrow-icon {
+.play-message-btn.playing {
+    background: #ef4444;
+    color: var(--white);
+    animation: playPulse 1s ease infinite;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+}
+
+.play-message-btn i {
+    font-size: 1rem;
+}
+
+.play-message-btn span {
+    font-size: 0.95rem;
+}
+
+/* Exchange Arrow */
+.exchange-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 120px;
+}
+
+.exchange-arrow i {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-    color: var(--white);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.3rem;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    color: var(--white);
     animation: arrowPulse 2s ease infinite;
 }
 
-.arrow-label {
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--white);
-    padding: 5px 15px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--indigo);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Play All Section */
-.play-all-section {
-    text-align: center;
-    margin-top: 30px;
-    padding-top: 30px;
-    border-top: 2px solid #e5e7eb;
-}
-
-.play-all-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px 40px;
-    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-    color: var(--white);
-    border: none;
-    border-radius: 16px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
-}
-
-.play-all-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
-}
-
-.play-all-button.playing {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-/* Continue Wrapper */
+/* Continue */
 .continue-wrapper {
     text-align: right;
 }
 
-.btn-continue {
+.continue-button {
     display: inline-flex;
     align-items: center;
     gap: 15px;
@@ -685,81 +550,41 @@ body {
     transition: all 0.3s ease;
 }
 
-.btn-continue:hover {
+.continue-button:hover {
     transform: translateY(-3px);
     color: var(--white);
 }
 
 /* ======== ANIMATIONS ======== */
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 @keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-15px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
 }
 
 @keyframes radioWave {
-    0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(2);
-        opacity: 0;
-    }
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
 }
 
-@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 @keyframes playPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
 }
 
 @keyframes arrowPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
 }
 
 /* ======== RESPONSIVE ======== */
@@ -781,25 +606,75 @@ body {
 
 @media (max-width: 768px) {
     .top-bar {
-        margin: 15px;
+        margin: 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 10px 15px;
+        border-radius: 0;
+    }
+
+    .header-right-group {
+        width: 100%;
+        justify-content: space-between !important;
+    }
+
+    .current-unit-title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0 53px !important;
     }
 
     .current-unit-title span {
+        font-size: 0.85rem;
+    }
+
+    .btn-learn-nav {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .btn-back .btn-text {
         display: none;
     }
 
-    .activity-badge {
-        flex-direction: column;
-        text-align: center;
+    .btn-back i {
+        margin: 0 !important;
+    }
+
+    .vhf-container {
+        padding: 70px 15px 30px;
     }
 
     .captain-avatar {
-        height: 200px;
+        height: 250px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .instruction-bubble {
+        margin-top: -80px;
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        z-index: 2;
     }
 
     .exchange-header {
         flex-direction: column;
         gap: 15px;
+        padding: 20px;
+    }
+
+    .exchange-body {
+        padding: 20px;
     }
 
     .instruction-banner {
@@ -807,44 +682,108 @@ body {
         text-align: center;
     }
 
-    .exchange-body {
-        padding: 20px;
+    /* Stack grid vertically on mobile */
+    .exchange-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
 
-    .vessel-avatar {
-        width: 50px;
-        height: 50px;
+    .exchange-arrow {
+        padding: 10px 0;
+        transform: rotate(90deg);
     }
 
-    .vessel-details h4 {
-        font-size: 1rem;
-    }
-
-    .message-text {
-        font-size: 0.9rem;
-    }
-
-    .continue-wrapper {
-        text-align: center;
-    }
-
-    .btn-continue {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .message-card {
-        padding: 15px;
-    }
-
-    .vessel-info {
+    .vessel-card {
         flex-direction: column;
         text-align: center;
     }
 
-    .data-info value {
+    .vessel-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .message-box {
+        min-height: auto;
+        font-size: 0.8rem;
+    }
+
+    .play-message-btn {
+        width: 100%;
+        padding: 10px 20px;
         font-size: 0.95rem;
+    }
+
+    .continue-wrapper {
+        text-align: center;
+        margin-top: 10px;
+        margin-left: 170px;
+    }
+
+    .continue-button {
+        width: 100%;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .activity-badge {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .badge-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .badge-text h4 {
+        font-size: 1rem;
+    }
+
+    .badge-text p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .vhf-container {
+        padding: 65px 12px 24px;
+    }
+
+    .example-container {
+        padding: 20px 15px;
+    }
+
+    .vessel-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .info-item value {
+        font-size: 0.85rem;
+    }
+
+    .message-box {
+        padding: 14px;
+        font-size: 0.75rem;
+    }
+
+    .play-message-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+
+    .play-message-btn i {
+        font-size: 0.9rem;
+    }
+
+    .play-message-btn span {
+        font-size: 0.85rem;
+    }
+
+    .continue-button {
+        font-size: 1rem;
+        padding: 12px 24px;
     }
 }

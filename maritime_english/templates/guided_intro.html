@@ -9,7 +9,7 @@
 <!-- HEADER -->
 <header class="top-bar">
     <div class="container d-flex justify-content-end align-items-center header-right-group">
-        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_numbers') }}" class="btn-learn-nav btn-back" aria-label="Back to Exchange">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_alphabet') }}" class="btn-learn-nav btn-back" aria-label="Back to Exchange">
             <i class="fas fa-chevron-left me-1"></i>
             <span class="btn-text">Back</span>
         </a>
@@ -30,30 +30,43 @@
     
     <!-- LEFT SIDEBAR -->
     <aside class="guided-sidebar">
-        
         <!-- Title Container -->
-        <div class="title-container">
-            <div class="main-title">
+        <div class="activity-badge">
+            <div class="badge-icon">
                 <i class="fa-solid fa-ship"></i>
-                Sail Through the Real Challenge
             </div>
-            <div class="sub-title">
-                Activity 8: Radio Watch Duty
+            <div class="badge-text">
+                <h4>G. Sail Through the Real Challenge</h4>
+                <p>Activity 8: Radio Watch Duty</p>
             </div>
         </div>
-
-        <!-- Captain Section -->
-        <img src="{{ url_for('static', filename='img/captain_radio_check_5.png') }}" alt="Captain Character" class="captain-image">
         
         <!-- Speech Bubble -->
-        <div class="guided-bubble">
-            <p class="speech-text-guided">
-                "Cadet, this time you'll sail through a real-life situation. Read each story carefully and imagine what's happening at sea. Then, decide what to say as the caller and as the receiver. Remember, clear radio messages can save lives!"
-            </p>
+
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captain_radio_check_5.png') }}" alt="Captain Character" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             
-            <div class="guided-controls">
-                <i class="fa-solid fa-play"></i>
-                <i class="fa-solid fa-language"></i>
+            <!-- Speech Bubble -->
+            <div class="guided-bubble">
+                <p class="speech-text-guided">
+                    Cadet, this time you’ll sail through a real-life radio situation. Read each story carefully and imagine what’s happening at sea. Then, decide your role — caller or receiver — and practice your radio message. Remember, clear radio communication can save lives!
+                </p>
+                
+                <div class="guided-controls">
+                    <button class="control-btn play-btn" aria-label="Play audio">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn" aria-label="Translate">
+                        <i class="fa-solid fa-language"></i>
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -66,7 +79,7 @@
         <div class="activity-area-title">
             <i class="fa-solid fa-comments"></i>
             <p class="instruction-text-guided">
-                Read the situation. Identify your role (caller and receiver). Say both messages aloud using the correct maritime alphabet and number pronunciation.
+                Read the situation. Choose your role (caller or receiver). Then record your radio message using the correct maritime alphabet and number pronunciation.
             </p>
         </div>
         
@@ -105,7 +118,7 @@
 
                     <div class="challenge-prompt">
                         <i class="fas fa-lightbulb"></i>
-                        <p>Now, imagine you are a radio operator trainee observing this situation. Take both roles, first as the caller (Coralis), then as the receiver (Silverwind).</p>
+                        <p>Now, imagine you are a radio operator trainee observing this situation. Choose your role below and practice the correct radio message.</p>
                     </div>
                 </div>
 
@@ -143,28 +156,38 @@
                     </div>
                 </div>
 
-                <div class="tasks-section">
-                    <div class="task-item">
-                        <div class="task-question">
-                            <span class="task-num">1</span>
-                            <p>What message should Coralis send?</p>
-                        </div>
-                        <button class="mic-btn-task" data-task="situation1-caller" data-card-index="0">
-                            <i class="fas fa-microphone"></i>
-                            <span>Record</span>
+                <!-- Role Selection -->
+                <div class="role-selection-section">
+                    <h5 class="role-selection-title">
+                        <i class="fas fa-user-check"></i>
+                        Choose Your Role:
+                    </h5>
+                    <div class="role-buttons">
+                        <button class="role-select-btn" data-role="caller" data-situation="1">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Caller (Coralis)</span>
+                        </button>
+                        <button class="role-select-btn" data-role="receiver" data-situation="1">
+                            <i class="fas fa-headphones"></i>
+                            <span>Receiver (Silverwind)</span>
                         </button>
                     </div>
+                </div>
 
-                    <div class="task-item">
-                        <div class="task-question">
-                            <span class="task-num">2</span>
-                            <p>What message should Silverwind reply?</p>
-                        </div>
-                        <button class="mic-btn-task" data-task="situation1-receiver" data-card-index="1">
-                            <i class="fas fa-microphone"></i>
-                            <span>Record</span>
-                        </button>
+                <!-- Recording Section (Hidden by default) -->
+                <div class="recording-section" id="recording-section-1" style="display: none;">
+                    <div class="selected-role-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="selected-role-text"></span>
                     </div>
+                    <button class="mic-btn-task" data-task="" data-situation="1">
+                        <i class="fas fa-microphone"></i>
+                        <span>Record Your Message</span>
+                    </button>
+                    <button class="change-role-btn" data-situation="1">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Change Role</span>
+                    </button>
                 </div>
             </div>
 
@@ -200,7 +223,7 @@
 
                     <div class="challenge-prompt">
                         <i class="fas fa-lightbulb"></i>
-                        <p>Now, imagine you are a radio operator trainee observing this situation. Take both roles, first as the caller (Crystal Wave), then as the receiver (Emerald Sky).</p>
+                        <p>Now, imagine you are a radio operator trainee observing this situation. Choose your role below and practice the correct radio message.</p>
                     </div>
                 </div>
 
@@ -238,28 +261,38 @@
                     </div>
                 </div>
 
-                <div class="tasks-section">
-                    <div class="task-item">
-                        <div class="task-question">
-                            <span class="task-num">1</span>
-                            <p>What message should Crystal Wave send?</p>
-                        </div>
-                        <button class="mic-btn-task" data-task="situation2-caller" data-card-index="2">
-                            <i class="fas fa-microphone"></i>
-                            <span>Record</span>
+                <!-- Role Selection -->
+                <div class="role-selection-section">
+                    <h5 class="role-selection-title">
+                        <i class="fas fa-user-check"></i>
+                        Choose Your Role:
+                    </h5>
+                    <div class="role-buttons">
+                        <button class="role-select-btn" data-role="caller" data-situation="2">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Caller (Crystal Wave)</span>
+                        </button>
+                        <button class="role-select-btn" data-role="receiver" data-situation="2">
+                            <i class="fas fa-headphones"></i>
+                            <span>Receiver (Emerald Sky)</span>
                         </button>
                     </div>
+                </div>
 
-                    <div class="task-item">
-                        <div class="task-question">
-                            <span class="task-num">2</span>
-                            <p>What message should Emerald Sky reply?</p>
-                        </div>
-                        <button class="mic-btn-task" data-task="situation2-receiver" data-card-index="3">
-                            <i class="fas fa-microphone"></i>
-                            <span>Record</span>
-                        </button>
+                <!-- Recording Section (Hidden by default) -->
+                <div class="recording-section" id="recording-section-2" style="display: none;">
+                    <div class="selected-role-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="selected-role-text"></span>
                     </div>
+                    <button class="mic-btn-task" data-task="" data-situation="2">
+                        <i class="fas fa-microphone"></i>
+                        <span>Record Your Message</span>
+                    </button>
+                    <button class="change-role-btn" data-situation="2">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Change Role</span>
+                    </button>
                 </div>
             </div>
 
@@ -270,12 +303,11 @@
 </div>
 
 <!-- FOOTER -->
-<footer class="footer-nav">
-    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='guided_task_1') }}" class="continue-button">
-        <span>Continue</span>
-        <i class="fas fa-chevron-right ms-1"></i>
+<div class="continue-wrapper">
+    <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=7) }}" class="btn-continue">
+        <span>Continue Sailing</span>
     </a>
-</footer>
+</div>
 
 {% endblock %}
 

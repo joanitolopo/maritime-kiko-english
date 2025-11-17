@@ -26,28 +26,39 @@
 
 <div class="main-content">
     
-    <aside class="task-sidebar">
-        
-        <div class="title-container">
-            <div class="main-title">
+    <aside class="drill-sidebar"> 
+        <div class="activity-badge">
+            <div class="badge-icon">
                 <i class="fa-solid fa-book-journal-whills"></i>
-                Log Your Journey
             </div>
-            <div class="sub-title">
-                Activity 10: Log Your Voyage
+            <div class="badge-text">
+                <h4>I. Log Your Journey</h4>
+                <p>Activity 10: Log Your Voyage</p>
             </div>
         </div>
 
-        <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-image">
-        
-        <div class="task-bubble">
-            <p class="speech-text-task">
-                "Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."
-            </p>
+        <div class="captain-instruction-card">
             
-            <div class="task-controls">
-                <i class="fa-solid fa-play" data-audio-src="{{ url_for('static', filename='data/audio/unit1/logbook_intro.wav') }}"></i>
-                <i class="fa-solid fa-language"></i>
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <div class="instruction-bubble"> <p class="speech-text-drill"> "Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."
+                </p>
+                
+                <div class="drill-controls"> <button class="control-btn audio-btn" id="captain-audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn" id="translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -123,12 +134,11 @@
     </main>
 </div>
 
-<footer class="footer-nav">
-    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='next_section_name') }}" class="continue-button">
-        <span>Continue</span>
-        <i class="fas fa-chevron-right ms-1"></i>
+<div class="continue-wrapper">
+    <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=9) }}" class="continue-button">
+        <span>Continue Sailing</span>
     </a>
-</footer>
+</div>
 {% endblock %}
 
 {% block page_js %}

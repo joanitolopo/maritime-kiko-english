@@ -106,22 +106,3 @@ body {
 .login-link a:hover {
   text-decoration: underline;
 }
-
-/* --- Penyesuaian Mobile --- */
-@media (max-width: 991.98px) {
-  .register-page-wrapper {
-    padding: 1rem 0;
-  }
-
-  /* Di mobile, hilangkan kotak putih dan bayangan */
-  .register-box {
-    padding: 1rem;
-    background-color: transparent;
-    box-shadow: none;
-    border: none;
-  }
-
-  .register-title {
-    text-align: center;
-  }
-}

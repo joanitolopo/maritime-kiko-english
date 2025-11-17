@@ -9,7 +9,7 @@
 <!-- HEADER -->
 <header class="top-bar">
     <div class="container d-flex justify-content-end align-items-center header-right-group">
-        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_intro') }}" class="btn-learn-nav btn-back" aria-label="Back to Noticing Intro">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_numbers') }}" class="btn-learn-nav btn-back" aria-label="Back to Noticing Intro">
             <i class="fas fa-chevron-left me-1"></i>
             <span class="btn-text">Back</span>
         </a>
@@ -31,29 +31,42 @@
     <!-- LEFT SIDEBAR -->
     <aside class="drill-sidebar">
         
-        <!-- Title Container -->
-        <div class="title-container">
-            <div class="main-title">
+        <div class="activity-badge">
+            <div class="badge-icon">
                 <i class="fa-solid fa-anchor"></i>
-                Drill it Like a Sailor
             </div>
-            <div class="sub-title">
-                Activity 6: Radio Spelling Practice
+            <div class="badge-text">
+                <h4>F. Practice with the Crew</h4>
+                <p>Activity 7. Radio Exchage Practice</p>
             </div>
         </div>
 
-        <!-- Captain Section -->
-        <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-image">
-        
-        <!-- Speech Bubble -->
-        <div class="drill-bubble">
-            <p class="speech-text-drill">
-                "Cadets, it's time to drill your pronunciation! Listen carefully to OS Lina's example, then spell and say each vessel's identification clearly - just like a real seafarer!"
-            </p>
+        <!-- Captain Section with Radio Waves -->
+        <div class="captain-instruction-card">
+            <div class="captain-avatar-wrapper">
+                <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-avatar">
+                <div class="radio-waves">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             
-            <div class="drill-controls">
-                <i class="fa-solid fa-play"></i>
-                <i class="fa-solid fa-language"></i>
+            <!-- Speech Bubble -->
+            <div class="instruction-bubble">
+                <p class="speech-text-drill">
+                    Alright, cadets! This time you will practice real radio exchanges, sending and receiving messages just like on board! Listen carefully and follow each step with confidence.
+                </p>
+                
+                <div class="drill-controls">
+                    <button class="control-btn audio-btn" id="captain-audio-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button class="control-btn translate-btn" id="translate-btn">
+                        <i class="fa-solid fa-language"></i>
+                        <span>Translate</span>
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -64,133 +77,192 @@
         
         <!-- Activity Header -->
         <div class="activity-area-title">
-            <i class="fa-solid fa-headphones"></i>
+            <div class="title-icon">
+                <i class="fa-solid fa-headphones"></i>
+            </div>
             <p class="instruction-text-drill">
-                Listen to the example carefully. Then, read each card and say the ship's name, MMSI, and Call Sign clearly into your microphone.
+                Practice radio communication by taking turns as Caller and Receiver. Listen to "Play Now" examples, then speak your part clearly.
             </p>
         </div>
         
-        <!-- Activity Columns Container -->
-        <div class="activity-columns-container">
+        <!-- EXAMPLE SECTION - UPDATED -->
+        <div class="example-section">
+            <h3 class="example-title">
+                Listen to the example
+            </h3>
             
-            <!-- LEFT COLUMN: Example -->
-            <div class="activity-wrapper">
-                
-                <!-- Example Window -->
-                <div class="example-window">
-                    <div class="window-header">
-                        <div class="header-dots">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
+            <div class="example-card">
+                <div class="example-content">
+                    <!-- Left Side: The Caller -->
+                    <div class="example-role caller-example">
+                        <h4 class="example-role-title">The Caller</h4>
+                        <div class="example-role-content">
+                            <div class="example-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Caller">
+                            </div>
+                            <div class="example-vessel-info">
+                                <p><span class="example-label">Vessel's Name:</span><br><span class="example-value">HORIZON</span></p>
+                                <p><span class="example-label">MMSI:</span><br><span class="example-value">248105900</span></p>
+                                <p><span class="example-label">Call Sign:</span><br><span class="example-value">YBON9</span></p>
+                            </div>
                         </div>
-                        <span class="window-title">Example</span>
+                        <!-- Play Button Inside -->
+                        <button class="example-play-btn" 
+                                data-audio-src="/static/data/audio/unit1/vhf_caller.wav"
+                                data-transcript="This is Motor Vessel Horizon,
+Call Sign Bravo Hotel Niner Too Fife Wun.
+MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero.
+Calling Motor Vessel Antares,
+Call Sign Yankee Bravo Oscar November Niner.
+Channel Wun Six. Over."
+                                data-role="Caller">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Play Now</span>
+                        </button>
                     </div>
                     
-                    <div class="window-body">
-                        <p>
-                            <span class="data-label">Vessel's Name:</span>
-                            <span class="data-value">ANTARES</span>
-                        </p>
-                        <p>
-                            <span class="data-label">MMSI:</span>
-                            <span class="data-value">257689000</span>
-                        </p>
-                        <p>
-                            <span class="data-label">Call Sign:</span>
-                            <span class="data-value">LAPW5</span>
-                        </p>
+                    <!-- Exchange Arrow -->
+                    <div class="example-exchange-arrow">
+                        <i class="fa-solid fa-arrows-left-right"></i>
+                    </div>
+                    
+                    <!-- Right Side: The Receiver -->
+                    <div class="example-role receiver-example">
+                        <h4 class="example-role-title">The Receiver</h4>
+                        <div class="example-role-content">
+                            <div class="example-vessel-info">
+                                <p><span class="example-label">Vessel's Name:</span><br><span class="example-value">ANTARES</span></p>
+                                <p><span class="example-label">MMSI:</span><br><span class="example-value">257689000</span></p>
+                                <p><span class="example-label">Call Sign:</span><br><span class="example-value">LAPW5</span></p>
+                            </div>
+                            <div class="example-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Receiver">
+                            </div>
+                        </div>
+                        <!-- Play Button Inside -->
+                        <button class="example-play-btn" 
+                                data-audio-src="/static/data/audio/unit1/vhf_receiver.wav"
+                                data-transcript="Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."
+                                data-role="Receiver">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Play Now</span>
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Media Player -->
-                <div class="media-player-centered small">
-                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="OS Lina" class="media-image">
-                    <button id="play-example-audio" class="play-now-button">
-                        <i class="fa-solid fa-play"></i>
-                        <i class="fa-solid fa-pause"></i>
-                        <span class="btn-text">PLAY NOW</span>
-                    </button>
+            </div>
+        </div>
+        
+        <!-- Role Play Cards Container -->
+        <div class="roleplay-cards-container">
+            <div class="roleplay-header">
+                <div class="roleplay-header-main">
+                    <i class="fa-solid fa-hand-point-right"></i>
+                    <h3 class="roleplay-title-text">Your Turn - Speak Clearly</h3>
                 </div>
+                <p class="roleplay-subtitle">Speak as the Caller. Say the vessel's name, MMSI, and Call Sign clearly..</p>
+            </div>            
+            <!-- CARD 1: User is CALLER, Captain is RECEIVER -->
+            <div class="roleplay-card" data-card-index="0">
+                <div class="card-number-badge">1</div>
                 
-                <!-- Transcript Bubble -->
-                <div class="transcript-bubble small">
-                    "This is two-five-seven-six-eight-nine-zero-zero-zero, Motor Vessel ANTARES Alfa November Tango Alfa Romeo Echo Sierra, Call Sign Lima Alfa Papa Whisky Five"
+                <div class="roleplay-content">
+                    <!-- Left Side: The Caller (YOU) -->
+                    <div class="role-section caller-section">
+                        <h4 class="role-title">The Caller</h4>
+                        <div class="role-content">
+                            <div class="role-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="You">
+                                <span class="avatar-label">You</span>
+                            </div>
+                            <div class="vessel-info">
+                                <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">ADOUR</span></p>
+                                <p><span class="info-label">MMSI:</span><br><span class="info-value">635005000</span></p>
+                                <p><span class="info-label">Call Sign:</span><br><span class="info-value">FQEP</span></p>
+                            </div>
+                        </div>
+                        <button class="action-btn speak-btn" data-role="caller">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span>Speak Now</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Exchange Arrow -->
+                    <div class="exchange-arrow">
+                        <i class="fa-solid fa-arrows-left-right"></i>
+                    </div>
+                    
+                    <!-- Right Side: The Receiver (CAPTAIN) -->
+                    <div class="role-section receiver-section">
+                        <h4 class="role-title">The Receiver</h4>
+                        <div class="role-content">
+                            <div class="vessel-info">
+                                <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">APOLLON</span></p>
+                                <p><span class="info-label">MMSI:</span><br><span class="info-value">237002600</span></p>
+                                <p><span class="info-label">Call Sign:</span><br><span class="info-value">SWFP</span></p>
+                            </div>
+                            <div class="role-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Captain">
+                                <span class="avatar-label">Captain</span>
+                            </div>
+                        </div>
+                        <button class="action-btn play-btn" data-audio-src="/static/data/audio/unit1/receiver_response_1.wav">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Play Now</span>
+                        </button>
+                    </div>
                 </div>
-                
             </div>
             
-            <!-- RIGHT COLUMN: Practice Cards -->
-            <div class="activity-wrapper">
+            <!-- CARD 2: Captain is CALLER, User is RECEIVER -->
+            <div class="roleplay-card" data-card-index="1">
+                <div class="card-number-badge">2</div>
                 
-                <!-- Practice Card 1 -->
-                <div class="practice-card-group" data-card-index="0">
-                    <div class="example-window practice-card">
-                        <div class="window-header">
-                            <div class="header-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                <div class="roleplay-content">
+                    <!-- Left Side: The Caller (CAPTAIN) -->
+                    <div class="role-section caller-section">
+                        <h4 class="role-title">The Caller</h4>
+                        <div class="role-content">
+                            <div class="role-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Captain">
+                                <span class="avatar-label">Captain</span>
                             </div>
-                            <span class="window-title">Card 1</span>
+                            <div class="vessel-info">
+                                <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">BAYSTAR</span></p>
+                                <p><span class="info-label">MMSI:</span><br><span class="info-value">440983000</span></p>
+                                <p><span class="info-label">Call Sign:</span><br><span class="info-value">DSON9</span></p>
+                            </div>
                         </div>
-                        
-                        <div class="window-body">
-                            <p>
-                                <span class="data-label">Vessel's Name:</span>
-                                <span class="data-value">APOLLON</span>
-                            </p>
-                            <p>
-                                <span class="data-label">MMSI:</span>
-                                <span class="data-value">237002600</span>
-                            </p>
-                            <p>
-                                <span class="data-label">Call Sign:</span>
-                                <span class="data-value">SWFP</span>
-                            </p>
-                        </div>
+                        <button class="action-btn play-btn" data-audio-src="/static/data/audio/unit1/caller_message_2.wav">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Play Now</span>
+                        </button>
                     </div>
                     
-                    <div class="mic-turn-box">
-                        <i class="fa-solid fa-microphone mic-icon-large"></i>
-                        <span>Your Turn</span>
-                    </div>
-                </div>
-                
-                <!-- Practice Card 2 -->
-                <div class="practice-card-group" data-card-index="1">
-                    <div class="example-window practice-card">
-                        <div class="window-header">
-                            <div class="header-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span class="window-title">Card 2</span>
-                        </div>
-                        
-                        <div class="window-body">
-                            <p>
-                                <span class="data-label">Vessel's Name:</span>
-                                <span class="data-value">BAYSTAR</span>
-                            </p>
-                            <p>
-                                <span class="data-label">MMSI:</span>
-                                <span class="data-value">440983000</span>
-                            </p>
-                            <p>
-                                <span class="data-label">Call Sign:</span>
-                                <span class="data-value">DSON9</span>
-                            </p>
-                        </div>
+                    <!-- Exchange Arrow -->
+                    <div class="exchange-arrow">
+                        <i class="fa-solid fa-arrows-left-right"></i>
                     </div>
                     
-                    <div class="mic-turn-box">
-                        <i class="fa-solid fa-microphone mic-icon-large"></i>
-                        <span>Your Turn</span>
+                    <!-- Right Side: The Receiver (YOU) -->
+                    <div class="role-section receiver-section">
+                        <h4 class="role-title">The Receiver</h4>
+                        <div class="role-content">
+                            <div class="vessel-info">
+                                <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">SUNSHINE</span></p>
+                                <p><span class="info-label">MMSI:</span><br><span class="info-value">369855000</span></p>
+                                <p><span class="info-label">Call Sign:</span><br><span class="info-value">NSAC</span></p>
+                            </div>
+                            <div class="role-avatar">
+                                <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="You">
+                                <span class="avatar-label">You</span>
+                            </div>
+                        </div>
+                        <button class="action-btn speak-btn" data-role="receiver">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span>Speak Now</span>
+                        </button>
                     </div>
                 </div>
-                
             </div>
             
         </div>
@@ -199,13 +271,30 @@
 
 </div>
 
-<!-- FOOTER -->
-<footer class="footer-nav">
-    <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='noticing_numbers') }}" class="continue-button">
-        <span>Continue</span>
-        <i class="fas fa-chevron-right ms-1"></i>
+<div class="continue-wrapper">
+    <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=6) }}" class="continue-button">
+        <span>Continue Sailing</span>
     </a>
-</footer>
+</div>
+
+
+<!-- Transcript Popup (Hidden by default) -->
+<div class="transcript-popup" id="transcript-popup">
+    <div class="transcript-popup-content">
+        <div class="transcript-popup-header">
+            <i class="fa-solid fa-broadcast-tower"></i>
+            <h4 id="transcript-role-title">Caller's Message</h4>
+            <div class="audio-indicator">
+                <span class="wave"></span>
+                <span class="wave"></span>
+                <span class="wave"></span>
+            </div>
+        </div>
+        <div class="transcript-popup-body">
+            <p id="transcript-text-content"></p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
