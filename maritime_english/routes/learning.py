@@ -6,6 +6,8 @@ import speech_recognition as speech_recog
 from ..models import UnitProgress, UserStats
 from ..__init__ import db
 from datetime import date
+from datetime import datetime
+from flask import jsonify
 
 learning_bp = Blueprint('learning', __name__, url_prefix='/learn')
 
@@ -178,7 +180,6 @@ SUBUNIT_TO_SECTION_MAP = {
         7: 'guided_intro',    # Part F
         8: 'guided_task_1',
         9: 'guided_task_2', # Part G
-        9: 'home', # Part G
     },
     2: { # Unit 2 (Dummy - sesuai permintaan Anda)
         1: 'warm_up',
@@ -377,6 +378,21 @@ def complete_subunit(unit_id, subunit_index):
     current_app.logger.debug("[complete_subunit] Memanggil update_user_stats...")
     update_user_stats(current_user.id, stats_object=stats)
 
+    # --- TRACKING BARU ---
+    # Update last_attempt timestamp
+    progress.last_attempt = datetime.utcnow()
+
+    # Tambahkan durasi ke total_duration unit ini
+    if duration_minutes > 0:
+        if progress.total_duration_minutes is None:
+            progress.total_duration_minutes = 0
+        progress.total_duration_minutes += duration_minutes
+    
+    if subunit_index == 1:  # Hanya increment jika mulai dari awal
+        if progress.total_attempts is None:
+            progress.total_attempts = 0
+        progress.total_attempts += 1
+
     try:
         db.session.commit()
     except Exception as e:
@@ -398,31 +414,361 @@ def complete_subunit(unit_id, subunit_index):
                                 unit_id=unit_id, 
                                 subunit_index=next_subunit_index))
 
+@learning_bp.route("/unit/<int:unit_id>/save_reflection", methods=['POST'])
+@login_required
+def save_reflection(unit_id):
+    """
+    Endpoint untuk menyimpan self-assessment dan reflection notes dari guided_task_2.
+    """
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"success": False, "message": "No data received"}), 400
+    
+    # Cari atau buat UnitProgress
+    progress = UnitProgress.query.filter_by(
+        user_id=current_user.id,
+        unit_id=unit_id
+    ).first()
+    
+    if not progress:
+        progress = UnitProgress(
+            user_id=current_user.id,
+            unit_id=unit_id,
+            completed_subunits=0,
+            progress_percent=0,
+            status='not_started',
+            total_attempts=0,
+            total_duration_minutes=0
+        )
+        db.session.add(progress)
+    
+    # Update self-assessment scores
+    if 'q1' in data:
+        progress.self_assessment_q1 = int(data['q1'])
+    if 'q2' in data:
+        progress.self_assessment_q2 = int(data['q2'])
+    if 'q3' in data:
+        progress.self_assessment_q3 = int(data['q3'])
+    
+    # Update reflection notes
+    if 'r1' in data:
+        progress.reflection_easiest = data['r1']
+    if 'r2' in data:
+        progress.reflection_struggle = data['r2']
+    if 'r3' in data:
+        progress.reflection_improvement = data['r3']
+    
+    # Update last_attempt
+    progress.last_attempt = datetime.utcnow()
+    
+    try:
+        db.session.commit()
+        current_app.logger.info(f"Reflection saved for user {current_user.id}, unit {unit_id}")
+        return jsonify({"success": True, "message": "Reflection saved successfully!"})
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error saving reflection: {e}")
+        return jsonify({"success": False, "message": "Failed to save reflection"}), 500
+
+
+@learning_bp.route("/unit/<int:unit_id>/save_assessment", methods=['POST'])
+@login_required
+def save_assessment(unit_id):
+    """
+    Endpoint untuk menyimpan assessment scores dari guided_task_1 (Activity 9).
+    """
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"success": False, "message": "No data received"}), 400
+    
+    # Cari atau buat UnitProgress
+    progress = UnitProgress.query.filter_by(
+        user_id=current_user.id,
+        unit_id=unit_id
+    ).first()
+    
+    if not progress:
+        progress = UnitProgress(
+            user_id=current_user.id,
+            unit_id=unit_id,
+            completed_subunits=0,
+            progress_percent=0,
+            status='not_started',
+            total_attempts=0,
+            total_duration_minutes=0
+        )
+        db.session.add(progress)
+    
+    # Update assessment scores
+    task1 = int(data.get('task1', 0))
+    task2 = int(data.get('task2', 0))
+    task3 = int(data.get('task3', 0))
+    
+    progress.assessment_task1_score = task1
+    progress.assessment_task2_score = task2
+    progress.assessment_task3_score = task3
+    progress.assessment_total_score = task1 + task2 + task3
+    progress.assessment_percentage = round((progress.assessment_total_score / 15) * 100, 1)
+    
+    # Update last_attempt
+    progress.last_attempt = datetime.utcnow()
+    
+    try:
+        db.session.commit()
+        current_app.logger.info(f"Assessment saved for user {current_user.id}, unit {unit_id}: {progress.assessment_total_score}/15")
+        return jsonify({
+            "success": True, 
+            "message": "Assessment saved successfully!",
+            "total_score": progress.assessment_total_score,
+            "percentage": progress.assessment_percentage
+        })
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error saving assessment: {e}")
+        return jsonify({"success": False, "message": "Failed to save assessment"}), 500
+
+@learning_bp.route("/unit/<int:unit_id>/report_pdf")
+@login_required
+def unit_report_pdf(unit_id):
+    """
+    Halaman report PDF untuk unit tertentu.
+    """
+    if unit_id not in UNITS:
+        flash("Unit not found.", "error")
+        return redirect(url_for('learning.report'))
+    
+    # Ambil progress untuk unit ini
+    progress = UnitProgress.query.filter_by(
+        user_id=current_user.id,
+        unit_id=unit_id
+    ).first()
+    
+    if not progress:
+        flash("No progress data found for this unit.", "warning")
+        return redirect(url_for('learning.report'))
+    
+    # Hitung self-assessment level
+    avg_score = None
+    level_label = None
+    captain_feedback = None
+    
+    if progress.self_assessment_q1 and progress.self_assessment_q2 and progress.self_assessment_q3:
+        avg_score = round((progress.self_assessment_q1 + progress.self_assessment_q2 + progress.self_assessment_q3) / 3, 1)
+        
+        if avg_score >= 3.5:
+            level_label = "High Confidence"
+        elif avg_score >= 2.5:
+            level_label = "Steady Progress"
+        elif avg_score >= 1.5:
+            level_label = "Developing Confidence"
+        else:
+            level_label = "Emerging Skills"
+        
+        easiest = progress.reflection_easiest or "certain tasks"
+        struggle = progress.reflection_struggle or "some challenges"
+        improvement = progress.reflection_improvement or "practice more"
+        
+        captain_feedback = generate_captain_feedback(level_label, easiest, struggle, improvement)
+    
+    # Data untuk template
+    report_data = {
+        "unit_id": unit_id,
+        "unit_title": UNITS[unit_id]["title"],
+        "status": "Completed" if progress.status == 'completed' else \
+                  ("In Progress" if progress.status == 'in_progress' else "Not Yet Started"),
+        "total_attempts": progress.total_attempts or 0,
+        "total_duration": progress.total_duration_minutes or 0,
+        "last_attempt": progress.last_attempt.strftime('%d/%m/%Y') if progress.last_attempt else "Never",
+        "self_assessment": {
+            "q1": progress.self_assessment_q1,
+            "q2": progress.self_assessment_q2,
+            "q3": progress.self_assessment_q3,
+            "avg_score": avg_score,
+            "level_label": level_label,
+        },
+        "reflections": {
+            "easiest": progress.reflection_easiest or "",
+            "struggle": progress.reflection_struggle or "",
+            "improvement": progress.reflection_improvement or "",
+        },
+        "captain_feedback": captain_feedback,
+        "assessment": {
+            "task1": progress.assessment_task1_score,
+            "task2": progress.assessment_task2_score,
+            "task3": progress.assessment_task3_score,
+            "total": progress.assessment_total_score,
+            "percentage": progress.assessment_percentage
+        }
+    }
+    
+    # Generate dummy daily data (nanti bisa diganti dengan data real)
+    # Untuk sekarang, kita buat placeholder
+    from datetime import datetime, timedelta
+    import random
+    
+    today = datetime.now()
+    daily_data = []
+    for i in range(7):
+        day = today - timedelta(days=6-i)
+        daily_data.append({
+            "day": day.strftime('%a'),
+            "attempts": random.randint(0, 3)  # Placeholder - nanti ganti dengan data real
+        })
+    
+    # Hitung stats
+    active_days = sum(1 for d in daily_data if d["attempts"] > 0)
+    total_attempts_week = sum(d["attempts"] for d in daily_data)
+    avg_attempts = round(total_attempts_week / 7, 1) if total_attempts_week > 0 else 0
+    avg_minutes = round(report_data["total_duration"] / max(1, active_days))
+    
+    # Longest streak (simplified)
+    current_streak = 0
+    max_streak = 0
+    for d in daily_data:
+        if d["attempts"] > 0:
+            current_streak += 1
+            max_streak = max(max_streak, current_streak)
+        else:
+            current_streak = 0
+    
+    stats = {
+        "active_days": active_days,
+        "avg_attempts": avg_attempts,
+        "avg_minutes": avg_minutes,
+        "longest_streak": max_streak
+    }
+    
+    return render_template('unit_report_pdf.html',
+                           user=current_user,
+                           report_data=report_data,
+                           daily_data=daily_data,
+                           stats=stats,
+                           today=today.strftime('%d/%m/%Y'))
 
 @learning_bp.route('/report')
 @login_required
 def report():
-    # 1. Ambil data progres YANG SEBENARNYA
     user_progress = UnitProgress.query.filter_by(user_id=current_user.id).all()
     
-    # 2. Ubah menjadi dictionary agar mudah diakses di template
-    progress_data = {
-        progress.unit_id: {
-            # Ubah status agar lebih mudah dibaca di laporan
-            "status": "Completed" if progress.status == 'completed' else \
-                      ("In Progress" if progress.status == 'in_progress' else "Not Yet Started"),
-            "progress": progress.progress_percent,
-            "score": 0, # Anda perlu menambahkan kolom 'score' di UnitProgress jika ingin ini
-            "last_activity": "N/A" # Anda perlu kolom 'last_updated' untuk ini
-        } for progress in user_progress
+    progress_data = {}
+    completed_count = 0
+    total_duration = 0
+    total_attempts = 0
+    total_progress_sum = 0
+    
+    for progress in user_progress:
+        status_text = "Completed" if progress.status == 'completed' else \
+                      ("In Progress" if progress.status == 'in_progress' else "Not Yet Started")
+        
+        if status_text == "Completed":
+            completed_count += 1
+        
+        duration = progress.total_duration_minutes or 0
+        attempts = progress.total_attempts or 0
+        prog_percent = progress.progress_percent or 0
+        
+        total_duration += duration
+        total_attempts += attempts
+        total_progress_sum += prog_percent
+        
+        # Calculate average score and level
+        avg_score = None
+        level_label = None
+        captain_feedback = None
+        
+        if progress.self_assessment_q1 and progress.self_assessment_q2 and progress.self_assessment_q3:
+            avg_score = round((progress.self_assessment_q1 + progress.self_assessment_q2 + progress.self_assessment_q3) / 3, 1)
+            
+            # Determine level label
+            if avg_score >= 3.5:
+                level_label = "High Confidence"
+            elif avg_score >= 2.5:
+                level_label = "Steady Progress"
+            elif avg_score >= 1.5:
+                level_label = "Developing Confidence"
+            else:
+                level_label = "Emerging Skills"
+            
+            # Generate captain feedback
+            easiest = progress.reflection_easiest or "certain tasks"
+            struggle = progress.reflection_struggle or "some challenges"
+            improvement = progress.reflection_improvement or "practice more"
+            
+            captain_feedback = generate_captain_feedback(level_label, easiest, struggle, improvement)
+        
+        progress_data[progress.unit_id] = {
+            "status": status_text,
+            "progress": prog_percent,
+            "total_attempts": attempts,
+            "total_duration": duration,
+            "last_attempt": progress.last_attempt.strftime('%Y-%m-%d %H:%M') if progress.last_attempt else "Never",
+            "self_assessment": {
+                "q1": progress.self_assessment_q1,
+                "q2": progress.self_assessment_q2,
+                "q3": progress.self_assessment_q3,
+                "avg_score": avg_score,
+                "level_label": level_label,
+            },
+            "reflections": {
+                "easiest": progress.reflection_easiest or "",
+                "struggle": progress.reflection_struggle or "",
+                "improvement": progress.reflection_improvement or "",
+            },
+            "captain_feedback": captain_feedback,
+            # NEW: Assessment scores
+            "assessment": {
+                "task1": progress.assessment_task1_score,
+                "task2": progress.assessment_task2_score,
+                "task3": progress.assessment_task3_score,
+                "total": progress.assessment_total_score,
+                "percentage": progress.assessment_percentage
+            }
+        }
+
+    total_units = len(UNITS)
+    overall_progress = int(total_progress_sum / total_units) if total_units > 0 else 0
+
+    default_progress = {
+        "status": "Locked", 
+        "progress": 0, 
+        "total_attempts": 0,
+        "total_duration": 0,
+        "last_attempt": "Not Yet Started",
+        "self_assessment": {"q1": None, "q2": None, "q3": None, "avg_score": None, "level_label": None},
+        "reflections": {"easiest": "", "struggle": "", "improvement": ""},
+        "captain_feedback": None,
+        # NEW
+        "assessment": {"task1": None, "task2": None, "task3": None, "total": None, "percentage": None}
     }
 
-    # 3. Data default untuk unit yang BELUM ada di 'progress_data'
-    default_progress = {
-        "status": "Locked", "progress": 0, "score": 0, "last_activity": "Not Yet Started"
+    summary_stats = {
+        "completed_count": completed_count,
+        "total_units": total_units,
+        "total_duration": total_duration,
+        "total_attempts": total_attempts,
+        "overall_progress": overall_progress
     }
 
     return render_template('report.html', 
                            units_data=UNITS, 
                            progress_data=progress_data,
-                           default_progress=default_progress)
+                           default_progress=default_progress,
+                           summary_stats=summary_stats)
+
+
+def generate_captain_feedback(level, easiest, struggle, improvement):
+    """Generate personalized captain feedback based on confidence level."""
+    
+    if level == "High Confidence":
+        return f"""Well done, Cadet. You sailed through this unit with strong confidence. Your skills are steady, your understanding is sharp, and you show that you can navigate these tasks with control. Your reflections also show that you know exactly where you feel solid and what you want to strengthen next. It's great that "{easiest}" felt smooth for you — strong moments like this are anchors for your confidence. And even though dealing with "{struggle}" was challenging, recognizing it the way you did shows maturity and readiness to grow. Your plan to "{improvement}" is a smart and steady move. Keep this course — you're ready for more challenging waters, and I'm confident you'll handle them like a true seafarer."""
+    
+    elif level == "Steady Progress":
+        return f"""Good work, Cadet. You're moving at a steady, reliable pace — just like a vessel keeping a true heading. Your confidence shows growing control of the essentials, and your reflections reveal that you're aware of your strengths and challenges. It's good to see that "{easiest}" felt comfortable for you — that stability builds momentum. As for "{struggle}", your honesty about why it felt difficult shows strong awareness. Your plan to "{improvement}" is a promising step toward smoother sailing. Keep practicing consistently — every attempt builds your skill, and you're on the right path."""
+    
+    elif level == "Developing Confidence":
+        return f"""Cadet, you're building your confidence step by step, and that's exactly how real sailors grow. Your reflections show that you understand what feels tough and how you want to improve — that's the mindset of someone who doesn't give up at sea. It's encouraging that "{easiest}" felt manageable — those small wins matter. And the way you described your challenge with "{struggle}" shows honesty and clarity. Your plan to "{improvement}" is a solid way to strengthen your footing. Stay patient with yourself, keep practicing, and keep showing up — every small effort strengthens your skills."""
+    
+    else:  # Emerging Skills
+        return f"""You're just starting out, Cadet, and that's perfectly okay. Every sailor begins somewhere — even the best captains were once beginners like you. What matters is that you completed this unit and took time to reflect on your learning. It's good that "{easiest}" gave you something to hold onto — small strengths make a difference. And even though "{struggle}" felt difficult, your willingness to name it shows courage. Your plan to "{improvement}" is the right direction forward. Keep your pace steady, focus on one skill at a time, and don't worry about perfection — with each voyage, you'll grow stronger and more confident."""

@@ -489,23 +489,142 @@ audio_task.addEventListener('ended', () => {
     }
 
     // ==================================================
-    // SEND REPORT
+    // SEND REPORT - SAVE TO DATABASE
     // ==================================================
     if (sendReportBtn) {
-        sendReportBtn.addEventListener('click', () => {
+        sendReportBtn.addEventListener('click', async () => {
             const totalScore = progress.task1 + progress.task2 + progress.task3;
             const percentage = Math.round((totalScore / 15) * 100);
             
-            let message = `Your Score: ${totalScore}/15 (${percentage}%)\n\n`;
-            message += `Vessel Names: ${progress.task1}/5\n`;
-            message += `MMSI Numbers: ${progress.task2}/5\n`;
-            message += `Call Signs: ${progress.task3}/5`;
+            // Disable button and show loading
+            sendReportBtn.disabled = true;
+            const originalHTML = sendReportBtn.innerHTML;
+            sendReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
             
-            alert(message);
-            showNotification('Report submitted! Good job!', 'success');
+            try {
+                const response = await fetch(`/learn/unit/${window.UNIT_ID}/save_assessment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        task1: progress.task1,
+                        task2: progress.task2,
+                        task3: progress.task3
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show success modal with scores
+                    showScoreModal(progress, totalScore, percentage);
+                    
+                    sendReportBtn.innerHTML = '<i class="fas fa-check"></i> <span>Submitted!</span>';
+                    sendReportBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    
+                    // Keep button disabled after successful submission
+                    setTimeout(() => {
+                        sendReportBtn.innerHTML = originalHTML;
+                        sendReportBtn.style.background = '';
+                        // Optionally re-enable if you want to allow resubmission
+                        // sendReportBtn.disabled = false;
+                    }, 3000);
+                } else {
+                    throw new Error(result.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showNotification('Failed to save assessment. Please try again.', 'error');
+                sendReportBtn.innerHTML = originalHTML;
+                sendReportBtn.disabled = false;
+            }
         });
     }
 
+    // Score Modal Function
+    function showScoreModal(scores, total, percentage) {
+        const modal = document.createElement('div');
+        modal.className = 'feedback-modal';
+        
+        let grade = '';
+        let gradeColor = '';
+        let message = '';
+        
+        if (percentage >= 90) {
+            grade = 'Excellent!';
+            gradeColor = '#10b981';
+            message = 'Outstanding performance, Cadet! You\'re ready for duty!';
+        } else if (percentage >= 70) {
+            grade = 'Good Job!';
+            gradeColor = '#3b82f6';
+            message = 'Solid work! Keep practicing to perfect your skills.';
+        } else if (percentage >= 50) {
+            grade = 'Keep Trying!';
+            gradeColor = '#f59e0b';
+            message = 'You\'re making progress. More practice will help!';
+        } else {
+            grade = 'Needs Practice';
+            gradeColor = '#ef4444';
+            message = 'Don\'t give up! Review the materials and try again.';
+        }
+        
+        modal.innerHTML = `
+            <div class="feedback-modal-content" style="max-width: 500px;">
+                <button class="feedback-close">&times;</button>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
+                    <h3 style="color: ${gradeColor}; font-size: 2rem; margin-bottom: 10px;">${grade}</h3>
+                    <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 25px;">${message}</p>
+                    
+                    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 25px; border-radius: 16px; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--ocean-blue); margin-bottom: 5px;">
+                            ${total}/15
+                        </div>
+                        <div style="font-size: 1.2rem; color: var(--text-light); font-weight: 600;">
+                            ${percentage}%
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Vessel Names</div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task1}/5</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Call Sign Input</div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task2}/5</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Call Sign Speech</div>
+                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task3}/5</div>
+                        </div>
+                    </div>
+                    
+                    <button class="try-again-btn" onclick="this.closest('.feedback-modal').remove()">
+                        <i class="fas fa-check"></i> Got It!
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const closeBtn = modal.querySelector('.feedback-close');
+        closeBtn.addEventListener('click', () => {
+            modal.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => modal.remove(), 300);
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => modal.remove(), 300);
+            }
+        });
+        
+        playSuccessSound();
+    }
     // ==================================================
     // HELPER FUNCTIONS
     // ==================================================

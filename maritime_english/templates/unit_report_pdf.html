@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Report - Unit {{ report_data.unit_id }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --ocean-blue: #0B5A8F;
+            --ocean-deep: #064273;
+            --coral: #10b981;
+            --coral-dark: #059669;
+            --indigo: #6366f1;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #f3f6f9;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .report-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .report-header {
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-section img {
+            height: 45px;
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .report-date {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Title */
+        .report-title {
+            text-align: center;
+            padding: 30px 40px 20px;
+            border-bottom: 3px solid var(--ocean-blue);
+        }
+
+        .report-title h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 20px;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .student-info p {
+            font-size: 0.95rem;
+        }
+
+        .student-info strong {
+            color: var(--ocean-blue);
+        }
+
+        /* Content */
+        .report-content {
+            padding: 30px 40px;
+        }
+
+        /* Unit Header */
+        .unit-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .unit-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin: 0;
+        }
+
+        .unit-status {
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        .unit-status strong {
+            color: var(--coral-dark);
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Activity Summary Table */
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .activity-table th {
+            background: var(--ocean-blue);
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .activity-table td {
+            padding: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .activity-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .chart-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 120px;
+            padding: 10px 0;
+            border-bottom: 2px solid #d1d5db;
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .bar {
+            width: 30px;
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--indigo) 100%);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 5px;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .bar-label {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.7rem;
+            color: var(--coral-dark);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-box .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Final Assessment */
+        .final-assessment {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 2px solid var(--coral);
+        }
+
+        .final-assessment h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--coral-dark);
+            margin-bottom: 10px;
+        }
+
+        .final-assessment .score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .final-assessment .date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Self Assessment */
+        .self-assessment {
+            margin-bottom: 25px;
+        }
+
+        .self-assessment h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 5px;
+        }
+
+        .scale-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .assessment-items {
+            margin-bottom: 15px;
+        }
+
+        .assessment-items p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .avg-confidence {
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 5px;
+        }
+
+        .level-label {
+            font-weight: 700;
+            color: var(--coral-dark);
+        }
+
+        .level-options {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Reflection Notes */
+        .reflection-notes {
+            margin-bottom: 25px;
+        }
+
+        .reflection-notes h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ocean-blue);
+            margin-bottom: 15px;
+        }
+
+        .reflection-items p {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .reflection-items strong {
+            color: var(--text-dark);
+        }
+
+        .reflection-date {
+            font-size: 0.85rem;
+            color: var(--coral-dark);
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Captain Feedback */
+        .captain-feedback {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px dashed var(--ocean-blue);
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .captain-feedback-header {
+            background: var(--ocean-blue);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .captain-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .captain-text {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #78350f;
+            text-align: justify;
+        }
+
+        .captain-text strong {
+            color: var(--ocean-blue);
+        }
+
+        .captain-image {
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .captain-image img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Download Button */
+        .download-section {
+            text-align: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .back-btn {
+            background: var(--ocean-blue);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .report-container {
+                box-shadow: none;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .download-section {
+                display: none;
+            }
+
+            .bar {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .report-container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+
+            .report-header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .report-content {
+                padding: 20px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .captain-content {
+                flex-direction: column;
+            }
+
+            .captain-image {
+                width: 100px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container" id="report-content">
+        <!-- Header -->
+        <div class="report-header">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Logo">
+                <div class="logo-text">
+                    <h1>Sail<span style="color: #10b981;">Learn</span>.Eng</h1>
+                    <p>Navigate English, Master the Sea</p>
+                </div>
+            </div>
+            <div class="report-date">
+                Date: {{ today }}
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="report-title">
+            <h2>LEARNING REPORT</h2>
+            <div class="student-info">
+                <p><strong>Name:</strong> {{ user.username }}</p>
+                <p><strong>Major:</strong> {{ user.major or 'N/A' }}</p>
+                <p><strong>Grade:</strong> {{ user.grade or 'N/A' }}</p>
+                <p><strong>School:</strong> {{ user.school_name or 'N/A' }}</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="report-content">
+            <!-- Unit Header -->
+            <div class="unit-header">
+                <h3>Unit {{ report_data.unit_id }}. {{ report_data.unit_title }}</h3>
+                <div class="unit-status">
+                    <p><strong>Status:</strong> {{ report_data.status }}</p>
+                    <p><strong>Report period:</strong><br>{{ report_data.last_attempt }}</p>
+                </div>
+            </div>
+
+            <!-- Two Column: Activity Summary & Daily Consistency -->
+            <div class="two-column">
+                <!-- Activity Practice Summary -->
+                <div>
+                    <h4 class="section-title">Activity Practice Summary</h4>
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>Activity</th>
+                                <th>Attempts</th>
+                                <th>Total Duration</th>
+                                <th>Last Attempt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(1, 9) %}
+                            <tr>
+                                <td>{{ i }}</td>
+                                <td>{{ report_data.total_attempts }}</td>
+                                <td>{{ report_data.total_duration }} min</td>
+                                <td>{{ report_data.last_attempt }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Daily Consistency -->
+                <div>
+                    <h4 class="section-title">Daily Consistency</h4>
+                    <div class="chart-container">
+                        <p class="chart-title">Attempts per day</p>
+                        <div class="bar-chart">
+                            {% for day in daily_data %}
+                            <div class="bar-item">
+                                <div class="bar" style="height: {{ day.attempts * 30 }}px;">
+                                    <span class="bar-value">{{ day.attempts }}</span>
+                                </div>
+                                <span class="bar-label">{{ day.day }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Active days</div>
+                                <div class="stat-value">{{ stats.active_days }}/7</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Avg attempts/day</div>
+                                <div class="stat-value">{{ stats.avg_attempts }}</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Avg minutes/day</div>
+                                <div class="stat-value">{{ stats.avg_minutes }} min</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Longest Streak</div>
+                                <div class="stat-value">{{ stats.longest_streak }} day</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Assessment -->
+            {% if report_data.assessment.total %}
+            <div class="final-assessment">
+                <h4>Final Assessment</h4>
+                <p class="score">Score: {{ report_data.assessment.total }}/15 ({{ report_data.assessment.percentage }}%)</p>
+                <p class="date">Date Completed: {{ report_data.last_attempt }}</p>
+            </div>
+            {% endif %}
+
+            <!-- A. Self-Assessment Summary -->
+            {% if report_data.self_assessment.q1 %}
+            <div class="self-assessment">
+                <h4>A. Self-Assessment Summary</h4>
+                <p class="scale-note">(Scale: 1 = Not Confident Yet → 4 = Very Confident)</p>
+                <div class="assessment-items">
+                    <p>1. Maritime Alphabet Spelling Confidence: <strong>{{ report_data.self_assessment.q1 }}/4</strong></p>
+                    <p>2. Vessel Identification Understanding: <strong>{{ report_data.self_assessment.q2 }}/4</strong></p>
+                    <p>3. Radio Speaking Confidence: <strong>{{ report_data.self_assessment.q3 }}/4</strong></p>
+                </div>
+                <p class="avg-confidence">Average Confidence: {{ report_data.self_assessment.avg_score }}/4</p>
+                <p class="level-label">Level: {{ report_data.self_assessment.level_label }}</p>
+                <p class="level-options">(High Confidence / Steady Progress / Developing Confidence / Emerging Skills)</p>
+            </div>
+            {% endif %}
+
+            <!-- B. Reflection Notes -->
+            {% if report_data.reflections.easiest %}
+            <div class="reflection-notes">
+                <h4>B. Reflection Notes</h4>
+                <div class="reflection-items">
+                    <p>1. Easiest part: "<strong>{{ report_data.reflections.easiest }}</strong>"</p>
+                    <p>2. Most challenging part: "<strong>{{ report_data.reflections.struggle }}</strong>"</p>
+                    <p>3. Next steps to improve communication: "<strong>{{ report_data.reflections.improvement }}</strong>"</p>
+                </div>
+                <p class="reflection-date">Reflection submitted on: {{ report_data.last_attempt }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Captain's Feedback -->
+            {% if report_data.captain_feedback %}
+            <div class="captain-feedback">
+                <div class="captain-feedback-header">
+                    <i class="fas fa-anchor me-2"></i> Sepatah Kata dari Kapten Anda
+                </div>
+                <div class="captain-content">
+                    <div class="captain-text">
+                        {{ report_data.captain_feedback }}
+                    </div>
+                    <div class="captain-image">
+                        <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Download Section -->
+        <div class="download-section">
+            <a href="{{ url_for('learning.report') }}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Report
+            </a>
+            <button class="download-btn" onclick="downloadPDF()">
+                <i class="fas fa-download"></i> Download as PDF
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('report-content');
+            const downloadBtn = document.querySelector('.download-section');
+            
+            // Hide download section temporarily
+            downloadBtn.style.display = 'none';
+            
+            const opt = {
+                margin: 0,
+                filename: 'Learning_Report_Unit_{{ report_data.unit_id }}_{{ user.username }}.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Show download section again
+                downloadBtn.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

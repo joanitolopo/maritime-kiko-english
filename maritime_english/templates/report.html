@@ -69,8 +69,8 @@
                 <h5 class="sidebar-title">Overall Summary</h5>
                 
                 <div class="summary-chart-container">
-                    <div class="summary-chart" role="progressbar" aria-valuenow="30" style="--value: 30">
-                        <span class="chart-value">30%</span>
+                    <div class="summary-chart" role="progressbar" aria-valuenow="{{ summary_stats.overall_progress }}" style="--progress-value: 0">
+                        <span class="chart-value">0%</span>
                         <span class="chart-label">Total Progress</span>
                     </div>
                 </div>
@@ -78,11 +78,15 @@
                 <div class="summary-stats">
                     <div class="stat-item">
                         <span>Units Completed</span>
-                        <strong>1 of 6</strong>
+                        <strong>{{ summary_stats.completed_count }} of {{ summary_stats.total_units }}</strong>
                     </div>
                     <div class="stat-item">
-                        <span>Average Score</span>
-                        <strong>93</strong>
+                        <span>Total Learning Time</span>
+                        <strong>{{ summary_stats.total_duration }} min</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Total Attempts</span>
+                        <strong>{{ summary_stats.total_attempts }}</strong>
                     </div>
                 </div>
 
@@ -108,7 +112,7 @@
                 
                 {% for unit_id, unit_info in units_data.items() %}
                     
-                    {% set progress = progress_data.get(unit_id|string, default_progress) %}
+                    {% set progress = progress_data.get(unit_id, default_progress) %}
                     {% set status_class = "status-" + progress.status|lower|replace(' ', '') %}
 
                     <div class="col fade-in-up">
@@ -130,12 +134,46 @@
 
                             <div class="report-card-body">
                                 <div class="metric-item">
-                                    <span class="metric-label">Score</span>
-                                    <span class="metric-value score-value">{{ progress.score }}</span>
-                                </div>
-                                <div class="metric-item">
                                     <span class="metric-label">Progress</span>
                                     <span class="metric-value">{{ progress.progress }}%</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Attempts</span>
+                                    <span class="metric-value">{{ progress.total_attempts }}</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Time Spent</span>
+                                    <span class="metric-value">{{ progress.total_duration }} min</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">
+                                        Self Rating 
+                                        <i class="fas fa-info-circle rating-info-icon" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top"
+                                        title="High Confidence: 3.5-4.0 | Steady Progress: 2.5-3.4 | Developing: 1.5-2.4 | Emerging: 1.0-1.4"></i>
+                                    </span>
+                                    <span class="metric-value">
+                                        {% if progress.self_assessment.avg_score %}
+                                            {{ progress.self_assessment.avg_score }}/4
+                                            <span class="level-badge level-{{ progress.self_assessment.level_label|lower|replace(' ', '-') }}">
+                                                {{ progress.self_assessment.level_label }}
+                                            </span>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Final Assessment</span>
+                                    <span class="metric-value">
+                                        {% if progress.assessment.total %}
+                                            {{ progress.assessment.total }}/15
+                                            <span class="assessment-percentage">{{ progress.assessment.percentage }}%</span>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
                                 </div>
                                 <div class="metric-item metric-full-width">
                                     <div class="progress custom-progress mt-1">
@@ -144,16 +182,31 @@
                                 </div>
                                 <div class="metric-item metric-full-width last-activity">
                                     <i class="fas fa-calendar-alt me-1"></i>
-                                    Last activity: <strong>{{ progress.last_activity }}</strong>
+                                    Last activity: <strong>{{ progress.last_attempt }}</strong>
                                 </div>
                             </div>
 
                             <div class="report-card-footer">
-                                <a href="#" class="btn-details" {% if progress.status == 'Locked' %}disabled{% endif %}>
-                                    <i class="fas fa-eye me-2"></i> View Details
+                                <a href="#" class="btn-details" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#detailModal"
+                                    data-unit-id="{{ unit_id }}"
+                                    data-unit-title="{{ unit_info.title }}"
+                                    data-reflections='{{ progress.reflections|tojson }}'
+                                    data-self-assessment='{{ progress.self_assessment|tojson }}'
+                                    data-captain-feedback="{{ progress.captain_feedback|e if progress.captain_feedback else '' }}"
+                                    data-assessment='{{ progress.assessment|tojson }}'
+                                    {% if progress.status == 'Locked' %}disabled{% endif %}>
+                                        <i class="fas fa-eye me-2"></i> View Details
                                 </a>
-                                <a href="#" class="btn-download" {% if progress.status == 'Locked' %}disabled{% endif %}>
-                                    <i class="fas fa-download"></i>
+                                <a href="{{ url_for('learning.unit_report_pdf', unit_id=unit_id) }}" 
+                                    class="btn-download" 
+                                    {% if progress.status == 'Locked' or progress.status == 'Not Yet Started' %}
+                                    disabled 
+                                    onclick="return false;"
+                                    {% endif %}
+                                    target="_blank">
+                                        <i class="fas fa-download"></i>
                                 </a>
                             </div>
 
@@ -161,7 +214,30 @@
                     </div>
                 {% endfor %}
                 
-            </div> </div> </div> </main>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- Modal untuk Detail Unit -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--ocean-blue), var(--indigo)); color: white;">
+                <h5 class="modal-title" id="detailModalLabel">
+                    <i class="fas fa-clipboard-list me-2"></i>
+                    Unit Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content-area">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_js %}

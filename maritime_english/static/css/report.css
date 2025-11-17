@@ -40,9 +40,6 @@ body {
   initial-value: 0;
 }
 
-@keyframes progress-anim {
-  to { --progress-value: 30; } /* Nilai target (harus sama dgn di HTML) */
-}
 
 .summary-chart {
     width: 150px;
@@ -55,8 +52,8 @@ body {
     background: 
         radial-gradient(closest-side, var(--white) 79%, transparent 80% 100%),
         conic-gradient(var(--coral) calc(var(--progress-value) * 1%), #e5e7eb 0);
-    animation: progress-anim 1s 0.5s forwards;
-    transition: all 0.5s ease;
+    /* HAPUS animation: progress-anim 1s 0.5s forwards; */
+    transition: --progress-value 1s ease; /* Tambahkan transition untuk smooth effect */
 }
 
 .chart-value {
@@ -242,7 +239,7 @@ body {
 }
 
 .btn-details {
-    background: linear-gradient(135deg, var(--indigo), var(--indigo-dark));
+    background: linear-gradient(135deg, var(--ocean-blue), var(--indigo));
     color: var(--white);
     padding: 8px 15px;
     border-radius: 10px;
@@ -301,6 +298,319 @@ body {
 .fade-in-up.is-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Modal Detail Styles */
+.detail-section {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.detail-section h6 {
+    color: var(--ocean-blue);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.assessment-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.score-item {
+    background: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.score-item span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.score-item strong {
+    font-size: 1.1rem;
+    color: var(--coral);
+}
+
+.reflection-notes .note-item {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid var(--indigo);
+}
+
+.reflection-notes label {
+    font-weight: 600;
+    color: var(--ocean-blue);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.reflection-notes p {
+    margin: 0;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* ======== LEVEL BADGES ======== */
+.level-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.level-high-confidence {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.level-steady-progress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.level-developing-confidence {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.level-emerging-skills {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Rating Info Icon */
+.rating-info-icon {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    cursor: help;
+    margin-left: 4px;
+}
+
+.rating-info-icon:hover {
+    color: var(--ocean-blue);
+}
+
+/* ======== MODAL ENHANCEMENTS ======== */
+.assessment-summary {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    text-align: center;
+    border: 2px solid #bae6fd;
+}
+
+.avg-score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.avg-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.avg-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ocean-blue);
+}
+
+.level-tag {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.level-tag.level-high-confidence {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.level-tag.level-steady-progress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.level-tag.level-developing-confidence {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.level-tag.level-emerging-skills {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Captain Feedback Section */
+.captain-feedback-section {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    border: 2px solid #f59e0b;
+}
+
+.captain-feedback-section h6 {
+    color: #92400e !important;
+    border-bottom-color: #fbbf24 !important;
+}
+
+.captain-feedback-box {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.captain-avatar-small {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    background: linear-gradient(135deg, var(--ocean-blue), var(--indigo));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.feedback-text {
+    background: white;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+    flex: 1;
+}
+
+.feedback-text p {
+    margin: 0;
+    color: #78350f;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* Metric Value with Badge */
+.metric-value {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-item .level-badge {
+    margin-left: 0;
+    align-self: flex-start;
+}
+
+/* Assessment Score Styles */
+.assessment-percentage {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--coral);
+    margin-top: 2px;
+}
+
+/* Modal Assessment Section */
+.assessment-section {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+    border: 2px solid var(--coral);
+}
+
+.assessment-section h6 {
+    color: var(--coral-dark) !important;
+    border-bottom-color: var(--coral) !important;
+}
+
+.total-score-display {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.total-score-display .score-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.total-score-display .score-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--coral-dark);
+    margin-bottom: 5px;
+}
+
+.total-score-display .score-percentage {
+    display: inline-block;
+    background: var(--coral);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.assessment-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.breakdown-item {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.breakdown-item i {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--indigo);
+    margin-bottom: 8px;
+}
+
+.breakdown-item span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.breakdown-item strong {
+    font-size: 1.2rem;
+    color: var(--coral-dark);
+}
+
+@media (max-width: 768px) {
+    .assessment-breakdown {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Responsive */

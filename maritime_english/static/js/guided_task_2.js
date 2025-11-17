@@ -101,20 +101,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==================================================
-    // SAVE LOGBOOK VALIDATION
+    // SAVE LOGBOOK TO SERVER
     // ==================================================
     if (saveButton) {
-        saveButton.addEventListener('click', () => {
-            if (validateForm()) {
-                // Sukses
-                showNotification('Logbook saved successfully!', 'success');
-                // Di aplikasi nyata, di sinilah Anda akan mengirim data ke server
-                // saveButton.disabled = true;
-                // saveButton.querySelector('span').textContent = 'Saving...';
-            } else {
-                // Gagal
+        saveButton.addEventListener('click', async () => {
+            if (!validateForm()) {
                 showNotification('Please complete all fields before saving.', 'error');
                 shakeElement(saveButton);
+                return;
+            }
+
+            // Kumpulkan data dari form
+            const reflectionData = {
+                q1: document.querySelector('input[name="q1"]:checked').value,
+                q2: document.querySelector('input[name="q2"]:checked').value,
+                q3: document.querySelector('input[name="q3"]:checked').value,
+                r1: document.getElementById('r1').value.trim(),
+                r2: document.getElementById('r2').value.trim(),
+                r3: document.getElementById('r3').value.trim()
+            };
+
+            // Disable tombol dan tampilkan loading
+            saveButton.disabled = true;
+            const originalHTML = saveButton.innerHTML;
+            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>';
+
+            try {
+                const response = await fetch(`/learn/unit/${window.UNIT_ID}/save_reflection`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reflectionData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Logbook saved successfully! ⚓', 'success');
+                    saveButton.innerHTML = '<i class="fas fa-check"></i> <span>Saved!</span>';
+                    saveButton.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+
+                    // Kembalikan ke semula setelah 3 detik
+                    setTimeout(() => {
+                        saveButton.innerHTML = originalHTML;
+                        saveButton.disabled = false;
+                        saveButton.style.background = '';
+                    }, 3000);
+                } else {
+                    throw new Error(result.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showNotification('Failed to save logbook. Please try again.', 'error');
+                saveButton.innerHTML = originalHTML;
+                saveButton.disabled = false;
             }
         });
     }

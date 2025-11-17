@@ -62,6 +62,29 @@ class UnitProgress(db.Model):
     # Ini untuk menentukan status kartu (locked, active, in-progress)
     status = db.Column(db.String(20), default='not_started') 
 
+    # === KOLOM BARU ===
+    total_attempts = db.Column(db.Integer, default=0)  # Berapa kali user mencoba unit ini
+    total_duration_minutes = db.Column(db.Integer, default=0)  # Total waktu di unit ini (menit)
+    last_attempt = db.Column(db.DateTime, default=None, nullable=True)  # Kapan terakhir kali akses
+    
+    # Self-assessment scores (untuk Unit 1, mungkin unit lain juga)
+    self_assessment_q1 = db.Column(db.Integer, nullable=True)  # Skor 1-4
+    self_assessment_q2 = db.Column(db.Integer, nullable=True)
+    self_assessment_q3 = db.Column(db.Integer, nullable=True)
+    
+    # Reflection notes
+    reflection_easiest = db.Column(db.Text, nullable=True)
+    reflection_struggle = db.Column(db.Text, nullable=True)
+    reflection_improvement = db.Column(db.Text, nullable=True)
+    # === AKHIR KOLOM BARU ===
+
+    # Assessment scores from Activity 9 (guided_task_1)
+    assessment_task1_score = db.Column(db.Integer, nullable=True)  # Vessel Names (0-5)
+    assessment_task2_score = db.Column(db.Integer, nullable=True)  # Call Sign Input (0-5)
+    assessment_task3_score = db.Column(db.Integer, nullable=True)  # Call Sign Speech (0-5)
+    assessment_total_score = db.Column(db.Integer, nullable=True)  # Total (0-15)
+    assessment_percentage = db.Column(db.Float, nullable=True)      # Percentage (0-100)
+
     # Relasi kembali ke User
     user = db.relationship('User', back_populates='unit_progress')
 
