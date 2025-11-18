@@ -34,19 +34,18 @@
         <!-- Activity Badge -->
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fas fa-id-card"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>C. Sail into Real Communication</h4>
-                <p>Activity 3. Spell the Sea! </p>
             </div>
         </div>
 
         <!-- Captain Card -->
         <div class="captain-instruction-card">
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captain-radio_check_3.png') }}" alt="Captain" class="captain-avatar">
-                <div class="signal-waves">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain" class="captain-avatar">
+                <div class="radio-waves">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -73,206 +72,183 @@
 
     </aside>
 
-    <!-- RIGHT CONTENT -->
+     <!-- RIGHT CONTENT -->
     <main class="mmsi-main">
-    
-    <section class="radio-card">
-        <div class="radio-header">
-            <div class="header-left">
-                <div class="header-icon">
-                    <i class="fas fa-radio"></i>
-                </div>
-                <div class="header-text">
-                    <h3>Radio Communication Example 1</h3>
-                    <p>Vessel: ANTARES</p>
-                </div>
-            </div>
-            <div class="header-status">
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span>Ready to Listen</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="radio-body">
-            <div class="instruction-banner">
-                <div class="banner-icon">
-                    <i class="fas fa-headphones"></i>
-                </div>
-                <div class="banner-text instruction-text-mmsi">
-                    <p>Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.</p>
+        
+        <!-- ACTIVITY 3: Spell the Sea! (Combined) -->
+        <section class="activity-card spell-sea-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <!-- <div class="activity-number">3</div> -->
+                    <i class="fas fa-id-card activity-number"></i>
+                    <div class="header-text">
+                        <h3>Activity 3: Spell the Sea!</h3>
+                        <p>Learn radio communication with real vessel examples</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="communication-grid">
+            <div class="activity-body">
                 
-                <div class="player-section">
-                    <div class="radio-player">
-                        <div class="player-display">
-                            <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Radio" class="radio-img">
-                            <div class="audio-visualizer">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                        <button class="play-example-btn play-button" data-audio-src="/static/data/audio/unit1/mmsi_example.wav">
-                            <i class="fas fa-play"></i>
-                            <span>Play Example</span>
-                        </button>
+                <!-- Instruction Banner (Global) -->
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="banner-text instruction-text-mmsi">
+                        <p>Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.</p>
                     </div>
                 </div>
 
-                <div class="info-section">
-                    <div class="ship-info-card">
-                        <div class="card-header">
-                            <div class="header-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span class="card-title">Vessel Information (ANTARES)</span>
-                        </div>
+                <!-- PART 1: ANTARES -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Example 1</span>
+                        Vessel: ANTARES
+                    </h4>
+                    
+                    <!-- Communication Card -->
+                    <div class="communication-card">
                         
-                        <div class="card-body">
-                            <div class="info-row">
-                                <div class="info-icon">
+                        <!-- Left: Character & Info -->
+                        <div class="card-left">
+                            <div class="character-section">
+                                <img src="{{ url_for('static', filename='img/operator_vessel_antara.png') }}" alt="Radio Operator" class="operator-img">
+                            </div>
+                            
+                            <div class="vessel-info-section">
+                                <div class="info-header">
                                     <i class="fas fa-ship"></i>
+                                    <span>Vessel Information</span>
                                 </div>
-                                <div class="info-details">
-                                    <label>Vessel's Name</label>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-anchor"></i> Name</label>
                                     <value>ANTARES</value>
                                 </div>
-                            </div>
-
-                            <div class="info-row">
-                                <div class="info-icon">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                                <div class="info-details">
-                                    <label>MMSI Number</label>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-hashtag"></i> MMSI</label>
                                     <value class="mmsi-number">257689000</value>
                                 </div>
-                            </div>
-
-                            <div class="info-row">
-                                <div class="info-icon">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                </div>
-                                <div class="info-details">
-                                    <label>Call Sign</label>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
                                     <value class="call-sign">LAPW5</value>
                                 </div>
+
+                                <button class="play-example-btn play-button" data-audio-src="/static/data/audio/unit1/mmsi_example.wav">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play</span>
+                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-            </div>
-        </div>
-    </section>
-
-    <section class="radio-card">
-        <div class="radio-header">
-            <div class="header-left">
-                <div class="header-icon">
-                    <i class="fas fa-radio"></i>
-                </div>
-                <div class="header-text">
-                    <h3>Radio Communication Example 2</h3>
-                    <p>Vessel: HORIZON</p>
-                </div>
-            </div>
-            <div class="header-status">
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span>Ready to Listen</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="radio-body">
-            <div class="communication-grid">
-                
-                <div class="player-section">
-                    <div class="radio-player">
-                        <div class="player-display">
-                            <img src="{{ url_for('static', filename='img/captain_radio_check_6.png') }}" alt="Radio" class="radio-img">
-                            <div class="audio-visualizer">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                        <button class="play-example-btn play-button" data-audio-src="/static/data/audio/unit1/mmsi_example2.wav">
-                            <i class="fas fa-play"></i>
-                            <span>Play Example</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <div class="ship-info-card">
-                        <div class="card-header">
-                            <div class="header-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span class="card-title">Vessel Information (HORIZON)</span>
-                        </div>
-                        
-                        <div class="card-body">
-                            <div class="info-row">
-                                <div class="info-icon">
-                                    <i class="fas fa-ship"></i>
+                        <!-- Right: Transcript -->
+                        <div class="card-right">
+                            <div class="transcript-section">
+                                <div class="transcript-header">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Radio Communication Transcript</span>
                                 </div>
-                                <div class="info-details">
-                                    <label>Vessel's Name</label>
+                                
+                                <div class="transcript-content">
+                                    <div class="transcript-line">
+                                        <span class="speaker">Vessel:</span>
+                                        <span class="message">
+                                            "This is Too - Fife - Seven - Six - Ait - Niner - ZEE-ro - ZEE-ro - ZEE-ro. 
+                                            Motor Vessel "ANTARES" Alfa - November - Tango - Alfa - Romeo - Echo - Sierra. Call Sign Lima - Alfa - Papa - Whisky - Fife."</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="part-divider"></div>
+
+                <!-- PART 2: HORIZON -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Example 2</span>
+                        Vessel: HORIZON
+                    </h4>
+                    
+                    <!-- Communication Card -->
+                    <div class="communication-card">
+                        
+                        <!-- Left: Character & Info -->
+                        <div class="card-left">
+                            <div class="character-section">
+                                <img src="{{ url_for('static', filename='img/operator_vessel_horizon.png') }}" alt="Radio Operator" class="operator-img">
+                            </div>
+                            
+                            <div class="vessel-info-section">
+                                <div class="info-header">
+                                    <i class="fas fa-ship"></i>
+                                    <span>Vessel Information</span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-anchor"></i> Name</label>
                                     <value>HORIZON</value>
                                 </div>
-                            </div>
-
-                            <div class="info-row">
-                                <div class="info-icon">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                                <div class="info-details">
-                                    <label>MMSI Number</label>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-hashtag"></i> MMSI</label>
                                     <value class="mmsi-number">248105900</value>
                                 </div>
-                            </div>
-
-                            <div class="info-row">
-                                <div class="info-icon">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                </div>
-                                <div class="info-details">
-                                    <label>Call Sign</label>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
                                     <value class="call-sign">YBON9</value>
+                                </div>
+
+                                <button class="play-example-btn play-button" data-audio-src="/static/data/audio/unit1/mmsi_example2.wav">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right: Transcript -->
+                        <div class="card-right">
+                            <div class="transcript-section">
+                                <div class="transcript-header">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Radio Communication Transcript</span>
+                                </div>
+                                
+                                <div class="transcript-content">
+                                    <div class="transcript-line">
+                                        <span class="speaker">Vessel:</span>
+                                        <span class="message">
+                                            "This is Too FOW-er - Ait - Wun - ZEE-ro - Fife - Niner - ZEE-ro - ZEE-ro. 
+                                            Motor Vessel HORIZON Hotel - Oscar - Romeo - India - Zulu - Oscar - November.
+                                            Call Sign Yankee - Bravo - Oscar - November - Niner"
+                                        </span>
+                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
             </div>
+        </section>
+
+        <!-- Continue Button -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}" class="continue-button">
+                <span>Continue Sailing</span>
+            </a>
         </div>
-    </section>
 
-    <div class="continue-wrapper">
-        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}" class="continue-button">
-            <span>Continue Sailing</span>
-        </a>
-    </div>
-
-</main>
-
+    </main>
 </div>
 
 {% endblock %}

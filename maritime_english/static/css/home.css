@@ -699,6 +699,20 @@ body {
     overflow: hidden;
 }
 
+.avatar-initials {
+    width: 35px;       /* Sesuaikan ukuran */
+    height: 35px;
+    background-color: #0B5A8F; /* Warna background biru pelaut */
+    color: #ffffff;    /* Warna huruf putih */
+    border-radius: 50%; /* Membuat jadi bulat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 5px; /* Jarak sedikit ke nama */
+}
+
 /* ======== 5. ANIMATIONS & UTILS ======== */
 .fade-in-up {
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;

@@ -523,15 +523,25 @@ audio_task.addEventListener('ended', () => {
                     sendReportBtn.innerHTML = '<i class="fas fa-check"></i> <span>Submitted!</span>';
                     sendReportBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                     
+                    // ✅ TAMPILKAN TOMBOL CONTINUE
+                    const continueSection = document.getElementById('continue-section');
+                    if (continueSection) {
+                        continueSection.classList.remove('hidden');
+                        continueSection.classList.add('visible');
+                    }
+
+                    // Scroll ke tombol continue (opsional, untuk UX yang lebih baik)
+                    setTimeout(() => {
+                        continueSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 500);
+                    
                     // Keep button disabled after successful submission
                     setTimeout(() => {
                         sendReportBtn.innerHTML = originalHTML;
                         sendReportBtn.style.background = '';
-                        // Optionally re-enable if you want to allow resubmission
-                        // sendReportBtn.disabled = false;
+                        // JANGAN re-enable tombol setelah sukses submit
+                        // sendReportBtn.disabled = false; // ❌ Hapus baris ini
                     }, 3000);
-                } else {
-                    throw new Error(result.message || 'Unknown error');
                 }
             } catch (error) {
                 console.error('Save error:', error);

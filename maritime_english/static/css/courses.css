@@ -261,17 +261,18 @@ body {
 }
 
 .modal-unit-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    /* background: rgba(255, 255, 255, 0.2); */
+    /* padding: 4px 12px; */
+    /* border-radius: 20px; */
+    font-size: 2rem;
+    font-weight: 900;
     width: fit-content;
-    backdrop-filter: blur(10px);
+    text-align: left;
+    /* backdrop-filter: blur(10px); */
 }
 
 .subunit-modal-header .modal-title {
-    font-weight: 700;
+    font-weight: 300;
     font-size: 1.5rem;
     margin: 0;
 }

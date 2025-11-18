@@ -17,6 +17,8 @@
     --white: #ffffff;
     --text-dark: #1f2937;
     --text-light: #6b7280;
+    --caller-blue: #0ea5e9;
+    --caller-blue-dark: #0284c7;
 }
 
 * {
@@ -157,18 +159,19 @@ body {
 .captain-avatar-wrapper {
     text-align: center;
     position: relative;
-    margin-bottom: -50px;
+    margin-bottom: -70px;
     z-index: 2;
 }
 
 .captain-avatar {
     height: 250px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
 }
 
 /* Signal Waves */
-.signal-waves {
+/* Radio Waves Animation - UPDATED */
+.radio-waves {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -176,22 +179,44 @@ body {
     width: 200px;
     height: 200px;
     pointer-events: none;
+    
+    /* PERUBAHAN DISINI: Sembunyikan secara default */
+    opacity: 0; 
+    transition: opacity 0.3s ease; /* Supaya muncul/hilangnya halus */
 }
 
-.signal-waves span {
+/* Class ini akan ditambahkan lewat JS saat audio nyala */
+.radio-waves.active {
+    opacity: 1;
+}
+
+.radio-waves span {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    border: 2px solid rgba(6, 182, 212, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.3);
     border-radius: 50%;
+    
+    /* PERUBAHAN DISINI: Defaultnya pause animasinya */
     animation: signalWave 2s ease-out infinite;
+    animation-play-state: paused; 
 }
 
-.signal-waves span:nth-child(2) { animation-delay: 0.7s; }
-.signal-waves span:nth-child(3) { animation-delay: 1.4s; }
+/* Saat parent punya class active, jalankan animasi */
+.radio-waves.active span {
+    animation-play-state: running;
+}
+
+.radio-waves span:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.radio-waves span:nth-child(3) {
+    animation-delay: 1.4s;
+}
 
 /* Instruction Bubble */
 .instruction-bubble {
@@ -353,31 +378,30 @@ body {
     align-items: center;
     gap: 15px;
     padding: 18px 24px;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-left: 4px solid var(--gold);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid var(--ocean-blue);
     border-radius: 12px;
-    margin-bottom: 25px;
+    margin-bottom: 30px; /* Tambahkan margin bottom */
 }
 
 .banner-icon {
     width: 50px;
     height: 50px;
-    background: rgba(245, 158, 11, 0.2);
+    background: rgba(51, 190, 233, 0.2);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: #d97706;
+    color: #5ea4d3;
     flex-shrink: 0;
     animation: pulse 2s ease-in-out infinite;
 }
 
 .banner-text p {
     font-size: 0.95rem;
-    color: #78350f;
+    /* color: #92400e; */
     margin: 0;
-    line-height: 1.7;
 }
 
 /* Communication Grid */
@@ -414,28 +438,6 @@ body {
     filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
     animation: float 3s ease-in-out infinite;
 }
-
-.audio-visualizer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    margin-top: 15px;
-    height: 40px;
-}
-
-.audio-visualizer span {
-    width: 4px;
-    height: 20px;
-    background: var(--cyan);
-    border-radius: 4px;
-    animation: visualize 1.2s ease-in-out infinite;
-}
-
-.audio-visualizer span:nth-child(2) { animation-delay: 0.2s; }
-.audio-visualizer span:nth-child(3) { animation-delay: 0.4s; }
-.audio-visualizer span:nth-child(4) { animation-delay: 0.6s; }
-.audio-visualizer span:nth-child(5) { animation-delay: 0.8s; }
 
 .play-button {
     display: flex;
@@ -702,6 +704,305 @@ body {
     color: var(--white);
 }
 
+/* ======== NEW: ACTIVITY STRUCTURE ======== */
+.activity-card {
+    background: var(--white);
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.activity-header {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    padding: 25px 30px;
+    display: flex;
+    align-items: center;
+}
+
+.activity-number {
+    width: 55px;
+    height: 55px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.header-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.header-text p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.activity-body {
+    padding: 30px;
+}
+
+.activity-part {
+    margin-bottom: 30px;
+}
+
+.part-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ocean-deep);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.part-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.part-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+    margin: 40px 0;
+    position: relative;
+}
+
+.part-divider::after {
+    content: '⚓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    padding: 0 15px;
+    font-size: 1.2rem;
+    color: var(--ocean-blue);
+}
+
+/* Communication Card - NEW LAYOUT */
+.communication-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Card Left: Character + Vessel Info (Horizontal) */
+.card-left {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    background: linear-gradient(135deg, #0B5A8F 0%, #064273 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(11, 90, 143, 0.3);
+    position: relative;
+    padding: 0;
+}
+
+.character-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.operator-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: none;
+    margin-bottom: 0;
+    border-radius: 12px 0 0 12px;
+}
+
+/* Vessel Info Section */
+/* Vessel Info Section */
+.vessel-info-section {
+    background: transparent;
+    border-radius: 0;
+    padding: 25px 25px 70px 25px; /* Extra padding bottom untuk play button */
+    box-shadow: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--white);
+}
+
+.info-header i {
+    font-size: 1.3rem;
+    color: var(--white);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 14px;
+    margin-bottom: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    border-left: 4px solid var(--white);
+    backdrop-filter: blur(10px);
+}
+
+.info-item:last-of-type {
+    margin-bottom: 0;
+}
+
+.info-item label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-item label i {
+    font-size: 0.9rem;
+    color: var(--white);
+}
+
+.info-item value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 2px;
+}
+
+.vessel-info-section .play-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--white) 0%, #f3f4f6 100%);
+    color: var(--ocean-blue);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+.vessel-info-section .play-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
+}
+
+.vessel-info-section .play-button.playing {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: var(--white);
+    border-color: rgba(239, 68, 68, 0.3);
+    animation: playPulse 1s ease infinite;
+}
+
+.vessel-info-section .play-button.playing i {
+    animation: pulse 1s ease infinite;
+}
+
+/* Card Right: Transcript */
+/* Card Right: Transcript (Full Width) */
+.card-right {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.transcript-section {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border: 3px solid #e5e7eb;
+}
+
+.transcript-header {
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.transcript-header i {
+    font-size: 1.1rem;
+}
+
+.transcript-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transcript-line {
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 10px;
+    border-left: 4px solid var(--cyan);
+    transition: all 0.3s ease;
+}
+
+.transcript-line .speaker {
+    display: block;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+.transcript-line .message {
+    display: block;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-dark);
+}
+
 /* ======== ANIMATIONS ======== */
 @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-40px); }
@@ -832,7 +1133,10 @@ body {
     }
 
     .badge-text h4 {
-        font-size: 1rem;
+        color: var(--white);
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
     }
 
     .badge-text p {
@@ -846,7 +1150,7 @@ body {
     }
 
     .instruction-bubble {
-        margin-top: -80px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
+        margin-top: -20px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
 
         padding: 20px;
         border-radius: 16px;
@@ -914,6 +1218,7 @@ body {
         width: 100%;
         padding: 12px 24px;
         font-size: 1rem;
+        margin-bottom: -5px;
     }
 
     .transcript-header {
@@ -984,6 +1289,120 @@ body {
         justify-content: center;
         font-size: 1.1rem;
         padding: 14px 30px;
+    }
+
+    .activity-header {
+        padding: 20px;
+    }
+
+    .activity-number {
+        width: 48px;
+        height: 48px;
+        font-size: 1.6rem;
+    }
+
+    .header-text h3 {
+        font-size: 1.25rem;
+    }
+
+    .header-text p {
+        font-size: 0.85rem;
+    }
+
+    .activity-body {
+        padding: 20px;
+    }
+
+    .part-title {
+        font-size: 1.1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .part-number {
+        font-size: 0.85rem;
+        padding: 6px 14px;
+    }
+
+    .communication-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .operator-img {
+        height: 140px;
+    }
+
+    .vessel-info-section {
+        padding: 16px;
+    }
+
+    .info-item {
+        padding: 10px;
+    }
+
+    .info-item value {
+        font-size: 1rem;
+    }
+
+    .transcript-content {
+        padding: 16px;
+    }
+
+    .transcript-line .message {
+        font-size: 0.9rem;
+    }
+
+    .card-left {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .character-section {
+        height: 200px;
+    }
+
+    .operator-img {
+        border-radius: 12px 12px 0 0;
+        height: 100%;
+    }
+
+    .vessel-info-section {
+        padding: 20px 20px 65px 20px;
+    }
+
+    .info-header {
+        font-size: 1rem;
+    }
+
+    .info-item {
+        padding: 10px 12px;
+    }
+
+    .info-item value {
+        font-size: 1.05rem;
+        letter-spacing: 1.5px;
+    }
+
+    .vessel-info-section .play-button {
+        bottom: 15px;
+        right: 15px;
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+
+    .transcript-content {
+        padding: 16px;
+    }
+
+    .transcript-line {
+        padding: 12px 14px;
+    }
+
+    .transcript-line .message {
+        font-size: 0.9rem;
     }
 }
 

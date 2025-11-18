@@ -5,6 +5,7 @@ from ..__init__ import db, mail
 from ..models import User, UserStats
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_mail import Message
+from datetime import datetime
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -47,7 +48,8 @@ def register():
             gender=gender,
             school_name=school_name,
             major=major,
-            grade=grade
+            grade=grade,
+            start_date=datetime.now()
         )
         
         new_stats = UserStats(

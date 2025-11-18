@@ -46,6 +46,7 @@
                             <div class="input-group-modern">
                                 <i class="fas fa-lock"></i>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                                <i class="fas fa-eye" id="togglePassword" style="left: auto; right: 15px; cursor: pointer; z-index: 10;"></i>
                             </div>
                         </div>
                         
@@ -102,4 +103,19 @@
 {% block page_js %}
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+    // Script untuk toggle visibility password
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // 1. Toggle type attribute (password <-> text)
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        // 2. Toggle icon class (mata terbuka <-> mata dicoret)
+        this.classList.toggle('fa-eye-slash'); // Icon mata dicoret
+        this.classList.toggle('fa-eye');       // Icon mata biasa
+    });
+</script>
 {% endblock %}

@@ -41,12 +41,13 @@
 
         /* Header */
         .report-header {
-            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+            background: white;
             color: white;
             padding: 25px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: #064273;
         }
 
         .logo-section {
@@ -78,6 +79,7 @@
         .report-date {
             font-size: 0.95rem;
             opacity: 0.9;
+            color: #0B5A8F;
         }
 
         /* Title */
@@ -536,6 +538,49 @@
                 margin: 0 auto;
             }
         }
+        @media print {
+            /* Reset margins */
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                font-size: 10pt;
+            }
+            
+            /* Prevent page breaks inside sections */
+            .report-section {
+                page-break-inside: avoid;
+            }
+            
+            /* Force page break before certain sections */
+            .report-section:nth-of-type(4) {
+                page-break-before: always;
+            }
+            
+            /* Hide elements */
+            .no-print {
+                display: none !important;
+            }
+            
+            /* Table fixes */
+            table {
+                page-break-inside: auto;
+            }
+            
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            
+            /* Adjust chart for print */
+            .bar-chart {
+                height: 150px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -544,10 +589,10 @@
         <div class="report-header">
             <div class="logo-section">
                 <img src="{{ url_for('static', filename='img/logo_website.png') }}" alt="Logo">
-                <div class="logo-text">
+                <!-- <div class="logo-text">
                     <h1>Sail<span style="color: #10b981;">Learn</span>.Eng</h1>
                     <p>Navigate English, Master the Sea</p>
-                </div>
+                </div> -->
             </div>
             <div class="report-date">
                 Date: {{ today }}
@@ -572,31 +617,35 @@
                 <h3>Unit {{ report_data.unit_id }}. {{ report_data.unit_title }}</h3>
                 <div class="unit-status">
                     <p><strong>Status:</strong> {{ report_data.status }}</p>
-                    <p><strong>Report period:</strong><br>{{ report_data.last_attempt }}</p>
+                    <p><strong>Report period:</strong><br>
+                        <strong>{{ report_data.report_period }}</strong>
+                    </p>
                 </div>
             </div>
 
             <!-- Two Column: Activity Summary & Daily Consistency -->
             <div class="two-column">
                 <!-- Activity Practice Summary -->
-                <div>
-                    <h4 class="section-title">Activity Practice Summary</h4>
-                    <table class="activity-table">
+                <div class="report-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-tasks"></i> Activity Practice Summary
+                    </h3>
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>Activity</th>
                                 <th>Attempts</th>
-                                <th>Total Duration</th>
+                                <th>Duration</th>
                                 <th>Last Attempt</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for i in range(1, 9) %}
+                            {% for activity in activity_summary %}
                             <tr>
-                                <td>{{ i }}</td>
-                                <td>{{ report_data.total_attempts }}</td>
-                                <td>{{ report_data.total_duration }} min</td>
-                                <td>{{ report_data.last_attempt }}</td>
+                                <td>{{ activity.name }}</td>
+                                <td>{{ activity.attempts }}</td>
+                                <td>{{ activity.duration }} min</td>
+                                <td>{{ activity.last_attempt }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -604,37 +653,38 @@
                 </div>
 
                 <!-- Daily Consistency -->
-                <div>
-                    <h4 class="section-title">Daily Consistency</h4>
+                <div class="report-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-check"></i> Daily Consistency (Last 7 Days)
+                    </h3>
                     <div class="chart-container">
-                        <p class="chart-title">Attempts per day</p>
                         <div class="bar-chart">
                             {% for day in daily_data %}
-                            <div class="bar-item">
-                                <div class="bar" style="height: {{ day.attempts * 30 }}px;">
-                                    <span class="bar-value">{{ day.attempts }}</span>
-                                </div>
-                                <span class="bar-label">{{ day.day }}</span>
+                            <div class="bar-group">
+                                <div class="bar" style="height: {{ (day.attempts / 5 * 100) if day.attempts else 0 }}%;" 
+                                    title="{{ day.attempts }} attempts"></div>
+                                <span class="bar-label">{{ day.day }}<br><small>{{ day.date }}</small></span>
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-label">Active days</div>
-                                <div class="stat-value">{{ stats.active_days }}/7</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Avg attempts/day</div>
-                                <div class="stat-value">{{ stats.avg_attempts }}</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Avg minutes/day</div>
-                                <div class="stat-value">{{ stats.avg_minutes }} min</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Longest Streak</div>
-                                <div class="stat-value">{{ stats.longest_streak }} day</div>
-                            </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats.active_days }}/7</div>
+                            <div class="stat-label">Active Days</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats.avg_attempts }}</div>
+                            <div class="stat-label">Avg. Attempts/Day</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats.avg_minutes }} min</div>
+                            <div class="stat-label">Avg. Duration</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats.longest_streak }} day{{ 's' if stats.longest_streak != 1 else '' }}</div>
+                            <div class="stat-label">Longest Streak</div>
                         </div>
                     </div>
                 </div>

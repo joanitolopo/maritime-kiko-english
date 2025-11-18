@@ -785,6 +785,20 @@ body {
     color: var(--white);
 }
 
+/* ======== HIDDEN STATE ======== */
+.continue-wrapper.hidden {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.continue-wrapper.visible {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    animation: fadeInUp 0.5s ease-out;
+}
+
 /* ======== FEEDBACK MODAL ======== */
 .feedback-modal {
     position: fixed;
@@ -1208,20 +1222,18 @@ body {
     }
 
     .continue-wrapper {
-        text-align: center;
-        margin-top: 10px;
-        margin-left: 170px;
-    }
-
-    .continue-wrapper {
-        text-align: center;
-    }
+    text-align: center;
+    margin-top: 20px;
+    padding: 0 16px; /* Konsisten dengan padding page */
+}
 
     .continue-button {
-        width: 100%;
+        width: auto; /* ✅ Ubah dari 100% */
+        max-width: 100%;
+        display: inline-flex; /* ✅ Agar bisa di-center */
         justify-content: center;
         font-size: 1.1rem;
-        padding: 14px 30px;
+        padding: 14px 32px;
     }
 
     .callsign-input-container {

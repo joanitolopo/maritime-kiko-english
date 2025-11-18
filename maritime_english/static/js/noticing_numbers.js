@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Target Phrases for Speech Recognition
     const TARGET_PHRASES = {
-        'task1': "This is too-tree-seven-zeero-zeero-too-six-zeero-zeero Motor Vessel APOLLON Sierra Whisky Foxtrot Papa Over",
-        'task2': "This is fower-fower-zeero-niner-ait-tree-zeero-zeero-zeero Motor Vessel BAYSTAR Delta Sierra Oscar November Niner Over"
+        'task1': "This is 237002600. Motor Vessel Apollon, Alfa Papa Oscar Lima Lima Oscar November. Call Sign Sierra Whisky Foxtrot Papa.",
+        'task2': "This is 440983000. Motor Vessel Baystar, Bravo Alfa Yankee Sierra Tango Alfa Romeo. Call Sign Delta Sierra Oscar November Niner."
     };
 
     // ==================================================

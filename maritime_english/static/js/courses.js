@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- PERUBAHAN DI SINI ---
             // Mengganti teks tombol berdasarkan progres
             if (completedSubunits > 0) {
-                startBtn.innerHTML = `<i class="fas fa-ship me-2"></i> Continue Voyage`;
+                startBtn.innerHTML = `<i class="fas fa-ship me-2"></i> Continue Sailing`;
             } else {
                 startBtn.innerHTML = `<i class="fas fa-ship me-2"></i> Start Voyage`;
             }

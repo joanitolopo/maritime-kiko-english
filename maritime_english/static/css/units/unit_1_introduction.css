@@ -167,25 +167,9 @@ body {
 .captain-img {
     height: 220px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
 }
 
-.avatar-badge {
-    position: absolute;
-    top: 10px;
-    right: 120px;
-    width: 35px;
-    height: 35px;
-    background: linear-gradient(135deg, var(--gold) 0%, #d97706 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
-    font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-    animation: pulse 2s ease-in-out infinite;
-}
 
 .welcome-bubble {
     background: var(--white);
@@ -207,26 +191,6 @@ body {
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
     filter: drop-shadow(0 -3px 3px rgba(0, 0, 0, 0.05));
-}
-
-.bubble-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.bubble-header i {
-    color: var(--ocean-blue);
-    font-size: 1.2rem;
-}
-
-.bubble-header span {
-    font-weight: 700;
-    color: var(--ocean-blue);
-    font-size: 1rem;
 }
 
 .speech-text {
@@ -441,9 +405,9 @@ body {
     gap: 15px;
     align-items: start;
     padding: 20px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    /* background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     border-left: 4px solid var(--ocean-blue);
-    border-radius: 15px;
+    border-radius: 15px; */
 }
 
 .intro-paragraph i {
@@ -457,6 +421,7 @@ body {
     line-height: 1.8;
     color: var(--text-dark);
     margin: 0;
+    text-align: justify;
 }
 
 .objectives-section h3 {
@@ -515,8 +480,8 @@ body {
     gap: 15px;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-left: 4px solid var(--gold);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid var(--ocean-blue);
     border-radius: 15px;
     animation: pulse 2s ease-in-out infinite;
 }
@@ -536,9 +501,10 @@ body {
 
 .cta-section p {
     font-size: 1.05rem;
-    color: #78350f;
+    /* color: #78350f; */
     margin: 0;
     line-height: 1.6;
+    text-align: justify;
 }
 
 /* Officer Character */
@@ -551,7 +517,7 @@ body {
 .officer-img {
     height: 320px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-    animation: float 3s ease-in-out infinite 1s;
+    /* animation: float 3s ease-in-out infinite 1s; */
 }
 
 .character-badge {
@@ -1222,8 +1188,8 @@ body {
     /* === CONTINUE BUTTON === */
     .continue-section {
         text-align: center;
-        margin-top: 10px;
-        margin-left: 170px;
+        margin-top: 1px;
+        margin-left: 180px;
     }
 
     .continue-section {
@@ -1233,7 +1199,7 @@ body {
     .continue-button {
         width: 100%;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 14px 30px;
     }
 
@@ -1253,6 +1219,15 @@ body {
         margin-bottom: -50px;
         z-index: 0;
     }
+
+    .captain-img {
+        height: 250px;
+        width: auto;
+    }
+
+    .officer-img {
+        height: 250px;
+    }
 }
 
 /* -- Tampilan Mobile Sangat Kecil -- */
@@ -1270,15 +1245,6 @@ body {
 
     .hero-text h1 {
         font-size: 1.6rem; /* Sedikit lebih besar dari 1.5rem Anda */
-    }
-
-    .captain-img {
-        height: 160px;
-        width: auto;
-    }
-
-    .officer-img {
-        height: 160px;
     }
 
     .speech-text,

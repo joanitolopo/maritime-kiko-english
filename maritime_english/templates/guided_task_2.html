@@ -8,7 +8,7 @@
 {% block content %}
 <header class="top-bar">
     <div class="container d-flex justify-content-end align-items-center header-right-group">
-        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='guided_intro') }}" class="btn-learn-nav btn-back" aria-label="Back to Intro">
+        <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='guided_task_1') }}" class="btn-learn-nav btn-back" aria-label="Back to Intro">
             <i class="fas fa-chevron-left me-1"></i>
             <span class="btn-text">Back</span>
         </a>
@@ -137,7 +137,7 @@
 <div class="continue-wrapper hidden" id="finish-section">
     <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=9) }}" class="continue-button">
         <i class="fas fa-flag-checkered"></i>
-        <span>Finish Unit</span>
+        <span>Finish Voyage</span>
     </a>
 </div>
 {% endblock %}

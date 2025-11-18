@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioBtn_warmup = document.querySelector('.warmup-controls .audio-btn i');
     const translateBtn_warmup = document.querySelector('.warmup-controls .translate-btn');
     const speechText_warmup = document.querySelector('.speech-text-warmup');
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
     // Activity 1: Grid
     const playBtn_grid = document.getElementById('play-grid-audio');
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allAudios = [audio_warmup, audio_grid_main, audio_mcq_main, audio_code_item];
         
     let currentActiveButton = null;
+    let mcqAudioPlayed = false;
 
     // ==================================================
     // BARU: STATE UNTUK GAME GRID (ACTIVITY 1)
@@ -82,6 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioBtn_warmup) {
             audioBtn_warmup.classList.remove('fa-pause');
             audioBtn_warmup.classList.add('fa-play');
+            
+            // BARU: Matikan animasi radio waves jika stopAllAudio dipanggil
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
 
         // Reset play button MCQ
@@ -137,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (feedbackBox_mcq) {
             feedbackBox_mcq.style.display = 'none';
         }
+        mcqAudioPlayed = false; // TAMBAHKAN BARIS INI - Reset flag saat form direset
     }
 
     // BARU: Fungsi feedback yang lebih generik
@@ -170,16 +176,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         audioBtn_warmup.classList.remove('fa-play');
                         audioBtn_warmup.classList.add('fa-pause');
                         addPulseEffect(this);
+
+                        // BARU: Nyalakan animasi radio waves
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
                         shakeElement(this);
-                    });
+                    })
             } else {
                 audio_warmup.pause();
                 audioBtn_warmup.classList.remove('fa-pause');
                 audioBtn_warmup.classList.add('fa-play');
                 removePulseEffect(this);
+
+                // BARU: Matikan animasi radio waves saat pause
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
@@ -187,6 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
             audioBtn_warmup.classList.remove('fa-pause');
             audioBtn_warmup.classList.add('fa-play');
             removePulseEffect(audioBtn_warmup.parentElement);
+            // BARU: Matikan animasi radio waves saat audio selesai
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
@@ -362,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playBtn_mcq.addEventListener('click', function() {
             resetMCQForm();
             playMainAudio(this, audio_mcq_main, audioPath_mcq_main);
+            mcqAudioPlayed = true; // Tandai bahwa audio sudah diputar
         });
 
         audio_mcq_main.addEventListener('ended', () => {
@@ -375,6 +390,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mcqForm) {
         radioButtons.forEach(radio => {
             radio.addEventListener('change', function() {
+                // Validasi: user harus mendengar audio dulu
+                if (!mcqAudioPlayed) {
+                    // Prevent selection
+                    this.checked = false;
+                    
+                    // Show warning
+                    showActivityFeedback(
+                        feedbackBox_mcq, 
+                        false, 
+                        '⚠️ Please listen to the audio first before answering!'
+                    );
+                    
+                    // Shake the play button
+                    shakeElement(playBtn_mcq);
+                    
+                    // Hide feedback after 3 seconds
+                    setTimeout(() => {
+                        if (feedbackBox_mcq) feedbackBox_mcq.style.display = 'none';
+                    }, 3000);
+                    
+                    return;
+                }
+                
                 stopAllAudio();
 
                 const selectedValue = this.value;

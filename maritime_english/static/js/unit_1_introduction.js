@@ -34,12 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const originalText_officer_HTML = `
         <div class="intro-paragraph">
-            <i class="fas fa-ship"></i>
             <p>During this voyage, you'll learn how sailors around the world spell ship names, call signs, and numbers clearly over the radio. You'll practice saying them the maritime way - just like real officers on the bridge.</p>
         </div>
 
         <div class="objectives-section">
-            <h3><i class="fas fa-bullseye"></i> Learning Objectives</h3>
             <p>By the end of this unit, you'll be able to:</p>
             <ol class="objectives-list">
                 <li>
@@ -54,20 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="cta-section">
-            <div class="cta-icon">
-                <i class="fas fa-anchor"></i>
-            </div>
             <p><strong>Now, get ready to tune your ears and voice - it's time to spell the sea!</strong></p>
         </div>`;
     
     const translatedText_officer_HTML = `
         <div class="intro-paragraph">
-            <i class="fas fa-ship"></i>
             <p>Dalam pelayaran ini, kamu akan belajar bagaimana para pelaut di seluruh dunia mengeja nama kapal, kode panggilan, dan angka dengan jelas melalui radio. Kamu juga akan berlatih mengucapkannya dengan cara maritim — seperti perwira sejati di anjungan kapal.</p>
         </div>
 
         <div class="objectives-section">
-            <h3><i class="fas fa-bullseye"></i> Tujuan Pembelajaran</h3>
             <p>Di akhir unit ini, kamu akan mampu untuk:</p>
             <ol class="objectives-list">
                 <li>
@@ -82,9 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="cta-section">
-            <div class="cta-icon">
-                <i class="fas fa-anchor"></i>
-            </div>
             <p><strong>Sekarang, siapkan telinga dan suaramu — saatnya mengeja lautan!</strong></p>
         </div>`;
     

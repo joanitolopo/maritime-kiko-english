@@ -34,18 +34,17 @@
         <!-- Activity Badge -->
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fas fa-bullseye"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>B. Get Ready to Sail</h4>
-                <p>Activity 1: Radio Check!</p>
             </div>
         </div>
 
         <!-- Captain Card -->
         <div class="captain-instruction-card">
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/Captain-Radio Check.png') }}" alt="Captain" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3-left.png') }}" alt="Captain" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -74,158 +73,139 @@
     <!-- RIGHT CONTENT -->
     <main class="warmup-main">
         
-        <!-- ACTIVITY 1: Code Grid -->
-        <section class="activity-card grid-activity">
+        <!-- ACTIVITY 1: Radio Check (Combined) -->
+        <section class="activity-card radio-check-activity">
             <div class="activity-header">
                 <div class="header-left">
                     <div class="activity-number">1</div>
                     <div class="header-text">
-                        <h3>Quick Pick Challenge</h3>
-                        <p>Listen and select the correct code</p>
+                        <h3>Activity 1: Radio Check!</h3>
+                        <p>Test your radio communication skills</p>
                     </div>
                 </div>
             </div>
 
             <div class="activity-body">
-                <div class="instruction-text">
-                    <i class="fas fa-headphones"></i>
-                    <p>Listen carefully! Click the correct letter or number</p>
-                </div>
-
-                <div class="radio-display">
-                    <img src="{{ url_for('static', filename='img/walkie-talkies.png') }}" alt="Radio" class="radio-img">
-                    <div class="audio-wave">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-
-                <button id="play-grid-audio" class="play-audio-btn">
-                    <i class="fas fa-play"></i>
-                    <span>Play Audio</span>
-                </button>
-
-                <!-- <div class="instruction-text">
-                    <i class="fas fa-headphones"></i>
-                    <p>Listen carefully! Click the correct letter or number</p>
-                </div> -->
-
-                <div class="code-grid">
-                    <button class="code-btn" data-code="oscar">
-                        <span class="code-letter">O</span>
-                        <!-- <span class="code-label">Oscar</span> -->
-                    </button>
-                    <button class="code-btn" data-code="charlie">
-                        <span class="code-letter">C</span>
-                        <!-- <span class="code-label">Charlie</span> -->
-                    </button>
-                    <button class="code-btn" data-code="sierra">
-                        <span class="code-letter">S</span>
-                        <!-- <span class="code-label">Sierra</span> -->
-                    </button>
-                    <button class="code-btn" data-code="alpha">
-                        <span class="code-letter">A</span>
-                        <!-- <span class="code-label">Alpha</span> -->
-                    </button>
-                    <button class="code-btn" data-code="zeero">
-                        <span class="code-letter">0</span>
-                        <!-- <span class="code-label">Zero</span> -->
-                    </button>
-                    <button class="code-btn" data-code="wun">
-                        <span class="code-letter">1</span>
-                        <!-- <span class="code-label">One</span> -->
-                    </button>
-                    <button class="code-btn" data-code="niner">
-                        <span class="code-letter">9</span>
-                        <!-- <span class="code-label">Niner</span> -->
-                    </button>
-                    <button class="code-btn" data-code="fife">
-                        <span class="code-letter">5</span>
-                        <!-- <span class="code-label">Fife</span> -->
-                    </button>
-                </div>
-                <div class="feedback-box" id="grid-feedback" style="display: none;">
-                    <i class="feedback-icon"></i>
-                    <p class="feedback-text"></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ACTIVITY 2: Multiple Choice -->
-        <section class="activity-card mcq-activity">
-            <div class="activity-header">
-                <div class="header-left">
-                    <div class="activity-number">2</div>
-                    <div class="header-text">
-                        <h3>Ship Name Decoder</h3>
-                        <p>Identify the ship name being spelled</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="activity-body">
-                <div class="instruction-text">
-                    <i class="fas fa-headphones"></i>
-                    <p>What is the ship name spelled by the Captain?</p>
-                </div>
-                <div class="captain-display">
-                    <img src="{{ url_for('static', filename='img/Captain-Radio Check2.png') }}" alt="Captain Speaking" class="captain-speaking">
-                    <div class="speech-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-
-                <button id="play-mcq-audio" class="play-audio-btn">
-                    <i class="fas fa-play"></i>
-                    <span>Play Audio</span>
-                </button>
-
                 
+                <!-- PART 1: Code Grid -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Part 1</span>
+                        Quick Pick Challenge
+                    </h4>
+                    
+                    <div class="instruction-text">
+                        <i class="fas fa-headphones"></i>
+                        <p>Listen carefully and click the correct letter or number you hear.</p>
+                    </div>
 
-                <form class="mcq-form">
-                    <label class="mcq-option">
-                        <input type="radio" name="shipname" value="SAILOR">
-                        <span class="option-content">
-                            <span class="option-letter">A</span>
-                            <span class="option-text">SAILOR</span>
-                            <i class="fas fa-check option-icon"></i>
-                        </span>
-                    </label>
-                    <label class="mcq-option">
-                        <input type="radio" name="shipname" value="SAILEX">
-                        <span class="option-content">
-                            <span class="option-letter">B</span>
-                            <span class="option-text">SAILEX</span>
-                            <i class="fas fa-check option-icon"></i>
-                        </span>
-                    </label>
-                    <label class="mcq-option">
-                        <input type="radio" name="shipname" value="SAIPEN">
-                        <span class="option-content">
-                            <span class="option-letter">C</span>
-                            <span class="option-text">SAIPEN</span>
-                            <i class="fas fa-check option-icon"></i>
-                        </span>
-                    </label>
-                    <label class="mcq-option">
-                        <input type="radio" name="shipname" value="SAILEN">
-                        <span class="option-content">
-                            <span class="option-letter">D</span>
-                            <span class="option-text">SAILEN</span>
-                            <i class="fas fa-check option-icon"></i>
-                        </span>
-                    </label>
-                </form>
+                    <div class="radio-display">
+                        <img src="{{ url_for('static', filename='img/walkie-talkies.png') }}" alt="Radio" class="radio-img">
+                    </div>
 
-                <div class="feedback-box" id="mcq-feedback" style="display: none;">
-                    <i class="feedback-icon"></i>
-                    <p class="feedback-text"></p>
+                    <button id="play-grid-audio" class="play-audio-btn">
+                        <i class="fas fa-play"></i>
+                        <span>Play Audio</span>
+                    </button>
+
+                    <div class="code-grid">
+                        <button class="code-btn" data-code="oscar">
+                            <span class="code-letter">O</span>
+                        </button>
+                        <button class="code-btn" data-code="charlie">
+                            <span class="code-letter">C</span>
+                        </button>
+                        <button class="code-btn" data-code="sierra">
+                            <span class="code-letter">S</span>
+                        </button>
+                        <button class="code-btn" data-code="alpha">
+                            <span class="code-letter">A</span>
+                        </button>
+                        <button class="code-btn" data-code="zeero">
+                            <span class="code-letter">0</span>
+                        </button>
+                        <button class="code-btn" data-code="wun">
+                            <span class="code-letter">1</span>
+                        </button>
+                        <button class="code-btn" data-code="niner">
+                            <span class="code-letter">9</span>
+                        </button>
+                        <button class="code-btn" data-code="fife">
+                            <span class="code-letter">5</span>
+                        </button>
+                    </div>
+                    
+                    <div class="feedback-box" id="grid-feedback" style="display: none;">
+                        <i class="feedback-icon"></i>
+                        <p class="feedback-text"></p>
+                    </div>
                 </div>
+
+                <!-- Divider -->
+                <div class="part-divider"></div>
+
+                <!-- PART 2: Multiple Choice -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Part 2</span>
+                        Ship Name Decoder
+                    </h4>
+                    
+                    <div class="instruction-text">
+                        <i class="fas fa-headphones"></i>
+                        <p>Listen and choose the ship name spelled by the Captain.</p>
+                    </div>
+                    
+                    <div class="captain-display">
+                        <img src="{{ url_for('static', filename='img/Captain-Radio Check2.png') }}" alt="Captain Speaking" class="captain-speaking">
+                    </div>
+
+                    <button id="play-mcq-audio" class="play-audio-btn">
+                        <i class="fas fa-play"></i>
+                        <span>Play Audio</span>
+                    </button>
+
+                    <form class="mcq-form">
+                        <label class="mcq-option">
+                            <input type="radio" name="shipname" value="SAILOR">
+                            <span class="option-content">
+                                <span class="option-letter">A</span>
+                                <span class="option-text">SAILOR</span>
+                                <i class="fas fa-check option-icon"></i>
+                            </span>
+                        </label>
+                        <label class="mcq-option">
+                            <input type="radio" name="shipname" value="SAILEX">
+                            <span class="option-content">
+                                <span class="option-letter">B</span>
+                                <span class="option-text">SAILEX</span>
+                                <i class="fas fa-check option-icon"></i>
+                            </span>
+                        </label>
+                        <label class="mcq-option">
+                            <input type="radio" name="shipname" value="SAIPEN">
+                            <span class="option-content">
+                                <span class="option-letter">C</span>
+                                <span class="option-text">SAIPEN</span>
+                                <i class="fas fa-check option-icon"></i>
+                            </span>
+                        </label>
+                        <label class="mcq-option">
+                            <input type="radio" name="shipname" value="SAILEN">
+                            <span class="option-content">
+                                <span class="option-letter">D</span>
+                                <span class="option-text">SAILEN</span>
+                                <i class="fas fa-check option-icon"></i>
+                            </span>
+                        </label>
+                    </form>
+
+                    <div class="feedback-box" id="mcq-feedback" style="display: none;">
+                        <i class="feedback-icon"></i>
+                        <p class="feedback-text"></p>
+                    </div>
+                </div>
+
             </div>
         </section>
 

@@ -142,13 +142,6 @@ body {
     line-height: 1.2;
 }
 
-.badge-text p {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin: 0;
-}
-
 /* Captain Instruction Card */
 .captain-instruction-card {
     animation: fadeInUp 0.7s ease-out 0.2s both;
@@ -164,7 +157,7 @@ body {
 .captain-avatar {
     height: 250px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
 }
 
 /* Radio Waves Animation */
@@ -176,6 +169,43 @@ body {
     width: 200px;
     height: 200px;
     pointer-events: none;
+    
+    /* PERUBAHAN DISINI: Sembunyikan secara default */
+    opacity: 0; 
+    transition: opacity 0.3s ease; /* Supaya muncul/hilangnya halus */
+}
+
+/* Class ini akan ditambahkan lewat JS saat audio nyala */
+.radio-waves.active {
+    opacity: 1;
+}
+
+.radio-waves span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    
+    /* PERUBAHAN DISINI: Defaultnya pause animasinya */
+    animation: radioWave 2s ease-out infinite;
+    animation-play-state: paused; 
+}
+
+/* Saat parent punya class active, jalankan animasi */
+.radio-waves.active span {
+    animation-play-state: running;
+}
+
+.radio-waves span:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.radio-waves span:nth-child(3) {
+    animation-delay: 1.4s;
 }
 
 .radio-waves span {
@@ -341,22 +371,22 @@ body {
     justify-content: center;
     gap: 12px;
     padding: 16px 20px;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-left: 4px solid var(--gold);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-left: 4px solid var(--ocean-blue);
     border-radius: 12px;
     margin: 0;
 }
 
 .instruction-text i {
     font-size: 1.6rem;
-    color: #d97706;
-    animation: pulse 2s ease-in-out infinite;
+    color: #5ea4d3;
+    /* animation: pulse 2s ease-in-out infinite; */
 }
 
 .instruction-text p {
     font-size: 1.05rem;
-    font-weight: 600;
-    color: #78350f;
+    font-weight: 300;
+    /* color: 5ea4d3; */
     margin: 0;
 }
 
@@ -371,7 +401,7 @@ body {
     width: 160px;
     height: 160px;
     object-fit: contain;
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
     filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
 }
 
@@ -414,7 +444,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
-    margin: 0 auto;
+    margin: 0 auto 25px;
     min-width: 200px;
 }
 
@@ -498,30 +528,13 @@ body {
 }
 
 .captain-speaking {
-    height: 200px;
+    height: 250px;
     object-fit: contain;
-    animation: float 3s ease-in-out infinite 0.5s;
     filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
+    margin-bottom: -40px; /* Overlap dengan button di bawahnya */
+    position: relative;
+    z-index: 1;
 }
-
-/* Speech Indicator */
-.speech-indicator {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 15px;
-}
-
-.speech-indicator span {
-    width: 10px;
-    height: 10px;
-    background: var(--ocean-blue);
-    border-radius: 50%;
-    animation: speechBubble 1s ease-in-out infinite;
-}
-
-.speech-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.speech-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
 /* MCQ Form */
 .mcq-form {
@@ -766,6 +779,60 @@ body {
     color: var(--danger-dark);
 }
 
+/* ======== NEW: ACTIVITY PARTS ======== */
+.activity-part {
+    margin-bottom: 30px;
+}
+
+.part-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ocean-deep);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.part-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 35px;
+    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
+    color: var(--white);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.part-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+    margin: 40px 0;
+    position: relative;
+}
+
+.part-divider::after {
+    content: '⚓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    padding: 0 15px;
+    font-size: 1.2rem;
+    color: var(--ocean-blue);
+}
+
+/* Ensure play button overlaps captain image */
+.captain-display + .play-audio-btn {
+    position: relative;
+    z-index: 2;
+    margin-top: -20px;
+}
+
 /* ======== ANIMATIONS ======== */
 @keyframes slideInLeft {
     from {
@@ -940,7 +1007,7 @@ body {
     }
 
     .badge-text h4 {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
     .badge-text p {
@@ -953,7 +1020,7 @@ body {
         z-index: 1; /* PERUBAHAN 1: Ubah 100 menjadi 1 (di belakang) */}
 
     .instruction-bubble {
-        margin-top: -80px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
+        margin-top: -60px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
         padding: 20px;
         border-radius: 16px;
         background: var(--white);
@@ -1003,10 +1070,10 @@ body {
     }
 
     .play-audio-btn {
-        padding: 12px 24px;
+        padding: 10px 20px;
         font-size: 1rem;
-        width: 100%;
-        max-width: 280px;
+        width: 10px;
+        max-width: 200px;
     }
 
     .code-grid {
@@ -1027,7 +1094,7 @@ body {
     }
 
     .captain-speaking {
-        height: 160px;
+        height: 250px;
     }
 
     .option-content {
@@ -1047,18 +1114,14 @@ body {
 
     .continue-wrapper {
         text-align: center;
-        margin-top: 10px;
-        margin-left: 170px;
-    }
-
-    .continue-wrapper {
-        text-align: center;
+        margin-top: 1px;
+        margin-left: 180px;
     }
 
     .continue-button {
         width: 100%;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 14px 30px;
     }
 }
@@ -1095,7 +1158,8 @@ body {
     }
 
     .captain-speaking {
-        height: 140px;
+        height: 250px;
+        margin-bottom: -40px;
     }
 
     .option-letter {
@@ -1108,8 +1172,11 @@ body {
         font-size: 0.95rem;
     }
 
-    .continue-button {
-        font-size: 1rem;
-        padding: 12px 24px;
-    }
+    /* .badge-text h4 {
+        color: var(--white);
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.2;
+    } */
 }

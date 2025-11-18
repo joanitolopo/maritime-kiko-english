@@ -50,8 +50,9 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group-modern">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required minlength="8">
-                                </div>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required minlength="8" style="padding-right: 45px;">
+                                <i class="fas fa-eye" id="togglePassword" style="left: auto; right: 15px; cursor: pointer; z-index: 10;"></i>
+                            </div>
                         </div>
                         
                         <button type="button" class="btn-action btn-action-primary w-100 mt-4 d-lg-none" id="open-modal-btn-sm">
@@ -115,7 +116,6 @@
                         <option value="" selected disabled>Select your major</option>
                         <option value="Nautika Kapal Niaga">Nautika Kapal Niaga</option>
                         <option value="Teknika Kapal Niaga">Nautika Kapal Penangkap Ikan</option>
-                        <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
                 
@@ -145,4 +145,19 @@
 {% block page_js %}
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+    // Script untuk toggle visibility password
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // 1. Toggle type attribute (password <-> text)
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        // 2. Toggle icon class (mata terbuka <-> mata dicoret)
+        this.classList.toggle('fa-eye-slash'); // Icon mata dicoret
+        this.classList.toggle('fa-eye');       // Icon mata biasa
+    });
+</script>
 {% endblock %}

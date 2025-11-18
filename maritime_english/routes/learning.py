@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 import json
 import os
 import speech_recognition as speech_recog
-from ..models import UnitProgress, UserStats
+from ..models import UnitProgress, UserStats, SubunitAttempt  # Tambahkan SubunitAttempt
 from ..__init__ import db
 from datetime import date
 from datetime import datetime
@@ -174,12 +174,12 @@ SUBUNIT_TO_SECTION_MAP = {
         1: 'introduction',    # Part A -> rute unit_introduction
         2: 'warmup',          # Part B -> rute learning_unit(section='warmup')
         3: 'input_alphabet', 
-        4: 'noticing_intro',     # Part C -> rute learning_unit(section='input_intro')
-        5: 'noticing_numbers',  # Part D -> rute learning_unit(section='noticing_intro')
-        6: 'noticing_alphabet', # Part E
-        7: 'guided_intro',    # Part F
+        4: 'noticing_intro',    
+        5: 'noticing_numbers',  
+        6: 'noticing_alphabet', 
+        7: 'guided_intro',    
         8: 'guided_task_1',
-        9: 'guided_task_2', # Part G
+        9: 'guided_task_2', 
     },
     2: { # Unit 2 (Dummy - sesuai permintaan Anda)
         1: 'warm_up',
@@ -334,6 +334,7 @@ def complete_subunit(unit_id, subunit_index):
 
 
     # Ambil durasi dari query parameter URL (?duration_sec=...)
+    # Ambil durasi dari query parameter URL (?duration_sec=...)
     duration_str = request.args.get('duration_sec', '0')
     try:
         duration_seconds = int(duration_str)
@@ -342,6 +343,18 @@ def complete_subunit(unit_id, subunit_index):
 
     # Ubah ke menit (bulatkan ke menit terdekat)
     duration_minutes = round(duration_seconds / 60)
+
+    # ✅ BARU: Simpan attempt per subunit
+    if duration_seconds > 0:
+        new_attempt = SubunitAttempt(
+            user_id=current_user.id,
+            unit_id=unit_id,
+            subunit_index=subunit_index,
+            duration_seconds=duration_seconds,
+            completed_at=datetime.utcnow()
+        )
+        db.session.add(new_attempt)
+        current_app.logger.debug(f"[complete_subunit] Menyimpan attempt untuk subunit {subunit_index}: {duration_seconds}s")
 
     # Hanya tambahkan jika waktunya signifikan (lebih dari 0 menit setelah dibulatkan)
     stats = current_user.stats
@@ -572,6 +585,27 @@ def unit_report_pdf(unit_id):
         
         captain_feedback = generate_captain_feedback(level_label, easiest, struggle, improvement)
     
+    report_start_date = current_user.start_date
+    latest_attempt = SubunitAttempt.query.filter(
+        SubunitAttempt.user_id == current_user.id,
+        SubunitAttempt.unit_id == unit_id
+    ).order_by(SubunitAttempt.completed_at.desc()).first()
+
+    # 2. Tentukan tanggal akhir laporan
+    if latest_attempt:
+        # Jika ada SubunitAttempt, gunakan waktu penyelesaiannya
+        report_end_date = latest_attempt.completed_at
+    elif progress and progress.last_attempt:
+        # Jika tidak ada SubunitAttempt tapi ada last_attempt di UnitProgress, gunakan itu
+        report_end_date = progress.last_attempt
+    else:
+        # Jika tidak ada attempt sama sekali, gunakan tanggal pendaftaran
+        report_end_date = report_start_date
+
+    # Format tanggal menjadi string period
+    # Format: 19 Nov 2025 - 25 Nov 2025
+    report_period_string = f"{report_end_date.strftime('%d %b %Y')} - {report_start_date.strftime('%d %b %Y')}"
+
     # Data untuk template
     report_data = {
         "unit_id": unit_id,
@@ -580,7 +614,8 @@ def unit_report_pdf(unit_id):
                   ("In Progress" if progress.status == 'in_progress' else "Not Yet Started"),
         "total_attempts": progress.total_attempts or 0,
         "total_duration": progress.total_duration_minutes or 0,
-        "last_attempt": progress.last_attempt.strftime('%d/%m/%Y') if progress.last_attempt else "Never",
+        "report_period": report_period_string,
+        "last_attempt": progress.last_attempt.strftime('%d/%m/%Y %H:%M') if progress.last_attempt else "Never",        
         "self_assessment": {
             "q1": progress.self_assessment_q1,
             "q2": progress.self_assessment_q2,
@@ -605,24 +640,88 @@ def unit_report_pdf(unit_id):
     
     # Generate dummy daily data (nanti bisa diganti dengan data real)
     # Untuk sekarang, kita buat placeholder
+    # ✅ GENERATE DATA HARIAN YANG REAL
     from datetime import datetime, timedelta
-    import random
-    
+    from sqlalchemy import func, and_
+
     today = datetime.now()
     daily_data = []
+
+    # Loop 7 hari terakhir
     for i in range(7):
-        day = today - timedelta(days=6-i)
+        day_date = today - timedelta(days=6-i)
+        day_start = day_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_date.replace(hour=23, minute=59, second=59, microsecond=999999)
+        
+        # Hitung berapa kali attempt di hari ini untuk unit ini
+        attempts_count = SubunitAttempt.query.filter(
+            and_(
+                SubunitAttempt.user_id == current_user.id,
+                SubunitAttempt.unit_id == unit_id,
+                SubunitAttempt.completed_at >= day_start,
+                SubunitAttempt.completed_at <= day_end
+            )
+        ).count()
+        
         daily_data.append({
-            "day": day.strftime('%a'),
-            "attempts": random.randint(0, 3)  # Placeholder - nanti ganti dengan data real
+            "day": day_date.strftime('%a'),
+            "date": day_date.strftime('%d/%m'),
+            "attempts": attempts_count
         })
+
+    # ✅ GENERATE ACTIVITY PRACTICE SUMMARY (Per Subunit)
+    # Nama subunit berdasarkan SUBUNIT_TO_SECTION_MAP
+    subunit_names = {
+        1: "A. Set Sail for Today's Voyage",
+        2: "B. Get Ready to Sail",
+        3: "C. Sail into Real Communication",
+        4: "D. Navigate the Language",
+        5: "E. Drill It Like a Seafarer",
+        6: "F. Practice with the Crew",
+        7: "G. Sail Through the Real Challenge",
+        8: "H. Test Your Sea Skills",
+        # guided_task_2 (subunit 9) tidak termasuk
+    }
+
+    activity_summary = []
+    for subunit_idx, subunit_name in subunit_names.items():
+        # Ambil semua attempts untuk subunit ini
+        attempts = SubunitAttempt.query.filter_by(
+            user_id=current_user.id,
+            unit_id=unit_id,
+            subunit_index=subunit_idx
+        ).all()
+        
+        if attempts:
+            total_attempts = len(attempts)
+            total_duration_sec = sum(a.duration_seconds for a in attempts)
+            total_duration_min = round(total_duration_sec / 60)
+            last_attempt_date = max(a.completed_at for a in attempts).strftime('%d/%m/%Y')
+            
+            activity_summary.append({
+                "name": subunit_name,
+                "attempts": total_attempts,
+                "duration": total_duration_min,
+                "last_attempt": last_attempt_date
+            })
+        else:
+            # Placeholder jika belum ada data
+            activity_summary.append({
+                "name": subunit_name,
+                "attempts": 0,
+                "duration": 0,
+                "last_attempt": "Not Yet"
+            })
     
     # Hitung stats
     active_days = sum(1 for d in daily_data if d["attempts"] > 0)
     total_attempts_week = sum(d["attempts"] for d in daily_data)
     avg_attempts = round(total_attempts_week / 7, 1) if total_attempts_week > 0 else 0
-    avg_minutes = round(report_data["total_duration"] / max(1, active_days))
-    
+
+    # ✅ Hitung average minutes dari activity_summary yang real
+    total_minutes_all_activities = sum(a["duration"] for a in activity_summary)
+    avg_minutes = round(total_minutes_all_activities / max(1, active_days))
+
     # Longest streak (simplified)
     current_streak = 0
     max_streak = 0
@@ -632,7 +731,7 @@ def unit_report_pdf(unit_id):
             max_streak = max(max_streak, current_streak)
         else:
             current_streak = 0
-    
+
     stats = {
         "active_days": active_days,
         "avg_attempts": avg_attempts,
@@ -641,11 +740,12 @@ def unit_report_pdf(unit_id):
     }
     
     return render_template('unit_report_pdf.html',
-                           user=current_user,
-                           report_data=report_data,
-                           daily_data=daily_data,
-                           stats=stats,
-                           today=today.strftime('%d/%m/%Y'))
+                       user=current_user,
+                       report_data=report_data,
+                       daily_data=daily_data,
+                       activity_summary=activity_summary,  # ✅ TAMBAHKAN INI
+                       stats=stats,
+                       today=today.strftime('%d/%m/%Y'))
 
 @learning_bp.route('/report')
 @login_required

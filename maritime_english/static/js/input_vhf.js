@@ -1,109 +1,104 @@
 // ========================================
-// MODERN VHF EXCHANGE JAVASCRIPT
-// Interactive Radio Communication Interface
-// Versi 3.0 (Updated to match MMSI behavior)
+// VHF RADIO EXCHANGE JAVASCRIPT v4.0
+// With Popup Modal System
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎙️ VHF Radio Exchange Initialized (v3.0)!');
+    console.log('🎙️ VHF Radio Exchange v4.0 Initialized!');
 
     // ==================================================
-    // ELEMENTS & AUDIO PLAYERS
+    // VESSEL DATA
     // ==================================================
+    const vesselData = {
+        '1-caller': {
+            name: 'HORIZON',
+            mmsi: '248105900',
+            callSign: 'Y8ON5',
+            audio: '/static/data/audio/unit1/vhf_caller.wav',
+            transcript: [
+                "This is Motor Vessel Horizon, Call Sign Bravo Hotel Niner Too Fife Wun. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares, Call Sign Yankee Bravo Oscar November Niner. Channel Wun Six. Over"
+            ]
+        },
+        '1-receiver': {
+            name: 'ANTARES',
+            mmsi: '257689000',
+            callSign: 'LAPW5',
+            audio: '/static/data/audio/unit1/vhf_receiver.wav',
+            transcript: [
+                "Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."
+            ]
+        },
+        '2-caller': {
+            name: 'ANTARES',
+            mmsi: '257689000',
+            callSign: 'LAPW5',
+            audio: '/static/data/audio/unit1/example2-caller.wav',
+            transcript: [
+                "This is Motor Vessel Antares, Call Sign Lima Alfa Papa Whisky Fife. MMSI too-fife-seven-six-ait-niner-zeero-zeero-zeero. Calling Motor Vessel Horizon, Call Sign Yankee Bravo Oscar November Niner. Channel wun six. Over."
+            ]
+        },
+        '2-receiver': {
+            name: 'HORIZON',
+            mmsi: '248105900',
+            callSign: 'Y8ON5',
+            audio: '/static/data/audio/unit1/example2-receiver.wav',
+            transcript: [
+                "Motor Vessel Antares, this is Horizon. Receiving you loud and clear. Over."
+            ]
+        }
+    };
 
-    // Sidebar Controls
+    // ==================================================
+    // ELEMENTS
+    // ==================================================
+    
+    // Sidebar
     const audioBtn_sidebar = document.querySelector('.captain-instruction-card .audio-btn i');
     const translateBtn_sidebar = document.querySelector('.captain-instruction-card .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-vhf');
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
-    // Message Controls
-    const allPlayButtons = document.querySelectorAll('.play-message-btn');
+    // Cards
+    const allVesselCards = document.querySelectorAll('.vessel-exchange-card');
 
-    // Visual Effects
-    const radioWaves = document.querySelectorAll('.radio-waves span');
-    const exchangeArrows = document.querySelectorAll('.exchange-arrow i');
-    const captainAvatar = document.querySelector('.captain-avatar');
+    // Modal
+    const modal = document.getElementById('exchangeModal');
+    const modalOverlay = modal.querySelector('.modal-overlay');
+    const closeModalBtn = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalVesselName = document.getElementById('modalVesselName');
+    const modalMMSI = document.getElementById('modalMMSI');
+    const modalCallSign = document.getElementById('modalCallSign');
+    const modalTranscript = document.getElementById('modalTranscript');
 
-    // Audio Players
+    // Audio
     const audio_sidebar = new Audio();
-    const audio_examples = []; // Array untuk menampung audio player dinamis
-    
-    let activeExampleAudio = null; // Melacak audio yang sedang aktif
-    let activeButton = null; // Melacak tombol yang sedang aktif
-
-    const allAudios = [audio_sidebar];
+    let audio_current = new Audio();
+    let isAudioPlaying = false;
 
     // ==================================================
-    // CONTENT & AUDIO PATHS
+    // TEXT CONTENT
     // ==================================================
-
-    // Text Content
     const originalText_sidebar = "Cadet, remember! Always start with your vessel's name, Call Sign, and MMSI before you speak on the radio. That's how real sailors make sure every message is clear and safe!";
     const translatedText_sidebar = "Taruna, ingat! Selalu sebutkan nama kapalmu, Call Sign, dan MMSI sebelum berbicara di radio. Itulah cara pelaut sejati memastikan setiap pesan terdengar jelas dan aman!";
-    let isTranslated_sidebar = false;
+    let isTranslated = false;
 
-    // Audio Paths
+    // Audio Path
     const audioPath_sidebar = '/static/data/audio/unit1/vhf_intro.wav';
-
-    // ==================================================
-    // MAIN AUDIO CONTROL FUNCTIONS
-    // ==================================================
-
-    function stopAllAudio() {
-        [...allAudios, ...audio_examples].forEach(audio => {
-            if (!audio.paused) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-        });
-
-        // Reset tombol sidebar
-        if (audioBtn_sidebar) {
-            audioBtn_sidebar.classList.remove('fa-pause');
-            audioBtn_sidebar.classList.add('fa-play');
-            removePulseEffect(audioBtn_sidebar.parentElement);
-        }
-
-        // Reset semua tombol play di main content
-        allPlayButtons.forEach(btn => {
-            btn.classList.remove('playing');
-            const icon = btn.querySelector('i');
-            const text = btn.querySelector('span');
-            if (icon) {
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-            }
-            if (text) {
-                if (text.textContent === 'Stop') {
-                    text.textContent = 'Play';
-                }
-            }
-        });
-
-        // Hapus highlight dari semua message box
-        document.querySelectorAll('.message-box.highlighted').forEach(box => {
-            box.classList.remove('highlighted');
-        });
-
-        activeExampleAudio = null;
-        activeButton = null;
-    }
 
     // ==================================================
     // SIDEBAR CONTROLS
     // ==================================================
-
     if (audioBtn_sidebar) {
         audioBtn_sidebar.parentElement.addEventListener('click', function() {
             if (audio_sidebar.paused) {
-                stopAllAudio();
+                stopCurrentAudio();
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
                         audioBtn_sidebar.classList.remove('fa-play');
                         audioBtn_sidebar.classList.add('fa-pause');
-                        addPulseEffect(this);
-                        animateRadioWaves();
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
@@ -113,215 +108,142 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio_sidebar.pause();
                 audioBtn_sidebar.classList.remove('fa-pause');
                 audioBtn_sidebar.classList.add('fa-play');
-                removePulseEffect(this);
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
         audio_sidebar.addEventListener('ended', () => {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
-            removePulseEffect(audioBtn_sidebar.parentElement);
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
-            stopAllAudio();
-
+            stopCurrentAudio();
             fadeTransition(speechText_sidebar, () => {
-                if (isTranslated_sidebar) {
-                    speechText_sidebar.textContent = originalText_sidebar;
-                    isTranslated_sidebar = false;
-                } else {
-                    speechText_sidebar.textContent = translatedText_sidebar;
-                    isTranslated_sidebar = true;
-                }
+                speechText_sidebar.textContent = isTranslated ? originalText_sidebar : translatedText_sidebar;
+                isTranslated = !isTranslated;
             });
-
             addClickEffect(this);
         });
     }
 
     // ==================================================
-    // EXAMPLE MESSAGE CONTROLS (Updated to match MMSI)
+    // VESSEL CARDS - OPEN MODAL
     // ==================================================
-
-    allPlayButtons.forEach(button => {
-        const audio = new Audio();
-        audio_examples.push(audio);
-        const audioName = button.dataset.audio;
-        const audioPath = `/static/data/audio/unit1/${audioName}.wav`;
+    allVesselCards.forEach(card => {
+        const playBtn = card.querySelector('.play-exchange-btn');
         
-        const messageBox = button.previousElementSibling;
-        const buttonIcon = button.querySelector('i');
-        
-        // Tambahkan span untuk teks jika belum ada
-        let buttonText = button.querySelector('span');
-        if (!buttonText) {
-            buttonText = document.createElement('span');
-            buttonText.textContent = 'Play';
-            button.appendChild(buttonText);
-        }
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const example = card.dataset.example;
+            const role = card.dataset.role;
+            const key = `${example}-${role}`;
+            const data = vesselData[key];
 
-        button.addEventListener('click', function() {
-            if (activeExampleAudio === audio && !audio.paused) {
-                // Audio ini sedang diputar, jadi hentikan
-                audio.pause();
-                audio.currentTime = 0;
-                button.classList.remove('playing');
-                
-                if (buttonIcon) {
-                    buttonIcon.classList.remove('fa-pause');
-                    buttonIcon.classList.add('fa-play');
-                }
-                if (buttonText) {
-                    buttonText.textContent = 'Play';
-                }
-                if (messageBox) {
-                    messageBox.classList.remove('highlighted');
-                }
-                
-                activeExampleAudio = null;
-                activeButton = null;
-            } else {
-                // Audio lain (atau tidak ada) yang diputar. Hentikan semua dulu.
-                stopAllAudio();
-                
-                // Mulai putar audio ini
-                audio.src = audioPath;
-                audio.play()
-                    .then(() => {
-                        button.classList.add('playing');
-                        
-                        if (buttonIcon) {
-                            buttonIcon.classList.remove('fa-play');
-                            buttonIcon.classList.add('fa-pause');
-                        }
-                        if (buttonText) {
-                            buttonText.textContent = 'Stop';
-                        }
-                        if (messageBox) {
-                            messageBox.classList.add('highlighted');
-                            messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                        
-                        activeExampleAudio = audio;
-                        activeButton = button;
-                        animateRadioWaves();
-                    })
-                    .catch(error => {
-                        console.error(`❌ Error playing ${audioPath}:`, error);
-                        shakeElement(button);
-                    });
+            if (data) {
+                openModal(data, role);
             }
-        });
-
-        audio.addEventListener('ended', () => {
-            button.classList.remove('playing');
-            
-            if (buttonIcon) {
-                buttonIcon.classList.remove('fa-pause');
-                buttonIcon.classList.add('fa-play');
-            }
-            if (buttonText) {
-                buttonText.textContent = 'Play Again';
-            }
-            if (messageBox) {
-                messageBox.classList.remove('highlighted');
-            }
-            
-            activeExampleAudio = null;
-            activeButton = null;
         });
     });
 
     // ==================================================
-    // VISUAL EFFECTS & ANIMATIONS
+    // MODAL FUNCTIONS
     // ==================================================
+    function openModal(data, role) {
+        // Stop any playing audio
+        stopCurrentAudio();
 
-    function animateRadioWaves() {
-        if (radioWaves.length > 0) {
-            radioWaves.forEach((wave, index) => {
-                wave.style.animation = 'none';
-                setTimeout(() => {
-                    wave.style.animation = `radioWave 2s ease-out infinite`;
-                    wave.style.animationDelay = `${index * 0.7}s`;
-                }, 10);
-            });
-        }
+        // Populate modal
+        modalTitle.textContent = `${role === 'caller' ? 'The Caller' : 'The Receiver'}: ${data.name}`;
+        modalVesselName.textContent = data.name;
+        modalMMSI.textContent = data.mmsi;
+        modalCallSign.textContent = data.callSign;
+        
+        // Populate transcript
+        modalTranscript.innerHTML = '';
+        data.transcript.forEach(line => {
+            const p = document.createElement('p');
+            p.textContent = line;
+            modalTranscript.appendChild(p);
+        });
 
-        if (exchangeArrows.length > 0) {
-            exchangeArrows.forEach(arrow => {
-                arrow.style.animation = 'none';
-                setTimeout(() => {
-                    arrow.style.animation = 'arrowPulse 2s ease infinite';
-                }, 10);
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Play audio
+        audio_current.src = data.audio;
+        audio_current.play()
+            .then(() => {
+                isAudioPlaying = true;
+            })
+            .catch(error => {
+                console.error('❌ Audio playback error:', error);
             });
-        }
+
+        audio_current.addEventListener('ended', () => {
+            isAudioPlaying = false;
+        });
     }
 
-    // ==================================================
-    // KEYBOARD SHORTCUTS
-    // ==================================================
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        stopCurrentAudio();
+    }
 
-    document.addEventListener('keydown', function(e) {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-        // T for translate
-        if (e.key.toLowerCase() === 't') {
-            e.preventDefault();
-            if (translateBtn_sidebar) translateBtn_sidebar.click();
+    function stopCurrentAudio() {
+        if (!audio_current.paused) {
+            audio_current.pause();
+            audio_current.currentTime = 0;
         }
+        isAudioPlaying = false;
 
-        // C for captain audio
-        if (e.key.toLowerCase() === 'c') {
-            e.preventDefault();
-            if (audioBtn_sidebar) audioBtn_sidebar.parentElement.click();
+        // Stop sidebar audio too
+        if (!audio_sidebar.paused) {
+            audio_sidebar.pause();
+            audio_sidebar.currentTime = 0;
         }
+        if (audioBtn_sidebar) {
+            audioBtn_sidebar.classList.remove('fa-pause');
+            audioBtn_sidebar.classList.add('fa-play');
+        }
+        if (radioWavesAnim) radioWavesAnim.classList.remove('active');
+    }
 
-        // Space to play/pause first example
-        if (e.code === 'Space') {
-            e.preventDefault();
-            if (allPlayButtons.length > 0) allPlayButtons[0].click();
+    // Close modal events
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+    
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
         }
     });
 
     // ==================================================
     // HELPER FUNCTIONS
     // ==================================================
-
     function shakeElement(element) {
         if (!element) return;
         element.style.animation = 'shake 0.5s';
-        setTimeout(() => {
-            element.style.animation = '';
-        }, 500);
-    }
-
-    function addPulseEffect(element) {
-        if (!element) return;
-        element.classList.add('playing');
-    }
-
-    function removePulseEffect(element) {
-        if (!element) return;
-        element.classList.remove('playing');
+        setTimeout(() => element.style.animation = '', 500);
     }
 
     function addClickEffect(element) {
         if (!element) return;
         element.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            element.style.transform = '';
-        }, 150);
+        setTimeout(() => element.style.transform = '', 150);
     }
 
     function fadeTransition(element, callback) {
         if (!element) return;
-
         element.style.opacity = '0.3';
         element.style.transition = 'opacity 0.3s ease';
-
         setTimeout(() => {
             callback();
             element.style.opacity = '1';
@@ -331,18 +253,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // SMOOTH INTERACTIONS
     // ==================================================
-
     const continueBtn = document.querySelector('.continue-button');
     if (continueBtn) {
         continueBtn.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-3px)';
         });
-
         continueBtn.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
     }
 
+    const captainAvatar = document.querySelector('.captain-avatar');
     if (captainAvatar) {
         captainAvatar.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.05)';
@@ -352,40 +273,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Message boxes hover
-    const messageBoxes = document.querySelectorAll('.message-box');
-    messageBoxes.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            if (!this.classList.contains('highlighted')) {
-                this.style.transform = 'scale(1.01)';
-                this.style.transition = 'transform 0.3s ease';
-            }
-        });
-
-        card.addEventListener('mouseleave', function() {
-            if (!this.classList.contains('highlighted')) {
-                this.style.transform = '';
-            }
-        });
-    });
-
     // ==================================================
     // ENTRANCE ANIMATIONS
     // ==================================================
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-        // Di mobile, langsung tampilkan semua tanpa animasi scroll
-        const animatedElements = document.querySelectorAll(
-            '.continue-wrapper'
-        );
-        
+        const animatedElements = document.querySelectorAll('.continue-wrapper');
         animatedElements.forEach((el) => {
             el.style.opacity = '1';
             el.style.transform = 'translateY(0)';
         });
     } else {
-        // Di desktop, gunakan Intersection Observer seperti biasa
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -399,25 +298,15 @@ document.addEventListener('DOMContentLoaded', () => {
             rootMargin: '0px 0px -50px 0px'
         });
 
-        const animatedElements = document.querySelectorAll(
-            '.activity-badge, .captain-instruction-card, .instruction-banner, .example-container, .continue-wrapper'
-        );
-
+        const animatedElements = document.querySelectorAll('.activity-card, .continue-wrapper');
         animatedElements.forEach((el, index) => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
-            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
             observer.observe(el);
         });
     }
 
-    // ==================================================
-    // CONSOLE TIPS
-    // ==================================================
-
     console.log('✅ VHF Radio Exchange Ready!');
-    console.log('💡 Tip: Press T to translate captain\'s instructions');
-    console.log('💡 Tip: Press C to hear captain\'s voice');
-    console.log('💡 Tip: Press Space to play/pause the first example');
-    console.log('🎯 Master VHF radio protocol for safe maritime communication!');
+    console.log('💡 Click on vessel cards to hear their radio messages');
 });

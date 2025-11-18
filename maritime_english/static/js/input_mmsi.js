@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const translateBtn_sidebar = document.querySelector('.mmsi-controls .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-mmsi');
     const instructionTexts = document.querySelectorAll('.instruction-text-mmsi p'); // Sekarang ada lebih dari satu
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
     // Radio Players (BARU: Menggunakan querySelectorAll)
     const playButtons = document.querySelectorAll('.play-example-btn');
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioBtn_sidebar) {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
 
         // (MODIFIKASI: Reset semua play button)
@@ -77,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (text) {
                 // Teks kembali ke 'Play Example' atau 'Play Again' tergantung state sebelumnya
                 if (text.textContent === 'Stop') {
-                    text.textContent = 'Play Example';
+                    text.textContent = 'Play';
                 }
             }
         });
@@ -128,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         audioBtn_sidebar.classList.remove('fa-play');
                         audioBtn_sidebar.classList.add('fa-pause');
                         addPulseEffect(this);
+
+                        // BARU: Nyalakan animasi radio waves
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
@@ -138,6 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 audioBtn_sidebar.classList.remove('fa-pause');
                 audioBtn_sidebar.classList.add('fa-play');
                 removePulseEffect(this);
+
+                // BARU: Matikan animasi radio waves saat pause
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
@@ -145,6 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
             removePulseEffect(audioBtn_sidebar.parentElement);
+
+            // BARU: Matikan animasi radio waves saat audio selesai
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
@@ -193,6 +204,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonIcon = button.querySelector('i');
         const buttonText = button.querySelector('span');
 
+        // BARU: Fungsi untuk scroll ke transcript
+        function scrollToTranscript() {
+            // 1. Cari elemen card (parent terdekat dari button)
+            const communicationCard = button.closest('.communication-card');
+            
+            // 2. Cari header transcript di dalam card-right
+            const targetTranscriptHeader = communicationCard?.querySelector('.transcript-header');
+            
+            if (targetTranscriptHeader) {
+                // Gulirkan halaman ke elemen transcript
+                // 'behavior: smooth' membuat scrolling menjadi halus
+                targetTranscriptHeader.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' // Posisikan di bagian atas view
+                });
+            }
+        }
+
         button.addEventListener('click', function() {
             if (activeExampleAudio === audio) {
                 // Audio ini sedang diputar, jadi hentikan
@@ -205,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttonIcon.classList.add('fa-play');
                 }
                 if (buttonText) {
-                    buttonText.textContent = 'Play Example';
+                    buttonText.textContent = 'Play';
                 }
                 
                 activeExampleAudio = null;
@@ -233,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         // (MODIFIKASI: Kirim card ke fungsi animasi)
                         animateTranscript(card);
+                        scrollToTranscript();
                     })
                     .catch(error => {
                         console.error('❌ Playback error:', error);
@@ -250,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 buttonIcon.classList.add('fa-play');
             }
             if (buttonText) {
-                buttonText.textContent = 'Play Again';
+                buttonText.textContent = 'Play';
             }
             
             activeExampleAudio = null;

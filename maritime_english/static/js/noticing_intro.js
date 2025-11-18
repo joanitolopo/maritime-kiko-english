@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const translateBtn_sidebar = document.querySelector('.captain-instruction-card .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-noticing');
 
+    // BARU: Ambil elemen radio waves
+    const radioWavesAnim = document.querySelector('.radio-waves');
+
     // Popup Content - English
     const popupContent_EN = {
         title: "Radio Message Structure & Function",
@@ -167,6 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioIcon_sidebar) {
             audioIcon_sidebar.classList.remove('fa-pause');
             audioIcon_sidebar.classList.add('fa-play');
+            // BARU: Matikan animasi radio waves jika stopAllAudio dipanggil
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
         if (audioBtn_sidebar) {
              removePulseEffect(audioBtn_sidebar);
@@ -221,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         addPulseEffect(this); // Efek dari referensi
                         animateRadioWaves();  // Efek dari referensi
                         currentPlayingAudio = audio_sidebar;
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
@@ -231,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 audioIcon_sidebar.classList.remove('fa-pause');
                 audioIcon_sidebar.classList.add('fa-play');
                 removePulseEffect(this);
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
@@ -240,6 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
             audioIcon_sidebar.classList.add('fa-play');
             removePulseEffect(audioBtn_sidebar);
             currentPlayingAudio = null;
+            // BARU: Matikan animasi radio waves saat audio selesai
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
 
         // --- Tombol Terjemahan (Ditingkatkan) ---

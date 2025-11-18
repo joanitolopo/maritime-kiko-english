@@ -48,7 +48,7 @@
                         </div>
                         <div class="dropdown">
                             <a class="user-profile-btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://ui-avatars.com/api/?name={{ current_user.username }}&background=0B5A8F&color=fff" alt="{{ current_user.username }}" class="user-avatar">
+                                <div class="avatar-initials"> {{ current_user.username[0] | upper }}</div>
                                 <span class="d-none d-md-inline-block ms-2">{{ current_user.username }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end custom-dropdown fade-in" aria-labelledby="userDropdown">
@@ -226,7 +226,9 @@
         <div class="modal-content subunit-modal-content">
             <div class="modal-header subunit-modal-header">
                 <div class="modal-header-content">
-                    <span class="modal-unit-badge">Unit <span id="modalUnitNumber">1</span></span>
+                    <span class="modal-unit-badge">Unit
+                        <span id="modalUnitNumber">1</span>
+                    </span>
                     <h5 class="modal-title" id="subunitModalLabel">Spelling the Sea</h5>
                 </div>
                 <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">

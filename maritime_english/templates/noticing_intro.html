@@ -30,17 +30,16 @@
         
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fa-solid fa-compass"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>D. Navigate the Language</h4>
-                <p>Activity 5. Decode the Message!</p>
             </div>
         </div>
 
         <div class="captain-instruction-card">
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captain-radio_check_3.png') }}" alt="Captain" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -75,8 +74,8 @@
                         <i class="fa-solid fa-book-open"></i>
                     </div>
                     <div class="header-text">
-                        <h3>Message Structure</h3>
-                        <p>Notice the structure of each radio exchange</p>
+                        <h3>Activity 5. Decode the Message!</h3>
+                        <p>Understand the components of radio exchange</p>
                     </div>
                 </div>
             </div>
@@ -84,10 +83,10 @@
             <div class="exchange-body">
                 <div class="instruction-banner">
                     <div class="banner-icon">
-                        <i class="fas fa-headphones"></i>
+                        <i class="fa-solid fa-book"></i>
                     </div>
                     <p class="instruction-text-noticing">
-                        "Read both messages carefully. Notice the structure of each radio exchange. Click Learn More to see the Captain's notes."
+                        Read both messages carefully. Notice the structure of each radio exchange. Click Learn More to see the Captain's notes.
                     </p>
                 </div>
 
@@ -98,7 +97,7 @@
                         <div class="message-card-structured">
                             <div class="message-header-structured caller-header">
                                 <div class="vessel-avatar-small">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Caller">
+                                    <img src="{{ url_for('static', filename='img/operator_vessel_horizon.png') }}" alt="Caller">
                                 </div>
                                 <h4 class="message-title">Caller's Message</h4>
                             </div>
@@ -144,7 +143,7 @@
                         <div class="message-card-structured">
                             <div class="message-header-structured receiver-header">
                                 <div class="vessel-avatar-small">
-                                    <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Receiver">
+                                    <img src="{{ url_for('static', filename='img/operator_vessel_antara.png') }}" alt="Receiver">
                                 </div>
                                 <h4 class="message-title">Receiver's Message</h4>
                             </div>
@@ -185,8 +184,13 @@
             </div>
         </section>
 
-        <div class="continue-wrapper">
+        <!-- <div class="continue-wrapper">
             <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=4) }}" class="continue-button">
+                <span>Continue Sailing</span>
+            </a>
+        </div> -->
+        <div class="continue-wrapper">
+            <a href="{{ url_for('main.home') }}" class="continue-button">
                 <span>Continue Sailing</span>
             </a>
         </div>

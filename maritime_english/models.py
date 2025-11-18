@@ -1,5 +1,6 @@
 from .__init__ import db
 from flask_login import UserMixin
+from datetime import datetime
 
 # Model User Anda yang sudah ada
 class User(db.Model, UserMixin):
@@ -13,6 +14,8 @@ class User(db.Model, UserMixin):
     major = db.Column(db.String(100), nullable=True) # Misal: "Science", "Social", "Maritime"
     grade = db.Column(db.String(10), nullable=True) # Misal: "X", "XI", "XII"
     
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
     stats = db.relationship('UserStats', back_populates='user', uselist=False, cascade="all, delete-orphan")
     unit_progress = db.relationship('UnitProgress', back_populates='user', lazy=True, cascade="all, delete-orphan")
 
@@ -93,3 +96,25 @@ class UnitProgress(db.Model):
 
     def __repr__(self):
         return f'<UnitProgress User {self.user_id}, Unit {self.unit_id}: {self.completed_subunits} subunits>'
+    
+
+# Tambahkan model baru ini
+class SubunitAttempt(db.Model):
+    """
+    Tabel untuk tracking setiap attempt per subunit.
+    Ini akan menyimpan waktu dan durasi setiap kali user menyelesaikan subunit.
+    """
+    __tablename__ = 'subunit_attempts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    unit_id = db.Column(db.Integer, nullable=False)
+    subunit_index = db.Column(db.Integer, nullable=False)  # 1-8 untuk Unit 1
+    duration_seconds = db.Column(db.Integer, default=0)
+    completed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    user = db.relationship('User', backref='subunit_attempts')
+    
+    def __repr__(self):
+        return f'<SubunitAttempt User:{self.user_id} Unit:{self.unit_id} Subunit:{self.subunit_index}>'

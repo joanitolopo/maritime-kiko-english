@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const translateBtn_sidebar = document.querySelector('.phonetic-controls .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-phonetic');
 
+    const radioWavesAnim = document.querySelector('.radio-waves');
+
     // Keyboard Elements
     const keyButtons = document.querySelectorAll('.key-btn');
     const currentDisplay = document.getElementById('current-display');
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioBtn_sidebar) {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
 
         if (currentPlayingKey) {
@@ -157,26 +160,34 @@ document.addEventListener('DOMContentLoaded', () => {
         audioBtn_sidebar.parentElement.addEventListener('click', function() {
             if (audio_sidebar.paused) {
                 stopAllAudio();
-                stopAutoPlay();
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
                         audioBtn_sidebar.classList.remove('fa-play');
                         audioBtn_sidebar.classList.add('fa-pause');
+                        addPulseEffect(this);
+
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
+                        shakeElement(this);
                     });
             } else {
                 audio_sidebar.pause();
                 audioBtn_sidebar.classList.remove('fa-pause');
                 audioBtn_sidebar.classList.add('fa-play');
+                removePulseEffect(this);
+
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
         audio_sidebar.addEventListener('ended', () => {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
+            removePulseEffect(audioBtn_sidebar.parentElement);
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
@@ -560,6 +571,24 @@ document.addEventListener('DOMContentLoaded', () => {
         continueBtn.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
+    }
+
+    function addPulseEffect(element) {
+        if (!element) return;
+        element.classList.add('playing');
+    }
+
+    function removePulseEffect(element) {
+        if (!element) return;
+        element.classList.remove('playing');
+    }
+
+    function shakeElement(element) {
+        if (!element) return;
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 500);
     }
 
     // ==================================================
