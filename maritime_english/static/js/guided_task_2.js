@@ -142,10 +142,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveButton.innerHTML = '<i class="fas fa-check"></i> <span>Saved!</span>';
                     saveButton.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
 
-                    // Kembalikan ke semula setelah 3 detik
+                    // ✅ TAMPILKAN TOMBOL FINISH
+                    const finishSection = document.getElementById('finish-section');
+                    if (finishSection) {
+                        finishSection.classList.remove('hidden');
+                        finishSection.classList.add('visible');
+                    }
+
+                    // Scroll ke tombol finish (opsional, untuk UX yang lebih baik)
+                    setTimeout(() => {
+                        finishSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 500);
+
+                    // Kembalikan tombol save ke semula setelah 3 detik
                     setTimeout(() => {
                         saveButton.innerHTML = originalHTML;
-                        saveButton.disabled = false;
+                        // JANGAN re-enable tombol setelah sukses save
+                        // saveButton.disabled = false; // ❌ Hapus baris ini
                         saveButton.style.background = '';
                     }, 3000);
                 } else {

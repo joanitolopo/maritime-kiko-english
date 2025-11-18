@@ -338,30 +338,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // === 7. ANIMASI SCROLL-IN (Dari Referensi) ===
     // ==================================================
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                observer.unobserve(entry.text);
-            }
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        // Di mobile, langsung tampilkan semua tanpa animasi scroll
+        const animatedElements = document.querySelectorAll(
+            '.continue-wrapper'
+        );
+        
+        animatedElements.forEach((el) => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    const animatedElements = document.querySelectorAll(
-        '.message-card, .instruction-banner, .continue-wrapper, .conversation-arrow, .learn-more-section'
-    );
-    
-    animatedElements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
-        observer.observe(el);
-    });
+    } else {
+        // Di desktop, gunakan Intersection Observer seperti biasa
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.text);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        const animatedElements = document.querySelectorAll(
+            '.message-card, .instruction-banner, .continue-wrapper, .conversation-arrow, .learn-more-section'
+        );
+        
+        animatedElements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(el);
+        });
+    }
 
     // ==================================================
     // === 8. TIPS KEYBOARD (Dari Referensi) ===

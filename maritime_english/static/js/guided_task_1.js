@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskPanels = document.querySelectorAll('.task-panel');
     
     const vesselOptions = document.querySelectorAll('.vessel-option');
-    const callsignInputs = document.querySelectorAll('.callsign-input');
+    const mmsiInputs = document.querySelectorAll('.mmsi-input');
     const checkBtns = document.querySelectorAll('.check-btn');
     const callsignMicBtns = document.querySelectorAll('.mic-btn-callsign');
     
@@ -129,14 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==================================================
-    // TASK 2: CALL SIGNS (Letters & Numbers)
+    // TASK 2: MMSI NUMBERS
     // ==================================================
     checkBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
             const question = btn.closest('.task-question');
-            const input = question.querySelector('.callsign-input');
+            const input = question.querySelector('.mmsi-input');
             const correct = input.dataset.correct;
-            const value = input.value.trim().toUpperCase();
+            const value = input.value.trim();
 
             if (value === correct) {
                 input.classList.remove('incorrect');
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 question.classList.add('completed');
                 updateProgress('task2', 1);
                 playSuccessSound();
-                showNotification('Correct Call Sign!', 'success');
+                showNotification('Correct MMSI Number!', 'success');
             } else {
                 input.classList.remove('correct');
                 input.classList.add('incorrect');
@@ -154,17 +154,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Enter key for Call Sign inputs
-    callsignInputs.forEach((input, index) => {
+    // Enter key for MMSI inputs
+    mmsiInputs.forEach((input, index) => {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 checkBtns[index].click();
             }
         });
 
-        // Allow letters and numbers only, auto uppercase
+        // Allow numbers only (9 digits)
         input.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
         });
     });
 
@@ -592,7 +592,7 @@ audio_task.addEventListener('ended', () => {
                             <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task1}/5</div>
                         </div>
                         <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Call Sign Input</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">MMSI Numbers</div>
                             <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task2}/5</div>
                         </div>
                         <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">

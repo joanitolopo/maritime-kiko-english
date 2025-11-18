@@ -1226,14 +1226,15 @@ body {
         margin-left: 170px;
     }
 
+    .continue-section {
+        text-align: center;
+    }
+
     .continue-button {
         width: 100%;
         justify-content: center;
-        padding: 14px 24px;
         font-size: 1.1rem;
-        font-weight: 700;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+        padding: 14px 30px;
     }
 
     .continue-button:hover {

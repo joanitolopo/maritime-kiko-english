@@ -62,7 +62,9 @@
             </h1>
             <p class="banner-subtitle">
                 {% if current_user.stats.total_learning_time_minutes == 0 %}
-                    Let’s begin your first voyage in Maritime English
+                    Let's begin your first voyage in Maritime English
+                {% elif current_user.stats.current_unit_progress == 0 %}
+                    Ready to start {{ current_user.stats.current_unit_name }}? Let's go!
                 {% else %}
                     Keep sailing! You're {{ current_user.stats.current_unit_progress }}% through {{ current_user.stats.current_unit_name }}.
                 {% endif %}
@@ -211,10 +213,18 @@
                 <div class="stat-info">
                     <h6>Current Unit</h6>
                     <h3>{{current_user.stats.current_unit_name}}</h3>
-                    <div class="progress custom-progress mt-2">
-                        <div class="progress-bar bg-coral" role="progressbar" style="width: 0%" data-target-width="{{current_user.stats.current_unit_progress}}%" aria-valuenow="{{current_user.stats.current_unit_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <small class="text-muted mt-1 d-block">{{current_user.stats.current_unit_progress}}% Complete</small>
+                    {% if current_user.stats.current_unit_progress > 0 %}
+                        <div class="progress custom-progress mt-2">
+                            <div class="progress-bar bg-coral" role="progressbar" style="width: 0%" data-target-width="{{current_user.stats.current_unit_progress}}%" aria-valuenow="{{current_user.stats.current_unit_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% endif %}
+                    <small class="text-muted mt-1 d-block">
+                        {% if current_user.stats.current_unit_progress == 0 %}
+                            Not started yet
+                        {% else %}
+                            {{current_user.stats.current_unit_progress}}% Complete
+                        {% endif %}
+                    </small>
                 </div>
             </div>
             <div class="stat-card secondary-stat">

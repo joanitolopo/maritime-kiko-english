@@ -83,7 +83,7 @@
             </button>
             <button class="task-nav-button" data-panel="task2">
                 <i class="fas fa-broadcast-tower"></i>
-                <span>2. Call Sign</span>
+                <span>2. MMSI Number</span>
             </button>
             <button class="task-nav-button" data-panel="task3">
                 <i class="fas fa-signal"></i>
@@ -140,8 +140,8 @@
                         </button>
                     </div>
                     <div class="vessel-options">
-                        <button class="vessel-option" data-answer="OCEANIX">OCEANIX</button>
-                        <button class="vessel-option correct" data-answer="OCEANIX">OCEANIS</button>
+                        <button class="vessel-option correct" data-answer="OCEANIX">OCEANIX</button>
+                        <button class="vessel-option" data-answer="OCEANIX">OCEANIS</button>
                         <button class="vessel-option" data-answer="OCEANIX">OCEANIC</button>
                         <button class="vessel-option" data-answer="OCEANIX">OCEENIX</button>
                     </div>
@@ -172,8 +172,8 @@
                         </button>
                     </div>
                     <div class="vessel-options">
-                        <button class="vessel-option" data-answer="BAYCREST">BAYCRAST</button>
-                        <button class="vessel-option correct" data-answer="BAYCREST">BAYCREST</button>
+                        <button class="vessel-option correct" data-answer="BAYCREST">BAYCRAST</button>
+                        <button class="vessel-option" data-answer="BAYCREST">BAYCREST</button>
                         <button class="vessel-option" data-answer="BAYCREST">BAYCRIST</button>
                         <button class="vessel-option" data-answer="BAYCREST">BAYCROST</button>
                     </div>
@@ -188,92 +188,87 @@
             <div id="task2" class="task-panel">
                 <div class="panel-instruction">
                     <i class="fas fa-info-circle"></i>
-                    <p>Type the Call Sign you hear. Listen carefully to each phonetic letter and number!</p>
+                    <p>Type the 9-digit MMSI number you hear. Listen carefully to each digit!</p>
                 </div>
 
                 <div class="task-question" data-question="1">
                     <div class="question-header">
                         <span class="question-number">1</span>
-                        <button class="audio-play-btn" data-audio="callsign_input1">
+                        <button class="audio-play-btn" data-audio="vessel1">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
                     </div>
-                    <div class="callsign-input-container">
-                        <input type="text" class="callsign-input" placeholder="Enter Call Sign..." maxlength="10" data-correct="CLFW2">
+                    <div class="mmsi-input-container">
+                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="440983000">
                         <button class="check-btn">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    
                 </div>
 
                 <div class="task-question" data-question="2">
                     <div class="question-header">
                         <span class="question-number">2</span>
-                        <button class="audio-play-btn" data-audio="callsign_input2">
+                        <button class="audio-play-btn" data-audio="vessel2">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
                     </div>
-                    <div class="callsign-input-container">
-                        <input type="text" class="callsign-input" placeholder="Enter Call Sign..." maxlength="10" data-correct="SV4NP">
+                    <div class="mmsi-input-container">
+                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="446793000">
                         <button class="check-btn">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    
                 </div>
 
                 <div class="task-question" data-question="3">
                     <div class="question-header">
                         <span class="question-number">3</span>
-                        <button class="audio-play-btn" data-audio="callsign_input3">
+                        <button class="audio-play-btn" data-audio="vessel3">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
                     </div>
-                    <div class="callsign-input-container">
-                        <input type="text" class="callsign-input" placeholder="Enter Call Sign..." maxlength="10" data-correct="E7MSK">
+                    <div class="mmsi-input-container">
+                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="52768010">
                         <button class="check-btn">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    
                 </div>
 
                 <div class="task-question" data-question="4">
                     <div class="question-header">
                         <span class="question-number">4</span>
-                        <button class="audio-play-btn" data-audio="callsign_input4">
+                        <button class="audio-play-btn" data-audio="vessel4">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
                     </div>
-                    <div class="callsign-input-container">
-                        <input type="text" class="callsign-input" placeholder="Enter Call Sign..." maxlength="10" data-correct="BLHW3">
+                    <div class="mmsi-input-container">
+                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="628940305">
                         <button class="check-btn">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    
                 </div>
 
                 <div class="task-question" data-question="5">
                     <div class="question-header">
                         <span class="question-number">5</span>
-                        <button class="audio-play-btn" data-audio="callsign_input5">
+                        <button class="audio-play-btn" data-audio="vessel5">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
                     </div>
-                    <div class="callsign-input-container">
-                        <input type="text" class="callsign-input" placeholder="Enter Call Sign..." maxlength="10" data-correct="CWT8R">
+                    <div class="mmsi-input-container">
+                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="516823096">
                         <button class="check-btn">
                             <i class="fas fa-check"></i>
                         </button>
                     </div>
-                    
                 </div>
 
                 <button class="next-task-btn">
@@ -290,7 +285,7 @@
                 <div class="task-question" data-question="1">
                     <div class="question-header">
                         <span class="question-number">1</span>
-                        <button class="audio-play-btn" data-audio="callsign1">
+                        <button class="audio-play-btn" data-audio="callsign_input1">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
@@ -300,7 +295,7 @@
                             <span class="callsign-label">Call Sign:</span>
                             <span class="callsign-text">CLFW2</span>
                         </div>
-                        <button class="mic-btn-callsign" data-callsign="Charlie Lima Foxtrot Whisky Two" data-card-index="0">
+                        <button class="mic-btn-callsign" data-callsign="CLFW2" data-card-index="0">
                             <i class="fas fa-microphone"></i>
                             <span>Spell It</span>
                         </button>
@@ -310,7 +305,7 @@
                 <div class="task-question" data-question="2">
                     <div class="question-header">
                         <span class="question-number">2</span>
-                        <button class="audio-play-btn" data-audio="callsign2">
+                        <button class="audio-play-btn" data-audio="callsign_input2">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
@@ -318,9 +313,9 @@
                     <div class="callsign-container">
                         <div class="callsign-display">
                             <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">SVNP4</span>
+                            <span class="callsign-text">SV4NP</span>
                         </div>
-                        <button class="mic-btn-callsign" data-callsign="Sierra Victor November Papa Four" data-card-index="1">
+                        <button class="mic-btn-callsign" data-callsign="SV4NP" data-card-index="1">
                             <i class="fas fa-microphone"></i>
                             <span>Spell It</span>
                         </button>
@@ -330,7 +325,7 @@
                 <div class="task-question" data-question="3">
                     <div class="question-header">
                         <span class="question-number">3</span>
-                        <button class="audio-play-btn" data-audio="callsign3">
+                        <button class="audio-play-btn" data-audio="callsign_input3">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
@@ -338,9 +333,9 @@
                     <div class="callsign-container">
                         <div class="callsign-display">
                             <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">CWTR8</span>
+                            <span class="callsign-text">E7MSK</span>
                         </div>
-                        <button class="mic-btn-callsign" data-callsign="Charlie Whisky Tango Romeo Eight" data-card-index="2">
+                        <button class="mic-btn-callsign" data-callsign="E7MSK" data-card-index="2">
                             <i class="fas fa-microphone"></i>
                             <span>Spell It</span>
                         </button>
@@ -350,7 +345,7 @@
                 <div class="task-question" data-question="4">
                     <div class="question-header">
                         <span class="question-number">4</span>
-                        <button class="audio-play-btn" data-audio="callsign4">
+                        <button class="audio-play-btn" data-audio="callsign_input4">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
@@ -358,9 +353,9 @@
                     <div class="callsign-container">
                         <div class="callsign-display">
                             <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">EMSK7</span>
+                            <span class="callsign-text">BLHW3</span>
                         </div>
-                        <button class="mic-btn-callsign" data-callsign="Echo Mike Sierra Kilo Seven" data-card-index="3">
+                        <button class="mic-btn-callsign" data-callsign="BLHW3" data-card-index="3">
                             <i class="fas fa-microphone"></i>
                             <span>Spell It</span>
                         </button>
@@ -370,7 +365,7 @@
                 <div class="task-question" data-question="5">
                     <div class="question-header">
                         <span class="question-number">5</span>
-                        <button class="audio-play-btn" data-audio="callsign5">
+                        <button class="audio-play-btn" data-audio="callsign_input5">
                             <i class="fas fa-play"></i>
                             <span>Play Audio</span>
                         </button>
@@ -378,9 +373,9 @@
                     <div class="callsign-container">
                         <div class="callsign-display">
                             <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">DSON9</span>
+                            <span class="callsign-text">CWT8R</span>
                         </div>
-                        <button class="mic-btn-callsign" data-callsign="Delta Sierra Oscar November Nine" data-card-index="4">
+                        <button class="mic-btn-callsign" data-callsign="CWT8R" data-card-index="4">
                             <i class="fas fa-microphone"></i>
                             <span>Spell It</span>
                         </button>

@@ -494,27 +494,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // ENTRANCE ANIMATIONS (Tetap sama)
     // ==================================================
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
+    const isMobile = window.innerWidth <= 768;
 
-    const animatedElements = document.querySelectorAll('.activity-card, .continue-wrapper');
-    
-    animatedElements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
-        observer.observe(el);
-    });
+    if (isMobile) {
+        // Di mobile, langsung tampilkan semua tanpa animasi scroll
+        const animatedElements = document.querySelectorAll(
+            '.continue-wrapper'
+        );
+        
+        animatedElements.forEach((el) => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        });
+    } else {
+        // Di desktop, gunakan Intersection Observer seperti biasa
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        const animatedElements = document.querySelectorAll('.activity-card, .continue-wrapper');
+        
+        animatedElements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+            observer.observe(el);
+        });
+    }
 
     console.log('✅ All warmup features ready!');
     console.log('🎵 Audio systems initialized');

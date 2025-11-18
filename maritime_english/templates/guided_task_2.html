@@ -134,9 +134,10 @@
     </main>
 </div>
 
-<div class="continue-wrapper">
+<div class="continue-wrapper hidden" id="finish-section">
     <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=9) }}" class="continue-button">
-        <span>Continue Sailing</span>
+        <i class="fas fa-flag-checkered"></i>
+        <span>Finish Unit</span>
     </a>
 </div>
 {% endblock %}
