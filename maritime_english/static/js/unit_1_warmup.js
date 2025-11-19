@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let remainingCodes = [];    // Menyimpan kode yang belum ditebak
     let currentChallengeCode = null; // Kode yang sedang diputar/ditanyakan
     let isGridGameActive = false;    // Status apakah game sedang menunggu tebakan
+    let isGridCompleted = false; // BARU: Track apakah Part 1 sudah selesai
     // ==================================================
 
     // ==================================================
@@ -152,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (feedbackBox_mcq) {
             feedbackBox_mcq.style.display = 'none';
         }
-        mcqAudioPlayed = false; // TAMBAHKAN BARIS INI - Reset flag saat form direset
+        // mcqAudioPlayed = false; // TAMBAHKAN BARIS INI - Reset flag saat form direset
     }
 
     // BARU: Fungsi feedback yang lebih generik
@@ -169,6 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
         text.textContent = message;
         
         boxElement.style.display = 'flex';
+    }
+
+    // BARU: Fungsi untuk mengecek apakah kedua activity sudah selesai
+    function checkAllActivitiesComplete() {
+        if (isGridCompleted) {
+            if (continueWrapper) {
+                continueWrapper.style.display = 'block';
+                setTimeout(() => {
+                    continueWrapper.style.opacity = '1';
+                    continueWrapper.style.transform = 'translateY(0)';
+                }, 50);
+            }
+        }
     }
 
     // ==================================================
@@ -258,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingCodes = [...allGridCodes]; // Salin semua kode ke daftar yang tersisa
         currentChallengeCode = null;
         isGridGameActive = false;
+        isGridCompleted = false;
         
         if (playBtn_grid) {
             playBtn_grid.innerHTML = '<i class="fas fa-play"></i><span>Play Audio</span>';
@@ -355,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Update tombol play untuk ronde berikutnya
                 if (remainingCodes.length === 0) {
+                    isGridCompleted = true; // BARU: Tandai Part 1 selesai
                     playBtn_grid.innerHTML = '<i class="fas fa-redo"></i><span>All Done! Play Again?</span>';
                 } else {
                     playBtn_grid.innerHTML = '<i class="fas fa-play"></i><span>Play Next Code</span>';
@@ -406,22 +422,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mcqForm) {
         radioButtons.forEach(radio => {
             radio.addEventListener('change', function() {
-                // Validasi: user harus mendengar audio dulu
-                if (!mcqAudioPlayed) {
-                    // Prevent selection
+                // BARU: Validasi apakah Part 1 sudah selesai
+                if (!isGridCompleted) {
                     this.checked = false;
                     
-                    // Show warning
+                    showActivityFeedback(
+                        feedbackBox_mcq, 
+                        false, 
+                        '⚠️ Please complete Part 1 (Grid Game) first!'
+                    );
+                    
+                    shakeElement(playBtn_grid);
+                    
+                    setTimeout(() => {
+                        if (feedbackBox_mcq) feedbackBox_mcq.style.display = 'none';
+                    }, 3000);
+                    
+                    return;
+                }
+                
+                // Validasi: user harus mendengar audio dulu
+                if (!mcqAudioPlayed) {
+                    this.checked = false;
+                    
                     showActivityFeedback(
                         feedbackBox_mcq, 
                         false, 
                         '⚠️ Please listen to the audio first before answering!'
                     );
                     
-                    // Shake the play button
                     shakeElement(playBtn_mcq);
                     
-                    // Hide feedback after 3 seconds
                     setTimeout(() => {
                         if (feedbackBox_mcq) feedbackBox_mcq.style.display = 'none';
                     }, 3000);
@@ -434,44 +465,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 const selectedValue = this.value;
                 const selectedOption = this.closest('.mcq-option');
 
-                // Disable all options
-                radioButtons.forEach(btn => btn.disabled = true);
-                mcqForm.classList.add('answered');
-                selectedOption.classList.add('selected');
-
                 if (selectedValue === correctAnswerMCQ) {
-                    // Correct Answer
-                    selectedOption.classList.add('correct');
-                    // Menggunakan fungsi feedback yang baru
-                    showActivityFeedback(feedbackBox_mcq, true, '🎉 Excellent! That\'s the correct ship name!');
-                    if (continueWrapper) {
-                            continueWrapper.style.display = 'block'; // Tampilkan elemen
-                            // Terapkan animasi masuk/fade in
-                            setTimeout(() => {
-                                continueWrapper.style.opacity = '1';
-                                continueWrapper.style.transform = 'translateY(0)';
-                            }, 50);
-                        }
-                } else {
-                    // Incorrect Answer
-                    selectedOption.classList.add('incorrect');
-                    // Menggunakan fungsi feedback yang baru
-                    showActivityFeedback(feedbackBox_mcq, false, '❌ Not quite right. Listen again and try!');
+                    // ✅ CORRECT ANSWER
+                    // Disable semua option
+                    radioButtons.forEach(btn => btn.disabled = true);
+                    mcqForm.classList.add('answered');
+                    selectedOption.classList.add('selected', 'correct');
                     
-                    // Show correct answer
+                    showActivityFeedback(feedbackBox_mcq, true, '🎉 Excellent! That\'s the correct ship name!');
+                    
+                    // Panggil fungsi check completion
+                    checkAllActivitiesComplete();
+                    
+                } else {
+                    // ❌ INCORRECT ANSWER
+                    // TIDAK disable option, biarkan user coba lagi
+                    selectedOption.classList.add('selected', 'incorrect');
+                    
+                    showActivityFeedback(feedbackBox_mcq, false, '❌ Not quite right. Listen again and try another answer!');
+                    
+                    // Shake effect pada option yang salah
+                    shakeElement(selectedOption);
+                    
+                    // Reset pilihan setelah 1.5 detik agar user bisa pilih lagi
                     setTimeout(() => {
-                        mcqOptions.forEach(option => {
-                            const radio = option.querySelector('input[type="radio"]');
-                            if (radio.value === correctAnswerMCQ) {
-                                option.classList.add('correct');
-                            }
-                        });
-                    }, 500);
+                        this.checked = false; // Uncheck radio button
+                        selectedOption.classList.remove('selected', 'incorrect'); // Hapus highlight
+                        
+                        // Hide feedback setelah reset
+                        if (feedbackBox_mcq) {
+                            feedbackBox_mcq.style.display = 'none';
+                        }
+                    }, 1500);
                 }
             });
         });
     }
-
     // ==================================================
     // HELPER FUNCTIONS (Tetap sama)
     // ==================================================
