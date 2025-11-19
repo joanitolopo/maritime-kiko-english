@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const radioButtons = document.querySelectorAll('.mcq-form input[name="shipname"]');
     const feedbackBox_mcq = document.getElementById('mcq-feedback'); // Mengganti nama agar lebih spesifik
 
+    const continueWrapper = document.getElementById('continue-wrapper');
+
     // Audio Players
     const audio_warmup = new Audio();
     const audio_grid_main = new Audio(); // Ini tidak akan kita pakai lagi untuk game
@@ -58,6 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalText_warmup = "Cadet, tune your ears to the radio! Identify each code word you hear — let's see if your radio ears are sharp!";
     const translatedText_warmup = "Taruna, arahkan pendengaranmu ke radio! Kenali setiap kode kata yang kamu dengar — mari kita lihat seberapa tajam pendengaran radionya!";
     let isTranslated_warmup = false;
+
+    const instructionTextPart1 = document.querySelector('.activity-part:nth-child(1) .instruction-text p');
+    const originalTextPart1 = 'Listen carefully and click the correct letter or number you hear.';
+    const translatedTextPart1 = 'Dengarkan baik-baik dan klik huruf atau angka yang benar yang kamu dengar.';
+
+    const instructionTextPart2 = document.querySelector('.activity-part:nth-child(3) .instruction-text p');
+    const originalTextPart2 = 'Listen and choose the ship name spelled by the Captain.';
+    const translatedTextPart2 = 'Dengarkan dan pilih nama kapal yang dieja oleh Kapten.';
 
     // Audio Paths
     const audioPath_warmup = '/static/data/audio/unit1/warmup_intro.wav';
@@ -216,6 +226,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     speechText_warmup.textContent = translatedText_warmup;
                     isTranslated_warmup = true;
+                }
+
+                // BARU: Update teks instruksi aktivitas
+                if (instructionTextPart1 && instructionTextPart2) {
+                    instructionTextPart1.textContent = isTranslated_warmup ? translatedTextPart1 : originalTextPart1;
+                    instructionTextPart2.textContent = isTranslated_warmup ? translatedTextPart2 : originalTextPart2;
                 }
             });
             
@@ -428,6 +444,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectedOption.classList.add('correct');
                     // Menggunakan fungsi feedback yang baru
                     showActivityFeedback(feedbackBox_mcq, true, '🎉 Excellent! That\'s the correct ship name!');
+                    if (continueWrapper) {
+                            continueWrapper.style.display = 'block'; // Tampilkan elemen
+                            // Terapkan animasi masuk/fade in
+                            setTimeout(() => {
+                                continueWrapper.style.opacity = '1';
+                                continueWrapper.style.transform = 'translateY(0)';
+                            }, 50);
+                        }
                 } else {
                     // Incorrect Answer
                     selectedOption.classList.add('incorrect');

@@ -95,8 +95,8 @@
                     <div class="banner-icon">
                         <i class="fas fa-headphones"></i>
                     </div>
-                    <div class="banner-text instruction-text-mmsi">
-                        <p>Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.</p>
+                    <div class="banner-text">
+                        <p class="instruction-text-mmsi" >Listen to the example of radio communication. Pay attention to how the Call Sign and MMSI are spelled and spoken. Then, repeat each one clearly in your own voice.</p>
                     </div>
                 </div>
 
@@ -242,7 +242,7 @@
         </section>
 
         <!-- Continue Button -->
-        <div class="continue-wrapper">
+        <div class="continue-wrapper" style="display: none;">
             <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_vhf') }}" class="continue-button">
                 <span>Continue Sailing</span>
             </a>

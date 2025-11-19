@@ -58,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const speechText_sidebar = document.querySelector('.speech-text-vhf');
     const radioWavesAnim = document.querySelector('.radio-waves');
 
+    const instructionText = document.querySelector('.instruction-text-vhf');
+
     // Cards
     const allVesselCards = document.querySelectorAll('.vessel-exchange-card');
 
@@ -76,12 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let audio_current = new Audio();
     let isAudioPlaying = false;
 
+    // Progress Tracking
+    let playedMessages = new Set(); // Track pesan yang sudah di-play
+    const totalMessages = 4; // Total: 2 example × 2 role (caller + receiver)
+
     // ==================================================
     // TEXT CONTENT
     // ==================================================
     const originalText_sidebar = "Cadet, remember! Always start with your vessel's name, Call Sign, and MMSI before you speak on the radio. That's how real sailors make sure every message is clear and safe!";
     const translatedText_sidebar = "Taruna, ingat! Selalu sebutkan nama kapalmu, Call Sign, dan MMSI sebelum berbicara di radio. Itulah cara pelaut sejati memastikan setiap pesan terdengar jelas dan aman!";
     let isTranslated = false;
+
+    const originalText_instruction = "Listen to the radio exchange between two vessels. Notice how each vessel identifies itself and responds. Repeat each line clearly.";
+    const translatedText_instruction = "Dengarkan pertukaran radio antara dua kapal. Perhatikan bagaimana setiap kapal mengidentifikasi diri dan merespons. Ulangi setiap baris dengan jelas.";
 
     // Audio Path
     const audioPath_sidebar = '/static/data/audio/unit1/vhf_intro.wav';
@@ -122,10 +131,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
             stopCurrentAudio();
+            
+            // Toggle state DULU
+            isTranslated = !isTranslated;
+            
+            // Translate captain speech
             fadeTransition(speechText_sidebar, () => {
-                speechText_sidebar.textContent = isTranslated ? originalText_sidebar : translatedText_sidebar;
-                isTranslated = !isTranslated;
+                speechText_sidebar.textContent = isTranslated ? translatedText_sidebar : originalText_sidebar;
             });
+
+            // Translate instruction banner
+            if (instructionText) {
+                fadeTransition(instructionText, () => {
+                    instructionText.textContent = isTranslated ? translatedText_instruction : originalText_instruction;
+                });
+            }
+
             addClickEffect(this);
         });
     }
@@ -148,6 +169,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // ==================================================
+    // CHECK COMPLETION
+    // ==================================================
+    function checkCompletion() {
+        if (playedMessages.size === totalMessages) {
+            showContinueButton();
+        }
+    }
+
+    function showContinueButton() {
+        const continueWrapper = document.querySelector('.continue-wrapper');
+        if (continueWrapper) {
+            continueWrapper.style.display = 'block';
+            setTimeout(() => {
+                continueWrapper.style.opacity = '1';
+                continueWrapper.style.transform = 'translateY(0)';
+            }, 100);
+            
+            console.log('🎉 All radio exchanges completed! Continue button shown.');
+        }
+    }
 
     // ==================================================
     // MODAL FUNCTIONS
@@ -184,9 +227,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('❌ Audio playback error:', error);
             });
 
+        // BARU: Track completion saat audio selesai
         audio_current.addEventListener('ended', () => {
             isAudioPlaying = false;
-        });
+            
+            // Track pesan ini sebagai sudah di-play
+            const messageId = data.audio; // Gunakan audio path sebagai unique ID
+            playedMessages.add(messageId);
+            checkCompletion();
+        }, { once: true }); // { once: true } agar event listener tidak duplicate
     }
 
     function closeModal() {

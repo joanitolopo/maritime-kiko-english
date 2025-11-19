@@ -97,7 +97,7 @@
                         <i class="fas fa-headphones"></i>
                     </div>
                     <div class="banner-text">
-                        <p>Listen to the radio exchange between two vessels. Notice how each vessel identifies itself and responds. Repeat each line clearly.</p>
+                        <p class="instruction-text-vhf">Listen to the radio exchange between two vessels. Notice how each vessel identifies itself and responds. Repeat each line clearly.</p>
                     </div>
                 </div>
 
@@ -210,7 +210,7 @@
         </section>
 
         <!-- Continue Button -->
-        <div class="continue-wrapper">
+        <div class="continue-wrapper" style="display: none;">
             <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=3) }}" class="continue-button">
                 <span>Continue Sailing</span>
             </a>

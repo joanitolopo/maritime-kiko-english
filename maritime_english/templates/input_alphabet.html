@@ -122,7 +122,7 @@
                     </div>
                     <div class="banner-text">
                         <!-- <h4>Interactive Learning</h4> -->
-                        <p>Click any letter or number to hear its NATO code word. Then repeat it aloud with clear, steady pronunciation.</p>
+                        <p class="instruction-text">Click any letter or number to hear its NATO code word. Then repeat it aloud with clear, steady pronunciation.</p>
                     </div>
                 </div>
 
@@ -336,7 +336,7 @@
         </section>
 
         <!-- Continue Button -->
-        <div class="continue-wrapper">
+        <div class="continue-wrapper" style="display: none;">
             <a href="{{ url_for('learning.learning_unit', unit_id=unit_id, section='input_mmsi') }}" class="continue-button">
                 <span>Continue Sailing</span>
             </a>

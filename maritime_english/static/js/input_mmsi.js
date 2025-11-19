@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioBtn_sidebar = document.querySelector('.mmsi-controls .audio-btn i');
     const translateBtn_sidebar = document.querySelector('.mmsi-controls .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-mmsi');
-    const instructionTexts = document.querySelectorAll('.instruction-text-mmsi p'); // Sekarang ada lebih dari satu
+    const instructionText = document.querySelector('.instruction-text-mmsi'); // Sekarang ada lebih dari satu
     const radioWavesAnim = document.querySelector('.radio-waves');
 
     // Radio Players (BARU: Menggunakan querySelectorAll)
@@ -29,7 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeExampleAudio = null; // (BARU: Melacak audio yang sedang aktif)
 
     const allAudios = [audio_sidebar]; // (MODIFIKASI: Hanya berisi audio sidebar)
-    
+
+    // State Variables
+    let playedExamples = new Set(); // BARU: Track example mana saja yang sudah di-play
+    const totalExamples = 2; // BARU: Total jumlah example yang harus di-play
+        
     // ==================================================
     // CONTENT & AUDIO PATHS
     // ==================================================
@@ -117,6 +121,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
+    // CHECK COMPLETION
+    // ==================================================
+
+    function checkCompletion() {
+        if (playedExamples.size === totalExamples) {
+            showContinueButton();
+        }
+    }
+
+    function showContinueButton() {
+        const continueWrapper = document.querySelector('.continue-wrapper');
+        if (continueWrapper) {
+            continueWrapper.style.display = 'block';
+            setTimeout(() => {
+                continueWrapper.style.opacity = '1';
+                continueWrapper.style.transform = 'translateY(0)';
+            }, 100);
+            
+            console.log('🎉 All examples completed! Continue button shown.');
+        }
+    }
+
+    // ==================================================
+
+
+    // ==================================================
     // SIDEBAR CONTROLS
     // ==================================================
 
@@ -163,29 +193,21 @@ document.addEventListener('DOMContentLoaded', () => {
         translateBtn_sidebar.addEventListener('click', function() {
             stopAllAudio();
             
-            // Fade transition untuk sidebar
+            // Toggle state DULU
+            isTranslated = !isTranslated;
+            
+            // Translate captain speech
             fadeTransition(speechText_sidebar, () => {
-                if (isTranslated) {
-                    speechText_sidebar.textContent = originalText_sidebar;
-                } else {
-                    speechText_sidebar.textContent = translatedText_sidebar;
-                }
+                speechText_sidebar.textContent = isTranslated ? translatedText_sidebar : originalText_sidebar;
             });
 
-            // (MODIFIKASI: Update semua teks instruksi)
-            instructionTexts.forEach(instructionText => {
-                if(instructionText) {
-                    fadeTransition(instructionText, () => {
-                        if (isTranslated) {
-                            instructionText.textContent = originalText_instruction;
-                        } else {
-                            instructionText.textContent = translatedText_instruction;
-                        }
-                    });
-                }
-            });
+            // Translate instruction banner
+            if (instructionText) {
+                fadeTransition(instructionText, () => {
+                    instructionText.textContent = isTranslated ? translatedText_instruction : originalText_instruction;
+                });
+            }
 
-            isTranslated = !isTranslated; // Toggle status
             addClickEffect(this);
         });
     }
@@ -194,13 +216,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // RADIO COMMUNICATION PLAYER (REFAKTORED)
     // ==================================================
 
-    playButtons.forEach(button => {
+    playButtons.forEach((button, index) => { // ✅ Tambahkan parameter index
         const audio = new Audio();
-        audio_examples.push(audio); // Tambahkan ke daftar untuk dikelola
+        audio_examples.push(audio);
         const audioSrc = button.dataset.audioSrc;
+        const exampleId = `example-${index}`; // ✅ Sekarang index terdefinisi
         
-        // (BARU: Cari elemen relatif terhadap tombol)
-        const card = button.closest('.radio-card'); 
+        // Cari elemen relatif terhadap tombol
+        const card = button.closest('.communication-card'); // ✅ Ubah ke .communication-card bukan .radio-card
         const buttonIcon = button.querySelector('i');
         const buttonText = button.querySelector('span');
 
@@ -271,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             }
         });
+        
 
         audio.addEventListener('ended', () => {
             button.classList.remove('playing');
@@ -285,6 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             activeExampleAudio = null;
             updateStatus('completed', card);
+
+            // BARU: Track bahwa example ini sudah selesai di-play
+            playedExamples.add(exampleId);
+            checkCompletion();
         });
     });
 

@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const translateBtn_sidebar = document.querySelector('.phonetic-controls .translate-btn');
     const speechText_sidebar = document.querySelector('.speech-text-phonetic');
 
-    const radioWavesAnim = document.querySelector('.radio-waves');
-
     // Keyboard Elements
     const keyButtons = document.querySelectorAll('.key-btn');
     const currentDisplay = document.getElementById('current-display');
@@ -43,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const testScoreEl = document.getElementById('test-score');
     const testTotalEl = document.getElementById('test-total');
 
+    const instructionText = document.querySelector('.instruction-text');
+
     // Audio Players
     const audio_sidebar = new Audio();
     const audio_key = new Audio();
@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const translatedText_sidebar = "Taruna, saatnya menguasai kata sandi kita di laut! Dalam aktivitas ini, Anda akan melatih pendengaran dan suara Anda untuk menangani alfabet maritim dan angka. Ikuti setiap kata sandi dan ulangi setiap angka yang Anda dengar — jaga suara radio Anda tetap stabil dan terdengar seperti pelaut sejati!";
     let isTranslated_sidebar = false;
 
+    // Instruction banner translations
+    const originalInstruction = "Click any letter or number to hear its NATO code word. Then repeat it aloud with clear, steady pronunciation.";
+    const translatedInstruction = "Klik huruf atau angka apa pun untuk mendengar kata kode NATO-nya. Kemudian ulangi dengan jelas dan pengucapan yang mantap.";
+
     const audioPath_sidebar = '/static/data/audio/unit1/phonetic_intro.wav';
     const natoAudioBasePath = '/static/data/audio/nato/';
 
@@ -85,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioBtn_sidebar) {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
-            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
 
         if (currentPlayingKey) {
@@ -137,7 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (progressBar) {
             progressBar.style.background = 'linear-gradient(90deg, #10b981 0%, #34d399 100%)';
         }
-        // Add confetti or celebration effect here
+
+        // Show continue button
+        const continueWrapper = document.querySelector('.continue-wrapper');
+        if (continueWrapper) {
+            continueWrapper.style.display = 'block';
+            setTimeout(() => {
+                continueWrapper.style.opacity = '1';
+                continueWrapper.style.transform = 'translateY(0)';
+            }, 100);
+        }
     }
 
     function updateDisplay(key, phonetic) {
@@ -160,52 +172,51 @@ document.addEventListener('DOMContentLoaded', () => {
         audioBtn_sidebar.parentElement.addEventListener('click', function() {
             if (audio_sidebar.paused) {
                 stopAllAudio();
+                stopAutoPlay();
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
                         audioBtn_sidebar.classList.remove('fa-play');
                         audioBtn_sidebar.classList.add('fa-pause');
-                        addPulseEffect(this);
-
-                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
-                        shakeElement(this);
                     });
             } else {
                 audio_sidebar.pause();
                 audioBtn_sidebar.classList.remove('fa-pause');
                 audioBtn_sidebar.classList.add('fa-play');
-                removePulseEffect(this);
-
-                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
         audio_sidebar.addEventListener('ended', () => {
             audioBtn_sidebar.classList.remove('fa-pause');
             audioBtn_sidebar.classList.add('fa-play');
-            removePulseEffect(audioBtn_sidebar.parentElement);
-            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
             stopAllAudio();
+            
+            // Toggle state DULU sebelum mengubah teks
+            isTranslated_sidebar = !isTranslated_sidebar;
 
+            // Translate captain speech
             if (speechText_sidebar) {
                 speechText_sidebar.style.opacity = '0.3';
                 setTimeout(() => {
-                    if (isTranslated_sidebar) {
-                        speechText_sidebar.textContent = originalText_sidebar;
-                        isTranslated_sidebar = false;
-                    } else {
-                        speechText_sidebar.textContent = translatedText_sidebar;
-                        isTranslated_sidebar = true;
-                    }
+                    speechText_sidebar.textContent = isTranslated_sidebar ? translatedText_sidebar : originalText_sidebar;
                     speechText_sidebar.style.opacity = '1';
+                }, 300);
+            }
+
+            // Translate instruction banner
+            if (instructionText) {
+                instructionText.style.opacity = '0.3';
+                setTimeout(() => {
+                    instructionText.textContent = isTranslated_sidebar ? translatedInstruction : originalInstruction;
+                    instructionText.style.opacity = '1';
                 }, 300);
             }
         });
@@ -371,6 +382,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (playAllBtn) {
             playAllBtn.innerHTML = '<i class="fas fa-play-circle"></i><span>Play All</span>';
+        }
+
+        // Check if all keys are played after auto-play
+        if (playedKeys.size === 36) {
+            celebrateCompletion();
         }
     }
 
@@ -571,24 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
         continueBtn.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
-    }
-
-    function addPulseEffect(element) {
-        if (!element) return;
-        element.classList.add('playing');
-    }
-
-    function removePulseEffect(element) {
-        if (!element) return;
-        element.classList.remove('playing');
-    }
-
-    function shakeElement(element) {
-        if (!element) return;
-        element.style.animation = 'shake 0.5s';
-        setTimeout(() => {
-            element.style.animation = '';
-        }, 500);
     }
 
     // ==================================================
