@@ -7,17 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Logbook Reflection Initialized!');
 
     // ==================================================
-    // ELEMENTS & STATE (DIUPDATE)
+    // ELEMENTS & STATE
     // ==================================================
-    const playBtn_sidebar = document.querySelector('#captain-audio-btn'); // DIUBAH: Target #id
-    const playIcon_sidebar = playBtn_sidebar ? playBtn_sidebar.querySelector('i') : null; // DITAMBAHKAN: Target <i> di dalam tombol
-    const translateBtn_sidebar = document.querySelector('#translate-btn'); // DIUBAH: Target #id
-    const speechText_sidebar = document.querySelector('.speech-text-drill'); // DIUBAH: .speech-text-drill
+    const playBtn_sidebar = document.querySelector('#captain-audio-btn');
+    const playIcon_sidebar = playBtn_sidebar ? playBtn_sidebar.querySelector('i') : null;
+    const translateBtn_sidebar = document.querySelector('#translate-btn');
+    const speechText_sidebar = document.querySelector('.speech-text-drill');
     const instructionText_activity = document.querySelector('.instruction-text-task');
 
     const likertInputs = document.querySelectorAll('.likert-scale input[type="radio"]');
     const textInputs = document.querySelectorAll('.item-input');
     const saveButton = document.querySelector('.save-logbook-button');
+
+    // ✅ Ambil elemen radio waves
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
     const audio_sidebar = new Audio();
     let isTranslated = false;
@@ -27,46 +30,219 @@ document.addEventListener('DOMContentLoaded', () => {
     const translatedText_sidebar = window.SIDEBAR_CONTENT?.translated || '"Error: Teks tidak dimuat"';
     const audioPath_sidebar = window.SIDEBAR_CONTENT?.audioPath || '';
 
+    // ✅ DATA TRANSLATE: Activity Instruction
+    const instructionContent = {
+        original: `Your reflection will appear in your Report Page. <strong>1)</strong> Rate yourself honestly. <strong>2)</strong> Write down your reflection notes. <strong>3)</strong> Click 'Save to Logbook' when you finish.`,
+        translated: `Refleksi Anda akan muncul di Halaman Laporan. <strong>1)</strong> Nilai diri Anda dengan jujur. <strong>2)</strong> Tuliskan catatan refleksi Anda. <strong>3)</strong> Klik 'Simpan ke Buku Catatan' saat selesai.`
+    };
+
+    // ✅ DATA TRANSLATE: Part A Title
+    const partATitleContent = {
+        original: 'Part A: Self-Assessment',
+        translated: 'Bagian A: Penilaian Diri'
+    };
+
+    // ✅ DATA TRANSLATE: Part A Questions
+    const assessmentQuestions = {
+        q1: {
+            original: 'I can spell names and numbers clearly using the Maritime Alphabet.',
+            translated: 'Saya dapat mengeja nama dan angka dengan jelas menggunakan Alfabet Maritim.'
+        },
+        q2: {
+            original: 'I can understand vessel identification messages on the radio.',
+            translated: 'Saya dapat memahami pesan identifikasi kapal di radio.'
+        },
+        q3: {
+            original: 'I feel more confident speaking on the radio after this unit.',
+            translated: 'Saya merasa lebih percaya diri berbicara di radio setelah unit ini.'
+        }
+    };
+
+    // ✅ DATA TRANSLATE: Part B Title
+    const partBTitleContent = {
+        original: 'Part B: Reflection Notes',
+        translated: 'Bagian B: Catatan Refleksi'
+    };
+
+    // ✅ DATA TRANSLATE: Part B Questions
+    const reflectionQuestions = {
+        r1: {
+            original: '1. What did you find easiest during this unit?',
+            translated: '1. Bagian apa yang paling mudah bagimu selama unit ini?',
+            placeholder_original: 'Type your answer here...',
+            placeholder_translated: 'Ketik jawaban Anda di sini...'
+        },
+        r2: {
+            original: '2. What part did you struggle with, and why?',
+            translated: '2. Bagian mana yang paling kamu rasa sulit, dan mengapa?',
+            placeholder_original: 'Type your answer here...',
+            placeholder_translated: 'Ketik jawaban Anda di sini...'
+        },
+        r3: {
+            original: '3. What will you do differently next time to improve?',
+            translated: '3. Apa yang akan kamu lakukan secara berbeda lain kali untuk meningkatkan kemampuan komunikasimu?',
+            placeholder_original: 'Type your answer here...',
+            placeholder_translated: 'Ketik jawaban Anda di sini...'
+        }
+    };
+
+    // ✅ DATA TRANSLATE: Save Button
+    const saveButtonContent = {
+        original: '<i class="fas fa-paper-plane"></i><span>Save to Logbook</span>',
+        translated: '<i class="fas fa-paper-plane"></i><span>Simpan ke Buku Catatan</span>'
+    };
+
     // ==================================================
-    // SIDEBAR CONTROLS (DIUPDATE)
+    // ✅ SIDEBAR AUDIO CONTROL (UPDATED)
     // ==================================================
-    if (playBtn_sidebar && playIcon_sidebar) { // DIUBAH: Cek kedua elemen
+    if (playBtn_sidebar && playIcon_sidebar) {
         playBtn_sidebar.addEventListener('click', function() {
+            // Cek path audio dulu
+            if (!audioPath_sidebar) {
+                console.error('Audio path tidak tersedia!');
+                showNotification('Audio file path not configured.', 'error');
+                return;
+            }
+
             if (audio_sidebar.paused) {
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
-                        playIcon_sidebar.classList.remove('fa-play'); // DIUBAH: Target ikon
+                        playIcon_sidebar.classList.remove('fa-play');
                         playIcon_sidebar.classList.add('fa-pause');
-                        playBtn_sidebar.classList.add('playing'); // DIUBAH: Target tombol
+                        playBtn_sidebar.classList.add('playing');
+                        
+                        // ✅ TAMPILKAN radio waves saat audio DIPUTAR
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('Audio error:', error);
-                        showNotification('Audio file not found or failed to play.', 'error');
+                        console.log('Attempted audio path:', audioPath_sidebar);
+                        showNotification('Audio file not found: ' + audioPath_sidebar, 'error');
                     });
             } else {
                 audio_sidebar.pause();
-                playIcon_sidebar.classList.remove('fa-pause'); // DIUBAH: Target ikon
+                playIcon_sidebar.classList.remove('fa-pause');
                 playIcon_sidebar.classList.add('fa-play');
-                playBtn_sidebar.classList.remove('playing'); // DIUBAH: Target tombol
+                playBtn_sidebar.classList.remove('playing');
+                
+                // ✅ SEMBUNYIKAN radio waves saat audio DIPAUSE
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
 
+        // ✅ SEMBUNYIKAN radio waves saat audio SELESAI
         audio_sidebar.addEventListener('ended', () => {
-            playIcon_sidebar.classList.remove('fa-pause'); // DIUBAH: Target ikon
+            playIcon_sidebar.classList.remove('fa-pause');
             playIcon_sidebar.classList.add('fa-play');
-            playBtn_sidebar.classList.remove('playing'); // DIUBAH: Target tombol
+            playBtn_sidebar.classList.remove('playing');
+            
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
+    // ==================================================
+    // ✅ TRANSLATE BUTTON - TRANSLATE SEMUA KONTEN
+    // ==================================================
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
+            isTranslated = !isTranslated;
+            
             if (isTranslated) {
-                speechText_sidebar.textContent = originalText_sidebar;
-                isTranslated = false;
-            } else {
+                // ===== BAHASA INDONESIA =====
+                
+                // 1. Sidebar Speech
                 speechText_sidebar.textContent = translatedText_sidebar;
-                isTranslated = true;
+                
+                // 2. Activity Instruction
+                instructionText_activity.innerHTML = instructionContent.translated;
+                
+                // 3. Part A Title
+                const partATitle = document.querySelector('.part-title');
+                if (partATitle) partATitle.textContent = partATitleContent.translated;
+                
+                // 4. Part A Questions (Assessment Items)
+                document.querySelectorAll('.assessment-item').forEach(item => {
+                    const questionKey = item.getAttribute('data-question');
+                    const itemText = item.querySelector('.item-text');
+                    const itemNumber = itemText.querySelector('.item-number');
+                    const numberText = itemNumber ? itemNumber.textContent : '';
+                    
+                    if (assessmentQuestions[questionKey]) {
+                        itemText.innerHTML = `<span class="item-number">${numberText}</span> ${assessmentQuestions[questionKey].translated}`;
+                    }
+                });
+                
+                // 5. Part B Title
+                const partBTitle = document.querySelectorAll('.part-title')[1];
+                if (partBTitle) partBTitle.textContent = partBTitleContent.translated;
+                
+                // 6. Part B Questions (Reflection Items)
+                document.querySelectorAll('.reflection-item').forEach(item => {
+                    const questionKey = item.getAttribute('data-question');
+                    const label = item.querySelector('.item-label');
+                    const textarea = item.querySelector('.item-input');
+                    
+                    if (reflectionQuestions[questionKey]) {
+                        label.textContent = reflectionQuestions[questionKey].translated;
+                        textarea.placeholder = reflectionQuestions[questionKey].placeholder_translated;
+                    }
+                });
+                
+                // 7. Save Button
+                saveButton.innerHTML = saveButtonContent.translated;
+                
+                // 8. Translate Button Text
+                const btnSpan = translateBtn_sidebar.querySelector('span');
+                if (btnSpan) btnSpan.textContent = 'English';
+                
+            } else {
+                // ===== BAHASA INGGRIS (ORIGINAL) =====
+                
+                // 1. Sidebar Speech
+                speechText_sidebar.textContent = originalText_sidebar;
+                
+                // 2. Activity Instruction
+                instructionText_activity.innerHTML = instructionContent.original;
+                
+                // 3. Part A Title
+                const partATitle = document.querySelector('.part-title');
+                if (partATitle) partATitle.textContent = partATitleContent.original;
+                
+                // 4. Part A Questions (Assessment Items)
+                document.querySelectorAll('.assessment-item').forEach(item => {
+                    const questionKey = item.getAttribute('data-question');
+                    const itemText = item.querySelector('.item-text');
+                    const itemNumber = itemText.querySelector('.item-number');
+                    const numberText = itemNumber ? itemNumber.textContent : '';
+                    
+                    if (assessmentQuestions[questionKey]) {
+                        itemText.innerHTML = `<span class="item-number">${numberText}</span> ${assessmentQuestions[questionKey].original}`;
+                    }
+                });
+                
+                // 5. Part B Title
+                const partBTitle = document.querySelectorAll('.part-title')[1];
+                if (partBTitle) partBTitle.textContent = partBTitleContent.original;
+                
+                // 6. Part B Questions (Reflection Items)
+                document.querySelectorAll('.reflection-item').forEach(item => {
+                    const questionKey = item.getAttribute('data-question');
+                    const label = item.querySelector('.item-label');
+                    const textarea = item.querySelector('.item-input');
+                    
+                    if (reflectionQuestions[questionKey]) {
+                        label.textContent = reflectionQuestions[questionKey].original;
+                        textarea.placeholder = reflectionQuestions[questionKey].placeholder_original;
+                    }
+                });
+                
+                // 7. Save Button
+                saveButton.innerHTML = saveButtonContent.original;
+                
+                // 8. Translate Button Text
+                const btnSpan = translateBtn_sidebar.querySelector('span');
+                if (btnSpan) btnSpan.textContent = 'Translate';
             }
         });
     }
@@ -149,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         finishSection.classList.add('visible');
                     }
 
-                    // Scroll ke tombol finish (opsional, untuk UX yang lebih baik)
+                    // Scroll ke tombol finish
                     setTimeout(() => {
                         finishSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }, 500);
@@ -157,8 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Kembalikan tombol save ke semula setelah 3 detik
                     setTimeout(() => {
                         saveButton.innerHTML = originalHTML;
-                        // JANGAN re-enable tombol setelah sukses save
-                        // saveButton.disabled = false; // ❌ Hapus baris ini
                         saveButton.style.background = '';
                     }, 3000);
                 } else {
@@ -222,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==================================================
-    // HELPER FUNCTIONS (Salin dari Task 1)
+    // HELPER FUNCTIONS
     // ==================================================
     
     function shakeElement(element) {
@@ -304,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ Logbook Reflection Ready!');
 });
 
-// Tambahkan animasi notifikasi (Salin dari Task 1)
+// Tambahkan animasi notifikasi
 const styles = document.createElement('style');
 styles.textContent = `
     @keyframes slideInRight {

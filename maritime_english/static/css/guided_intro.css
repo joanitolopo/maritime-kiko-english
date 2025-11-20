@@ -54,9 +54,9 @@ body {
     animation: slideDown 0.5s ease-out;
 }
 
-.header-right-group {
+/* .header-right-group {
     gap: 0.75rem;
-}
+} */
 
 .btn-learn-nav {
     font-family: 'Poppins', sans-serif;
@@ -248,6 +248,7 @@ body {
     padding: 60px 25px 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     position: relative;
+    z-index: 3;
 }
 
 .guided-bubble::before {
@@ -259,6 +260,7 @@ body {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
+    z-index: 3;
 }
 
 /* DIUBAH: .speech-text-guided diganti dengan style .speech-text-drill */

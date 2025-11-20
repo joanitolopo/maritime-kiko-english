@@ -49,9 +49,9 @@ body {
     animation: slideDown 0.5s ease-out;
 }
 
-.header-right-group {
+/* .header-right-group {
     gap: 0.75rem;
-}
+} */
 
 .btn-learn-nav {
     font-family: 'Poppins', sans-serif;
@@ -213,6 +213,7 @@ body {
     padding: 60px 25px 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     position: relative;
+    z-index: 3;
 }
 
 .instruction-bubble::before {
@@ -224,6 +225,7 @@ body {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
+    z-index: 3;
 }
 
 .speech-text-drill {
@@ -471,7 +473,7 @@ body {
     gap: 15px;
     padding: 15px 20px;
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);;
-    border-left: 4px solid var(--warning);
+    border-left: 4px solid var(--ocean-blue);
     border-radius: 12px;
     margin-bottom: 10px;
 }
@@ -479,7 +481,7 @@ body {
 .panel-instruction i {
     width: 30px;
     height: 30px;
-    background: var(--warning);
+    background: #5ea4d3;
     color: var(--white);
     border-radius: 50%;
     display: flex;
@@ -493,7 +495,7 @@ body {
     flex: 1;
     font-size: 0.95rem;
     line-height: 1.7;
-    color: #78350f;
+    /* color: #78350f; */
     margin: 0;
     font-weight: 600;
 }
@@ -987,8 +989,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
+    background: transparent;
+    backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1163,6 +1165,14 @@ body {
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         padding: 10px 15px;
         border-radius: 0;
+    }
+
+    .current-unit-title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0 30px !important;
+        background: transparent;
+        padding: 0;
     }
 
     .header-right-group {

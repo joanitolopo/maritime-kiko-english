@@ -15,7 +15,7 @@
     --white: #ffffff;
     --text-dark: #1f2937;
     --text-light: #6b7280;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow: 0 4px 20px rgba(7, 2, 2, 0.08);
 }
 
 * {
@@ -177,6 +177,7 @@ body {
     padding: 50px 25px 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     position: relative;
+    z-index: 3;
 }
 
 .welcome-bubble::before {
@@ -191,6 +192,7 @@ body {
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
     filter: drop-shadow(0 -3px 3px rgba(0, 0, 0, 0.05));
+    z-index: 3;
 }
 
 .speech-text {

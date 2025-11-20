@@ -3,6 +3,7 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_2.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -29,18 +30,17 @@
     <aside class="drill-sidebar"> 
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fa-solid fa-book-journal-whills"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>I. Log Your Journey</h4>
-                <p>Activity 10: Log Your Voyage</p>
             </div>
         </div>
 
         <div class="captain-instruction-card">
             
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain Character" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -48,10 +48,12 @@
                 </div>
             </div>
             
-            <div class="instruction-bubble"> <p class="speech-text-drill"> "Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."
+            <div class="instruction-bubble"> 
+                <p class="speech-text-drill">Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time.
                 </p>
                 
-                <div class="drill-controls"> <button class="control-btn audio-btn" id="captain-audio-btn">
+                <div class="drill-controls"> 
+                    <button class="control-btn audio-btn" id="captain-audio-btn">
                         <i class="fa-solid fa-play"></i>
                     </button>
                     <button class="control-btn translate-btn" id="translate-btn">
@@ -64,73 +66,88 @@
         
     </aside>
 
-    <main class="activity-area">
-        
-        <div class="activity-area-title">
-            <i class="fa-solid fa-list-check"></i>
-            <p class="instruction-text-task">
-                Your reflection will appear in your Report Page.
-                <strong>1)</strong> Rate yourself honestly.
-                <strong>2)</strong> Write down your reflection notes.
-                <strong>3)</strong> Click 'Save to Logbook' when you finish.
-            </p>
-        </div>
-
-        <div class="logbook-form-container">
+    <main class="vhf-main">
+        <section class="activity-card vhf-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <i class="fa-solid fa-book-journal-whills activity-number"></i>
+                    <div class="header-text">
+                        <h3>Activity 10: Log Your Voyage</h3>
+                        <p>Take a moment to reflect on your voyage.</p>
+                    </div>
+                </div>
+            </div>
             
-            <h3 class="part-title">Part A: Self-Assessment</h3>
-            <div class="assessment-list">
-                <div class="assessment-item" data-question="q1">
-                    <p class="item-text"><span class="item-number">1</span> I can spell names and numbers clearly using the Maritime Alphabet.</p>
-                    <div class="likert-scale" role="radiogroup" aria-labelledby="q1-label">
-                        <label><input type="radio" name="q1" value="1"><span>1</span></label>
-                        <label><input type="radio" name="q1" value="2"><span>2</span></label>
-                        <label><input type="radio" name="q1" value="3"><span>3</span></label>
-                        <label><input type="radio" name="q1" value="4"><span>4</span></label>
+            <div class="activity-body">
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div class="banner-text">
+                        <p class="instruction-text-task">
+                            Your reflection will appear in your Report Page.
+                            <strong>1)</strong> Rate yourself honestly.
+                            <strong>2)</strong> Write down your reflection notes.
+                            <strong>3)</strong> Click 'Save to Logbook' when you finish.
                     </div>
                 </div>
-                <div class="assessment-item" data-question="q2">
-                    <p class="item-text"><span class="item-number">2</span> I can understand vessel identification messages on the radio.</p>
-                    <div class="likert-scale" role="radiogroup" aria-labelledby="q2-label">
-                        <label><input type="radio" name="q2" value="1"><span>1</span></label>
-                        <label><input type="radio" name="q2" value="2"><span>2</span></label>
-                        <label><input type="radio" name="q2" value="3"><span>3</span></label>
-                        <label><input type="radio" name="q2" value="4"><span>4</span></label>
+
+                <div class="logbook-form-container">
+                    
+                    <h3 class="part-title">Part A: Self-Assessment</h3>
+                    <div class="assessment-list">
+                        <div class="assessment-item" data-question="q1">
+                            <p class="item-text"><span class="item-number">1</span> I can spell names and numbers clearly using the Maritime Alphabet.</p>
+                            <div class="likert-scale" role="radiogroup" aria-labelledby="q1-label">
+                                <label><input type="radio" name="q1" value="1"><span>1</span></label>
+                                <label><input type="radio" name="q1" value="2"><span>2</span></label>
+                                <label><input type="radio" name="q1" value="3"><span>3</span></label>
+                                <label><input type="radio" name="q1" value="4"><span>4</span></label>
+                            </div>
+                        </div>
+                        <div class="assessment-item" data-question="q2">
+                            <p class="item-text"><span class="item-number">2</span> I can understand vessel identification messages on the radio.</p>
+                            <div class="likert-scale" role="radiogroup" aria-labelledby="q2-label">
+                                <label><input type="radio" name="q2" value="1"><span>1</span></label>
+                                <label><input type="radio" name="q2" value="2"><span>2</span></label>
+                                <label><input type="radio" name="q2" value="3"><span>3</span></label>
+                                <label><input type="radio" name="q2" value="4"><span>4</span></label>
+                            </div>
+                        </div>
+                        <div class="assessment-item" data-question="q3">
+                            <p class="item-text"><span class="item-number">3</span> I feel more confident speaking on the radio after this unit.</p>
+                            <div class="likert-scale" role="radiogroup" aria-labelledby="q3-label">
+                                <label><input type="radio" name="q3" value="1"><span>1</span></label>
+                                <label><input type="radio" name="q3" value="2"><span>2</span></label>
+                                <label><input type="radio" name="q3" value="3"><span>3</span></label>
+                                <label><input type="radio" name="q3" value="4"><span>4</span></label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="assessment-item" data-question="q3">
-                    <p class="item-text"><span class="item-number">3</span> I feel more confident speaking on the radio after this unit.</p>
-                    <div class="likert-scale" role="radiogroup" aria-labelledby="q3-label">
-                        <label><input type="radio" name="q3" value="1"><span>1</span></label>
-                        <label><input type="radio" name="q3" value="2"><span>2</span></label>
-                        <label><input type="radio" name="q3" value="3"><span>3</span></label>
-                        <label><input type="radio" name="q3" value="4"><span>4</span></label>
+
+                    <h3 class="part-title">Part B: Reflection Notes</h3>
+                    <div class="reflection-list">
+                        <div class="reflection-item" data-question="r1">
+                            <label for="r1" class="item-label">1. What did you find easiest during this unit?</label>
+                            <textarea id="r1" name="r1" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                        </div>
+                        <div class="reflection-item" data-question="r2">
+                            <label for="r2" class="item-label">2. What part did you struggle with, and why?</label>
+                            <textarea id="r2" name="r2" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                        </div>
+                        <div class="reflection-item" data-question="r3">
+                            <label for="r3" class="item-label">3. What will you do differently next time to improve?</label>
+                            <textarea id="r3" name="r3" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
+                        </div>
                     </div>
-                </div>
+
+                    <button class="save-logbook-button">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Save to Logbook</span>
+                    </button>
+                </div> 
             </div>
-
-            <h3 class="part-title">Part B: Reflection Notes</h3>
-            <div class="reflection-list">
-                <div class="reflection-item" data-question="r1">
-                    <label for="r1" class="item-label">1. What did you find easiest during this unit?</label>
-                    <textarea id="r1" name="r1" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
-                </div>
-                <div class="reflection-item" data-question="r2">
-                    <label for="r2" class="item-label">2. What part did you struggle with, and why?</label>
-                    <textarea id="r2" name="r2" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
-                </div>
-                <div class="reflection-item" data-question="r3">
-                    <label for="r3" class="item-label">3. What will you do differently next time to improve?</label>
-                    <textarea id="r3" name="r3" class="item-input" rows="2" placeholder="Type your answer here..."></textarea>
-                </div>
-            </div>
-
-            <button class="save-logbook-button">
-                <i class="fas fa-paper-plane"></i>
-                <span>Save to Logbook</span>
-            </button>
-        </div> 
-
+        </section>
     </main>
 </div>
 
@@ -146,8 +163,8 @@
 <script>
     // Menyediakan data untuk JS, seperti path audio (jika ada)
     window.SIDEBAR_CONTENT = {
-        original: `"Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time."`,
-        translated: `"Kadet, setiap pelayaran mengajarkan kita sesuatu. Sebelum Anda berlayar ke unit berikutnya, luangkan waktu sejenak untuk menulis di buku catatan Anda. Renungkan apa yang menantang Anda dan apa yang akan Anda tingkatkan lain kali."`,
+        original: "Cadet, every voyage teaches us something. Before you set sail for the next unit, take a moment to write in your logbook. Reflect on what challenged you and what you'll improve next time.",
+        translated: "Kadet, setiap pelayaran mengajarkan kita sesuatu. Sebelum Anda berlayar ke unit berikutnya, luangkan waktu sejenak untuk menulis di buku catatan Anda. Renungkan apa yang menantang Anda dan apa yang akan Anda tingkatkan lain kali.",
         audioPath: "{{ url_for('static', filename='data/audio/unit1/logbook_intro.wav') }}" 
     };
     window.UNIT_ID = {{ unit_id | default(0) }};

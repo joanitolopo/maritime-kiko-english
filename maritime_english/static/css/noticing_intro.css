@@ -213,6 +213,7 @@ body {
     padding: 60px 25px 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     position: relative;
+    z-index: 3;
 }
 .instruction-bubble::before {
     content: '';
@@ -223,6 +224,7 @@ body {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid var(--white);
+    z-index: 3;
 }
 .speech-text-noticing {
     font-size: 0.95rem;
