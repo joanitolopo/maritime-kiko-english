@@ -990,18 +990,6 @@ body {
     gap: 12px;
 }
 
-.header-text h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.header-text p {
-    font-size: 0.95rem;
-    opacity: 0.9;
-    margin: 0;
-}
-
 .part-number {
     display: inline-flex;
     align-items: center;
@@ -1676,7 +1664,6 @@ body {
 
     .instruction-bubble {
         margin-top: -20px; /* PERUBAHAN 2: Ubah 0 menjadi -80px (naik menutupi avatar) */
-
         padding: 20px;
         border-radius: 16px;
         background: var(--white);

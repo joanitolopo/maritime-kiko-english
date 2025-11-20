@@ -484,6 +484,74 @@ def save_reflection(unit_id):
         current_app.logger.error(f"Error saving reflection: {e}")
         return jsonify({"success": False, "message": "Failed to save reflection"}), 500
 
+@learning_bp.route('/unit/<int:unit_id>/reset_progress', methods=['POST'])
+@login_required
+def reset_unit_progress(unit_id):
+    """Reset semua progress user untuk unit tertentu"""
+    try:
+        user_id = current_user.id
+        
+        # 1. Hapus semua subunit attempts
+        SubunitAttempt.query.filter_by(
+            user_id=user_id,
+            unit_id=unit_id
+        ).delete()
+        
+        # 2. Hapus atau reset UnitProgress
+        progress = UnitProgress.query.filter_by(
+            user_id=user_id,
+            unit_id=unit_id
+        ).first()
+        
+        if progress:
+            # Reset semua field ke nilai awal
+            progress.completed_subunits = 0
+            progress.progress_percent = 0
+            progress.status = 'not_started'
+            progress.total_attempts = 0
+            progress.total_duration_minutes = 0
+            progress.last_attempt = None
+            
+            # Reset self-assessment
+            progress.self_assessment_q1 = None
+            progress.self_assessment_q2 = None
+            progress.self_assessment_q3 = None
+            
+            # Reset reflections
+            progress.reflection_easiest = None
+            progress.reflection_struggle = None
+            progress.reflection_improvement = None
+            
+            # Reset assessment scores
+            progress.assessment_task1_score = None
+            progress.assessment_task2_score = None
+            progress.assessment_task3_score = None
+            progress.assessment_total_score = None
+            progress.assessment_percentage = None
+        
+        # 3. Update UserStats
+        stats = current_user.stats
+        if stats:
+            # Recalculate stats after reset
+            update_user_stats(user_id, stats_object=stats)
+        
+        db.session.commit()
+        
+        current_app.logger.info(f"Progress reset successfully for user {user_id}, unit {unit_id}")
+        
+        return jsonify({
+            'success': True,
+            'message': 'Progress reset successfully'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error resetting progress: {e}")
+        print(f"Error resetting progress: {e}")
+        return jsonify({
+            'success': False,
+            'message': f'Failed to reset progress: {str(e)}'
+        }), 500
 
 @learning_bp.route("/unit/<int:unit_id>/save_assessment", methods=['POST'])
 @login_required
@@ -731,12 +799,18 @@ def unit_report_pdf(unit_id):
             max_streak = max(max_streak, current_streak)
         else:
             current_streak = 0
+    
+    # ✅ TAMBAHKAN INI: Hitung max attempts untuk scaling chart
+    max_attempts_in_week = max((d["attempts"] for d in daily_data), default=1)
+    # Pastikan minimal 5 untuk chart yang bagus (kalau semua 0)
+    chart_max = max(max_attempts_in_week, 5)
 
     stats = {
         "active_days": active_days,
         "avg_attempts": avg_attempts,
         "avg_minutes": avg_minutes,
-        "longest_streak": max_streak
+        "longest_streak": max_streak,
+        "chart_max": chart_max  # ✅ TAMBAHKAN INI
     }
     
     return render_template('unit_report_pdf.html',

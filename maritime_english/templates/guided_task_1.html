@@ -3,6 +3,8 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/guided_task_1.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}">
+
 {% endblock %}
 
 {% block content %}
@@ -29,18 +31,16 @@
     <aside class="drill-sidebar"> 
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fa-solid fa-ship"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>H. Test Your Sea Skills</h4>
-                <p>Activity 9: Radio Readiness Check</p>
             </div>
         </div>
 
-        <div class="captain-instruction-card">
-            
+        <div class="captain-instruction-card"> 
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captai_check_9.png') }}" alt="Captain Character" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain Character" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -49,7 +49,7 @@
             </div>
             
             <div class="instruction-bubble"> 
-                <p class="speech-text-drill"> 
+                <p class="speech-text-drill" data-translate="sidebar-speech"> 
                     Cadet, this is your final radio test before taking the watch! You'll listen once to each radio message. Each includes a vessel's name, MMSI number, and call sign. Identify the correct vessel's name, type the MMSI you hear, then spell the call sign aloud. Remember — one clear message can save a ship!
                 </p>
                 
@@ -64,332 +64,346 @@
                 </div>
             </div>
         </div>
-
     </aside>
 
-    <main class="activity-area">
-        
-        <div class="activity-area-title">
-            <i class="fa-solid fa-list-check"></i>
-            <p class="instruction-text-task">
-                Listen carefully to each radio message. For each transmission: <strong>1)</strong> Click the correct vessel name, <strong>2)</strong> Type the MMSI number, <strong>3)</strong> Spell the Call Sign aloud. You will only hear each message once.
-            </p>
-        </div>
-
-        <nav class="task-nav">
-            <button class="task-nav-button active" data-panel="task1">
-                <i class="fas fa-ship"></i>
-                <span>1. Vessel Name</span>
-            </button>
-            <button class="task-nav-button" data-panel="task2">
-                <i class="fas fa-broadcast-tower"></i>
-                <span>2. MMSI Number</span>
-            </button>
-            <button class="task-nav-button" data-panel="task3">
-                <i class="fas fa-signal"></i>
-                <span>3. Call Sign</span>
-            </button>
-        </nav>
-
-        <div class="task-panels-container">
-
-            <div id="task1" class="task-panel active">
-                <div class="panel-instruction">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Listen to each message and select the correct vessel name you hear. Pay attention to similar-sounding letters!</p>
-                </div>
-
-                <div class="task-question" data-question="1">
-                    <div class="question-header">
-                        <span class="question-number">1</span>
-                        <button class="audio-play-btn" data-audio="vessel1">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="vessel-options">
-                        <button class="vessel-option" data-answer="SEAFLARE">SEAFLEAR</button>
-                        <button class="vessel-option correct" data-answer="SEAFLARE">SEAFLARE</button>
-                        <button class="vessel-option" data-answer="SEAFLARE">SEAGLARE</button>
-                        <button class="vessel-option" data-answer="SEAFLARE">SEAFLAIR</button>
+    <main class="vhf-main">
+        <section class="activity-card vhf-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <i class="fas fa-comments activity-number"></i>
+                    <div class="header-text">
+                        <h3>Activity 9: Radio Readiness Check</h3>
+                        <p>Your final testing.</p>
                     </div>
                 </div>
-
-                <div class="task-question" data-question="2">
-                    <div class="question-header">
-                        <span class="question-number">2</span>
-                        <button class="audio-play-btn" data-audio="vessel2">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="vessel-options">
-                        <button class="vessel-option correct" data-answer="MOONSTAR">MOONSTAR</button>
-                        <button class="vessel-option" data-answer="MOONSTAR">MOONSTAN</button>
-                        <button class="vessel-option" data-answer="MOONSTAR">NOONSTAR</button>
-                        <button class="vessel-option" data-answer="MOONSTAR">MONNSTAR</button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="3">
-                    <div class="question-header">
-                        <span class="question-number">3</span>
-                        <button class="audio-play-btn" data-audio="vessel3">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="vessel-options">
-                        <button class="vessel-option correct" data-answer="OCEANIX">OCEANIX</button>
-                        <button class="vessel-option" data-answer="OCEANIX">OCEANIS</button>
-                        <button class="vessel-option" data-answer="OCEANIX">OCEANIC</button>
-                        <button class="vessel-option" data-answer="OCEANIX">OCEENIX</button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="4">
-                    <div class="question-header">
-                        <span class="question-number">4</span>
-                        <button class="audio-play-btn" data-audio="vessel4">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="vessel-options">
-                        <button class="vessel-option" data-answer="WAVETIDE">WAVETITE</button>
-                        <button class="vessel-option correct" data-answer="WAVETIDE">WAVETIDE</button>
-                        <button class="vessel-option" data-answer="WAVETIDE">WAVETIME</button>
-                        <button class="vessel-option" data-answer="WAVETIDE">WAVETINE</button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="5">
-                    <div class="question-header">
-                        <span class="question-number">5</span>
-                        <button class="audio-play-btn" data-audio="vessel5">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="vessel-options">
-                        <button class="vessel-option correct" data-answer="BAYCREST">BAYCRAST</button>
-                        <button class="vessel-option" data-answer="BAYCREST">BAYCREST</button>
-                        <button class="vessel-option" data-answer="BAYCREST">BAYCRIST</button>
-                        <button class="vessel-option" data-answer="BAYCREST">BAYCROST</button>
-                    </div>
-                </div>
-
-                <button class="next-task-btn">
-                    <span>Next</span>
-                    
-                </button>
             </div>
 
-            <div id="task2" class="task-panel">
-                <div class="panel-instruction">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Type the 9-digit MMSI number you hear. Listen carefully to each digit!</p>
-                </div>
-
-                <div class="task-question" data-question="1">
-                    <div class="question-header">
-                        <span class="question-number">1</span>
-                        <button class="audio-play-btn" data-audio="vessel1">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
+            <div class="activity-body">
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
                     </div>
-                    <div class="mmsi-input-container">
-                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="440983000">
-                        <button class="check-btn">
-                            <i class="fas fa-check"></i>
-                        </button>
+                    <div class="banner-text">
+                        <p class="instruction-text-vhf" data-translate="activity-instruction">
+                            Listen carefully to each radio message. For each transmission: <strong>1)</strong> Click the correct vessel name, <strong>2)</strong> Type the MMSI number, <strong>3)</strong> Spell the Call Sign aloud. You will only hear each message once.
+                        </p>
                     </div>
                 </div>
 
-                <div class="task-question" data-question="2">
-                    <div class="question-header">
-                        <span class="question-number">2</span>
-                        <button class="audio-play-btn" data-audio="vessel2">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="mmsi-input-container">
-                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="446793000">
-                        <button class="check-btn">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
+                <nav class="task-nav">
+                    <button class="task-nav-button active" data-panel="task1">
+                        <i class="fas fa-ship"></i>
+                        <span>1. Vessel Name</span>
+                    </button>
+                    <button class="task-nav-button" data-panel="task2">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <span>2. MMSI Number</span>
+                    </button>
+                    <button class="task-nav-button" data-panel="task3">
+                        <i class="fas fa-signal"></i>
+                        <span>3. Call Sign</span>
+                    </button>
+                </nav>
 
-                <div class="task-question" data-question="3">
-                    <div class="question-header">
-                        <span class="question-number">3</span>
-                        <button class="audio-play-btn" data-audio="vessel3">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="mmsi-input-container">
-                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="52768010">
-                        <button class="check-btn">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
+                <div class="task-panels-container">
+                    <div id="task1" class="task-panel active">
+                        <div class="panel-instruction">
+                            <i class="fas fa-info-circle"></i>
+                            <p data-translate="task1-instruction">Click the correct vessel name</p>
+                        </div>
 
-                <div class="task-question" data-question="4">
-                    <div class="question-header">
-                        <span class="question-number">4</span>
-                        <button class="audio-play-btn" data-audio="vessel4">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="mmsi-input-container">
-                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="628940305">
-                        <button class="check-btn">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
+                        <div class="task-question" data-question="1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <button class="audio-play-btn" data-audio="vessel1">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="vessel-options">
+                                <button class="vessel-option" data-answer="SEAFLARE">SEAFLEAR</button>
+                                <button class="vessel-option correct" data-answer="SEAFLARE">SEAFLARE</button>
+                                <button class="vessel-option" data-answer="SEAFLARE">SEAGLARE</button>
+                                <button class="vessel-option" data-answer="SEAFLARE">SEAFLAIR</button>
+                            </div>
+                        </div>
 
-                <div class="task-question" data-question="5">
-                    <div class="question-header">
-                        <span class="question-number">5</span>
-                        <button class="audio-play-btn" data-audio="vessel5">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="mmsi-input-container">
-                        <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="516823096">
-                        <button class="check-btn">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
+                        <div class="task-question" data-question="2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <button class="audio-play-btn" data-audio="vessel2">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="vessel-options">
+                                <button class="vessel-option correct" data-answer="MOONSTAR">MOONSTAR</button>
+                                <button class="vessel-option" data-answer="MOONSTAR">MOONSTAN</button>
+                                <button class="vessel-option" data-answer="MOONSTAR">NOONSTAR</button>
+                                <button class="vessel-option" data-answer="MOONSTAR">MONNSTAR</button>
+                            </div>
+                        </div>
 
-                <button class="next-task-btn">
-                    <span>Next</span>
-                </button>
+                        <div class="task-question" data-question="3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <button class="audio-play-btn" data-audio="vessel3">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="vessel-options">
+                                <button class="vessel-option correct" data-answer="OCEANIX">OCEANIX</button>
+                                <button class="vessel-option" data-answer="OCEANIX">OCEANIS</button>
+                                <button class="vessel-option" data-answer="OCEANIX">OCEANIC</button>
+                                <button class="vessel-option" data-answer="OCEANIX">OCEENIX</button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <button class="audio-play-btn" data-audio="vessel4">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="vessel-options">
+                                <button class="vessel-option" data-answer="WAVETIDE">WAVETITE</button>
+                                <button class="vessel-option correct" data-answer="WAVETIDE">WAVETIDE</button>
+                                <button class="vessel-option" data-answer="WAVETIDE">WAVETIME</button>
+                                <button class="vessel-option" data-answer="WAVETIDE">WAVETINE</button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <button class="audio-play-btn" data-audio="vessel5">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="vessel-options">
+                                <button class="vessel-option correct" data-answer="BAYCREST">BAYCRAST</button>
+                                <button class="vessel-option" data-answer="BAYCREST">BAYCREST</button>
+                                <button class="vessel-option" data-answer="BAYCREST">BAYCRIST</button>
+                                <button class="vessel-option" data-answer="BAYCREST">BAYCROST</button>
+                            </div>
+                        </div>
+
+                        <button class="next-task-btn">
+                            <span>Next</span>
+                        </button>
+                    </div>
+
+                    <div id="task2" class="task-panel">
+                        <div class="panel-instruction">
+                            <i class="fas fa-info-circle"></i>
+                            <p data-translate="task2-instruction">Type the 9-digit MMSI number you hear. Listen carefully to each digit!</p>
+                        </div>
+
+                        <div class="task-question" data-question="1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <button class="audio-play-btn" data-audio="vessel1">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="mmsi-input-container">
+                                <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="440983000">
+                                <button class="check-btn">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <button class="audio-play-btn" data-audio="vessel2">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="mmsi-input-container">
+                                <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="446793000">
+                                <button class="check-btn">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <button class="audio-play-btn" data-audio="vessel3">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="mmsi-input-container">
+                                <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="52768010">
+                                <button class="check-btn">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <button class="audio-play-btn" data-audio="vessel4">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="mmsi-input-container">
+                                <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="628940305">
+                                <button class="check-btn">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <button class="audio-play-btn" data-audio="vessel5">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="mmsi-input-container">
+                                <input type="text" class="mmsi-input" placeholder="Enter 9-digit MMSI..." maxlength="9" data-correct="516823096">
+                                <button class="check-btn">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="next-task-btn">
+                            <span>Next</span>
+                        </button>
+                    </div>
+
+                    <div id="task3" class="task-panel">
+                        <div class="panel-instruction">
+                            <i class="fas fa-info-circle"></i>
+                            <p data-translate="task3-instruction">Spell each call sign aloud using the phonetic alphabet. Click the microphone to record!</p>
+                        </div>
+
+                        <div class="task-question" data-question="1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <button class="audio-play-btn" data-audio="callsign_input1">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="callsign-container">
+                                <div class="callsign-display">
+                                    <span class="callsign-label">Call Sign:</span>
+                                    <span class="callsign-text">CLFW2</span>
+                                </div>
+                                <button class="mic-btn-callsign" data-callsign="CLFW2" data-card-index="0">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Spell It</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <button class="audio-play-btn" data-audio="callsign_input2">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="callsign-container">
+                                <div class="callsign-display">
+                                    <span class="callsign-label">Call Sign:</span>
+                                    <span class="callsign-text">SV4NP</span>
+                                </div>
+                                <button class="mic-btn-callsign" data-callsign="SV4NP" data-card-index="1">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Spell It</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <button class="audio-play-btn" data-audio="callsign_input3">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="callsign-container">
+                                <div class="callsign-display">
+                                    <span class="callsign-label">Call Sign:</span>
+                                    <span class="callsign-text">E7MSK</span>
+                                </div>
+                                <button class="mic-btn-callsign" data-callsign="E7MSK" data-card-index="2">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Spell It</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <button class="audio-play-btn" data-audio="callsign_input4">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="callsign-container">
+                                <div class="callsign-display">
+                                    <span class="callsign-label">Call Sign:</span>
+                                    <span class="callsign-text">BLHW3</span>
+                                </div>
+                                <button class="mic-btn-callsign" data-callsign="BLHW3" data-card-index="3">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Spell It</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="task-question" data-question="5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <button class="audio-play-btn" data-audio="callsign_input5">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play Audio</span>
+                                </button>
+                            </div>
+                            <div class="callsign-container">
+                                <div class="callsign-display">
+                                    <span class="callsign-label">Call Sign:</span>
+                                    <span class="callsign-text">CWT8R</span>
+                                </div>
+                                <button class="mic-btn-callsign" data-callsign="CWT8R" data-card-index="4">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Spell It</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="send-report-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Submit Final Report</span>
+                        </button>
+                    </div>
+
+                </div>
             </div>
 
-            <div id="task3" class="task-panel">
-                <div class="panel-instruction">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Spell each call sign aloud using the phonetic alphabet. Click the microphone to record!</p>
-                </div>
-
-                <div class="task-question" data-question="1">
-                    <div class="question-header">
-                        <span class="question-number">1</span>
-                        <button class="audio-play-btn" data-audio="callsign_input1">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="callsign-container">
-                        <div class="callsign-display">
-                            <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">CLFW2</span>
-                        </div>
-                        <button class="mic-btn-callsign" data-callsign="CLFW2" data-card-index="0">
-                            <i class="fas fa-microphone"></i>
-                            <span>Spell It</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="2">
-                    <div class="question-header">
-                        <span class="question-number">2</span>
-                        <button class="audio-play-btn" data-audio="callsign_input2">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="callsign-container">
-                        <div class="callsign-display">
-                            <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">SV4NP</span>
-                        </div>
-                        <button class="mic-btn-callsign" data-callsign="SV4NP" data-card-index="1">
-                            <i class="fas fa-microphone"></i>
-                            <span>Spell It</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="3">
-                    <div class="question-header">
-                        <span class="question-number">3</span>
-                        <button class="audio-play-btn" data-audio="callsign_input3">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="callsign-container">
-                        <div class="callsign-display">
-                            <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">E7MSK</span>
-                        </div>
-                        <button class="mic-btn-callsign" data-callsign="E7MSK" data-card-index="2">
-                            <i class="fas fa-microphone"></i>
-                            <span>Spell It</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="4">
-                    <div class="question-header">
-                        <span class="question-number">4</span>
-                        <button class="audio-play-btn" data-audio="callsign_input4">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="callsign-container">
-                        <div class="callsign-display">
-                            <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">BLHW3</span>
-                        </div>
-                        <button class="mic-btn-callsign" data-callsign="BLHW3" data-card-index="3">
-                            <i class="fas fa-microphone"></i>
-                            <span>Spell It</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="task-question" data-question="5">
-                    <div class="question-header">
-                        <span class="question-number">5</span>
-                        <button class="audio-play-btn" data-audio="callsign_input5">
-                            <i class="fas fa-play"></i>
-                            <span>Play Audio</span>
-                        </button>
-                    </div>
-                    <div class="callsign-container">
-                        <div class="callsign-display">
-                            <span class="callsign-label">Call Sign:</span>
-                            <span class="callsign-text">CWT8R</span>
-                        </div>
-                        <button class="mic-btn-callsign" data-callsign="CWT8R" data-card-index="4">
-                            <i class="fas fa-microphone"></i>
-                            <span>Spell It</span>
-                        </button>
-                    </div>
-                </div>
-
-                <button class="send-report-btn">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Submit Final Report</span>
-                </button>
-            </div>
-
-        </div>
-        
+        </section>
     </main>
 
 </div>
@@ -398,6 +412,52 @@
     <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=8) }}" class="continue-button">
         <span>Continue Sailing</span>
     </a>
+</div>
+
+<!-- ========== WARNING MODAL ========== -->
+<div class="warning-modal" id="warningModal">
+    <div class="warning-modal-content">
+        <div style="text-align: center; padding: 30px;">
+            <div style="font-size: 5rem; margin-bottom: 20px;">⚠️</div>
+            <h2 style="color: var(--error); font-size: 2rem; margin-bottom: 15px; font-weight: 800;">
+                Important Notice!
+            </h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-dark); margin-bottom: 20px;">
+                This is your <strong style="color: var(--error);">FINAL ASSESSMENT</strong> for this unit. 
+                Please note:
+            </p>
+            
+            <ul style="text-align: left; max-width: 450px; margin: 0 auto 25px; line-height: 2; color: var(--text-dark);">
+                <li>✋ You can only attempt this assessment <strong>ONCE</strong></li>
+                <li>🎧 You can replay audio multiple times</li>
+                <li>✅ You can only submit each answer <strong>ONE TIME</strong></li>
+                <li>🔒 After submission, you cannot change your answers</li>
+                <li>📊 Results will be available in the Progress Report</li>
+            </ul>
+            
+            <p style="font-size: 1rem; color: var(--error); font-weight: 700; margin-bottom: 25px;">
+                Make sure you have studied all materials before proceeding!
+            </p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button id="cancelAssessment" 
+                        style="padding: 14px 28px; background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); 
+                               color: white; border: none; border-radius: 12px; font-weight: 700; 
+                               cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem;
+                               box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </button>
+                
+                <button id="proceedAssessment" 
+                        style="padding: 14px 28px; background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%); 
+                               color: white; border: none; border-radius: 12px; font-weight: 700; 
+                               cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem;
+                               box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); transition: all 0.3s ease;">
+                    I'm Ready! <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

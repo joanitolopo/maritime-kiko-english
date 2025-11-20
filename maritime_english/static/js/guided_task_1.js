@@ -6,6 +6,36 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Radio Readiness Check Initialized!');
 
+    // ========== WARNING MODAL ==========
+    const warningModal = document.getElementById('warningModal');
+    const proceedBtn = document.getElementById('proceedAssessment');
+    const cancelBtn = document.getElementById('cancelAssessment');
+    
+    // Show warning modal on load
+    if (warningModal) {
+        // Hide main content initially
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.style.opacity = '0';
+            mainContent.style.pointerEvents = 'none';
+        }
+        
+        proceedBtn.addEventListener('click', () => {
+            warningModal.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                warningModal.remove();
+                if (mainContent) {
+                    mainContent.style.opacity = '1';
+                    mainContent.style.pointerEvents = 'auto';
+                }
+            }, 300);
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            window.location.href = `/learn/unit/${window.UNIT_ID}/guided_intro`;
+        });
+    }
+
     // ==================================================
     // SPEECH RECOGNITION SETUP
     // ==================================================
@@ -28,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     const playBtn_sidebar = document.getElementById('captain-audio-btn');
     const translateBtn_sidebar = document.getElementById('translate-btn');
-    const speechText_sidebar = document.querySelector('.speech-text-task');
-    const instructionText_activity = document.querySelector('.instruction-text-task');
+    const speechText_sidebar = document.querySelector('.speech-text-drill');
+    const instructionText_activity = document.querySelector('.instruction-text-vhf');
 
     const taskNavButtons = document.querySelectorAll('.task-nav-button');
     const taskPanels = document.querySelectorAll('.task-panel');
@@ -44,30 +74,87 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendReportBtn = document.querySelector('.send-report-btn');
 
     const audio_sidebar = new Audio();
-    const audio_task = new Audio(); // <-- TAMBAHKAN INI
-    const allAudios = [audio_sidebar, audio_task]; // <-- UBAH INI
+    const audio_task = new Audio();
+    const allAudios = [audio_sidebar, audio_task];
     
-    let isTranslated = false;
+    let currentLang = 'en';
     let isListening = false;
     let currentMicBtn = null;
+    let isAssessmentLocked = false;
 
     // Progress tracking
     let progress = {
-        task1: 0, // Vessel names
-        task2: 0, // MMSI numbers  
-        task3: 0  // Call signs
+        task1: 0,
+        task2: 0,
+        task3: 0
+    };
+
+    // Tasks completion tracking
+    let tasksCompleted = {
+        task1: false,
+        task2: false,
+        task3: false
+    };
+
+    // Answers tracking untuk disimpan ke database
+    let userAnswers = {
+        task1: [], // [{questionIndex: 0, answer: 'SEAFLARE', isCorrect: true}, ...]
+        task2: [], // [{questionIndex: 0, answer: '440983000', isCorrect: false}, ...]
+        task3: []  // [{questionIndex: 0, transcript: '...', isCorrect: true}, ...]
+    };
+
+    // Audio played tracking
+    let audioPlayed = {
+        task1: [false, false, false, false, false],
+        task2: [false, false, false, false, false],
+        task3: [false, false, false, false, false]
+    };
+
+    // Answers locked tracking
+    let answersLocked = {
+        task1: [false, false, false, false, false],
+        task2: [false, false, false, false, false],
+        task3: [false, false, false, false, false]
     };
 
     // ==================================================
-    // CONTENT & AUDIO PATHS
+    // CONTENT & TRANSLATIONS
     // ==================================================
-    const originalText_sidebar = "Cadet, this is your final radio test before taking the watch! You'll listen once to each radio message. Each includes a vessel's name, MMSI number, and call sign. Identify the correct vessel's name, type the MMSI you hear, then spell the call sign aloud. Remember — one clear message can save a ship!";
-    const translatedText_sidebar = "Taruna, ini adalah tes radio terakhir sebelum kamu bertugas jaga! Kamu akan mendengarkan setiap pesan radio satu kali. Setiap pesan berisi nama kapal, nomor MMSI, dan call sign. Pilih nama kapal yang benar, ketik MMSI yang kamu dengar, lalu eja call sign dengan lantang. Ingat — satu pesan yang jelas dapat menyelamatkan kapal!";
-
-    const originalText_instruction = `Listen carefully to each radio message. For each transmission: <strong>1)</strong> Click the correct vessel name, <strong>2)</strong> Type the MMSI number, <strong>3)</strong> Spell the Call Sign aloud. You will only hear each message once.`;
-    const translatedText_instruction = `Dengarkan dengan saksama setiap pesan radio. Untuk setiap transmisi: <strong>1)</strong> Klik nama kapal yang benar, <strong>2)</strong> Ketik nomor MMSI, <strong>3)</strong> Eja Call Sign dengan lantang. Kamu hanya akan mendengar setiap pesan sekali.`;
+    const translations = {
+        'sidebar-speech': {
+            en: "Cadet, this is your final radio test before taking the watch! You'll listen once to each radio message. Each includes a vessel's name, MMSI number, and call sign. Identify the correct vessel's name, type the MMSI you hear, then spell the call sign aloud. Remember — one clear message can save a ship!",
+            id: "Taruna, ini adalah tes radio terakhir sebelum kamu bertugas jaga! Kamu akan mendengarkan setiap pesan radio satu kali. Setiap pesan berisi nama kapal, nomor MMSI, dan call sign. Pilih nama kapal yang benar, ketik MMSI yang kamu dengar, lalu eja call sign dengan lantang. Ingat — satu pesan yang jelas dapat menyelamatkan kapal!"
+        },
+        'activity-instruction': {
+            en: `Listen carefully to each radio message. For each transmission: <strong>1)</strong> Click the correct vessel name, <strong>2)</strong> Type the MMSI number, <strong>3)</strong> Spell the Call Sign aloud. You will only hear each message once.`,
+            id: `Dengarkan dengan saksama setiap pesan radio. Untuk setiap transmisi: <strong>1)</strong> Klik nama kapal yang benar, <strong>2)</strong> Ketik nomor MMSI, <strong>3)</strong> Eja Call Sign dengan lantang. Kamu hanya akan mendengar setiap pesan sekali.`
+        },
+        'task1-instruction': {
+            en: 'Click the correct vessel name',
+            id: 'Klik nama kapal yang benar'
+        },
+        'task2-instruction': {
+            en: 'Type the 9-digit MMSI number you hear. Listen carefully to each digit!',
+            id: 'Ketik nomor MMSI 9 digit yang kamu dengar. Dengarkan setiap digit dengan saksama!'
+        },
+        'task3-instruction': {
+            en: 'Spell each call sign aloud using the phonetic alphabet. Click the microphone to record!',
+            id: 'Eja setiap call sign dengan lantang menggunakan alfabet fonetik. Klik mikrofon untuk merekam!'
+        }
+    };
 
     const audioPath_sidebar = '/static/data/audio/unit1/guided_task1_intro.wav';
+
+    // ==================================================
+    // INITIAL SETUP - DISABLE TASK 2 & 3 BUTTONS
+    // ==================================================
+    taskNavButtons.forEach((btn, index) => {
+        if (index > 0) {
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            btn.style.pointerEvents = 'none';
+        }
+    });
 
     // ==================================================
     // TAB NAVIGATION
@@ -80,6 +167,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function switchPanel(panelId) {
+        // Check if assessment is locked
+        if (isAssessmentLocked) {
+            showNotification('Assessment already submitted. You cannot make changes.', 'warning');
+            return;
+        }
+        
+        // Check sequential access
+        if (panelId === 'task2' && !tasksCompleted.task1) {
+            showNotification('Please complete Task 1 first!', 'warning');
+            return;
+        }
+        if (panelId === 'task3' && !tasksCompleted.task2) {
+            showNotification('Please complete Task 2 first!', 'warning');
+            return;
+        }
+        
         taskNavButtons.forEach(btn => btn.classList.remove('active'));
         taskPanels.forEach(panel => panel.classList.remove('active'));
 
@@ -95,10 +198,109 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     nextTaskBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
-            if (index === 0) switchPanel('task2');
-            else if (index === 1) switchPanel('task3');
+            if (index === 0) {
+                // Check if task1 completed (all 5 answered)
+                if (progress.task1 === 5) {
+                    tasksCompleted.task1 = true;
+                    // Enable task2 button
+                    taskNavButtons[1].style.opacity = '1';
+                    taskNavButtons[1].style.cursor = 'pointer';
+                    taskNavButtons[1].style.pointerEvents = 'auto';
+                    switchPanel('task2');
+                } else {
+                    showNotification('Please complete all 5 questions first!', 'warning');
+                }
+            } else if (index === 1) {
+                if (progress.task2 === 5) {
+                    tasksCompleted.task2 = true;
+                    // Enable task3 button
+                    taskNavButtons[2].style.opacity = '1';
+                    taskNavButtons[2].style.cursor = 'pointer';
+                    taskNavButtons[2].style.pointerEvents = 'auto';
+                    switchPanel('task3');
+                } else {
+                    showNotification('Please complete all 5 MMSI numbers first!', 'warning');
+                }
+            }
         });
     });
+
+    // ==================================================
+    // AUDIO CONTROLS
+    // ==================================================
+    audioPlayBtns.forEach((btn) => {
+        btn.addEventListener('click', function() {
+            const audioKey = this.dataset.audio;
+            const audioPath = `/static/data/audio/unit1/${audioKey}.wav`;
+
+            // Determine task and question index
+            const question = this.closest('.task-question');
+            const questionIndex = question ? parseInt(question.dataset.question) - 1 : -1;
+            const taskPanel = this.closest('.task-panel');
+            const taskId = taskPanel ? taskPanel.id : null;
+
+            // Mark audio as played
+            if (taskId && questionIndex >= 0) {
+                audioPlayed[taskId][questionIndex] = true;
+            }
+
+            // Check if this audio is currently playing
+            const isPlayingThis = !audio_task.paused && audio_task.src.includes(audioPath);
+
+            stopAllAudio();
+
+            if (isPlayingThis) {
+                // Audio stopped
+            } else {
+                // Play audio
+                audio_task.src = audioPath;
+                audio_task.play().catch(error => {
+                    console.error('Audio error:', error);
+                    shakeElement(this);
+                });
+
+                // Update UI
+                this.classList.add('playing');
+                const icon = this.querySelector('i');
+                const text = this.querySelector('span');
+                if (icon) icon.className = 'fas fa-pause';
+                if (text) text.textContent = 'Playing...';
+            }
+        });
+    });
+
+    // Audio ended listener
+    audio_task.addEventListener('ended', () => {
+        stopAllAudio();
+    });
+
+    function stopAllAudio() {
+        // Stop all audio objects
+        allAudios.forEach(audio => {
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+
+        // Reset all task audio buttons
+        audioPlayBtns.forEach(btn => {
+            btn.classList.remove('playing');
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            if (icon) icon.className = 'fas fa-play';
+            if (text) text.textContent = 'Play Audio';
+        });
+
+        // Reset sidebar audio button
+        if (playBtn_sidebar) {
+            const icon = playBtn_sidebar.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        }
+    }
 
     // ==================================================
     // TASK 1: VESSEL NAMES
@@ -106,25 +308,57 @@ document.addEventListener('DOMContentLoaded', () => {
     vesselOptions.forEach(btn => {
         btn.addEventListener('click', function() {
             const question = this.closest('.task-question');
+            const questionIndex = parseInt(question.dataset.question) - 1;
+            
+            // Check if audio played
+            if (!audioPlayed.task1[questionIndex]) {
+                showNotification('Please play the audio first!', 'warning');
+                shakeElement(question.querySelector('.audio-play-btn'));
+                return;
+            }
+            
+            // Check if already answered
+            if (answersLocked.task1[questionIndex]) {
+                showNotification('You can only answer once!', 'warning');
+                return;
+            }
+            
             const options = question.querySelectorAll('.vessel-option');
             
             options.forEach(opt => {
-                opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+                opt.classList.remove('selected');
             });
 
             this.classList.add('selected');
+            
+            // Lock this question
+            answersLocked.task1[questionIndex] = true;
+            
+            // Disable all options for this question
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.style.opacity = '0.7';
+            });
 
-            if (this.classList.contains('correct')) {
-                this.classList.add('correct-answer');
-                question.classList.add('completed');
-                updateProgress('task1', 1);
-                playSuccessSound();
-                showNotification('Correct! Well done!', 'success');
-            } else {
-                this.classList.add('wrong-answer');
-                shakeElement(this);
-                showNotification('Try again!', 'error');
-            }
+            // CEK BENAR/SALAH DI BACKGROUND (USER GAK TAHU)
+            const isCorrect = this.classList.contains('correct');
+            const userAnswer = this.dataset.answer || this.textContent.trim();
+            
+            // Simpan ke array untuk dikirim ke backend
+            userAnswers.task1.push({
+                questionIndex: questionIndex + 1,
+                answer: userAnswer,
+                isCorrect: isCorrect
+            });
+            
+            // Update progress (semua jawaban dihitung)
+            updateProgress('task1', 1);
+
+            // Mark as completed tanpa indikasi benar/salah
+            question.classList.add('completed');
+            
+            // Feedback netral
+            showNotification('Answer recorded', 'info');
         });
     });
 
@@ -134,23 +368,48 @@ document.addEventListener('DOMContentLoaded', () => {
     checkBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
             const question = btn.closest('.task-question');
+            const questionIndex = parseInt(question.dataset.question) - 1;
             const input = question.querySelector('.mmsi-input');
+            
+            // Check if audio played
+            if (!audioPlayed.task2[questionIndex]) {
+                showNotification('Please play the audio first!', 'warning');
+                shakeElement(question.querySelector('.audio-play-btn'));
+                return;
+            }
+            
+            // Check if already answered
+            if (answersLocked.task2[questionIndex]) {
+                showNotification('You can only answer once!', 'warning');
+                return;
+            }
+            
             const correct = input.dataset.correct;
             const value = input.value.trim();
-
-            if (value === correct) {
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
-                question.classList.add('completed');
-                updateProgress('task2', 1);
-                playSuccessSound();
-                showNotification('Correct MMSI Number!', 'success');
-            } else {
-                input.classList.remove('correct');
-                input.classList.add('incorrect');
-                shakeElement(input);
-                showNotification('Incorrect. Try again!', 'error');
-            }
+            
+            // CEK BENAR/SALAH DI BACKGROUND (USER GAK TAHU)
+            const isCorrect = (value === correct);
+            
+            // Simpan ke array untuk dikirim ke backend
+            userAnswers.task2.push({
+                questionIndex: questionIndex + 1,
+                answer: value,
+                correctAnswer: correct,
+                isCorrect: isCorrect
+            });
+            
+            // Mark as completed
+            question.classList.add('completed');
+            updateProgress('task2', 1);
+            
+            // Lock answer
+            answersLocked.task2[questionIndex] = true;
+            input.disabled = true;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            
+            // Feedback netral
+            showNotification('Answer recorded', 'info');
         });
     });
 
@@ -174,6 +433,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (recognition) {
         callsignMicBtns.forEach(btn => {
             btn.addEventListener('click', function() {
+                const question = this.closest('.task-question');
+                const questionIndex = parseInt(question.dataset.question) - 1;
+                
+                // Check if audio played
+                if (!audioPlayed.task3[questionIndex]) {
+                    showNotification('Please play the audio first!', 'warning');
+                    shakeElement(question.querySelector('.audio-play-btn'));
+                    return;
+                }
+                
+                // Check if already answered
+                if (answersLocked.task3[questionIndex]) {
+                    showNotification('You can only answer once!', 'warning');
+                    return;
+                }
+                
                 if (isListening) {
                     showNotification('Please wait for the current recording to finish', 'warning');
                     return;
@@ -247,94 +522,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkCallsignPronunciation(transcript, targetText, micBtn) {
+        const question = micBtn.closest('.task-question');
+        const questionIndex = parseInt(question.dataset.question) - 1;
+        
+        // Lock answer
+        answersLocked.task3[questionIndex] = true;
+        micBtn.disabled = true;
+        micBtn.style.opacity = '0.5';
+        micBtn.style.cursor = 'not-allowed';
+        
+        // MATCHING DI BACKGROUND (USER GAK TAHU)
         const userWords = new Set(cleanText(transcript).split(' '));
         const targetWords = cleanText(targetText).split(' ');
         
-        let resultHTML = '';
         let correctCount = 0;
         let totalCount = targetWords.length;
 
         targetWords.forEach(targetWord => {
             if (userWords.has(targetWord)) {
-                resultHTML += `<span class="correct">${targetWord}</span> `;
                 correctCount++;
-            } else {
-                resultHTML += `<span class="missing">${targetWord}</span> `;
             }
         });
 
-        const accuracy = Math.round((correctCount / totalCount) * 100);
         const allCorrect = correctCount === totalCount;
-
-        const modal = document.createElement('div');
-        modal.className = 'feedback-modal';
+        const accuracy = Math.round((correctCount / totalCount) * 100);
         
-        let title = '';
-        let message = '';
-
-        if (allCorrect) {
-            title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Perfect!</h4>';
-            message = `<p style="color: #059669;">You spelled the call sign correctly! 🎉</p>`;
-            const question = micBtn.closest('.task-question');
-            question.classList.add('completed');
-            updateProgress('task3', 1);
-        } else if (accuracy >= 60) {
-            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Try!</h4>';
-            message = `<p style="color: #d97706;">${correctCount}/${totalCount} correct (${accuracy}%). Try again!</p>`;
-        } else {
-            title = '<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>';
-            message = `<p style="color: #2563eb;">${correctCount}/${totalCount} correct (${accuracy}%). Practice more!</p>`;
-        }
+        // Simpan ke array untuk dikirim ke backend
+        userAnswers.task3.push({
+            questionIndex: questionIndex + 1,
+            callsign: targetText,
+            transcript: transcript,
+            correctCount: correctCount,
+            totalCount: totalCount,
+            accuracy: accuracy,
+            isCorrect: allCorrect
+        });
         
-        const transcriptDisplay = `
-            <h5>What you said:</h5>
-            <p style="font-style: italic; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; word-wrap: break-word; color: #0c4a6e;">
-                "${transcript}"
-            </p>
-        `;
-
-        modal.innerHTML = `
-            <div class="feedback-modal-content">
-                <button class="feedback-close">&times;</button>
-                <div class="mic-result-box">
-                    ${title}
-                    ${message}
-                    ${transcriptDisplay}
-                    <h5>Comparison (${correctCount}/${totalCount}):</h5>
-                    <div class="diff-output">${resultHTML}</div>
-                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
-                </div>
-            </div>
-        `;
+        // Mark as completed
+        question.classList.add('completed');
+        updateProgress('task3', 1);
         
-        document.body.appendChild(modal);
-
-        const closeBtn = modal.querySelector('.feedback-close');
-        const tryAgainBtn = modal.querySelector('.try-again-btn');
-
-        closeBtn.addEventListener('click', () => {
-            modal.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => modal.remove(), 300);
-        });
-
-        tryAgainBtn.addEventListener('click', () => {
-            modal.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                modal.remove();
-                micBtn.click();
-            }, 300);
-        });
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => modal.remove(), 300);
-            }
-        });
-
-        if (allCorrect) {
-            playSuccessSound();
-        }
+        // Feedback netral (user tidak tahu benar/salah)
+        showNotification('Answer recorded', 'success');
     }
 
     function cleanText(text) {
@@ -360,131 +589,67 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProgress(task, increment) {
         if (progress[task] < 5) {
             progress[task] += increment;
-            const progressItem = document.querySelector(`.progress-item[data-task="${task.slice(-1)}"]`);
-            if (progressItem) {
-                const scoreSpan = progressItem.querySelector('.progress-score');
-                if (scoreSpan) {
-                    scoreSpan.textContent = `${progress[task]}/5`;
-                }
-            }
         }
     }
-
-    // ==================================================
-    // AUDIO CONTROLS
-    // ==================================================
-    audioPlayBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const audioKey = this.dataset.audio;
-            const audioPath = `/static/data/audio/unit1/${audioKey}.wav`;
-
-            // Cek apakah audio ini sedang diputar
-            const isPlayingThis = !audio_task.paused && audio_task.src.includes(audioPath);
-
-            stopAllAudio(); // Hentikan semua audio & reset UI
-
-            if (isPlayingThis) {
-                // Jika audio ini tadi diputar, stopAllAudio sudah menghentikannya.
-                // Klik tombol yang sama lagi akan berfungsi sebagai "stop".
-            } else {
-                // Jika audio lain diputar (atau tidak ada), putar yang ini.
-                audio_task.src = audioPath;
-                audio_task.play().catch(error => {
-                    console.error('Audio error:', error);
-                    shakeElement(this);
-                });
-
-                // Update UI tombol *ini*
-                this.classList.add('playing');
-                const icon = this.querySelector('i');
-                const text = this.querySelector('span');
-                if (icon) icon.className = 'fas fa-pause';
-                if (text) text.textContent = 'Playing...';
-            }
-        });
-    });
-
-// Tambahkan listener 'ended' untuk audio_task
-audio_task.addEventListener('ended', () => {
-    stopAllAudio(); // Reset UI saat audio selesai
-});
-
-    function stopAllAudio() {
-        // 1. Hentikan semua objek audio
-        allAudios.forEach(audio => {
-            if (!audio.paused) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-        });
-
-        // 2. Reset semua tombol audio di dalam task
-        audioPlayBtns.forEach(btn => {
-            btn.classList.remove('playing');
-            const icon = btn.querySelector('i');
-            const text = btn.querySelector('span');
-            if (icon) icon.className = 'fas fa-play';
-            if (text) text.textContent = 'Play Audio';
-        });
-
-        // 3. Reset tombol audio sidebar
-        if (playBtn_sidebar) {
-            const icon = playBtn_sidebar.querySelector('i');
-            if(icon) {
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-            }
-        }
-}
 
     // ==================================================
     // SIDEBAR CONTROLS
     // ==================================================
     if (playBtn_sidebar) {
-        const icon = playBtn_sidebar.querySelector('i'); // Dapatkan icon di dalam tombol
+        const icon = playBtn_sidebar.querySelector('i');
 
         playBtn_sidebar.addEventListener('click', function() {
             const isPlayingThis = !audio_sidebar.paused;
 
-            stopAllAudio(); // Hentikan audio task jika sedang main
+            stopAllAudio();
 
             if (isPlayingThis) {
                 audio_sidebar.pause();
                 audio_sidebar.currentTime = 0;
-                // Icon akan di-reset oleh stopAllAudio()
             } else {
                 audio_sidebar.src = audioPath_sidebar;
                 audio_sidebar.play()
                     .then(() => {
-                            if (icon) {
+                        if (icon) {
                             icon.classList.remove('fa-play');
-                                icon.classList.add('fa-pause');
+                            icon.classList.add('fa-pause');
                         }
-                            })
-                            .catch(error => console.error('Audio error:', error));
-                }
-            });
+                    })
+                    .catch(error => console.error('Audio error:', error));
+            }
+        });
 
-            audio_sidebar.addEventListener('ended', () => {
-                if(icon) {
-                    icon.classList.remove('fa-pause');
-                    icon.classList.add('fa-play');
-                }
-            });
-        }
+        audio_sidebar.addEventListener('ended', () => {
+            if (icon) {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        });
+    }
 
     if (translateBtn_sidebar) {
         translateBtn_sidebar.addEventListener('click', function() {
-            stopAllAudio(); // Hentikan audio saat menerjemahkan
-            if (isTranslated) {
-                    speechText_sidebar.textContent = originalText_sidebar;
-                instructionText_activity.innerHTML = originalText_instruction;
-                isTranslated = false;
-            } else {
-                speechText_sidebar.textContent = translatedText_sidebar;
-                instructionText_activity.innerHTML = translatedText_instruction;
-                isTranslated = true;
+            stopAllAudio();
+            
+            currentLang = currentLang === 'en' ? 'id' : 'en';
+            
+            // Translate sidebar speech
+            if (speechText_sidebar) {
+                speechText_sidebar.textContent = translations['sidebar-speech'][currentLang];
             }
+            
+            // Translate activity instruction
+            if (instructionText_activity) {
+                instructionText_activity.innerHTML = translations['activity-instruction'][currentLang];
+            }
+            
+            // Translate panel instructions
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[key]) {
+                    el.innerHTML = translations[key][currentLang];
+                }
+            });
         });
     }
 
@@ -493,7 +658,12 @@ audio_task.addEventListener('ended', () => {
     // ==================================================
     if (sendReportBtn) {
         sendReportBtn.addEventListener('click', async () => {
-            const totalScore = progress.task1 + progress.task2 + progress.task3;
+            // Hitung score ASLI (di background)
+            const task1Score = userAnswers.task1.filter(a => a.isCorrect).length;
+            const task2Score = userAnswers.task2.filter(a => a.isCorrect).length;
+            const task3Score = userAnswers.task3.filter(a => a.isCorrect).length;
+            
+            const totalScore = task1Score + task2Score + task3Score;
             const percentage = Math.round((totalScore / 15) * 100);
             
             // Disable button and show loading
@@ -508,40 +678,51 @@ audio_task.addEventListener('ended', () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        task1: progress.task1,
-                        task2: progress.task2,
-                        task3: progress.task3
+                        // Kirim semua data jawaban ke backend
+                        task1_answers: userAnswers.task1,
+                        task2_answers: userAnswers.task2,
+                        task3_answers: userAnswers.task3,
+                        
+                        // Kirim score asli
+                        task1: task1Score,
+                        task2: task2Score,
+                        task3: task3Score,
+                        total: totalScore,
+                        percentage: percentage
                     })
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    // Show success modal with scores
-                    showScoreModal(progress, totalScore, percentage);
+                    // Lock assessment
+                    isAssessmentLocked = true;
+                    
+                    // Disable all interactions
+                    vesselOptions.forEach(opt => opt.disabled = true);
+                    mmsiInputs.forEach(input => input.disabled = true);
+                    checkBtns.forEach(btn => btn.disabled = true);
+                    callsignMicBtns.forEach(btn => btn.disabled = true);
+                    audioPlayBtns.forEach(btn => btn.disabled = true);
+                    taskNavButtons.forEach(btn => btn.style.pointerEvents = 'none');
+                    
+                    // Show success modal (TANPA LINK)
+                    showScoreModal();
                     
                     sendReportBtn.innerHTML = '<i class="fas fa-check"></i> <span>Submitted!</span>';
                     sendReportBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                     
-                    // ✅ TAMPILKAN TOMBOL CONTINUE
+                    // Show continue button
                     const continueSection = document.getElementById('continue-section');
                     if (continueSection) {
                         continueSection.classList.remove('hidden');
                         continueSection.classList.add('visible');
                     }
 
-                    // Scroll ke tombol continue (opsional, untuk UX yang lebih baik)
+                    // Scroll to continue button
                     setTimeout(() => {
                         continueSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }, 500);
-                    
-                    // Keep button disabled after successful submission
-                    setTimeout(() => {
-                        sendReportBtn.innerHTML = originalHTML;
-                        sendReportBtn.style.background = '';
-                        // JANGAN re-enable tombol setelah sukses submit
-                        // sendReportBtn.disabled = false; // ❌ Hapus baris ini
-                    }, 3000);
                 }
             } catch (error) {
                 console.error('Save error:', error);
@@ -553,65 +734,26 @@ audio_task.addEventListener('ended', () => {
     }
 
     // Score Modal Function
-    function showScoreModal(scores, total, percentage) {
+    function showScoreModal() {
         const modal = document.createElement('div');
         modal.className = 'feedback-modal';
-        
-        let grade = '';
-        let gradeColor = '';
-        let message = '';
-        
-        if (percentage >= 90) {
-            grade = 'Excellent!';
-            gradeColor = '#10b981';
-            message = 'Outstanding performance, Cadet! You\'re ready for duty!';
-        } else if (percentage >= 70) {
-            grade = 'Good Job!';
-            gradeColor = '#3b82f6';
-            message = 'Solid work! Keep practicing to perfect your skills.';
-        } else if (percentage >= 50) {
-            grade = 'Keep Trying!';
-            gradeColor = '#f59e0b';
-            message = 'You\'re making progress. More practice will help!';
-        } else {
-            grade = 'Needs Practice';
-            gradeColor = '#ef4444';
-            message = 'Don\'t give up! Review the materials and try again.';
-        }
         
         modal.innerHTML = `
             <div class="feedback-modal-content" style="max-width: 500px;">
                 <button class="feedback-close">&times;</button>
-                <div style="text-align: center; padding: 20px;">
-                    <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
-                    <h3 style="color: ${gradeColor}; font-size: 2rem; margin-bottom: 10px;">${grade}</h3>
-                    <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 25px;">${message}</p>
+                <div style="text-align: center; padding: 30px;">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">✅</div>
+                    <h3 style="color: var(--ocean-blue); font-size: 2rem; margin-bottom: 10px;">Assessment Submitted!</h3>
+                    <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 25px; line-height: 1.8;">
+                        Your assessment has been recorded successfully.<br>
+                        Results will be available in your <strong>Progress Report</strong>.
+                    </p>
                     
-                    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 25px; border-radius: 16px; margin-bottom: 20px;">
-                        <div style="font-size: 3rem; font-weight: 800; color: var(--ocean-blue); margin-bottom: 5px;">
-                            ${total}/15
-                        </div>
-                        <div style="font-size: 1.2rem; color: var(--text-light); font-weight: 600;">
-                            ${percentage}%
-                        </div>
-                    </div>
+                    <p style="font-size: 1rem; color: var(--indigo); font-weight: 700; margin-bottom: 30px;">
+                        Click "Continue Sailing" below to proceed to the next section.
+                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
-                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Vessel Names</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task1}/5</div>
-                        </div>
-                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">MMSI Numbers</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task2}/5</div>
-                        </div>
-                        <div style="background: #f9fafb; padding: 15px; border-radius: 12px;">
-                            <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px;">Call Sign Speech</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--indigo);">${scores.task3}/5</div>
-                        </div>
-                    </div>
-                    
-                    <button class="try-again-btn" onclick="this.closest('.feedback-modal').remove()">
+                    <button class="try-again-btn" onclick="this.closest('.feedback-modal').remove()" style="background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);">
                         <i class="fas fa-check"></i> Got It!
                     </button>
                 </div>
@@ -635,6 +777,7 @@ audio_task.addEventListener('ended', () => {
         
         playSuccessSound();
     }
+
     // ==================================================
     // HELPER FUNCTIONS
     // ==================================================
@@ -746,6 +889,12 @@ styles.textContent = `
     @keyframes fadeOut {
         from { opacity: 1; }
         to { opacity: 0; }
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
     }
 `;
 document.head.appendChild(styles);

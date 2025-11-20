@@ -613,3 +613,71 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* ======== LOCKED ASSESSMENT STYLES ======== */
+.subunit-item.locked-assessment {
+    background: #fef2f2;
+    border-color: #fecaca;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.subunit-item.locked-assessment::before {
+    background: #ef4444;
+}
+
+.subunit-item.locked-assessment .subunit-icon {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.subunit-item.locked-assessment .subunit-title {
+    color: #991b1b;
+}
+
+.subunit-item.locked-assessment:hover {
+    transform: none;
+}
+
+/* ======== RESET PROGRESS BUTTON ======== */
+.btn-reset-progress {
+    background: transparent;
+    border: 2px solid #fca5a5;
+    color: #ef4444;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-reset-progress:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #dc2626;
+    transform: translateY(-2px);
+}
+
+.btn-reset-progress:active {
+    transform: translateY(0);
+}
+
+/* ======== RESPONSIVE ADJUSTMENTS ======== */
+@media (max-width: 767.98px) {
+    .modal-footer.subunit-modal-footer > div {
+        flex-direction: column;
+    }
+    
+    .modal-footer.subunit-modal-footer > div > div {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .btn-reset-progress,
+    .btn-start-voyage,
+    .btn-secondary-outline {
+        width: 100%;
+        justify-content: center;
+    }
+}

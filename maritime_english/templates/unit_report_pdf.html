@@ -657,13 +657,19 @@
                     <h3 class="section-title">
                         <i class="fas fa-calendar-check"></i> Daily Consistency (Last 7 Days)
                     </h3>
+                    <div style="text-align: center; margin-bottom: 10px; font-weight: 600; color: var(--ocean-blue);">
+                        Total Attempts This Week: {{ daily_data | sum(attribute='attempts') }}
+                    </div>
                     <div class="chart-container">
                         <div class="bar-chart">
                             {% for day in daily_data %}
-                            <div class="bar-group">
-                                <div class="bar" style="height: {{ (day.attempts / 5 * 100) if day.attempts else 0 }}%;" 
-                                    title="{{ day.attempts }} attempts"></div>
-                                <span class="bar-label">{{ day.day }}<br><small>{{ day.date }}</small></span>
+                            <div class="bar-item">
+                                <div class="bar" style="height: {{ (day.attempts / stats.chart_max * 100) if day.attempts else 5 }}%;">
+                                    {% if day.attempts > 0 %}
+                                    <span class="bar-value">{{ day.attempts }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="bar-label">{{ day.day }}<br>{{ day.date }}</div>
                             </div>
                             {% endfor %}
                         </div>
@@ -732,7 +738,7 @@
             {% if report_data.captain_feedback %}
             <div class="captain-feedback">
                 <div class="captain-feedback-header">
-                    <i class="fas fa-anchor me-2"></i> Sepatah Kata dari Kapten Anda
+                    <i class="fas fa-anchor me-2"></i> Captain's Feedback
                 </div>
                 <div class="captain-content">
                     <div class="captain-text">

@@ -83,13 +83,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const isCompleted = index < completedSubunits;
             const isCurrent = index === completedSubunits;
             const isLocked = index > completedSubunits;
+            
+            // ✅ BAGIAN BARU: Part H (index 7) & Part I (index 8) dikunci setelah complete
+            const isPartH = index === 7;
+            const isPartI = index === 8;
+            const isLockedAssessment = (isPartH || isPartI) && isCompleted;
 
             let statusClass = 'locked';
             let statusBadgeClass = 'locked';
             let statusText = 'Locked';
             let iconContent = `<i class="fas fa-lock"></i>`;
 
-            if (isCompleted) {
+            if (isLockedAssessment) {
+                // Part H & I yang sudah complete = dikunci
+                statusClass = 'completed locked-assessment';
+                statusBadgeClass = 'completed';
+                statusText = 'Completed & Locked';
+                iconContent = `<i class="fas fa-lock"></i>`;
+            } else if (isCompleted) {
                 statusClass = 'completed';
                 statusBadgeClass = 'completed';
                 statusText = 'Completed';
@@ -112,9 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="subunit-description">${subunit.description}</p>
                         <div class="subunit-status">
                             <span class="status-badge ${statusBadgeClass}">
-                                ${isCompleted ? '<i class="fas fa-check-circle me-1"></i>' : ''}
+                                ${isLockedAssessment ? '<i class="fas fa-lock me-1"></i>' : ''}
+                                ${(isCompleted && !isLockedAssessment) ? '<i class="fas fa-check-circle me-1"></i>' : ''}
                                 ${isCurrent ? '<i class="fas fa-play-circle me-1"></i>' : ''}
-                                ${isLocked ? '<i class="fas fa-lock me-1"></i>' : ''}
+                                ${(isLocked && !isLockedAssessment) ? '<i class="fas fa-lock me-1"></i>' : ''}
                                 ${statusText}
                             </span>
                         </div>
@@ -131,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.innerHTML = '<i class="fas fa-trophy me-2"></i> Unit Completed!';
             startBtn.disabled = true;
         } else {
-            // --- PERUBAHAN DI SINI ---
-            // Mengganti teks tombol berdasarkan progres
             if (completedSubunits > 0) {
                 startBtn.innerHTML = `<i class="fas fa-ship me-2"></i> Continue Sailing`;
             } else {
@@ -140,47 +150,205 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             startBtn.disabled = false;
             
-            // Menggunakan URL yang benar (introductionUrl)
             startBtn.onclick = () => {
-                const url = introductionUrl; // <-- URL yang Anda inginkan
+                const url = introductionUrl;
                 console.log(`Navigating to Unit Introduction: ${url}`);
-                window.location.href = url; // <-- Navigasi sebenarnya
+                window.location.href = url;
             };
+        }
+
+        // ✅ TAMBAHKAN TOMBOL RESET (hanya jika ada progress)
+        const resetBtnContainer = document.getElementById('resetProgressContainer');
+        if (completedSubunits > 0) {
+            resetBtnContainer.style.display = 'block';
+        } else {
+            resetBtnContainer.style.display = 'none';
         }
 
         // Show the modal
         const modal = new bootstrap.Modal(document.getElementById('subunitModal'));
         modal.show();
 
-        // Add click handlers for completed/current subunits
+        // Add click handlers for completed/current subunits (KECUALI Part H & I yang locked)
         setTimeout(() => {
-            const subunitItems = document.querySelectorAll('.subunit-item.completed, .subunit-item.current');
+            const subunitItems = document.querySelectorAll('.subunit-item');
             subunitItems.forEach(item => {
-                item.style.cursor = 'pointer';
-                item.addEventListener('click', () => {
-                    const index = parseInt(item.dataset.subunitIndex);
-                    const subunit = subunitsData[index];
+                const index = parseInt(item.dataset.subunitIndex);
+                const isLockedAssessment = item.classList.contains('locked-assessment');
+                
+                // Hanya yang completed/current DAN BUKAN locked-assessment yang bisa diklik
+                if ((item.classList.contains('completed') || item.classList.contains('current')) && !isLockedAssessment) {
+                    item.style.cursor = 'pointer';
                     
-                    // --- PERUBAHAN DI SINI ---
-                    // Menggunakan subunitUrlTemplate untuk membuat URL yang benar
-                    const url = subunitUrlTemplate.replace('999', index + 1);
-                    
-                    console.log(`Navigating to Subunit: ${url}`);
-                    window.location.href = url; // <-- Navigasi sebenarnya
-                });
+                    item.addEventListener('click', () => {
+                        const url = subunitUrlTemplate.replace('999', index + 1);
+                        console.log(`Navigating to Subunit: ${url}`);
+                        window.location.href = url;
+                    });
 
-                // Add hover effect
-                item.addEventListener('mouseenter', () => {
-                    if (!item.classList.contains('locked')) {
+                    // Add hover effect
+                    item.addEventListener('mouseenter', () => {
                         item.style.transform = 'translateX(8px)';
-                    }
-                });
-                item.addEventListener('mouseleave', () => {
-                    item.style.transform = 'translateX(0)';
-                });
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        item.style.transform = 'translateX(0)';
+                    });
+                } else if (isLockedAssessment) {
+                    // Part H & I yang locked: tampilkan pesan
+                    item.style.cursor = 'not-allowed';
+                    item.addEventListener('click', () => {
+                        showNotification('This assessment is locked. Use "Reset Progress" to restart the unit.', 'warning');
+                    });
+                }
             });
         }, 100);
     };
+
+    /**
+     * ✅ FUNGSI RESET PROGRESS
+     */
+    window.resetUnitProgress = function() {
+        const unitId = document.getElementById('modalUnitNumber').textContent;
+        const unitTitle = document.getElementById('subunitModalLabel').textContent;
+        
+        // Tampilkan konfirmasi
+        const confirmModal = document.createElement('div');
+        confirmModal.className = 'modal fade';
+        confirmModal.id = 'resetConfirmModal';
+        confirmModal.setAttribute('tabindex', '-1');
+        confirmModal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 20px; overflow: hidden;">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none;">
+                        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i> Reset Progress Confirmation</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" style="padding: 2rem;">
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: #1f2937;">
+                            Are you sure you want to reset your progress for <strong>${unitTitle}</strong>?
+                        </p>
+                        <ul style="color: #ef4444; font-weight: 600; line-height: 2;">
+                            <li>All completed activities will be reset</li>
+                            <li>All assessment scores will be deleted</li>
+                            <li>You will start from Part A again</li>
+                        </ul>
+                        <p style="color: #6b7280; font-style: italic;">
+                            This action cannot be undone.
+                        </p>
+                    </div>
+                    <div class="modal-footer" style="border: none; padding: 1rem 2rem;">
+                        <button type="button" class="btn btn-secondary-outline" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger" id="confirmResetBtn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700;">
+                            <i class="fas fa-redo me-2"></i> Yes, Reset Progress
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(confirmModal);
+        const confirmModalInstance = new bootstrap.Modal(confirmModal);
+        confirmModalInstance.show();
+        
+        // Handle reset button click
+        document.getElementById('confirmResetBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('confirmResetBtn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Resetting...';
+            
+            try {
+                const response = await fetch(`/learn/unit/${unitId}/reset_progress`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Progress reset successfully!', 'success');
+                    
+                    // Close both modals
+                    confirmModalInstance.hide();
+                    bootstrap.Modal.getInstance(document.getElementById('subunitModal')).hide();
+                    
+                    // Reload page after animation
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showNotification(result.message || 'Failed to reset progress', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                }
+            } catch (error) {
+                console.error('Reset error:', error);
+                showNotification('Failed to reset progress. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        });
+        
+        // Clean up modal after close
+        confirmModal.addEventListener('hidden.bs.modal', () => {
+            confirmModal.remove();
+        });
+    };
+
+    /**
+     * ✅ FUNGSI NOTIFIKASI
+     */
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle',
+            warning: 'fa-exclamation-triangle'
+        };
+        
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+        
+        notification.innerHTML = `
+            <i class="fas ${icons[type]}"></i>
+            <span>${message}</span>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid ${colors[type]};
+            color: ${colors[type]};
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
 
     /**
      * Stagger-load animation for course cards
@@ -218,3 +386,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Add notification animations
+const styles = document.createElement('style');
+styles.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+    }
+`;
+document.head.appendChild(styles);

@@ -3,6 +3,7 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/guided_intro.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -33,19 +34,16 @@
         <!-- Title Container -->
         <div class="activity-badge">
             <div class="badge-icon">
-                <i class="fa-solid fa-ship"></i>
+                <i class="fa-solid fa-anchor"></i>
             </div>
             <div class="badge-text">
                 <h4>G. Sail Through the Real Challenge</h4>
-                <p>Activity 8: Radio Watch Duty</p>
             </div>
         </div>
-        
-        <!-- Speech Bubble -->
 
         <div class="captain-instruction-card">
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captain_radio_check_5.png') }}" alt="Captain Character" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain Character" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -53,10 +51,9 @@
                 </div>
             </div>
             
-            <!-- Speech Bubble -->
             <div class="guided-bubble">
                 <p class="speech-text-guided">
-                    Cadet, this time you’ll sail through a real-life radio situation. Read each story carefully and imagine what’s happening at sea. Then, decide your role — caller or receiver — and practice your radio message. Remember, clear radio communication can save lives!
+                    Cadet, this time you'll sail through a real-life radio situation. Read each story carefully and imagine what's happening at sea. Then, decide your role — caller or receiver — and practice your radio message. Remember, clear radio communication can save lives!
                 </p>
                 
                 <div class="guided-controls">
@@ -69,47 +66,44 @@
                 </div>
             </div>
         </div>
-        
     </aside>
 
     <!-- RIGHT CONTENT -->
-    <main class="activity-area">
-        
-        <!-- Activity Header -->
-        <div class="activity-area-title">
-            <i class="fa-solid fa-comments"></i>
-            <p class="instruction-text-guided">
-                Read the situation. Choose your role (caller or receiver). Then record your radio message using the correct maritime alphabet and number pronunciation.
-            </p>
-        </div>
-        
-        <!-- Situations Container -->
-        <div class="situations-container">
-            
-            <!-- SITUATION 1 -->
-            <div class="situation-card" data-situation="1">
+    <main class="vhf-main">
+        <section class="activity-card spell-sea-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <i class="fa-solid fa-earth-oceania activity-number"></i>
+                    <div class="header-text">
+                        <h3>Activity 8: Radio Watch Duty</h3>
+                        <p>Learn radio communication with real vessel examples</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-body">
+                <div class="activity-area-title">
+                    <div class="banner-icon">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <div class="banner-text">
+                        <p class="instruction-text-guided">
+                            Read the situation carefully. Choose your role — caller or receiver — and perform the message aloud using the correct maritime alphabet and number pronunciation. You may switch roles to practice both sides.
+                        </p>
+                    </div>
+                </div>
+                
                 <div class="situation-header">
                     <div class="situation-number">
-                        <i class="fas fa-map-marked-alt"></i>
+                        <i class="fas fa-ship"></i>
                         <span>Situation 1</span>
                     </div>
-                    <div class="situation-badge">Lombok Strait</div>
+                    <!-- <div class="situation-badge">Practice Scenario</div> -->
                 </div>
 
                 <div class="situation-story">
-                    <div class="story-scene">
-                        <div class="scene-icon">
-                            <i class="fas fa-moon"></i>
-                            <span>Late Night</span>
-                        </div>
-                        <div class="scene-weather">
-                            <i class="fas fa-water"></i>
-                            <span>Calm Waters</span>
-                        </div>
-                    </div>
-
                     <p class="story-text">
-                        Late at night, <strong>MV CORALIS</strong> (MMSI: 538209100, Call Sign: CLFW2), a research vessel, is sailing through the calm waters of the Lombok Strait. On the radar, another vessel appears - <strong>MV SILVERWIND</strong> (MMSI: 312985600, Call Sign: SVNP4) - moving in the opposite direction.
+                        Late at night, <strong>MV CORALIS</strong> (MMSI: 538209100, Call Sign: CLFW2) is sailing through the calm waters of the Lombok Strait. On the radar, another vessel appears — <strong>MV SILVERWIND</strong> (MMSI: 312985600, Call Sign: SVNP4) — moving in the opposite direction.
                     </p>
 
                     <p class="story-text">
@@ -117,125 +111,66 @@
                     </p>
 
                     <div class="challenge-prompt">
-                        <i class="fas fa-lightbulb"></i>
-                        <p>Now, imagine you are a radio operator trainee observing this situation. Choose your role below and practice the correct radio message.</p>
+                        <i class="fas fa-bullhorn"></i>
+                        <p>Now, take your position and perform the radio exchange!</p>
                     </div>
                 </div>
 
-                <!-- Role Selection Cards -->
-                <div class="role-selection-cards">
-                    <h5 class="role-section-title">
-                        <i class="fas fa-user-check"></i>
-                        Choose Your Role:
-                    </h5>
-                    
-                    <div class="role-cards-row">
-                        <!-- Caller Card -->
-                        <div class="role-practice-card caller-card" data-situation="1" data-role="caller">
-                            <div class="role-card-overlay">
-                                <span class="role-label caller-label">
-                                    <i class="fas fa-phone"></i> The Caller
-                                </span>
-                            </div>
-                            <div class="role-card-vessel-info">
-                                <h4>MV CORALIS</h4>
-                                <div class="role-card-details">
-                                    <span><i class="fas fa-hashtag"></i> 538209100</span>
-                                    <span><i class="fas fa-signal"></i> CLFW2</span>
-                                </div>
-                            </div>
-                            <button class="select-role-btn">
-                                <i class="fas fa-microphone"></i>
-                                <span>Practice as Caller</span>
-                            </button>
-                        </div>
 
-                        <!-- Receiver Card -->
-                        <div class="role-practice-card receiver-card" data-situation="1" data-role="receiver">
-                            <div class="role-card-overlay">
-                                <span class="role-label receiver-label">
-                                    <i class="fas fa-headphones"></i> The Receiver
-                                </span>
-                            </div>
-                            <div class="role-card-vessel-info">
-                                <h4>MV SILVERWIND</h4>
-                                <div class="role-card-details">
-                                    <span><i class="fas fa-hashtag"></i> 312985600</span>
-                                    <span><i class="fas fa-signal"></i> SVNP4</span>
-                                </div>
-                            </div>
-                            <button class="select-role-btn">
+                <h5 class="role-section-title">
+                    <i class="fas fa-user-check"></i>
+                    Choose Your Role:
+                </h5>
+                    
+                <div class="role-cards-row">
+                    <div class="role-practice-card caller-card" data-situation="1" data-role="caller">
+                        <div class="card-overlay">
+                            <span class="role-label caller-label">
+                                <i class="fas fa-phone"></i> The Caller
+                            </span>
+                        </div>
+                        <img src="{{ url_for('static', filename='img/operator_vessel_coralis.png') }}" alt="Caller" class="vessel-bg-img">
+                        <div class="card-footer">
+                            <div class="vessel-name-display">MV CORALIS</div>
+                            <button class="record-role-btn">
                                 <i class="fas fa-microphone"></i>
-                                <span>Practice as Receiver</span>
+                                <span>Record as Caller</span>
                             </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Recording Section (Hidden initially) -->
-                <div class="recording-active-section" id="recording-section-1" style="display: none;">
-                    <div class="recording-header">
-                        <div class="selected-role-display">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="role-name-display"></span>
+                    <div class="role-practice-card receiver-card" data-situation="1" data-role="receiver">
+                        <div class="card-overlay">
+                            <span class="role-label receiver-label">
+                                <i class="fas fa-headphones"></i> The Receiver
+                            </span>
                         </div>
-                        <button class="change-role-btn" data-situation="1">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>Change Role</span>
-                        </button>
-                    </div>
-                    
-                    <div class="recording-body">
-                        <div class="vessel-info-display">
-                            <h5>Your Vessel Information:</h5>
-                            <div class="info-items">
-                                <div class="info-item">
-                                    <label>Vessel Name:</label>
-                                    <value class="vessel-name-val">-</value>
-                                </div>
-                                <div class="info-item">
-                                    <label>MMSI:</label>
-                                    <value class="vessel-mmsi-val">-</value>
-                                </div>
-                                <div class="info-item">
-                                    <label>Call Sign:</label>
-                                    <value class="vessel-callsign-val">-</value>
-                                </div>
-                            </div>
+                        <img src="{{ url_for('static', filename='img/operator_vessel_silverwind.png') }}" alt="Receiver" class="vessel-bg-img">
+                        <div class="card-footer">
+                            <div class="vessel-name-display">MV SILVERWIND</div>
+                            <button class="record-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Record as Receiver</span>
+                            </button>
                         </div>
-                        
-                        <button class="record-message-btn" data-situation="1">
-                            <i class="fas fa-microphone"></i>
-                            <span>Start Recording</span>
-                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- SITUATION 2 -->
-            <div class="situation-card" data-situation="2">
+            <!-- Divider -->
+            <div class="part-divider"></div>
+
+            <div class="activity-body">
                 <div class="situation-header">
                     <div class="situation-number">
-                        <i class="fas fa-map-marked-alt"></i>
+                        <i class="fas fa-ship"></i>
                         <span>Situation 2</span>
                     </div>
-                    <div class="situation-badge">Kupang Bay</div>
                 </div>
 
                 <div class="situation-story">
-                    <div class="story-scene">
-                        <div class="scene-icon">
-                            <i class="fas fa-sun"></i>
-                            <span>Afternoon</span>
-                        </div>
-                        <div class="scene-weather">
-                            <i class="fas fa-cloud"></i>
-                            <span>Misty Weather</span>
-                        </div>
-                    </div>
-
                     <p class="story-text">
-                        In the afternoon, <strong>MV CRYSTAL WAVE</strong> (MMSI: 239814900, Call Sign: CWTR8) is sailing slowly through Kupang Bay under misty weather conditions. The crew notices another ship, <strong>MV EMERALD SKY</strong> (MMSI: 519402300, Call Sign: EMSK7), appearing on the radar about two miles ahead.
+                        In the afternoon, <strong>MV CRYSTAL WAVE</strong> (MMSI: 239814900, Call Sign: CWTR8) sails slowly through Kupang Bay under sunny weather conditions. The crew notices another ship, <strong>MV EMERALD SKY</strong> (MMSI: 519402300, Call Sign: EMSK7), appearing on the radar about two miles ahead.
                     </p>
 
                     <p class="story-text">
@@ -243,113 +178,95 @@
                     </p>
 
                     <div class="challenge-prompt">
-                        <i class="fas fa-lightbulb"></i>
-                        <p>Now, imagine you are a radio operator trainee observing this situation. Choose your role below and practice the correct radio message.</p>
+                        <i class="fas fa-bullhorn"></i>
+                        <p>Now, take your position and perform the radio exchange!</p>
                     </div>
                 </div>
 
-                <!-- Role Selection Cards -->
-                <div class="role-selection-cards">
-                    <h5 class="role-section-title">
-                        <i class="fas fa-user-check"></i>
-                        Choose Your Role:
-                    </h5>
-                    
-                    <div class="role-cards-row">
-                        <!-- Caller Card -->
-                        <div class="role-practice-card caller-card" data-situation="2" data-role="caller">
-                            <div class="role-card-overlay">
-                                <span class="role-label caller-label">
-                                    <i class="fas fa-phone"></i> The Caller
-                                </span>
-                            </div>
-                            <div class="role-card-vessel-info">
-                                <h4>MV CRYSTAL WAVE</h4>
-                                <div class="role-card-details">
-                                    <span><i class="fas fa-hashtag"></i> 239814900</span>
-                                    <span><i class="fas fa-signal"></i> CWTR8</span>
-                                </div>
-                            </div>
-                            <button class="select-role-btn">
-                                <i class="fas fa-microphone"></i>
-                                <span>Practice as Caller</span>
-                            </button>
-                        </div>
 
-                        <!-- Receiver Card -->
-                        <div class="role-practice-card receiver-card" data-situation="2" data-role="receiver">
-                            <div class="role-card-overlay">
-                                <span class="role-label receiver-label">
-                                    <i class="fas fa-headphones"></i> The Receiver
-                                </span>
-                            </div>
-                            <div class="role-card-vessel-info">
-                                <h4>MV EMERALD SKY</h4>
-                                <div class="role-card-details">
-                                    <span><i class="fas fa-hashtag"></i> 519402300</span>
-                                    <span><i class="fas fa-signal"></i> EMSK7</span>
-                                </div>
-                            </div>
-                            <button class="select-role-btn">
+                <h5 class="role-section-title">
+                    <i class="fas fa-user-check"></i>
+                    Choose Your Role:
+                </h5>
+                    
+                <div class="role-cards-row">
+                    <div class="role-practice-card caller-card" data-situation="2" data-role="caller">
+                        <div class="card-overlay">
+                            <span class="role-label caller-label">
+                                <i class="fas fa-phone"></i> The Caller
+                            </span>
+                        </div>
+                        <img src="{{ url_for('static', filename='img/operator_vessel_crystal_wave.png') }}" alt="Caller" class="vessel-bg-img">
+                        <div class="card-footer">
+                            <div class="vessel-name-display">MV CRYSTAL WAVE</div>
+                            <button class="record-role-btn">
                                 <i class="fas fa-microphone"></i>
-                                <span>Practice as Receiver</span>
+                                <span>Record as Caller</span>
                             </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Recording Section (Hidden initially) -->
-                <div class="recording-active-section" id="recording-section-2" style="display: none;">
-                    <div class="recording-header">
-                        <div class="selected-role-display">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="role-name-display"></span>
+                    <div class="role-practice-card receiver-card" data-situation="2" data-role="receiver">
+                        <div class="card-overlay">
+                            <span class="role-label receiver-label">
+                                <i class="fas fa-headphones"></i> The Receiver
+                            </span>
                         </div>
-                        <button class="change-role-btn" data-situation="2">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>Change Role</span>
-                        </button>
-                    </div>
-                    
-                    <div class="recording-body">
-                        <div class="vessel-info-display">
-                            <h5>Your Vessel Information:</h5>
-                            <div class="info-items">
-                                <div class="info-item">
-                                    <label>Vessel Name:</label>
-                                    <value class="vessel-name-val">-</value>
-                                </div>
-                                <div class="info-item">
-                                    <label>MMSI:</label>
-                                    <value class="vessel-mmsi-val">-</value>
-                                </div>
-                                <div class="info-item">
-                                    <label>Call Sign:</label>
-                                    <value class="vessel-callsign-val">-</value>
-                                </div>
-                            </div>
+                        <img src="{{ url_for('static', filename='img/operator_vessel_emerald_sky.png') }}" alt="Receiver" class="vessel-bg-img">
+                        <div class="card-footer">
+                            <div class="vessel-name-display">MV EMERALD SKY</div>
+                            <button class="record-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Record as Receiver</span>
+                            </button>
                         </div>
-                        
-                        <button class="record-message-btn" data-situation="2">
-                            <i class="fas fa-microphone"></i>
-                            <span>Start Recording</span>
-                        </button>
                     </div>
                 </div>
             </div>
-
-        </div>
+        </section>
         
+        <div class="continue-wrapper" id="continueWrapper" style="display: none; opacity: 0;">
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=7) }}" class="continue-button">
+                <span>Continue Sailing</span>
+            </a>
+        </div>
     </main>
 
-</div>
+    <!-- POPUP MODAL -->
+    <div class="exchange-modal" id="exchangeModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <h3 id="modalTitle">Radio Communication</h3>
+            </div>
 
-<!-- FOOTER -->
-<!-- Continue Button (Hidden by default) -->
-<div class="continue-wrapper" id="continueWrapper" style="display: none; opacity: 0;">
-    <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=7) }}" class="continue-button">
-        <span>Continue Sailing</span>
-    </a>
+            <div class="modal-body">
+                <div class="vessel-info-row">
+                    <div class="info-col">
+                        <label><i class="fas fa-ship"></i> Vessel Name</label>
+                        <value id="modalVesselName">-</value>
+                    </div>
+                    <div class="info-col">
+                        <label><i class="fas fa-hashtag"></i> MMSI</label>
+                        <value id="modalMMSI">-</value>
+                    </div>
+                    <div class="info-col">
+                        <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
+                        <value id="modalCallSign">-</value>
+                    </div>
+                </div>
+                <div id="modalActionContainer"></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

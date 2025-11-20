@@ -1638,8 +1638,12 @@ body {
         font-size: 1.5rem;
     }
     .badge-text h4 {
-        font-size: 1rem;
+        color: var(--white);
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
     }
+
     .badge-text p {
         font-size: 0.9rem;
     }

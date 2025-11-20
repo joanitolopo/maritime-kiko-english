@@ -251,12 +251,27 @@
                 </div>
             </div>
             <div class="modal-footer subunit-modal-footer">
-                <button type="button" class="btn btn-secondary-outline" data-bs-dismiss="modal">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Courses
-                </button>
-                <button type="button" class="btn btn-start-voyage" id="startVoyageBtn">
-                    <i class="fas fa-ship me-2"></i> Start Voyage
-                </button>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; gap: 1rem;">
+                    <!-- <button type="button" class="btn btn-secondary-outline" data-bs-dismiss="modal">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Courses
+                    </button> -->
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <!-- ✅ TOMBOL RESET PROGRESS -->
+                        <div id="resetProgressContainer" style="display: none;">
+                            <button type="button" 
+                                    class="btn btn-reset-progress" 
+                                    onclick="resetUnitProgress()"
+                                    title="Reset all progress and scores for this unit">
+                                <i class="fas fa-redo me-2"></i> Reset Progress
+                            </button>
+                        </div>
+                        
+                        <button type="button" class="btn btn-start-voyage" id="startVoyageBtn">
+                            <i class="fas fa-ship me-2"></i> Start Voyage
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

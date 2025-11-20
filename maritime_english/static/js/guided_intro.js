@@ -1,6 +1,6 @@
 // ========================================
-// GUIDED INTRO JAVASCRIPT - UPDATED
-// Radio Watch Duty with Role Selection
+// GUIDED INTRO JAVASCRIPT - UPDATED WITH STEMMING & NUMBER HANDLING
+// Radio Watch Duty with Popup Modal
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,6 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
     recognition.lang = 'en-US';
 
     // ==================================================
+    // SIMPLE STEMMER - Remove common suffixes
+    // ==================================================
+    function simpleStem(word) {
+        // Convert to lowercase
+        word = word.toLowerCase();
+        
+        // Remove common suffixes
+        const suffixes = ['ed', 'ing', 's', 'es', 'd'];
+        
+        for (const suffix of suffixes) {
+            if (word.endsWith(suffix) && word.length > suffix.length + 2) {
+                return word.slice(0, -suffix.length);
+            }
+        }
+        
+        return word;
+    }
+
+    // ==================================================
     // VESSEL DATA
     // ==================================================
     const vesselData = {
@@ -30,25 +49,30 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'MV CORALIS',
             mmsi: '538209100',
             callSign: 'CLFW2',
-            targetPhrase: "This is Motor Vessel Coralis Call Sign Charlie Lima Foxtrot Whisky Two MMSI Five Three Eight Two Zero Nine One Zero Zero Calling Motor Vessel Silverwind Call Sign Sierra Victor November Papa Four Channel One Six Over"
+            // Target phrase HANYA pakai huruf phonetic, bukan convert
+            targetPhrase: "this is motor vessel coralis call sign charlie lima foxtrot whisky 2 mmsi 538209100 calling motor vessel silverwind call sign sierra victor november papa 4 channel 16 over",
+            reminder: "Say your vessel's name, MMSI, Call Sign, and call the other vessel clearly."
         },
         'situation1-receiver': {
             name: 'MV SILVERWIND',
             mmsi: '312985600',
             callSign: 'SVNP4',
-            targetPhrase: "Motor Vessel Coralis this is Silverwind receiving you loud and clear Over"
+            targetPhrase: "motor vessel coralis this is silverwind receiving you loud and clear over",
+            reminder: "Respond clearly using the correct format."
         },
         'situation2-caller': {
             name: 'MV CRYSTAL WAVE',
             mmsi: '239814900',
             callSign: 'CWTR8',
-            targetPhrase: "This is Motor Vessel Crystal Wave Call Sign Charlie Whisky Tango Romeo Eight MMSI Two Three Nine Eight One Four Nine Zero Zero Calling Motor Vessel Emerald Sky Call Sign Echo Mike Sierra Kilo Seven Channel One Six Over"
+            targetPhrase: "this is motor vessel crystal wave call sign charlie whisky tango romeo 8 mmsi 239814900 calling motor vessel emerald sky call sign echo mike sierra kilo 7 channel 16 over",
+            reminder: "Say your vessel's name, MMSI, Call Sign, and call the other vessel clearly."
         },
         'situation2-receiver': {
             name: 'MV EMERALD SKY',
             mmsi: '519402300',
             callSign: 'EMSK7',
-            targetPhrase: "Motor Vessel Crystal Wave this is Emerald Sky receiving you loud and clear Over"
+            targetPhrase: "motor vessel crystal wave this is emerald sky receiving you loud and clear over",
+            reminder: "Respond clearly using the correct format."
         }
     };
 
@@ -69,9 +93,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructionText_activity = document.querySelector('.instruction-text-guided');
     const continueWrapper = document.getElementById('continueWrapper');
 
+    // Modal elements
+    const modal = document.getElementById('exchangeModal');
+    const modalOverlay = modal.querySelector('.modal-overlay');
+    const closeModalBtn = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalVesselName = document.getElementById('modalVesselName');
+    const modalMMSI = document.getElementById('modalMMSI');
+    const modalCallSign = document.getElementById('modalCallSign');
+    const modalActionContainer = document.getElementById('modalActionContainer');
+
     const audio_sidebar = new Audio();
     let isTranslated = false;
     let isListening = false;
+    let currentSituation = null;
+    let currentRole = null;
 
     // ==================================================
     // TEXT CONTENT
@@ -79,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalText_sidebar = "Cadet, this time you'll sail through a real-life radio situation. Read each story carefully and imagine what's happening at sea. Then, decide your role — caller or receiver — and practice your radio message. Remember, clear radio communication can save lives!";
     const translatedText_sidebar = "Taruna, kali ini kamu akan berlayar melalui situasi radio yang nyata. Bacalah setiap cerita dengan cermat dan bayangkan apa yang sedang terjadi di laut. Setelah itu, tentukan peranmu — sebagai pemanggil atau penerima — lalu latih pesan radiomu. Ingat, komunikasi radio yang jelas dapat menyelamatkan nyawa!";
 
-    const originalText_instruction = "Read the situation. Choose your role (caller or receiver). Then record your radio message using the correct maritime alphabet and number pronunciation.";
-    const translatedText_instruction = "Baca situasinya. Pilih peranmu (pemanggil atau penerima). Lalu rekam pesan radiomu menggunakan alfabet maritim dan pengucapan angka yang benar.";
+    const originalText_instruction = "Read the situation carefully. Choose your role — caller or receiver — and perform the message aloud using the correct maritime alphabet and number pronunciation. You may switch roles to practice both sides.";
+    const translatedText_instruction = "Bacalah situasi dengan cermat. Pilih peranmu — sebagai pemanggil (caller) atau penerima (receiver) — lalu ucapkan pesan tersebut dengan lantang menggunakan pengucapan alfabet dan angka maritim yang benar. Kamu dapat berganti peran untuk berlatih keduanya.";
 
     const audioPath_sidebar = '/static/data/audio/unit1/guided_intro.wav';
 
@@ -130,16 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // ROLE CARD SELECTION
+    // RECORD ROLE BUTTONS - OPEN POPUP
     // ==================================================
-    const roleCards = document.querySelectorAll('.role-practice-card');
+    const recordRoleBtns = document.querySelectorAll('.record-role-btn');
     
-    roleCards.forEach(card => {
-        const selectBtn = card.querySelector('.select-role-btn');
-        
-        selectBtn.addEventListener('click', (e) => {
+    recordRoleBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.stopPropagation();
             
+            const card = btn.closest('.role-practice-card');
             const situation = card.dataset.situation;
             const role = card.dataset.role;
             const key = `situation${situation}-${role}`;
@@ -147,131 +182,125 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!data) return;
             
-            // Hide role selection, show recording section
-            const roleSelectionSection = card.closest('.role-selection-cards');
-            const recordingSection = document.getElementById(`recording-section-${situation}`);
+            currentSituation = situation;
+            currentRole = role;
             
-            roleSelectionSection.style.display = 'none';
-            recordingSection.style.display = 'block';
-            
-            // Populate vessel info
-            const roleNameDisplay = recordingSection.querySelector('.role-name-display');
-            const vesselNameVal = recordingSection.querySelector('.vessel-name-val');
-            const vesselMmsiVal = recordingSection.querySelector('.vessel-mmsi-val');
-            const vesselCallsignVal = recordingSection.querySelector('.vessel-callsign-val');
-            const recordBtn = recordingSection.querySelector('.record-message-btn');
-            
-            roleNameDisplay.textContent = `You are the ${role.toUpperCase()} on ${data.name}`;
-            vesselNameVal.textContent = data.name;
-            vesselMmsiVal.textContent = data.mmsi;
-            vesselCallsignVal.textContent = data.callSign;
-            recordBtn.dataset.key = key;
-            
-            showNotification(`Role selected: ${role.toUpperCase()}. Ready to record!`, 'success');
+            openRecordModal(data, role);
         });
     });
 
     // ==================================================
-    // CHANGE ROLE BUTTONS
+    // OPEN RECORD MODAL
     // ==================================================
-    const changeRoleBtns = document.querySelectorAll('.change-role-btn');
-    
-    changeRoleBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const situation = this.dataset.situation;
-            const recordingSection = document.getElementById(`recording-section-${situation}`);
-            const roleSelectionSection = recordingSection.previousElementSibling;
-            
-            recordingSection.style.display = 'none';
-            roleSelectionSection.style.display = 'block';
-            
-            showNotification('Role selection reset. Choose again.', 'info');
+    function openRecordModal(data, role) {
+        // Populate modal
+        modalTitle.textContent = `You are the ${role.toUpperCase()}: ${data.name}`;
+        modalVesselName.textContent = data.name;
+        modalMMSI.textContent = data.mmsi;
+        modalCallSign.textContent = data.callSign;
+        
+        // Create reminder + record button
+        modalActionContainer.innerHTML = `
+            <div class="modal-reminder">
+                <i class="fas fa-lightbulb"></i>
+                <p>${data.reminder}</p>
+            </div>
+            <button class="modal-record-btn" id="modalRecordBtn">
+                <i class="fas fa-microphone"></i>
+                <span>Start Recording</span>
+            </button>
+        `;
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Add event listener to record button
+        const modalRecordBtn = document.getElementById('modalRecordBtn');
+        modalRecordBtn.addEventListener('click', function() {
+            startRecording(data, this);
         });
-    });
+    }
 
     // ==================================================
-    // RECORD BUTTONS
+    // START RECORDING
     // ==================================================
-    const recordBtns = document.querySelectorAll('.record-message-btn');
-    
-    recordBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (isListening) {
-                showNotification('Please wait for current recording to finish', 'warning');
-                return;
+    function startRecording(data, button) {
+        if (isListening) {
+            showNotification('Please wait for current recording to finish', 'warning');
+            return;
+        }
+
+        isListening = true;
+        button.classList.add('recording');
+        const icon = button.querySelector('i');
+        const text = button.querySelector('span');
+        icon.className = 'fas fa-circle';
+        text.textContent = 'Listening...';
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log('📝 Transcript:', transcript);
+            closeModal();
+            checkPronunciation(transcript, data.targetPhrase);
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            button.classList.remove('recording');
+            icon.className = 'fas fa-microphone';
+            text.textContent = 'Start Recording';
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            isListening = false;
+            button.classList.remove('recording');
+            icon.className = 'fas fa-microphone';
+            text.textContent = 'Start Recording';
+            
+            let errorMessage = 'Could not recognize speech.';
+            if (event.error === 'no-speech') {
+                errorMessage = 'No speech detected. Please try again.';
+            } else if (event.error === 'audio-capture') {
+                errorMessage = 'Microphone not found.';
+            } else if (event.error === 'not-allowed') {
+                errorMessage = 'Microphone permission denied.';
             }
-
-            const key = this.dataset.key;
-            const situation = this.dataset.situation;
             
-            if (!key) return;
-            
-            const data = vesselData[key];
-            if (!data) return;
+            showNotification(errorMessage, 'error');
+        };
 
-            isListening = true;
-            this.classList.add('listening');
-            const icon = this.querySelector('i');
-            const text = this.querySelector('span');
-            icon.className = 'fas fa-circle';
-            text.textContent = 'Listening...';
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                console.log('📝 Transcript:', transcript);
-                checkPronunciation(transcript, data.targetPhrase, situation);
-            };
-
-            recognition.onend = () => {
-                isListening = false;
-                this.classList.remove('listening');
-                icon.className = 'fas fa-microphone';
-                text.textContent = 'Start Recording';
-            };
-
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                isListening = false;
-                this.classList.remove('listening');
-                icon.className = 'fas fa-microphone';
-                text.textContent = 'Start Recording';
-                
-                let errorMessage = 'Could not recognize speech.';
-                if (event.error === 'no-speech') {
-                    errorMessage = 'No speech detected. Please try again.';
-                } else if (event.error === 'audio-capture') {
-                    errorMessage = 'Microphone not found.';
-                } else if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone permission denied.';
-                }
-                
-                showNotification(errorMessage, 'error');
-            };
-
-            try {
-                recognition.start();
-                showNotification('Listening... Speak your message!', 'info');
-            } catch (e) {
-                console.error('Failed to start recognition:', e);
-                isListening = false;
-                this.classList.remove('listening');
-            }
-        });
-    });
+        try {
+            recognition.start();
+            showNotification('Listening... Speak your message!', 'info');
+        } catch (e) {
+            console.error('Failed to start recognition:', e);
+            isListening = false;
+            button.classList.remove('recording');
+        }
+    }
 
     // ==================================================
-    // PRONUNCIATION CHECKING
+    // PRONUNCIATION CHECKING WITH STEMMING
     // ==================================================
-    function checkPronunciation(transcript, targetText, situation) {
-        const userWords = new Set(cleanText(transcript).split(' '));
-        const targetWords = cleanText(targetText).split(' ');
+    function checkPronunciation(transcript, targetText) {
+        // Clean dan stem kedua text
+        const userWords = cleanAndStemText(transcript);
+        const targetWords = cleanAndStemText(targetText);
+        
+        console.log('🔍 User words:', userWords);
+        console.log('🎯 Target words:', targetWords);
         
         let resultHTML = '';
         let correctCount = 0;
         let totalCount = targetWords.length;
 
-        targetWords.forEach(targetWord => {
-            if (userWords.has(targetWord)) {
+        // Buat Set dari user words untuk quick lookup
+        const userWordsSet = new Set(userWords);
+
+        targetWords.forEach((targetWord, index) => {
+            if (userWordsSet.has(targetWord)) {
                 resultHTML += `<span class="correct">${targetWord}</span> `;
                 correctCount++;
             } else {
@@ -283,8 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const allCorrect = correctCount === totalCount;
 
         // Create feedback modal
-        const modal = document.createElement('div');
-        modal.className = 'feedback-modal';
+        const feedbackModal = document.createElement('div');
+        feedbackModal.className = 'feedback-modal';
         
         let title = '';
         let message = '';
@@ -292,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (allCorrect) {
             title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent!</h4>';
             message = '<p style="color: #059669;">Perfect! All words correct! 🎉</p>';
-        } else if (accuracy >= 50) {
+        } else if (accuracy >= 10) {
             title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Try!</h4>';
             message = `<p style="color: #d97706;">You got ${correctCount}/${totalCount} words (${accuracy}%). Keep practicing!</p>`;
         } else {
@@ -309,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const expectedLabel = `<h5>Word comparison (${correctCount}/${totalCount} correct):</h5>`;
 
-        modal.innerHTML = `
+        feedbackModal.innerHTML = `
             <div class="feedback-modal-content">
                 <button class="feedback-close">&times;</button>
                 <div class="mic-result-box">
@@ -318,30 +347,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${transcriptDisplay}
                     ${expectedLabel}
                     <div class="diff-output">${resultHTML}</div>
-                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+
+                    <div class="feedback-btn-row">
+                        <button class="try-again-btn">
+                            <i class="fa-solid fa-rotate-left"></i> Try Again
+                        </button>
+
+                        <button class="mark-complete-btn">
+                            <i class="fa-solid fa-check"></i> Mark as Completed
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
+
         
-        document.body.appendChild(modal);
+        document.body.appendChild(feedbackModal);
 
-        const closeBtn = modal.querySelector('.feedback-close');
-        const tryAgainBtn = modal.querySelector('.try-again-btn');
+        const closeBtn = feedbackModal.querySelector('.feedback-close');
+        const tryAgainBtn = feedbackModal.querySelector('.try-again-btn');
 
-        closeBtn.addEventListener('click', () => modal.remove());
-        tryAgainBtn.addEventListener('click', () => modal.remove());
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
+        const markCompleteBtn = feedbackModal.querySelector('.mark-complete-btn');
+
+        markCompleteBtn.addEventListener('click', () => {
+            feedbackModal.remove();
+
+            // Mark situation as completed
+            progressState[`situation${currentSituation}`] = true;
+
+            showNotification(`✔ Situation ${currentSituation} marked as completed!`, 'success');
+
+            checkCompletion();
         });
 
-        // Update progress if accuracy >= 50%
-        if (accuracy >= 50) {
-            progressState[`situation${situation}`] = true;
+
+        closeBtn.addEventListener('click', () => feedbackModal.remove());
+        tryAgainBtn.addEventListener('click', () => {
+            feedbackModal.remove();
+            // Re-open modal
+            const key = `situation${currentSituation}-${currentRole}`;
+            const data = vesselData[key];
+            openRecordModal(data, currentRole);
+        });
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) feedbackModal.remove();
+        });
+
+        // Update progress if accuracy >= 10%
+        if (accuracy >= 10) {
+            progressState[`situation${currentSituation}`] = true;
             
-            // Mark card as completed
-            const situationCard = document.querySelector(`[data-situation="${situation}"]`);
-            const roleCards = situationCard.querySelectorAll('.role-practice-card');
-            roleCards.forEach(card => card.classList.add('completed'));
+            // Mark cards as completed
+            const situationCard = document.querySelector(`[data-situation="${currentSituation}"]`);
+            if (situationCard) {
+                const roleCards = situationCard.closest('.situation-card').querySelectorAll('.role-practice-card');
+                roleCards.forEach(card => card.classList.add('completed'));
+            }
             
             checkCompletion();
             
@@ -351,21 +412,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function cleanText(text) {
-        const numMap = {
-            'zero': '0', 'one': '1', 'two': '2', 'three': '3',
-            'four': '4', 'five': '5', 'six': '6', 'seven': '7',
-            'eight': '8', 'nine': '9'
-        };
+    // ==================================================
+    // CLEAN AND STEM TEXT - NEW FUNCTION
+    // ==================================================
+    function cleanAndStemText(text) {
+        // Lowercase
+        text = text.toLowerCase();
         
-        let newText = text.toLowerCase();
+        // Remove punctuation
+        text = text.replace(/[.,!?"-]/g, '');
         
-        for (const word in numMap) {
-            const regex = new RegExp(`\\b${word}\\b`, 'g');
-            newText = newText.replace(regex, numMap[word]);
-        }
+        // Split into words
+        let words = text.split(/\s+/).filter(word => word.length > 0);
         
-        return newText.replace(/[.,!?"-]/g, '').replace(/\s+/g, ' ').trim();
+        // Process each word
+        words = words.map(word => {
+            // Jika kata adalah angka (pure number), keep as is
+            if (/^\d+$/.test(word)) {
+                return word;
+            }
+            
+            // Jika kata mengandung angka dan huruf (misal: 2a, b4), keep as is
+            if (/\d/.test(word)) {
+                return word;
+            }
+            
+            // Convert number words to digits (optional, tapi biasanya speech recog langsung angka)
+            const numMap = {
+                'zero': '0', 'one': '1', 'two': '2', 'three': '3',
+                'four': '4', 'five': '5', 'six': '6', 'seven': '7',
+                'eight': '8', 'nine': '9'
+            };
+            
+            if (numMap[word]) {
+                return numMap[word];
+            }
+            
+            // Stem the word (remove common suffixes)
+            return simpleStem(word);
+        });
+        
+        return words;
     }
 
     function playSuccessSound() {
@@ -387,6 +474,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
+    // MODAL CLOSE
+    // ==================================================
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Stop recognition if active
+        if (isListening) {
+            try {
+                recognition.stop();
+            } catch (e) {}
+            isListening = false;
+        }
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // ==================================================
     // COMPLETION CHECK
     // ==================================================
     function checkCompletion() {
@@ -401,7 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (continueWrapper) {
             continueWrapper.style.display = 'block';
             setTimeout(() => {
-                continueWrapper.classList.add('show');
+                continueWrapper.style.opacity = '1';
             }, 100);
             
             showNotification('🎉 All situations completed! Ready to continue!', 'success');
@@ -483,5 +595,74 @@ styles.textContent = `
         from { opacity: 1; transform: translateX(0); }
         to { opacity: 0; transform: translateX(100px); }
     }
+    
+    .modal-record-btn {
+        width: 100%;
+        padding: 18px 30px;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 16px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
+    
+    .modal-record-btn:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+    
+    .modal-record-btn.recording {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        animation: recordPulse 1.5s ease infinite;
+    }
+    
+    .modal-record-btn i {
+        font-size: 1.4rem;
+    }
+    
+    @keyframes recordPulse {
+        0%, 100% {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3), 0 0 0 0 rgba(239, 68, 68, 0.4);
+        }
+        50% {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4), 0 0 0 20px rgba(239, 68, 68, 0);
+        }
+    }
 `;
+
+styles.textContent += `
+    .feedback-btn-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .mark-complete-btn {
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .mark-complete-btn:hover {
+        background: #059669;
+    }
+`;
+
 document.head.appendChild(styles);
