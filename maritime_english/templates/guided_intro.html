@@ -122,72 +122,93 @@
                     </div>
                 </div>
 
-                <div class="vessels-display">
-                    <div class="vessel-card caller-vessel">
-                        <div class="vessel-role">
-                            <i class="fas fa-bullhorn"></i>
-                            <span>Caller</span>
-                        </div>
-                        <div class="vessel-info">
-                            <h4>MV CORALIS</h4>
-                            <div class="vessel-details">
-                                <span><i class="fas fa-hashtag"></i> MMSI: 538209100</span>
-                                <span><i class="fas fa-signal"></i> Call Sign: CLFW2</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="arrow-exchange">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-
-                    <div class="vessel-card receiver-vessel">
-                        <div class="vessel-role">
-                            <i class="fas fa-headphones"></i>
-                            <span>Receiver</span>
-                        </div>
-                        <div class="vessel-info">
-                            <h4>MV SILVERWIND</h4>
-                            <div class="vessel-details">
-                                <span><i class="fas fa-hashtag"></i> MMSI: 312985600</span>
-                                <span><i class="fas fa-signal"></i> Call Sign: SVNP4</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="role-selection-section">
-                    <h5 class="role-selection-title">
+                <!-- Role Selection Cards -->
+                <div class="role-selection-cards">
+                    <h5 class="role-section-title">
                         <i class="fas fa-user-check"></i>
                         Choose Your Role:
                     </h5>
-                    <div class="role-buttons">
-                        <button class="role-select-btn" data-role="caller" data-situation="1">
-                            <i class="fas fa-bullhorn"></i>
-                            <span>Caller (Coralis)</span>
-                        </button>
-                        <button class="role-select-btn" data-role="receiver" data-situation="1">
-                            <i class="fas fa-headphones"></i>
-                            <span>Receiver (Silverwind)</span>
-                        </button>
+                    
+                    <div class="role-cards-row">
+                        <!-- Caller Card -->
+                        <div class="role-practice-card caller-card" data-situation="1" data-role="caller">
+                            <div class="role-card-overlay">
+                                <span class="role-label caller-label">
+                                    <i class="fas fa-phone"></i> The Caller
+                                </span>
+                            </div>
+                            <div class="role-card-vessel-info">
+                                <h4>MV CORALIS</h4>
+                                <div class="role-card-details">
+                                    <span><i class="fas fa-hashtag"></i> 538209100</span>
+                                    <span><i class="fas fa-signal"></i> CLFW2</span>
+                                </div>
+                            </div>
+                            <button class="select-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Practice as Caller</span>
+                            </button>
+                        </div>
+
+                        <!-- Receiver Card -->
+                        <div class="role-practice-card receiver-card" data-situation="1" data-role="receiver">
+                            <div class="role-card-overlay">
+                                <span class="role-label receiver-label">
+                                    <i class="fas fa-headphones"></i> The Receiver
+                                </span>
+                            </div>
+                            <div class="role-card-vessel-info">
+                                <h4>MV SILVERWIND</h4>
+                                <div class="role-card-details">
+                                    <span><i class="fas fa-hashtag"></i> 312985600</span>
+                                    <span><i class="fas fa-signal"></i> SVNP4</span>
+                                </div>
+                            </div>
+                            <button class="select-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Practice as Receiver</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Recording Section (Hidden by default) -->
-                <div class="recording-section" id="recording-section-1" style="display: none;">
-                    <div class="selected-role-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span class="selected-role-text"></span>
+                <!-- Recording Section (Hidden initially) -->
+                <div class="recording-active-section" id="recording-section-1" style="display: none;">
+                    <div class="recording-header">
+                        <div class="selected-role-display">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="role-name-display"></span>
+                        </div>
+                        <button class="change-role-btn" data-situation="1">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Change Role</span>
+                        </button>
                     </div>
-                    <button class="mic-btn-task" data-task="" data-situation="1">
-                        <i class="fas fa-microphone"></i>
-                        <span>Record Your Message</span>
-                    </button>
-                    <button class="change-role-btn" data-situation="1">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Change Role</span>
-                    </button>
+                    
+                    <div class="recording-body">
+                        <div class="vessel-info-display">
+                            <h5>Your Vessel Information:</h5>
+                            <div class="info-items">
+                                <div class="info-item">
+                                    <label>Vessel Name:</label>
+                                    <value class="vessel-name-val">-</value>
+                                </div>
+                                <div class="info-item">
+                                    <label>MMSI:</label>
+                                    <value class="vessel-mmsi-val">-</value>
+                                </div>
+                                <div class="info-item">
+                                    <label>Call Sign:</label>
+                                    <value class="vessel-callsign-val">-</value>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="record-message-btn" data-situation="1">
+                            <i class="fas fa-microphone"></i>
+                            <span>Start Recording</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -227,72 +248,93 @@
                     </div>
                 </div>
 
-                <div class="vessels-display">
-                    <div class="vessel-card caller-vessel">
-                        <div class="vessel-role">
-                            <i class="fas fa-bullhorn"></i>
-                            <span>Caller</span>
-                        </div>
-                        <div class="vessel-info">
-                            <h4>MV CRYSTAL WAVE</h4>
-                            <div class="vessel-details">
-                                <span><i class="fas fa-hashtag"></i> MMSI: 239814900</span>
-                                <span><i class="fas fa-signal"></i> Call Sign: CWTR8</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="arrow-exchange">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-
-                    <div class="vessel-card receiver-vessel">
-                        <div class="vessel-role">
-                            <i class="fas fa-headphones"></i>
-                            <span>Receiver</span>
-                        </div>
-                        <div class="vessel-info">
-                            <h4>MV EMERALD SKY</h4>
-                            <div class="vessel-details">
-                                <span><i class="fas fa-hashtag"></i> MMSI: 519402300</span>
-                                <span><i class="fas fa-signal"></i> Call Sign: EMSK7</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="role-selection-section">
-                    <h5 class="role-selection-title">
+                <!-- Role Selection Cards -->
+                <div class="role-selection-cards">
+                    <h5 class="role-section-title">
                         <i class="fas fa-user-check"></i>
                         Choose Your Role:
                     </h5>
-                    <div class="role-buttons">
-                        <button class="role-select-btn" data-role="caller" data-situation="2">
-                            <i class="fas fa-bullhorn"></i>
-                            <span>Caller (Crystal Wave)</span>
-                        </button>
-                        <button class="role-select-btn" data-role="receiver" data-situation="2">
-                            <i class="fas fa-headphones"></i>
-                            <span>Receiver (Emerald Sky)</span>
-                        </button>
+                    
+                    <div class="role-cards-row">
+                        <!-- Caller Card -->
+                        <div class="role-practice-card caller-card" data-situation="2" data-role="caller">
+                            <div class="role-card-overlay">
+                                <span class="role-label caller-label">
+                                    <i class="fas fa-phone"></i> The Caller
+                                </span>
+                            </div>
+                            <div class="role-card-vessel-info">
+                                <h4>MV CRYSTAL WAVE</h4>
+                                <div class="role-card-details">
+                                    <span><i class="fas fa-hashtag"></i> 239814900</span>
+                                    <span><i class="fas fa-signal"></i> CWTR8</span>
+                                </div>
+                            </div>
+                            <button class="select-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Practice as Caller</span>
+                            </button>
+                        </div>
+
+                        <!-- Receiver Card -->
+                        <div class="role-practice-card receiver-card" data-situation="2" data-role="receiver">
+                            <div class="role-card-overlay">
+                                <span class="role-label receiver-label">
+                                    <i class="fas fa-headphones"></i> The Receiver
+                                </span>
+                            </div>
+                            <div class="role-card-vessel-info">
+                                <h4>MV EMERALD SKY</h4>
+                                <div class="role-card-details">
+                                    <span><i class="fas fa-hashtag"></i> 519402300</span>
+                                    <span><i class="fas fa-signal"></i> EMSK7</span>
+                                </div>
+                            </div>
+                            <button class="select-role-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Practice as Receiver</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Recording Section (Hidden by default) -->
-                <div class="recording-section" id="recording-section-2" style="display: none;">
-                    <div class="selected-role-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span class="selected-role-text"></span>
+                <!-- Recording Section (Hidden initially) -->
+                <div class="recording-active-section" id="recording-section-2" style="display: none;">
+                    <div class="recording-header">
+                        <div class="selected-role-display">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="role-name-display"></span>
+                        </div>
+                        <button class="change-role-btn" data-situation="2">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Change Role</span>
+                        </button>
                     </div>
-                    <button class="mic-btn-task" data-task="" data-situation="2">
-                        <i class="fas fa-microphone"></i>
-                        <span>Record Your Message</span>
-                    </button>
-                    <button class="change-role-btn" data-situation="2">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Change Role</span>
-                    </button>
+                    
+                    <div class="recording-body">
+                        <div class="vessel-info-display">
+                            <h5>Your Vessel Information:</h5>
+                            <div class="info-items">
+                                <div class="info-item">
+                                    <label>Vessel Name:</label>
+                                    <value class="vessel-name-val">-</value>
+                                </div>
+                                <div class="info-item">
+                                    <label>MMSI:</label>
+                                    <value class="vessel-mmsi-val">-</value>
+                                </div>
+                                <div class="info-item">
+                                    <label>Call Sign:</label>
+                                    <value class="vessel-callsign-val">-</value>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="record-message-btn" data-situation="2">
+                            <i class="fas fa-microphone"></i>
+                            <span>Start Recording</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -303,7 +345,8 @@
 </div>
 
 <!-- FOOTER -->
-<div class="continue-wrapper">
+<!-- Continue Button (Hidden by default) -->
+<div class="continue-wrapper" id="continueWrapper" style="display: none; opacity: 0;">
     <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=7) }}" class="continue-button">
         <span>Continue Sailing</span>
     </a>

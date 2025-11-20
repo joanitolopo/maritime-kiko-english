@@ -3,6 +3,8 @@
 
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/noticing_numbers.css') }}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/input_mmsi.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/input_vhf.css') }}"> -->
 {% endblock %}
 
 {% block content %}
@@ -26,10 +28,10 @@
 </header>
 
 <!-- MAIN CONTENT -->
-<div class="main-content">
+<div class="mmsi-container">
     
     <!-- LEFT SIDEBAR -->
-    <aside class="drill-sidebar">
+    <aside class="mmsi-sidebar">
         
         <div class="activity-badge">
             <div class="badge-icon">
@@ -37,14 +39,13 @@
             </div>
             <div class="badge-text">
                 <h4>E. Drill It Like a Seafarer</h4>
-                <p>Activity 6. Radio Spelling Practice</p>
             </div>
         </div>
 
         <!-- Captain Section with Radio Waves -->
         <div class="captain-instruction-card">
             <div class="captain-avatar-wrapper">
-                <img src="{{ url_for('static', filename='img/captain_radio_check_5.png') }}" alt="Captain Character" class="captain-avatar">
+                <img src="{{ url_for('static', filename='img/Captain male-3.png') }}" alt="Captain Character" class="captain-avatar">
                 <div class="radio-waves">
                     <span></span>
                     <span></span>
@@ -54,11 +55,11 @@
             
             <!-- Speech Bubble -->
             <div class="instruction-bubble">
-                <p class="speech-text-drill">
+                <p class="speech-text-mmsi">
                     Cadets, it's time to drill your pronunciation! Listen carefully to the example, then spell and say each vessel's identification clearly — just like a real seafarer!
                 </p>
                 
-                <div class="drill-controls">
+                <div class="mmsi-controls">
                     <button class="control-btn audio-btn" id="captain-audio-btn">
                         <i class="fa-solid fa-play"></i>
                     </button>
@@ -69,137 +70,237 @@
                 </div>
             </div>
         </div>
-        
     </aside>
 
     <!-- RIGHT CONTENT -->
-    <main class="activity-area">
-        
-        <!-- Activity Header -->
-        <div class="activity-area-title">
-            <div class="title-icon">
-                <i class="fa-solid fa-headphones"></i>
-            </div>
-            <p class="instruction-text-drill">
-                Listen to the example, then read your vessel card and say the name, MMSI, and Call Sign using the same format. Speak clearly.
-            </p>
-        </div>
-        
-        <!-- EXAMPLE SECTION - RADIO COMMUNICATION STYLE -->
-        <div class="example-section">
-            <div class="example-header">
-                <div class="example-header-icon">
-                    <i class="fa-solid fa-volume-high"></i>
+    <main class="mmsi-main">
+        <section class="activity-card spell-sea-activity">
+            <div class="activity-header">
+                <div class="header-left">
+                    <i class="fa-solid fa-comment activity-number"></i>
+                    <div class="header-text">
+                        <h3>Activity 6: Radio Spelling Practice</h3>
+                        <p>Learn radio communication with real vessel examples</p>
+                    </div>
                 </div>
-                <h3 class="example-header-title">Listen to the example</h3>
             </div>
-            
-            <div class="example-radio-card">
-                <div class="example-communication-grid">
+
+            <div class="activity-body">
+                <div class="instruction-banner">
+                    <div class="banner-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="banner-text">
+                        <p class="instruction-text-mmsi" >
+                            Listen to the example, then read your vessel card and say the name, MMSI, and Call Sign using the same format. Speak clearly.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Example</span>
+                        Vessel: ANTARES
+                    </h4>
                     
-                    <!-- Left Side: Avatar and Info -->
-                    <div class="example-info-section">
-                        <div class="example-vessel-display">
-                            <div class="example-vessel-avatar">
-                                <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="ANTARES">
+                    <!-- Communication Card -->
+                    <div class="communication-card">
+                        
+                        <!-- Left: Character & Info -->
+                        <div class="card-left">
+                            <div class="character-section">
+                                <img src="{{ url_for('static', filename='img/operator_vessel_antara.png') }}" alt="Radio Operator" class="operator-img">
                             </div>
-                            <div class="example-vessel-details">
-                                <p><span class="detail-label">Vessel's Name:</span><br><span class="detail-value">ANTARES</span></p>
-                                <p><span class="detail-label">MMSI:</span><br><span class="detail-value">257689000</span></p>
-                                <p><span class="detail-label">Call Sign:</span><br><span class="detail-value">LAPW5</span></p>
+                            
+                            <div class="vessel-info-section">
+                                <div class="info-header">
+                                    <i class="fas fa-ship"></i>
+                                    <span>Vessel Information</span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-anchor"></i> Name</label>
+                                    <value>ANTARES</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-hashtag"></i> MMSI</label>
+                                    <value class="mmsi-number">257689000</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
+                                    <value class="call-sign">LAPW5</value>
+                                </div>
+
+                                <!-- ✅ KEMBALIKAN BUTTON INI -->
+                                <button class="play-button" id="example-play-btn" data-audio-src="/static/data/audio/unit1/mmsi_example.wav">
+                                    <i class="fas fa-play"></i>
+                                    <span>Play</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right: Transcript -->
+                        <div class="card-right">
+                            <div class="transcript-section">
+                                <div class="transcript-header">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Radio Communication Transcript</span>
+                                </div>
+                                
+                                <div class="transcript-content">
+                                    <div class="transcript-line">
+                                        <span class="speaker">Vessel:</span>
+                                        <span class="message">
+                                            "This is Too - Fife - Seven - Six - Ait - Niner - ZEE-ro - ZEE-ro - ZEE-ro. 
+                                            Motor Vessel "ANTARES" Alfa - November - Tango - Alfa - Romeo - Echo - Sierra. Call Sign Lima - Alfa - Papa - Whisky - Fife."</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="roleplay-header">
+                    <div class="roleplay-header-main">
+                        <i class="fa-solid fa-hand-point-right"></i>
+                        <h3 class="roleplay-title-text">Your Turn - Speak Clearly</h3>
+                    </div>
+                    <p class="roleplay-subtitle">Follow the same format as the example above.</p>
+                </div>  
+
+                <!-- PART 1: Your Turn - APOLLON -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Part 1</span>
+                        Your Turn: APOLLON
+                    </h4>
+                    
+                    <!-- Communication Card -->
+                    <div class="communication-card">
+                        
+                        <div class="card-left">
+                            <div class="character-section clickable-image show-overlay" data-task="task1" data-type="speak">
+                                <!-- User profile image - conditional based on gender -->
+                                {% if user_info and user_info.gender == 'Female' %}
+                                    <img src="{{ url_for('static', filename='img/Cadet female-4.png') }}" 
+                                        alt="Your Profile" 
+                                        class="operator-img user-profile-img">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='img/Cadet male-6.png') }}" 
+                                        alt="Your Profile" 
+                                        class="operator-img user-profile-img">
+                                {% endif %}
+                                <div class="image-overlay permanent-overlay">
+                                    <div class="mic-icon">
+                                        <i class="fas fa-microphone"></i>
+                                    </div>
+                                    <p class="overlay-instruction">Click to Record</p>
+                                </div>
+                            </div>
+                            
+                            <div class="vessel-info-section">
+                                <div class="info-header">
+                                    <i class="fas fa-ship"></i>
+                                    <span>Vessel Information</span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-anchor"></i> Name</label>
+                                    <value>APOLLON</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-hashtag"></i> MMSI</label>
+                                    <value class="mmsi-number">237002600</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
+                                    <value class="call-sign">SWFP</value>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="part-divider"></div>
+
+                <!-- PART 2: Your Turn - BAYSTAR -->
+                <div class="activity-part">
+                    <h4 class="part-title">
+                        <span class="part-number">Part 2</span>
+                        Your Turn: BAYSTAR
+                    </h4>
                     
-                    <!-- Right Side: Transcript -->
-                    <div class="example-transcript-section">
-                        <div class="transcript-box">
-                            <button class="transcript-play-btn" 
-                                    data-audio-src="/static/data/audio/unit1/example_antares.wav">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                            <div class="transcript-text">
-                                <p>This is too-fife-seven-six-ait-niner-zeero-zeero-zeero.<br>
-                                Motor Vessel "ANTARES" Alfa November Tango Alfa Romeo Echo Sierra.<br>
-                                Call Sign Lima Alfa Papa Whisky Fife</p>
+                    <!-- Communication Card -->
+                    <div class="communication-card">
+                        
+                        <!-- Card Left: Character & Vessel Info -->
+                        <div class="card-left">
+                            <div class="character-section clickable-image show-overlay" data-task="task2" data-type="speak">
+                                <!-- User profile image - conditional based on gender -->
+                                {% if user_info and user_info.gender == 'Female' %}
+                                    <img src="{{ url_for('static', filename='img/Cadet female-4.png') }}" 
+                                        alt="Your Profile" 
+                                        class="operator-img user-profile-img">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='img/Cadet male-6.png') }}" 
+                                        alt="Your Profile" 
+                                        class="operator-img user-profile-img">
+                                {% endif %}
+                                <div class="image-overlay permanent-overlay">
+                                    <div class="mic-icon">
+                                        <i class="fas fa-microphone"></i>
+                                    </div>
+                                    <p class="overlay-instruction">Click to Record</p>
+                                </div>
+                            </div>
+                            
+                            <div class="vessel-info-section">
+                                <div class="info-header">
+                                    <i class="fas fa-ship"></i>
+                                    <span>Vessel Information</span>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-anchor"></i> Name</label>
+                                    <value>BAYSTAR</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-hashtag"></i> MMSI</label>
+                                    <value class="mmsi-number">440983000</value>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <label><i class="fas fa-broadcast-tower"></i> Call Sign</label>
+                                    <value class="call-sign">DSON9</value>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
+
+        </section>
+
+
+        <!-- Continue Button - Hidden by default -->
+        <div class="continue-wrapper" style="display: none;">
+            <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=5) }}"  class="continue-button">
+            <span>Continue Sailing</span>
+            </a>
         </div>
-        
-        <!-- SPEAK NOW SECTION -->
-        <div class="speak-cards-container">
-            <div class="speak-header">
-                <div class="speak-header-main">
-                    <i class="fa-solid fa-hand-point-right"></i>
-                    <h3 class="speak-title-text">Your Turn — Speak Clearly</h3>
-                </div>
-                <p class="speak-subtitle">Follow the same format as the example above.</p>
-            </div>
-            
-            <!-- CARD 1 -->
-            <div class="speak-card" data-card-index="0">
-                <div class="card-number-badge">1</div>
-                
-                <div class="speak-card-content">
-                    <div class="vessel-avatar-section">
-                        <img src="{{ url_for('static', filename='img/captain_radio_check_8.png') }}" alt="Vessel 1">
-                    </div>
-                    
-                    <div class="vessel-info-section">
-                        <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">APOLLON</span></p>
-                        <p><span class="info-label">MMSI:</span><br><span class="info-value">237002600</span></p>
-                        <p><span class="info-label">Call Sign:</span><br><span class="info-value">SWFP</span></p>
-                    </div>
-                    
-                    <div class="speak-action-section">
-                        <button class="speak-now-btn" data-task="task1">
-                            <i class="fa-solid fa-microphone"></i>
-                            <span>Speak Now</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- CARD 2 -->
-            <div class="speak-card" data-card-index="1">
-                <div class="card-number-badge">2</div>
-                
-                <div class="speak-card-content">
-                    <div class="vessel-avatar-section">
-                        <img src="{{ url_for('static', filename='img/captain_radio_check_4.png') }}" alt="Vessel 2">
-                    </div>
-                    
-                    <div class="vessel-info-section">
-                        <p><span class="info-label">Vessel's Name:</span><br><span class="info-value">BAYSTAR</span></p>
-                        <p><span class="info-label">MMSI:</span><br><span class="info-value">440983000</span></p>
-                        <p><span class="info-label">Call Sign:</span><br><span class="info-value">DSON9</span></p>
-                    </div>
-                    
-                    <div class="speak-action-section">
-                        <button class="speak-now-btn" data-task="task2">
-                            <i class="fa-solid fa-microphone"></i>
-                            <span>Speak Now</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-        
     </main>
 
 </div>
 
 <!-- FOOTER -->
-<div class="continue-wrapper">
-    <a href="{{ url_for('learning.complete_subunit', unit_id=unit_id, subunit_index=5) }}" class="continue-button">
-        <span>Continue Sailing</span>
-    </a>
-</div>
+
 
 {% endblock %}
 

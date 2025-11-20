@@ -33,14 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sidebar Controls
     const captainAudioBtn = document.getElementById('captain-audio-btn');
     const translateBtn = document.getElementById('translate-btn');
-    const speechText_sidebar = document.querySelector('.speech-text-drill');
-    const instructionText_activity = document.querySelector('.instruction-text-drill');
+    const speechText_sidebar = document.querySelector('.speech-text-mmsi');
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
-    // Transcript Play Button
-    const transcriptPlayBtn = document.querySelector('.transcript-play-btn');
+    const instructionText_activity = document.querySelector('.instruction-text-mmsi');
 
-    // Speak Now Buttons
-    const speakNowBtns = document.querySelectorAll('.speak-now-btn');
+    // ✅ EXAMPLE PLAY BUTTON
+    const examplePlayBtn = document.getElementById('example-play-btn');
+
+    // ✅ CLICKABLE IMAGES (ONLY FOR SPEAK TASKS)
+    const clickableImages = document.querySelectorAll('.clickable-image[data-type="speak"]');
+
 
     // Audio Players
     const audio_captain = new Audio();
@@ -51,6 +54,39 @@ document.addEventListener('DOMContentLoaded', () => {
     let isTranslated = false;
     let isListening = false;
     let currentSpeakBtn = null;
+
+    // ==================================================
+    // PROGRESS TRACKING
+    // ==================================================
+    const taskProgress = {
+        examplePlayed: false,
+        task1Completed: false,
+        task2Completed: false
+    };
+
+    function checkAllTasksCompleted() {
+        const allCompleted = taskProgress.examplePlayed && 
+                            taskProgress.task1Completed && 
+                            taskProgress.task2Completed;
+        
+        if (allCompleted) {
+            showContinueButton();
+        }
+    }
+
+    function showContinueButton() {
+        const continueWrapper = document.querySelector('.continue-wrapper');
+        if (continueWrapper) {
+            // ✅ Show dengan fade in animation
+            continueWrapper.style.display = 'block';
+            setTimeout(() => {
+                continueWrapper.classList.add('show');
+            }, 100);
+            
+            showNotification('All tasks completed! You can continue now 🎉', 'success');
+            console.log('🎉 All tasks completed! Continue button shown.');
+        }
+    }
 
     // ==================================================
     // CONTENT & AUDIO PATHS
@@ -101,23 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon.classList.add('fa-play');
             }
             captainAudioBtn.classList.remove('playing');
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         }
 
-        // Reset transcript play button
-        if (transcriptPlayBtn) {
-            transcriptPlayBtn.classList.remove('playing');
-            const icon = transcriptPlayBtn.querySelector('i');
+        // ✅ Reset example play button
+        if (examplePlayBtn) {
+            examplePlayBtn.classList.remove('playing');
+            const icon = examplePlayBtn.querySelector('i');
+            const text = examplePlayBtn.querySelector('span');
             if (icon) {
                 icon.classList.remove('fa-pause');
                 icon.classList.add('fa-play');
             }
+            if (text) text.textContent = 'Play';
         }
 
-        // Reset speak now buttons
-        speakNowBtns.forEach(btn => {
-            btn.classList.remove('listening');
-            const text = btn.querySelector('span');
-            if (text) text.textContent = 'Speak Now';
+        // ✅ Reset clickable images (speak only)
+        clickableImages.forEach(img => {
+            img.classList.remove('listening');
         });
     }
 
@@ -155,6 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // PRONUNCIATION CHECKING
     // ==================================================
 
+    // ==================================================
+    // PRONUNCIATION CHECKING WITH 50% THRESHOLD
+    // ==================================================
+
     function checkPronunciation(transcript, targetText, speakBtn) {
         const userWords = new Set(cleanText(transcript).split(' '));
         const targetWords = cleanText(targetText).split(' ');
@@ -174,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const accuracy = Math.round((correctCount / totalCount) * 100);
         const allCorrect = correctCount === totalCount;
+        const passedThreshold = accuracy >= 5; // ✅ 50% MINIMUM
 
         // Create modal
         const modal = document.createElement('div');
@@ -181,16 +223,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let title = '';
         let message = '';
+        let actionButton = '';
 
         if (allCorrect) {
             title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent Work!</h4>';
             message = `<p style="color: #059669;">Perfect! You pronounced all the key words correctly. Keep up the great work! 🎉</p>`;
-        } else if (accuracy >= 70) {
-            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Try!</h4>';
-            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Review the missing words and try again!</p>`;
+            actionButton = '<button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>';
+        } else if (passedThreshold) {
+            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Job!</h4>';
+            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). That's good enough to continue! You can retry for a perfect score or move on.</p>`;
+            actionButton = `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                    <button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>
+                </div>
+            `;
         } else {
-            title = '<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>';
-            message = `<p style="color: #2563eb;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Don't worry! Listen to the example again and practice more.</p>`;
+            title = '<h4><i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i> Keep Practicing!</h4>';
+            message = `<p style="color: #dc2626;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). You need at least 50% to continue. Don't worry! Listen to the example again and try once more.</p>`;
+            actionButton = '<button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>';
         }
         
         const transcriptDisplay = `
@@ -200,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </p>
         `;
 
-        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct):</h5>`;
+        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct - ${accuracy}%):</h5>`;
 
         modal.innerHTML = `
             <div class="feedback-modal-content">
@@ -211,30 +262,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${transcriptDisplay}
                     ${expectedLabel}
                     <div class="diff-output">${resultHTML}</div>
-                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                    ${actionButton}
                 </div>
             </div>
         `;
         
         document.body.appendChild(modal);
 
-        // Close button functionality
+        // ✅ CLOSE BUTTON
         const closeBtn = modal.querySelector('.feedback-close');
-        const tryAgainBtn = modal.querySelector('.try-again-btn');
-
         closeBtn.addEventListener('click', () => {
             modal.style.animation = 'fadeOut 0.3s ease';
             setTimeout(() => modal.remove(), 300);
         });
 
-        tryAgainBtn.addEventListener('click', () => {
-            modal.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                modal.remove();
-                speakBtn.click();
-            }, 300);
-        });
+        // ✅ TRY AGAIN BUTTON
+        const tryAgainBtn = modal.querySelector('.try-again-btn');
+        if (tryAgainBtn) {
+            tryAgainBtn.addEventListener('click', () => {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    modal.remove();
+                    speakBtn.click(); // Trigger recording again
+                }, 300);
+            });
+        }
 
+        // ✅ CONTINUE/COMPLETE BUTTON (NEW)
+        const continueTaskBtn = modal.querySelector('.continue-task-btn');
+        if (continueTaskBtn) {
+            continueTaskBtn.addEventListener('click', () => {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    modal.remove();
+                    markTaskAsCompleted(speakBtn); // ✅ Mark task as done
+                }, 300);
+            });
+        }
+
+        // ✅ CLICK OUTSIDE TO CLOSE
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.animation = 'fadeOut 0.3s ease';
@@ -242,9 +308,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // ✅ SUCCESS SOUND
         if (allCorrect) {
             playSuccessSound();
         }
+    }
+
+    // ==================================================
+    // MARK TASK AS COMPLETED
+    // ==================================================
+
+    function markTaskAsCompleted(speakBtn) {
+        if (!speakBtn) return;
+        
+        const taskKey = speakBtn.dataset.task;
+        
+        // ✅ PREVENT DOUBLE COMPLETION
+        if (taskKey === 'task1' && taskProgress.task1Completed) {
+            console.log('Task 1 already completed');
+            return;
+        }
+        if (taskKey === 'task2' && taskProgress.task2Completed) {
+            console.log('Task 2 already completed');
+            return;
+        }
+        
+        // ✅ MARK AS COMPLETED
+        if (taskKey === 'task1') {
+            taskProgress.task1Completed = true;
+            speakBtn.classList.add('completed');
+            showNotification('Task 1 completed! ✓', 'success');
+            console.log('✅ Task 1 marked as completed');
+        } else if (taskKey === 'task2') {
+            taskProgress.task2Completed = true;
+            speakBtn.classList.add('completed');
+            showNotification('Task 2 completed! ✓', 'success');
+            console.log('✅ Task 2 marked as completed');
+        }
+        
+        // ✅ CHECK IF ALL TASKS DONE
+        checkAllTasksCompleted();
     }
 
     function playSuccessSound() {
@@ -283,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon.classList.remove('fa-play');
                         icon.classList.add('fa-pause');
                         this.classList.add('playing');
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
                     })
                     .catch(error => {
                         console.error('❌ Audio error:', error);
@@ -292,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio_captain.pause();
                 icon.classList.remove('fa-pause');
                 icon.classList.add('fa-play');
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
                 this.classList.remove('playing');
             }
         });
@@ -301,6 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.classList.remove('fa-pause');
             icon.classList.add('fa-play');
             captainAudioBtn.classList.remove('playing');
+
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
         });
     }
 
@@ -325,138 +432,214 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // TRANSCRIPT PLAY BUTTON
+    // EXAMPLE PLAY BUTTON (TOGGLEABLE)
     // ==================================================
 
-    if (transcriptPlayBtn) {
-        transcriptPlayBtn.addEventListener('click', function() {
+    if (examplePlayBtn) {
+        examplePlayBtn.addEventListener('click', function() {
             const audioSrc = this.dataset.audioSrc;
             const icon = this.querySelector('i');
+            const text = this.querySelector('span');
 
             if (!audioSrc) {
                 console.warn('Audio source not found');
                 return;
             }
 
-            if (audio_example.paused || audio_example.src !== audioSrc) {
-                stopAllAudioAndSpeech();
-
-                audio_example.src = audioSrc;
-                audio_example.play()
-                    .then(() => {
-                        this.classList.add('playing');
-                        if (icon) {
-                            icon.classList.remove('fa-play');
-                            icon.classList.add('fa-pause');
-                        }
-                        showNotification('Playing example audio...', 'info');
-                    })
-                    .catch(error => {
-                        console.error('❌ Audio error:', error);
-                        shakeElement(this);
-                    });
-            } else {
+            // ✅ TOGGLE: If playing, pause it
+            if (!audio_example.paused && audio_example.src.includes(audioSrc)) {
                 audio_example.pause();
                 this.classList.remove('playing');
                 if (icon) {
                     icon.classList.remove('fa-pause');
                     icon.classList.add('fa-play');
                 }
+                if (text) text.textContent = 'Play';
+                return;
             }
+
+            // ✅ PLAY: Start audio
+            stopAllAudioAndSpeech();
+
+            audio_example.src = audioSrc;
+            audio_example.play()
+                .then(() => {
+                    this.classList.add('playing');
+                    if (icon) {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                    }
+                    if (text) text.textContent = 'Pause';
+                    showNotification('Playing example audio...', 'info');
+                    scrollToTranscript(this);
+                })
+                .catch(error => {
+                    console.error('❌ Audio error:', error);
+                    shakeElement(this);
+                });
         });
 
+        // ✅ AUDIO ENDED
         audio_example.addEventListener('ended', () => {
-            transcriptPlayBtn.classList.remove('playing');
-            const icon = transcriptPlayBtn.querySelector('i');
+            examplePlayBtn.classList.remove('playing');
+            const icon = examplePlayBtn.querySelector('i');
+            const text = examplePlayBtn.querySelector('span');
             if (icon) {
                 icon.classList.remove('fa-pause');
                 icon.classList.add('fa-play');
+            }
+            if (text) text.textContent = 'Play';
+            
+            // ✅ MARK AS COMPLETED
+            if (!taskProgress.examplePlayed) {
+                taskProgress.examplePlayed = true;
+                showNotification('Example completed! ✓', 'success');
+                checkAllTasksCompleted();
             }
         });
     }
 
     // ==================================================
-    // SPEAK NOW BUTTONS
+    // HELPER FUNCTIONS
     // ==================================================
 
-    speakNowBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (isListening) {
-                showNotification('Please wait for the current recording to finish', 'warning');
-                return;
-            }
 
-            stopAllAudioAndSpeech();
-            isListening = true;
-            currentSpeakBtn = this;
+    // ==================================================
+    // SCROLL TO TRANSCRIPT FUNCTION
+    // ==================================================
+
+    function scrollToTranscript(playButton) {
+        const communicationCard = playButton.closest('.communication-card');
+        
+        if (!communicationCard) return;
+        
+        const transcriptSection = communicationCard.querySelector('.transcript-section');
+        
+        if (transcriptSection) {
+            // ✅ SCROLL
+            transcriptSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start'
+            });
             
-            const taskKey = this.dataset.task;
-            const targetText = TARGET_PHRASES[taskKey];
-
-            if (!targetText) {
-                console.warn(`Target phrase not found for: ${taskKey}`);
-                showNotification('Target phrase not configured for this task', 'error');
-                isListening = false;
-                return;
-            }
-
-            this.classList.add('listening');
-            const text = this.querySelector('span');
-            if (text) text.textContent = 'Listening...';
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                console.log('📝 Transcript:', transcript);
-                checkPronunciation(transcript, targetText, currentSpeakBtn);
-            };
-
-            recognition.onend = () => {
-                isListening = false;
-                if (currentSpeakBtn) {
-                    currentSpeakBtn.classList.remove('listening');
-                    const text = currentSpeakBtn.querySelector('span');
-                    if (text) text.textContent = 'Speak Now';
-                }
-                currentSpeakBtn = null;
-            };
-
-            recognition.onerror = (event) => {
-                console.error('❌ Speech recognition error:', event.error);
-                isListening = false;
+            // ✅ HIGHLIGHT EFFECT
+            setTimeout(() => {
+                transcriptSection.style.transition = 'all 0.3s ease';
+                transcriptSection.style.transform = 'scale(1.02)';
+                transcriptSection.style.boxShadow = '0 12px 40px rgba(11, 90, 143, 0.4)';
                 
-                if (currentSpeakBtn) {
-                    currentSpeakBtn.classList.remove('listening');
-                    const text = currentSpeakBtn.querySelector('span');
-                    if (text) text.textContent = 'Speak Now';
-                }
-                
-                let errorMessage = 'Could not recognize speech.';
-                if (event.error === 'no-speech') {
-                    errorMessage = 'No speech detected. Please try again and speak clearly.';
-                } else if (event.error === 'audio-capture') {
-                    errorMessage = 'Microphone not found. Please check your microphone connection.';
-                } else if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone permission denied. Please allow microphone access.';
-                }
-                
-                showNotification(errorMessage, 'error');
-                currentSpeakBtn = null;
-            };
+                setTimeout(() => {
+                    transcriptSection.style.transform = 'scale(1)';
+                    transcriptSection.style.boxShadow = '';
+                }, 600);
+            }, 500); // Wait for scroll to finish
+            
+            console.log('📜 Scrolled and highlighted transcript');
+        }
+    }
 
-            try {
-                recognition.start();
-                showNotification('Listening... Speak now!', 'info');
-            } catch (e) {
-                console.error('Failed to start recognition:', e);
-                isListening = false;
-                this.classList.remove('listening');
-            }
+    // ==================================================
+    // CLICKABLE IMAGE HANDLERS
+    // ==================================================
+
+    // const clickableImages = document.querySelectorAll('.clickable-image');
+
+    clickableImages.forEach(img => {
+        img.addEventListener('click', function() {
+            handleSpeakClick(this);
         });
     });
 
-    // ==================================================
-    // HELPER FUNCTIONS
-    // ==================================================
+    audio_example.addEventListener('ended', () => {
+        const playingImg = document.querySelector('.clickable-image.playing');
+        if (playingImg) {
+            playingImg.classList.remove('playing');
+            playingImg.classList.add('completed');
+            taskProgress.examplePlayed = true;
+            checkAllTasksCompleted();
+        }
+    });
+
+    function handleSpeakClick(element) {
+        if (isListening) {
+            showNotification('Please wait for the current recording to finish', 'warning');
+            return;
+        }
+
+        stopAllAudioAndSpeech();
+        isListening = true;
+        currentSpeakBtn = element;
+        
+        const taskKey = element.dataset.task;
+        const targetText = TARGET_PHRASES[taskKey];
+
+        if (!targetText) {
+            console.warn(`Target phrase not found for: ${taskKey}`);
+            showNotification('Target phrase not configured for this task', 'error');
+            isListening = false;
+            return;
+        }
+
+        element.classList.add('listening');
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log('📝 Transcript:', transcript);
+            checkPronunciation(transcript, targetText, currentSpeakBtn);
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            if (currentSpeakBtn) {
+                currentSpeakBtn.classList.remove('listening');
+                
+                // // ✅ MARK AS COMPLETED
+                // const taskKey = currentSpeakBtn.dataset.task;
+                // if (taskKey === 'task1' && !taskProgress.task1Completed) {
+                //     taskProgress.task1Completed = true;
+                //     currentSpeakBtn.classList.add('completed');
+                //     showNotification('Task 1 completed! ✓', 'success');
+                //     checkAllTasksCompleted();
+                // } else if (taskKey === 'task2' && !taskProgress.task2Completed) {
+                //     taskProgress.task2Completed = true;
+                //     currentSpeakBtn.classList.add('completed');
+                //     showNotification('Task 2 completed! ✓', 'success');
+                //     checkAllTasksCompleted();
+                // }
+            }
+            currentSpeakBtn = null;
+        };
+
+        recognition.onerror = (event) => {
+            console.error('❌ Speech recognition error:', event.error);
+            isListening = false;
+            
+            if (currentSpeakBtn) {
+                currentSpeakBtn.classList.remove('listening');
+            }
+            
+            let errorMessage = 'Could not recognize speech.';
+            if (event.error === 'no-speech') {
+                errorMessage = 'No speech detected. Please try again and speak clearly.';
+            } else if (event.error === 'audio-capture') {
+                errorMessage = 'Microphone not found. Please check your microphone connection.';
+            } else if (event.error === 'not-allowed') {
+                errorMessage = 'Microphone permission denied. Please allow microphone access.';
+            }
+            
+            showNotification(errorMessage, 'error');
+            currentSpeakBtn = null;
+        };
+
+        try {
+            recognition.start();
+            showNotification('Listening... Speak now!', 'info');
+        } catch (e) {
+            console.error('Failed to start recognition:', e);
+            isListening = false;
+            element.classList.remove('listening');
+        }
+    }
 
     function shakeElement(element) {
         if (!element) return;

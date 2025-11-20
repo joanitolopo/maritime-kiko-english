@@ -296,39 +296,11 @@ body {
     animation: fadeInUp 0.7s ease-out 0.4s both;
 }
 
-/* Radio Card */
-.radio-card {
-    background: var(--white);
-    border-radius: 25px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-/* Radio Header */
-.radio-header {
-    background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-deep) 100%);
-    color: var(--white);
-    padding: 25px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+/* Header */
 .header-left {
     display: flex;
     align-items: center;
     gap: 20px;
-}
-
-.header-icon {
-    width: 55px;
-    height: 55px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
 }
 
 .header-text h3 {
@@ -341,11 +313,6 @@ body {
     font-size: 0.95rem;
     opacity: 0.9;
     margin: 0;
-}
-
-.header-status {
-    display: flex;
-    align-items: center;
 }
 
 .status-indicator {
@@ -718,31 +685,6 @@ body {
     padding: 25px 30px;
     display: flex;
     align-items: center;
-}
-
-.activity-number {
-    width: 55px;
-    height: 55px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: 800;
-    flex-shrink: 0;
-}
-
-.header-text h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.header-text p {
-    font-size: 0.95rem;
-    opacity: 0.9;
-    margin: 0;
 }
 
 .activity-body {

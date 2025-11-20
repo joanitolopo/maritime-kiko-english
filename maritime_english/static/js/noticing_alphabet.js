@@ -1,10 +1,10 @@
 // ========================================
-// NOTICING ALPHABET JAVASCRIPT - ROLEPLAY VERSION
-// Radio Communication Role-Play with Caller/Receiver
+// VHF ROLEPLAY PRACTICE JAVASCRIPT
+// With Record/Play buttons and Progress Tracking
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎤 Radio Role-Play Practice Initialized!');
+    console.log('🎙️ VHF Roleplay Practice Initialized!');
 
     // ==================================================
     // SPEECH RECOGNITION SETUP
@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (!window.SpeechRecognition) {
-        console.error('❌ Browser tidak mendukung Speech Recognition API');
+        console.error('❌ Browser does not support Speech Recognition API');
         showNotification('Your browser does not support speech recognition. Please use Chrome or Edge.', 'error');
-        document.querySelectorAll('.speak-btn').forEach(btn => {
+        document.querySelectorAll('.record-exchange-btn').forEach(btn => {
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
         });
@@ -27,114 +27,498 @@ document.addEventListener('DOMContentLoaded', () => {
     recognition.lang = 'en-US';
 
     // ==================================================
+    // VESSEL DATA
+    // ==================================================
+    const vesselData = {
+        'example-caller': {
+            name: 'HORIZON',
+            mmsi: '248105900',
+            callSign: 'YBON9',
+            audio: '/static/data/audio/unit1/vhf_caller.wav',
+            targetPhrase: null, // No speech recognition for example
+            transcript: ["This is Motor Vessel Horizon, Call Sign Bravo Hotel Niner Too Fife Wun. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares, Call Sign Yankee Bravo Oscar November Niner. Channel Wun Six. Over"
+        ]
+        },
+        'example-receiver': {
+            name: 'ANTARES',
+            mmsi: '257689000',
+            callSign: 'LAPW5',
+            audio: '/static/data/audio/unit1/vhf_receiver.wav',
+            targetPhrase: null,
+            transcript: ["Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."
+        ]
+        },
+        'part1-caller': {
+            name: 'ADOUR',
+            mmsi: '635005000',
+            callSign: 'FQEP',
+            audio: null,
+            targetPhrase: "This is Motor Vessel ADOUR 635005000 Foxtrot Quebec Echo Papa calling Motor Vessel APOLLON call sign Sierra Whisky Foxtrot Papa channel one six over",
+
+        },
+        'part1-receiver': {
+            name: 'APOLLON',
+            mmsi: '237002600',
+            callSign: 'SWFP',
+            audio: '/static/data/audio/unit1/receiver_response_1.wav',
+            targetPhrase: null,
+        },
+        'part2-caller': {
+            name: 'BAYSTAR',
+            mmsi: '440983000',
+            callSign: 'DSON9',
+            audio: '/static/data/audio/unit1/caller_message_2.wav',
+            targetPhrase: null
+        },
+        'part2-receiver': {
+            name: 'SUNSHINE',
+            mmsi: '369855000',
+            callSign: 'H3RC',
+            audio: null,
+            targetPhrase: "Motor Vessel BAYSTAR this is SUNSHINE. Receiving you loud and clear over"
+        }
+    };
+
+    // ==================================================
+    // PROGRESS TRACKING
+    // ==================================================
+    const progressState = {
+        examplePlayed: false,
+        part1CallerRecorded: false,
+        part1ReceiverPlayed: false,
+        part2CallerPlayed: false,
+        part2ReceiverRecorded: false
+    };
+
+    // ==================================================
     // ELEMENTS
     // ==================================================
+    
+    // Sidebar
     const captainAudioBtn = document.getElementById('captain-audio-btn');
     const translateBtn = document.getElementById('translate-btn');
     const speechTextDrill = document.querySelector('.speech-text-drill');
-    const instructionTextDrill = document.querySelector('.instruction-text-drill');
-    
-    const speakButtons = document.querySelectorAll('.speak-btn');
-    const playButtons = document.querySelectorAll('.play-btn');
+    const instructionTextVhf = document.querySelector('.instruction-text-vhf');
+    const radioWavesAnim = document.querySelector('.radio-waves');
 
-    // Audio Players
-    const audioCaptain = new Audio();
-    const audioExample = new Audio();
-    const audioTranscript = new Audio();
-    const allAudios = [audioCaptain, audioExample, audioTranscript];
-    
-    let isTranslated = false;
+    // Cards
+    const allVesselCards = document.querySelectorAll('.vessel-exchange-card');
+    const playButtons = document.querySelectorAll('.play-exchange-btn');
+    const recordButtons = document.querySelectorAll('.record-exchange-btn');
+
+    // Modal
+    const modal = document.getElementById('exchangeModal');
+    const modalOverlay = modal.querySelector('.modal-overlay');
+    const closeModalBtn = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalVesselName = document.getElementById('modalVesselName');
+    const modalMMSI = document.getElementById('modalMMSI');
+    const modalCallSign = document.getElementById('modalCallSign');
+    const modalActionContainer = document.getElementById('modalActionContainer');
+
+    // Continue Button
+    const continueWrapper = document.getElementById('continueWrapper');
+
+    // Audio
+    const audio_sidebar = new Audio();
+    let audio_current = new Audio();
+    let isAudioPlaying = false;
     let isListening = false;
-    let currentSpeakBtn = null;
-    let currentPlayBtn = null;
-    let currentTranscriptBtn = null;
+    let currentRecordingKey = null;
 
     // ==================================================
     // TEXT CONTENT
     // ==================================================
-    const originalText_captain = `"Cadets, it's time to practice real radio communication! You'll take turns being the Caller and the Receiver. Listen to the other ship, then respond clearly!"`;
-    const translatedText_captain = `"Kadet, saatnya berlatih komunikasi radio yang sesungguhnya! Kamu akan bergantian menjadi Pemanggil dan Penerima. Dengarkan kapal lain, lalu jawab dengan jelas!"`;
+    const originalText_captain = `Alright, cadets! This time you will practice real radio exchanges, sending and receiving messages just like on board! Listen carefully and follow each step with confidence.`;
+    const translatedText_captain = `Baik, kadet! Kali ini kalian akan berlatih pertukaran radio yang sesungguhnya, mengirim dan menerima pesan seperti di kapal! Dengarkan baik-baik dan ikuti setiap langkah dengan percaya diri.`;
 
-    const originalText_instruction = `Practice radio communication by taking turns as Caller and Receiver. Listen to "Play Now" examples, then speak your part clearly.`;
-    const translatedText_instruction = `Berlatih komunikasi radio dengan bergantian sebagai Pemanggil dan Penerima. Dengarkan contoh "Play Now", lalu ucapkan bagianmu dengan jelas.`;
+    const originalText_instruction = `Listen to the radio exchange between two vessels. Notice how each vessel identifies itself and responds. Then practice your role!`;
+    const translatedText_instruction = `Dengarkan pertukaran radio antara dua kapal. Perhatikan bagaimana setiap kapal mengidentifikasi diri dan merespons. Lalu praktikkan peranmu!`;
 
-    // Audio Paths
-    const audioPath_captain = '/static/data/audio/unit1/noticing_alphabet_intro.wav';
+    let isTranslated = false;
 
-    // Target Phrases for Speech Recognition
-    const TARGET_PHRASES = {
-        // Card 0: User is CALLER (calling APOLLON)
-        caller_0: "This is Motor Vessel ADOUR 635005000 Foxtrot Quebec Echo Papa calling Motor Vessel APOLLON call sign Sierra Whisky Foxtrot Papa channel one six over",
-        // Card 1: User is RECEIVER (responding to BAYSTAR)
-        receiver_1: "Motor Vessel BAYSTAR this is SUNSHINE. Receiving you loud and clear over"
-    };
-    
+    // Audio Path
+    const audioPath_captain = '/static/data/audio/unit1/vhf_intro.wav';
 
     // ==================================================
-    // AUDIO CONTROL FUNCTIONS
+    // SIDEBAR CONTROLS
     // ==================================================
-
-    function stopAllAudioAndSpeech() {
-        allAudios.forEach(audio => {
-            if (!audio.paused) {
-                audio.pause();
-                audio.currentTime = 0;
+    if (captainAudioBtn) {
+        captainAudioBtn.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            
+            if (audio_sidebar.paused) {
+                stopAllAudioAndSpeech();
+                audio_sidebar.src = audioPath_captain;
+                audio_sidebar.play()
+                    .then(() => {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                        this.classList.add('playing');
+                        if (radioWavesAnim) radioWavesAnim.classList.add('active');
+                    })
+                    .catch(error => {
+                        console.error('❌ Audio error:', error);
+                        shakeElement(this);
+                    });
+            } else {
+                audio_sidebar.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                this.classList.remove('playing');
+                if (radioWavesAnim) radioWavesAnim.classList.remove('active');
             }
         });
-        
-        if (isListening && recognition) {
-            try {
-                recognition.stop();
-            } catch (e) {
-                console.warn('Recognition already stopped');
-            }
-            isListening = false;
-        }
 
-        // Reset captain button
-        if (captainAudioBtn) {
+        audio_sidebar.addEventListener('ended', () => {
             const icon = captainAudioBtn.querySelector('i');
             icon.classList.remove('fa-pause');
             icon.classList.add('fa-play');
             captainAudioBtn.classList.remove('playing');
+            if (radioWavesAnim) radioWavesAnim.classList.remove('active');
+        });
+    }
+
+    if (translateBtn) {
+        translateBtn.addEventListener('click', function() {
+            stopAllAudioAndSpeech();
+            
+            isTranslated = !isTranslated;
+            
+            fadeTransition(speechTextDrill, () => {
+                speechTextDrill.textContent = isTranslated ? translatedText_captain : originalText_captain;
+            });
+
+            if (instructionTextVhf) {
+                fadeTransition(instructionTextVhf, () => {
+                    instructionTextVhf.textContent = isTranslated ? translatedText_instruction : originalText_instruction;
+                });
+            }
+
+            addClickEffect(this);
+        });
+    }
+
+    // ==================================================
+    // PLAY BUTTONS - OPEN MODAL WITH PLAY FUNCTION
+    // ==================================================
+    playButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = button.closest('.vessel-exchange-card');
+            const example = card.dataset.example;
+            const role = card.dataset.role;
+            const key = `${example}-${role}`;
+            const data = vesselData[key];
+
+            if (data && data.audio) {
+                openModalForPlay(data, role, example);
+            }
+        });
+    });
+
+    // ==================================================
+    // RECORD BUTTONS - OPEN MODAL WITH RECORD FUNCTION
+    // ==================================================
+    recordButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = button.closest('.vessel-exchange-card');
+            const example = card.dataset.example;
+            const role = card.dataset.role;
+            const key = `${example}-${role}`;
+            const data = vesselData[key];
+
+            if (data) {
+                openModalForRecord(data, role, example, key);
+            }
+        });
+    });
+
+    // ==================================================
+    // MODAL FUNCTIONS - PLAY
+    // ==================================================
+    function openModalForPlay(data, role, example) {
+        stopAllAudioAndSpeech();
+
+        // Populate modal
+        modalTitle.textContent = `${role === 'caller' ? 'The Caller' : 'The Receiver'}: ${data.name}`;
+        modalVesselName.textContent = data.name;
+        modalMMSI.textContent = data.mmsi;
+        modalCallSign.textContent = data.callSign;
+        
+        // Clear action container
+        modalActionContainer.innerHTML = '';
+        
+        // ===== TAMBAHKAN BAGIAN INI =====
+        // Tampilkan transcript HANYA untuk example
+        if (example === 'example' && data.transcript) {
+            const transcriptHTML = `
+                <div class="transcript-box">
+                    <div class="transcript-box-header">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Message Transcript</span>
+                    </div>
+                    <div class="transcript-box-content">
+                        ${data.transcript.map(line => `<p>${line}</p>`).join('')}
+                    </div>
+                </div>
+            `;
+            modalActionContainer.innerHTML = transcriptHTML;
+        }
+        // ===== AKHIR TAMBAHAN =====
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Play audio
+        audio_current.src = data.audio;
+        audio_current.play()
+            .then(() => {
+                isAudioPlaying = true;
+            })
+            .catch(error => {
+                console.error('❌ Audio playback error:', error);
+                showNotification('Could not play audio. File may not exist.', 'error');
+            });
+
+        // Track completion
+        audio_current.addEventListener('ended', () => {
+            isAudioPlaying = false;
+            
+            // Update progress
+            if (example === 'example') {
+                progressState.examplePlayed = true;
+            } else if (example === 'part1' && role === 'receiver') {
+                progressState.part1ReceiverPlayed = true;
+            } else if (example === 'part2' && role === 'caller') {
+                progressState.part2CallerPlayed = true;
+            }
+            
+            updateProgress();
+            checkCompletion();
+        }, { once: true });
+    }
+
+    // ==================================================
+    // MODAL FUNCTIONS - RECORD
+    // ==================================================
+    function openModalForRecord(data, role, example, key) {
+        stopAllAudioAndSpeech();
+        currentRecordingKey = key;
+
+        // Populate modal
+        modalTitle.textContent = `You are ${role === 'caller' ? 'the Caller' : 'the Receiver'}: ${data.name}`;
+        modalVesselName.textContent = data.name;
+        modalMMSI.textContent = data.mmsi;
+        modalCallSign.textContent = data.callSign;
+        
+        // Create record button section
+        modalActionContainer.innerHTML = `
+            <div class="modal-record-section">
+                <p class="modal-record-instruction">
+                    <i class="fas fa-info-circle"></i>
+                    Read the vessel information above and prepare your radio message. When ready, press the button below to record your message.
+                </p>
+                <button class="modal-record-btn" id="modalRecordBtn">
+                    <i class="fas fa-microphone"></i>
+                    <span>Start Recording</span>
+                </button>
+            </div>
+        `;
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Add event listener to modal record button
+        const modalRecordBtn = document.getElementById('modalRecordBtn');
+        modalRecordBtn.addEventListener('click', function() {
+            startRecording(data, role, example, this);
+        });
+    }
+
+    // ==================================================
+    // SPEECH RECOGNITION
+    // ==================================================
+    function startRecording(data, role, example, button) {
+        if (isListening) {
+            showNotification('Please wait for the current recording to finish', 'warning');
+            return;
         }
 
-        // Reset all play buttons
-        playButtons.forEach(btn => {
-            btn.classList.remove('playing');
-            btn.querySelector('span').textContent = 'Play Now';
-            const icon = btn.querySelector('i');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play');
-        });
+        isListening = true;
+        
+        // Update button state
+        button.classList.add('recording');
+        const icon = button.querySelector('i');
+        const text = button.querySelector('span');
+        icon.classList.remove('fa-microphone');
+        icon.classList.add('fa-circle');
+        text.textContent = 'Listening...';
 
-        // Reset all speak buttons
-        speakButtons.forEach(btn => {
-            btn.classList.remove('listening');
-            btn.querySelector('span').textContent = 'Speak Now';
-        });
+        // Setup recognition handlers
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log('📝 Transcript:', transcript);
+            checkPronunciation(transcript, data.targetPhrase, example, role);
+        };
 
-        // Reset all example play buttons
-        const exampleBtns = document.querySelectorAll('.example-play-btn');
-        exampleBtns.forEach(btn => {
-            btn.classList.remove('playing');
-            const icon = btn.querySelector('i');
-            const text = btn.querySelector('span');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play');
-            text.textContent = 'Play Now';
-        });
+        recognition.onend = () => {
+            isListening = false;
+            button.classList.remove('recording');
+            icon.classList.remove('fa-circle');
+            icon.classList.add('fa-microphone');
+            text.textContent = 'Start Recording';
+        };
 
-        // Hide transcript popup
-        const popup = document.getElementById('transcript-popup');
-        if (popup) {
-            popup.classList.remove('show');
+        recognition.onerror = (event) => {
+            console.error('❌ Speech recognition error:', event.error);
+            isListening = false;
+            button.classList.remove('recording');
+            icon.classList.remove('fa-circle');
+            icon.classList.add('fa-microphone');
+            text.textContent = 'Start Recording';
+            
+            let errorMessage = 'Could not recognize speech.';
+            if (event.error === 'no-speech') {
+                errorMessage = 'No speech detected. Please try again.';
+            } else if (event.error === 'audio-capture') {
+                errorMessage = 'Microphone not found.';
+            } else if (event.error === 'not-allowed') {
+                errorMessage = 'Microphone permission denied.';
+            }
+            
+            showNotification(errorMessage, 'error');
+        };
+
+        // Start recognition
+        try {
+            recognition.start();
+            showNotification('Listening... Speak your radio message!', 'info');
+        } catch (e) {
+            console.error('Failed to start recognition:', e);
+            isListening = false;
+            button.classList.remove('recording');
+            icon.classList.remove('fa-circle');
+            icon.classList.add('fa-microphone');
+            text.textContent = 'Start Recording';
         }
     }
 
     // ==================================================
-    // TEXT CLEANING
+    // PRONUNCIATION CHECKING
     // ==================================================
+    function checkPronunciation(transcript, targetText, example, role) {
+        const userWords = new Set(cleanText(transcript).split(' '));
+        const targetWords = cleanText(targetText).split(' ');
+        
+        let resultHTML = '';
+        let correctCount = 0;
+        let totalCount = targetWords.length;
+
+        targetWords.forEach(targetWord => {
+            if (userWords.has(targetWord)) {
+                resultHTML += `<span class="correct">${targetWord}</span> `;
+                correctCount++;
+            } else {
+                resultHTML += `<span class="missing">${targetWord}</span> `;
+            }
+        });
+
+        const accuracy = Math.round((correctCount / totalCount) * 100);
+        const allCorrect = correctCount === totalCount;
+
+        // Close main modal first
+        closeModal();
+
+        // Create feedback modal
+        const feedbackModal = document.createElement('div');
+        feedbackModal.className = 'feedback-modal active';
+        
+        let title = '';
+        let message = '';
+        const roleLabel = role === 'caller' ? 'Caller' : 'Receiver';
+
+        if (allCorrect) {
+            title = `<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent ${roleLabel}!</h4>`;
+            message = `<p style="color: #059669;">Perfect radio communication! You pronounced all key words correctly. 🎉</p>`;
+        } else if (accuracy >= 5) {
+            title = `<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good ${roleLabel}!</h4>`;
+            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Keep practicing!</p>`;
+        } else {
+            title = `<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>`;
+            message = `<p style="color: #2563eb;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Try again!</p>`;
+        }
+        
+        const transcriptDisplay = `
+            <h5>What you said:</h5>
+            <p style="font-style: italic; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; word-wrap: break-word; color: #0c4a6e;">
+                "${transcript}"
+            </p>
+        `;
+
+        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct):</h5>`;
+
+        feedbackModal.innerHTML = `
+            <div class="feedback-modal-content">
+                <button class="feedback-close">&times;</button>
+                <div class="mic-result-box">
+                    ${title}
+                    ${message}
+                    ${transcriptDisplay}
+                    ${expectedLabel}
+                    <div class="diff-output">${resultHTML}</div>
+                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(feedbackModal);
+
+        // Event listeners
+        const closeBtn = feedbackModal.querySelector('.feedback-close');
+        const tryAgainBtn = feedbackModal.querySelector('.try-again-btn');
+
+        closeBtn.addEventListener('click', () => {
+            feedbackModal.classList.remove('active');
+            setTimeout(() => feedbackModal.remove(), 300);
+        });
+
+        tryAgainBtn.addEventListener('click', () => {
+            feedbackModal.classList.remove('active');
+            setTimeout(() => {
+                feedbackModal.remove();
+                // Re-open recording modal
+                const data = vesselData[currentRecordingKey];
+                openModalForRecord(data, role, example, currentRecordingKey);
+            }, 300);
+        });
+
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => feedbackModal.remove(), 300);
+            }
+        });
+
+        // Update progress if accuracy >= 50%
+        if (accuracy >= 5) {
+            if (example === 'part1' && role === 'caller') {
+                progressState.part1CallerRecorded = true;
+            } else if (example === 'part2' && role === 'receiver') {
+                progressState.part2ReceiverRecorded = true;
+            }
+            
+            updateProgress();
+            checkCompletion();
+            
+            if (allCorrect) {
+                playSuccessSound();
+            }
+        }
+    }
 
     function cleanText(text) {
         const numMap = {
@@ -155,104 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
                       .trim();
     }
 
-    // ==================================================
-    // PRONUNCIATION CHECKING
-    // ==================================================
-
-    function checkPronunciation(transcript, targetText, speakBtn) {
-        const userWords = new Set(cleanText(transcript).split(' '));
-        const targetWords = cleanText(targetText).split(' ');
-        
-        let resultHTML = '';
-        let correctCount = 0;
-        let totalCount = targetWords.length;
-
-        targetWords.forEach(targetWord => {
-            if (userWords.has(targetWord)) {
-                resultHTML += `<span class="correct">${targetWord}</span> `;
-                correctCount++;
-            } else {
-                resultHTML += `<span class="missing">${targetWord}</span> `;
-            }
-        });
-
-        const accuracy = Math.round((correctCount / totalCount) * 100);
-        const allCorrect = correctCount === totalCount;
-
-        // Create modal
-        const modal = document.createElement('div');
-        modal.className = 'feedback-modal';
-        modal.style.display = 'flex';
-        
-        let title = '';
-        let message = '';
-        const role = speakBtn.dataset.role === 'caller' ? 'Caller' : 'Receiver';
-
-        if (allCorrect) {
-            title = `<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent ${role}!</h4>`;
-            message = `<p style="color: #059669;">Perfect radio communication! You pronounced all key words correctly. 🎉</p>`;
-        } else if (accuracy >= 70) {
-            title = `<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good ${role}!</h4>`;
-            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Review the missing words!</p>`;
-        } else {
-            title = `<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>`;
-            message = `<p style="color: #2563eb;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Listen to the example again!</p>`;
-        }
-        
-        const transcriptDisplay = `
-            <h5>What you said:</h5>
-            <p style="font-style: italic; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; word-wrap: break-word; color: #0c4a6e;">
-                "${transcript}"
-            </p>
-        `;
-
-        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct):</h5>`;
-
-        modal.innerHTML = `
-            <div class="feedback-modal-content">
-                <button class="feedback-close">&times;</button>
-                <div class="mic-result-box">
-                    ${title}
-                    ${message}
-                    ${transcriptDisplay}
-                    ${expectedLabel}
-                    <div class="diff-output">${resultHTML}</div>
-                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-
-        // Event listeners
-        const closeBtn = modal.querySelector('.feedback-close');
-        const tryAgainBtn = modal.querySelector('.try-again-btn');
-
-        closeBtn.addEventListener('click', () => {
-            modal.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => modal.remove(), 300);
-        });
-
-        tryAgainBtn.addEventListener('click', () => {
-            modal.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                modal.remove();
-                speakBtn.click();
-            }, 300);
-        });
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => modal.remove(), 300);
-            }
-        });
-
-        if (allCorrect) {
-            playSuccessSound();
-        }
-    }
-
     function playSuccessSound() {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
@@ -270,282 +556,94 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // CAPTAIN AUDIO CONTROL
+    // PROGRESS TRACKING
     // ==================================================
+    function updateProgress() {
+        console.log('📊 Progress:', progressState);
+    }
 
-    if (captainAudioBtn) {
-        captainAudioBtn.addEventListener('click', function() {
-            const icon = this.querySelector('i');
+    function checkCompletion() {
+        const allComplete = 
+            progressState.examplePlayed &&
+            progressState.part1CallerRecorded &&
+            progressState.part1ReceiverPlayed &&
+            progressState.part2CallerPlayed &&
+            progressState.part2ReceiverRecorded;
+
+        if (allComplete) {
+            showContinueButton();
+        }
+    }
+
+    function showContinueButton() {
+        if (continueWrapper) {
+            continueWrapper.style.display = 'block';
+            setTimeout(() => {
+                continueWrapper.classList.add('show');
+            }, 100);
             
-            if (audioCaptain.paused) {
-                stopAllAudioAndSpeech();
-                audioCaptain.src = audioPath_captain;
-                audioCaptain.play()
-                    .then(() => {
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-pause');
-                        this.classList.add('playing');
-                    })
-                    .catch(error => {
-                        console.error('❌ Audio error:', error);
-                        shakeElement(this);
-                    });
-            } else {
-                audioCaptain.pause();
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-                this.classList.remove('playing');
-            }
-        });
+            showNotification('🎉 Excellent work! You completed all radio exchanges!', 'success');
+            console.log('✅ All tasks completed! Continue button shown.');
+        }
+    }
 
-        audioCaptain.addEventListener('ended', () => {
+    // ==================================================
+    // MODAL CLOSE
+    // ==================================================
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        stopAllAudioAndSpeech();
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // ==================================================
+    // STOP ALL AUDIO AND SPEECH
+    // ==================================================
+    function stopAllAudioAndSpeech() {
+        // Stop all audio
+        if (!audio_current.paused) {
+            audio_current.pause();
+            audio_current.currentTime = 0;
+        }
+        isAudioPlaying = false;
+
+        if (!audio_sidebar.paused) {
+            audio_sidebar.pause();
+            audio_sidebar.currentTime = 0;
+        }
+        
+        if (captainAudioBtn) {
             const icon = captainAudioBtn.querySelector('i');
             icon.classList.remove('fa-pause');
             icon.classList.add('fa-play');
             captainAudioBtn.classList.remove('playing');
-        });
-    }
-
-    // ==================================================
-    // TRANSLATE BUTTON
-    // ==================================================
-
-    if (translateBtn) {
-        translateBtn.addEventListener('click', function() {
-            stopAllAudioAndSpeech();
-            
-            fadeTransition(speechTextDrill, () => {
-                if (isTranslated) {
-                    speechTextDrill.textContent = originalText_captain;
-                    instructionTextDrill.textContent = originalText_instruction;
-                    isTranslated = false;
-                } else {
-                    speechTextDrill.textContent = translatedText_captain;
-                    instructionTextDrill.textContent = translatedText_instruction;
-                    isTranslated = true;
-                }
-            });
-            
-            fadeTransition(instructionTextDrill, () => {});
-            addClickEffect(this);
-        });
-    }
-
-    // ==================================================
-    // PLAY BUTTONS (Example Audio)
-    // ==================================================
-
-    playButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const audioSrc = this.dataset.audioSrc;
-            const icon = this.querySelector('i');
-            const text = this.querySelector('span');
-            
-            if (audioExample.paused || currentPlayBtn !== this) {
-                stopAllAudioAndSpeech();
-                currentPlayBtn = this;
-                
-                audioExample.src = audioSrc;
-                audioExample.play()
-                    .then(() => {
-                        this.classList.add('playing');
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-pause');
-                        text.textContent = 'Playing...';
-                    })
-                    .catch(error => {
-                        console.error('❌ Audio error:', error);
-                        showNotification('Could not play audio. File may not exist.', 'error');
-                        shakeElement(this);
-                    });
-            } else {
-                audioExample.pause();
-                this.classList.remove('playing');
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-                text.textContent = 'Play Now';
-            }
-        });
-    });
-
-    audioExample.addEventListener('ended', () => {
-        if (currentPlayBtn) {
-            currentPlayBtn.classList.remove('playing');
-            const icon = currentPlayBtn.querySelector('i');
-            const text = currentPlayBtn.querySelector('span');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play');
-            text.textContent = 'Play Now';
-            currentPlayBtn = null;
         }
-    });
+        
+        if (radioWavesAnim) radioWavesAnim.classList.remove('active');
 
-    // ==================================================
-    // TRANSCRIPT PLAY BUTTONS (Example Audio)
-    // ==================================================
-
-    const examplePlayBtns = document.querySelectorAll('.example-play-btn');
-    const transcriptPopup = document.getElementById('transcript-popup');
-    const transcriptRoleTitle = document.getElementById('transcript-role-title');
-    const transcriptTextContent = document.getElementById('transcript-text-content');
-    let currentExampleBtn = null;
-    
-    examplePlayBtns.forEach(button => {
-        button.addEventListener('click', function() {
-            const audioSrc = this.dataset.audioSrc;
-            const transcript = this.dataset.transcript;
-            const role = this.dataset.role;
-            const icon = this.querySelector('i');
-            const text = this.querySelector('span');
-            
-            if (audioTranscript.paused || currentExampleBtn !== this) {
-                stopAllAudioAndSpeech();
-                currentExampleBtn = this;
-                
-                // Update popup content
-                transcriptRoleTitle.textContent = `${role}'s Message`;
-                transcriptTextContent.textContent = transcript;
-                
-                audioTranscript.src = audioSrc;
-                audioTranscript.play()
-                    .then(() => {
-                        this.classList.add('playing');
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-pause');
-                        text.textContent = 'Playing...';
-                        
-                        // Show popup
-                        transcriptPopup.classList.add('show');
-                    })
-                    .catch(error => {
-                        console.error('❌ Example audio error:', error);
-                        showNotification('Could not play audio. File may not exist.', 'error');
-                        shakeElement(this);
-                    });
-            } else {
-                audioTranscript.pause();
-                this.classList.remove('playing');
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-                text.textContent = 'Play Now';
-                
-                // Hide popup
-                transcriptPopup.classList.remove('show');
-            }
-        });
-    });
-
-    audioTranscript.addEventListener('ended', () => {
-        if (currentExampleBtn) {
-            currentExampleBtn.classList.remove('playing');
-            const icon = currentExampleBtn.querySelector('i');
-            const text = currentExampleBtn.querySelector('span');
-            icon.classList.remove('fa-pause');
-            icon.classList.add('fa-play');
-            text.textContent = 'Play Now';
-            currentExampleBtn = null;
-            
-            // Auto-hide popup after audio ends
-            setTimeout(() => {
-                transcriptPopup.classList.remove('show');
-            }, 500);
-        }
-    });
-
-    // Close popup on click outside
-    if (transcriptPopup) {
-        transcriptPopup.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('show');
-                if (currentExampleBtn && !audioTranscript.paused) {
-                    audioTranscript.pause();
-                    currentExampleBtn.classList.remove('playing');
-                    const icon = currentExampleBtn.querySelector('i');
-                    const text = currentExampleBtn.querySelector('span');
-                    icon.classList.remove('fa-pause');
-                    icon.classList.add('fa-play');
-                    text.textContent = 'Play Now';
-                    currentExampleBtn = null;
-                }
-            }
-        });
-    }
-
-    // ==================================================
-    // SPEAK BUTTONS (Speech Recognition)
-    // ==================================================
-
-    speakButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            if (isListening) {
-                showNotification('Please wait for the current recording to finish', 'warning');
-                return;
-            }
-
-            stopAllAudioAndSpeech();
-            isListening = true;
-            currentSpeakBtn = this;
-            
-            // Get target phrase based on role and card index
-            const cardIndex = this.closest('.roleplay-card').dataset.cardIndex;
-            const role = this.dataset.role;
-            const targetKey = `${role}_${cardIndex}`;
-            const targetText = TARGET_PHRASES[targetKey];
-
-            // Add listening state
-            this.classList.add('listening');
-            this.querySelector('span').textContent = 'Listening...';
-
-            // Setup recognition handlers
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                console.log('📝 Transcript:', transcript);
-                checkPronunciation(transcript, targetText, currentSpeakBtn);
-            };
-
-            recognition.onend = () => {
-                isListening = false;
-                currentSpeakBtn.classList.remove('listening');
-                currentSpeakBtn.querySelector('span').textContent = 'Speak Now';
-                currentSpeakBtn = null;
-            };
-
-            recognition.onerror = (event) => {
-                console.error('❌ Speech recognition error:', event.error);
-                isListening = false;
-                currentSpeakBtn.classList.remove('listening');
-                currentSpeakBtn.querySelector('span').textContent = 'Speak Now';
-                
-                let errorMessage = 'Could not recognize speech.';
-                if (event.error === 'no-speech') {
-                    errorMessage = 'No speech detected. Please try again.';
-                } else if (event.error === 'audio-capture') {
-                    errorMessage = 'Microphone not found.';
-                } else if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone permission denied.';
-                }
-                
-                showNotification(errorMessage, 'error');
-                currentSpeakBtn = null;
-            };
-
-            // Start recognition
+        // Stop speech recognition
+        if (isListening && recognition) {
             try {
-                recognition.start();
-                showNotification('Listening... Speak your radio message!', 'info');
+                recognition.stop();
             } catch (e) {
-                console.error('Failed to start recognition:', e);
-                isListening = false;
-                this.classList.remove('listening');
-                this.querySelector('span').textContent = 'Speak Now';
+                console.warn('Recognition already stopped');
             }
-        });
-    });
+            isListening = false;
+        }
+    }
 
     // ==================================================
     // HELPER FUNCTIONS
     // ==================================================
-
     function shakeElement(element) {
         if (!element) return;
         element.style.animation = 'shake 0.5s';
@@ -619,7 +717,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // KEYBOARD SHORTCUTS
     // ==================================================
-
     document.addEventListener('keydown', function(e) {
         if (e.key.toLowerCase() === 't') {
             if (translateBtn) translateBtn.click();
@@ -633,11 +730,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // CONSOLE INFO
     // ==================================================
-
-    console.log('✅ Radio Role-Play Practice Ready!');
+    console.log('✅ VHF Roleplay Practice Ready!');
     console.log('💡 Tip: Press T to translate instructions');
     console.log('💡 Tip: Press C to hear captain\'s voice');
-    console.log('🎯 Practice both Caller and Receiver roles!');
+    console.log('🎯 Complete all exchanges to continue!');
 });
 
 // Add CSS for notifications
@@ -657,11 +753,6 @@ notificationStyles.textContent = `
         0%, 100% { transform: translateX(0); }
         25% { transform: translateX(-10px); }
         75% { transform: translateX(10px); }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
     }
 `;
 document.head.appendChild(notificationStyles);

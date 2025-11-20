@@ -155,7 +155,7 @@ body {
 .captain-avatar {
     height: 250px;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-    animation: float 3s ease-in-out infinite;
+    /* animation: float 3s ease-in-out infinite; */
     transition: transform 0.3s ease;
 }
 
@@ -164,6 +164,7 @@ body {
 }
 
 /* Radio Waves Animation */
+/* Radio Waves Animation - UPDATED */
 .radio-waves {
     position: absolute;
     top: 50%;
@@ -172,6 +173,15 @@ body {
     width: 200px;
     height: 200px;
     pointer-events: none;
+    
+    /* PERUBAHAN DISINI: Sembunyikan secara default */
+    opacity: 0; 
+    transition: opacity 0.3s ease; /* Supaya muncul/hilangnya halus */
+}
+
+/* Class ini akan ditambahkan lewat JS saat audio nyala */
+.radio-waves.active {
+    opacity: 1;
 }
 
 .radio-waves span {
@@ -181,9 +191,17 @@ body {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    border: 2px solid rgba(6, 182, 212, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.3);
     border-radius: 50%;
+    
+    /* PERUBAHAN DISINI: Defaultnya pause animasinya */
     animation: radioWave 2s ease-out infinite;
+    animation-play-state: paused; 
+}
+
+/* Saat parent punya class active, jalankan animasi */
+.radio-waves.active span {
+    animation-play-state: running;
 }
 
 .radio-waves span:nth-child(2) {
@@ -932,7 +950,7 @@ body {
    STYLE BARU UNTUK ROLEPLAY HEADER
 ======================================== */
 .roleplay-header {
-    background-color: var(--practice-blue); /* Warna biru dari gambar */
+    background-color: #5ea4d3; /* Warna biru dari gambar */
     color: var(--white);
     border-radius: 16px;
     padding: 20px 25px;
@@ -987,6 +1005,423 @@ body {
 .continue-button:hover {
     transform: translateY(-3px);
     color: var(--white);
+}
+
+/* ========================================
+   VHF ROLEPLAY SPECIFIC STYLES
+   Additional styles for roleplay practice
+======================================== */
+
+/* User Card Highlight */
+/* .user-card {
+    border: 3px solid #f59e0b;
+    box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4) !important;
+}
+
+.user-card:hover {
+    border-color: #d97706;
+    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.6) !important;
+} */
+
+.user-badge {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    animation: badgePulse 2s ease infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+    }
+}
+
+/* Record Button Styling */
+.record-exchange-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.record-exchange-btn:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+}
+
+.record-exchange-btn.recording {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    animation: recordPulse 1.5s ease infinite;
+}
+
+.record-exchange-btn.recording i {
+    animation: micBounce 0.5s ease infinite;
+}
+
+@keyframes recordPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+    }
+}
+
+@keyframes micBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Modal Action Button for Recording */
+.modal-record-section {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    border: 2px solid #fca5a5;
+}
+
+.modal-record-instruction {
+    font-size: 1rem;
+    color: #991b1b;
+    font-weight: 600;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.modal-record-instruction i {
+    color: #ef4444;
+    margin-right: 8px;
+}
+
+.modal-record-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-record-btn:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+}
+
+.modal-record-btn.recording {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    animation: recordPulse 1.5s ease infinite;
+}
+
+.modal-record-btn.recording i {
+    animation: micBounce 0.5s ease infinite;
+}
+
+.modal-record-btn i {
+    font-size: 1.4rem;
+}
+
+/* Progress Indicator */
+.progress-indicator {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 250px;
+}
+
+.progress-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ocean-deep);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-title i {
+    color: var(--indigo);
+}
+
+.progress-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.progress-item:last-child {
+    border-bottom: none;
+}
+
+.progress-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.progress-checkbox.completed {
+    background: var(--coral);
+    border-color: var(--coral);
+}
+
+.progress-checkbox.completed i {
+    color: var(--white);
+    font-size: 0.8rem;
+}
+
+.progress-label {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    flex: 1;
+}
+
+.progress-label.completed {
+    color: var(--text-light);
+    text-decoration: line-through;
+}
+
+/* Feedback Modal for Recording */
+.feedback-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.feedback-modal.active {
+    display: flex;
+}
+
+.feedback-modal-content {
+    background: var(--white);
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.4s ease;
+    position: relative;
+}
+
+.feedback-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feedback-close:hover {
+    background: #ef4444;
+    color: var(--white);
+    transform: rotate(90deg);
+}
+
+.mic-result-box h4 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.mic-result-box h5 {
+    font-size: 1.1rem;
+    color: var(--ocean-deep);
+    margin: 20px 0 10px 0;
+}
+
+.diff-output {
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 12px;
+    line-height: 2;
+    word-wrap: break-word;
+    margin-bottom: 15px;
+}
+
+.diff-output span {
+    padding: 4px 8px;
+    margin: 2px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.diff-output span.correct {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.diff-output span.missing {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    font-style: italic;
+}
+
+.try-again-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.try-again-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+/* Continue Button Animation */
+.continue-wrapper {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.continue-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Completion Celebration */
+@keyframes celebrate {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(5deg);
+    }
+}
+
+.celebration-icon {
+    animation: celebrate 0.6s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .progress-indicator {
+        top: 80px;
+        right: 15px;
+        min-width: 200px;
+        padding: 15px;
+    }
+
+    .modal-record-btn {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+
+    .feedback-modal-content {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-indicator {
+        position: static;
+        margin: 15px;
+    }
+
+    .record-exchange-btn,
+    .modal-record-btn {
+        width: 100%;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* ======== ANIMATIONS ======== */
