@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'MV CORALIS',
             mmsi: '538209100',
             callSign: 'CLFW2',
+            callSignReceiver: 'SVNP4',
             // Target phrase HANYA pakai huruf phonetic, bukan convert
             targetPhrase: "this is motor vessel coralis call sign charlie lima foxtrot whisky 2 mmsi 538209100 calling motor vessel silverwind call sign sierra victor november papa 4 channel 16 over",
             reminder: "Say your vessel's name, MMSI, Call Sign, and call the other vessel clearly."
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'MV SILVERWIND',
             mmsi: '312985600',
             callSign: 'SVNP4',
+            callSignReceiver: 'CLFW2',
             targetPhrase: "motor vessel coralis this is silverwind receiving you loud and clear over",
             reminder: "Respond clearly using the correct format."
         },
@@ -64,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'MV CRYSTAL WAVE',
             mmsi: '239814900',
             callSign: 'CWTR8',
+            callSignReceiver: 'EMSK7',
             targetPhrase: "this is motor vessel crystal wave call sign charlie whisky tango romeo 8 mmsi 239814900 calling motor vessel emerald sky call sign echo mike sierra kilo 7 channel 16 over",
             reminder: "Say your vessel's name, MMSI, Call Sign, and call the other vessel clearly."
         },
@@ -71,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'MV EMERALD SKY',
             mmsi: '519402300',
             callSign: 'EMSK7',
+            callSignReceiver: 'CWTR8',
             targetPhrase: "motor vessel crystal wave this is emerald sky receiving you loud and clear over",
             reminder: "Respond clearly using the correct format."
         }
@@ -101,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalVesselName = document.getElementById('modalVesselName');
     const modalMMSI = document.getElementById('modalMMSI');
     const modalCallSign = document.getElementById('modalCallSign');
+    const modalCallSignReceiver = document.getElementById('modalCallSignReceiver');
     const modalActionContainer = document.getElementById('modalActionContainer');
 
     const audio_sidebar = new Audio();
@@ -198,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalVesselName.textContent = data.name;
         modalMMSI.textContent = data.mmsi;
         modalCallSign.textContent = data.callSign;
+        modalCallSignReceiver.textContent = data.callSignReceiver;
         
         // Create reminder + record button
         modalActionContainer.innerHTML = `

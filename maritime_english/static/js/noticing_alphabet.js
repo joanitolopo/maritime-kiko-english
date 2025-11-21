@@ -34,15 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'HORIZON',
             mmsi: '248105900',
             callSign: 'YBON9',
+            callSignReceiver: 'LAPW5',
             audio: '/static/data/audio/unit1/vhf_caller.wav',
             targetPhrase: null, // No speech recognition for example
-            transcript: ["This is Motor Vessel Horizon, Call Sign Bravo Hotel Niner Too Fife Wun. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares, Call Sign Yankee Bravo Oscar November Niner. Channel Wun Six. Over"
+            transcript: ["This is Motor Vessel Horizon, Call Sign Yankee Bravo Oscar November Niner. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares. Call sign Lima Alfa Papa Whisky Fife. Channel Wun Six. Over"
         ]
         },
         'example-receiver': {
             name: 'ANTARES',
             mmsi: '257689000',
             callSign: 'LAPW5',
+            callSignReceiver: 'YBON9',
             audio: '/static/data/audio/unit1/vhf_receiver.wav',
             targetPhrase: null,
             transcript: ["Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."
@@ -52,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'ADOUR',
             mmsi: '635005000',
             callSign: 'FQEP',
+            callSignReceiver: 'SWFP',
             audio: null,
             targetPhrase: "This is Motor Vessel ADOUR 635005000 Foxtrot Quebec Echo Papa calling Motor Vessel APOLLON call sign Sierra Whisky Foxtrot Papa channel one six over",
 
@@ -60,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'APOLLON',
             mmsi: '237002600',
             callSign: 'SWFP',
+            callSignReceiver: 'FQEP',
             audio: '/static/data/audio/unit1/receiver_response_1.wav',
             targetPhrase: null,
         },
@@ -67,13 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'BAYSTAR',
             mmsi: '440983000',
             callSign: 'DSON9',
+            callSignReceiver: 'NSAC',
             audio: '/static/data/audio/unit1/caller_message_2.wav',
             targetPhrase: null
         },
         'part2-receiver': {
             name: 'SUNSHINE',
             mmsi: '369855000',
-            callSign: 'H3RC',
+            callSign: 'NSAC',
+            callSignReceiver: 'DSON9',
             audio: null,
             targetPhrase: "Motor Vessel BAYSTAR this is SUNSHINE. Receiving you loud and clear over"
         }
@@ -114,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalVesselName = document.getElementById('modalVesselName');
     const modalMMSI = document.getElementById('modalMMSI');
     const modalCallSign = document.getElementById('modalCallSign');
+    const modalCallSignReceiver = document.getElementById('modalCallSignReceiver');
     const modalActionContainer = document.getElementById('modalActionContainer');
 
     // Continue Button
@@ -138,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isTranslated = false;
 
     // Audio Path
-    const audioPath_captain = '/static/data/audio/unit1/vhf_intro.wav';
+    const audioPath_captain = '/static/data/audio/unit1/input_alphabet_intro.wav';
 
     // ==================================================
     // SIDEBAR CONTROLS
@@ -246,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalVesselName.textContent = data.name;
         modalMMSI.textContent = data.mmsi;
         modalCallSign.textContent = data.callSign;
+        modalCallSignReceiver.textContent = data.callSignReceiver;
         
         // Clear action container
         modalActionContainer.innerHTML = '';
@@ -313,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalVesselName.textContent = data.name;
         modalMMSI.textContent = data.mmsi;
         modalCallSign.textContent = data.callSign;
+        modalCallSignReceiver.textContent = data.callSignReceiver;
         
         // Create record button section
         modalActionContainer.innerHTML = `

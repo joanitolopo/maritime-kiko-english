@@ -178,7 +178,7 @@
                                                         '{{ unit_info.title }}', 
                                                         {{ completed_subunits }},
                                                         '{{ url_for('learning.unit_introduction', unit_id=unit_id) }}',
-                                                        '{{ url_for('learning.subunit_page', unit_id=unit_id, subunit_index=999) }}'
+                                                        '{{ url_for('learning.subunit_page', unit_id=unit_id, subunit_index=unit_progress_data.get('next_subunit', 0)) }}'  
                                             )">
                                             <i class="fas fa-play me-2"></i> Start
                                     </button>

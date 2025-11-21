@@ -121,16 +121,20 @@ def update_user_stats(user_id, stats_object=None):
 def courses_page():
     # 1. Ambil semua progres unit untuk pengguna yang sedang login
     user_progress = UnitProgress.query.filter_by(user_id=current_user.id).all()
+
+    progress_data = {}
     
-    # 2. Ubah data progres menjadi dictionary agar mudah diakses di template
-    #    Formatnya: {1: {'status': 'in_progress', 'completed_subunits': 1, 'progress_percent': 11}, 2: {...}}
-    progress_data = {
-        progress.unit_id: {
+    for progress in user_progress:
+        # ✅ PERBAIKAN: Hitung next_subunit per unit (di dalam loop)
+        completed_subunits = progress.completed_subunits or 0
+        next_subunit = completed_subunits  # Karena index mulai dari 0
+        
+        progress_data[progress.unit_id] = {
             "status": progress.status,
-            "completed_subunits": progress.completed_subunits,
-            "progress_percent": progress.progress_percent
-        } for progress in user_progress
-    }
+            "completed_subunits": completed_subunits,
+            "progress_percent": progress.progress_percent,
+            "next_subunit": next_subunit  # ✅ Setiap unit punya next_subunit sendiri
+        }
 
     # 3. Kirimkan 'units_data' (info unit) DAN 'progress_data' (info user) ke template
     return render_template('courses.html', 
