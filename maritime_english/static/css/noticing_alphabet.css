@@ -1357,6 +1357,265 @@ body {
     transform: translateY(0);
 }
 
+/* ========================================
+   COMPLETED STATE STYLING
+======================================== */
+
+/* Button Completed State - General */
+.play-exchange-btn.completed,
+.record-exchange-btn.completed,
+.speak-now-btn.completed,
+.clickable-image.completed {
+    position: relative;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    border-color: #059669 !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Completed Checkmark Icon */
+.play-exchange-btn.completed::after,
+.record-exchange-btn.completed::after,
+.speak-now-btn.completed::after {
+    content: '\f00c'; /* FontAwesome check icon */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    animation: checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Completed State for Clickable Images */
+.clickable-image.completed {
+    border: 3px solid #10b981 !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3) !important;
+    opacity: 0.8;
+    cursor: default;
+    pointer-events: none;
+}
+
+.clickable-image.completed::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+    animation: checkmarkPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10;
+}
+
+/* Completed Animation */
+@keyframes checkmarkPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Hover Effect Disabled for Completed */
+.play-exchange-btn.completed:hover,
+.record-exchange-btn.completed:hover,
+.speak-now-btn.completed:hover {
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* ========================================
+   MODAL BUTTONS - Mark as Complete & Try Again
+======================================== */
+
+/* Try Again Button */
+.try-again-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.try-again-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.try-again-btn:active {
+    transform: translateY(0);
+}
+
+/* Mark as Complete Button */
+.continue-task-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.continue-task-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.continue-task-btn:active {
+    transform: translateY(0);
+}
+
+/* Icon Animation */
+.continue-task-btn i,
+.try-again-btn i {
+    transition: transform 0.3s ease;
+}
+
+.continue-task-btn:hover i {
+    transform: scale(1.2);
+}
+
+.try-again-btn:hover i {
+    transform: rotate(360deg);
+}
+
+/* ========================================
+   FEEDBACK MODAL IMPROVEMENTS
+======================================== */
+
+.mic-result-box {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+}
+
+.mic-result-box h4 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.mic-result-box h5 {
+    color: #1f2937;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.diff-output {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+    line-height: 2;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+}
+
+.diff-output .correct {
+    color: #10b981;
+    background: #d1fae5;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.diff-output .missing {
+    color: #ef4444;
+    background: #fee2e2;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-right: 5px;
+    text-decoration: line-through;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+    .try-again-btn,
+    .continue-task-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .play-exchange-btn.completed::after,
+    .record-exchange-btn.completed::after,
+    .speak-now-btn.completed::after {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+        top: -6px;
+        right: -6px;
+    }
+    
+    .clickable-image.completed::after {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+}
+
 /* Completion Celebration */
 @keyframes celebrate {
     0%, 100% {

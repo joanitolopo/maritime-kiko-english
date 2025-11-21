@@ -26,10 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SIMPLE STEMMER - Remove common suffixes
     // ==================================================
     function simpleStem(word) {
-        // Convert to lowercase
         word = word.toLowerCase();
-        
-        // Remove common suffixes
         const suffixes = ['ed', 'ing', 's', 'es', 'd'];
         
         for (const suffix of suffixes) {
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return word.slice(0, -suffix.length);
             }
         }
-        
         return word;
     }
 
@@ -50,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
             mmsi: '538209100',
             callSign: 'CLFW2',
             callSignReceiver: 'SVNP4',
-            // Target phrase HANYA pakai huruf phonetic, bukan convert
             targetPhrase: "this is motor vessel coralis call sign charlie lima foxtrot whisky 2 mmsi 538209100 calling motor vessel silverwind call sign sierra victor november papa 4 channel 16 over",
             reminder: "Say your vessel's name, MMSI, Call Sign, and call the other vessel clearly."
         },
@@ -81,11 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ==================================================
-    // PROGRESS TRACKING
+    // PROGRESS TRACKING (✅ UPDATED: Per Role)
     // ==================================================
     const progressState = {
-        situation1: false,
-        situation2: false
+        'situation1-caller': false,
+        'situation1-receiver': false,
+        'situation2-caller': false,
+        'situation2-receiver': false
     };
 
     // ==================================================
@@ -113,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isListening = false;
     let currentSituation = null;
     let currentRole = null;
+    let currentButton = null;
 
     // ==================================================
     // TEXT CONTENT
@@ -189,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             currentSituation = situation;
             currentRole = role;
+            currentButton = btn;
             
             openRecordModal(data, role);
         });
@@ -198,14 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // OPEN RECORD MODAL
     // ==================================================
     function openRecordModal(data, role) {
-        // Populate modal
         modalTitle.textContent = `You are the ${role.toUpperCase()}: ${data.name}`;
         modalVesselName.textContent = data.name;
         modalMMSI.textContent = data.mmsi;
         modalCallSign.textContent = data.callSign;
         modalCallSignReceiver.textContent = data.callSignReceiver;
         
-        // Create reminder + record button
         modalActionContainer.innerHTML = `
             <div class="modal-reminder">
                 <i class="fas fa-lightbulb"></i>
@@ -217,11 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         `;
 
-        // Show modal
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        // Add event listener to record button
         const modalRecordBtn = document.getElementById('modalRecordBtn');
         modalRecordBtn.addEventListener('click', function() {
             startRecording(data, this);
@@ -288,10 +283,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // PRONUNCIATION CHECKING WITH STEMMING
+    // PRONUNCIATION CHECKING (✅ UPDATED: 20% Threshold)
     // ==================================================
     function checkPronunciation(transcript, targetText) {
-        // Clean dan stem kedua text
         const userWords = cleanAndStemText(transcript);
         const targetWords = cleanAndStemText(targetText);
         
@@ -301,11 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let resultHTML = '';
         let correctCount = 0;
         let totalCount = targetWords.length;
-
-        // Buat Set dari user words untuk quick lookup
         const userWordsSet = new Set(userWords);
 
-        targetWords.forEach((targetWord, index) => {
+        targetWords.forEach((targetWord) => {
             if (userWordsSet.has(targetWord)) {
                 resultHTML += `<span class="correct">${targetWord}</span> `;
                 correctCount++;
@@ -316,33 +308,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const accuracy = Math.round((correctCount / totalCount) * 100);
         const allCorrect = correctCount === totalCount;
+        const passedThreshold = accuracy >= 20; // ✅ UBAH: 20% minimum (sama seperti noticing_alphabet)
 
         // Create feedback modal
         const feedbackModal = document.createElement('div');
-        feedbackModal.className = 'feedback-modal';
+        feedbackModal.className = 'feedback-modal active';
         
         let title = '';
         let message = '';
+        let actionButton = '';
 
+        // ✅ UPDATED: Sama seperti noticing_alphabet
         if (allCorrect) {
-            title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent!</h4>';
-            message = '<p style="color: #059669;">Perfect! All words correct! 🎉</p>';
-        } else if (accuracy >= 10) {
-            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Try!</h4>';
-            message = `<p style="color: #d97706;">You got ${correctCount}/${totalCount} words (${accuracy}%). Keep practicing!</p>`;
+            title = '<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent Work!</h4>';
+            message = '<p style="color: #059669;">Perfect! You pronounced all the key words correctly. Keep up the great work! 🎉</p>';
+            actionButton = '<button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>';
+        } else if (passedThreshold) {
+            title = '<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good Job!</h4>';
+            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). That's good enough to continue! You can retry for a perfect score or move on.</p>`;
+            actionButton = `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                    <button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>
+                </div>
+            `;
         } else {
-            title = '<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Try Again!</h4>';
-            message = `<p style="color: #2563eb;">You got ${correctCount}/${totalCount} words (${accuracy}%). Practice more!</p>`;
+            title = '<h4><i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i> Keep Practicing!</h4>';
+            message = `<p style="color: #dc2626;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). You need at least 20% to continue. Don't worry! Listen to the example again and try once more.</p>`;
+            actionButton = '<button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>';
         }
         
         const transcriptDisplay = `
             <h5>What you said:</h5>
-            <p style="font-style: italic; background: #f0f9ff; border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; color: #0c4a6e;">
+            <p style="font-style: italic; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; padding: 12px; border-radius: 12px; color: #0c4a6e; word-wrap: break-word;">
                 "${transcript}"
             </p>
         `;
 
-        const expectedLabel = `<h5>Word comparison (${correctCount}/${totalCount} correct):</h5>`;
+        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct - ${accuracy}%):</h5>`;
 
         feedbackModal.innerHTML = `
             <div class="feedback-modal-content">
@@ -353,108 +356,104 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${transcriptDisplay}
                     ${expectedLabel}
                     <div class="diff-output">${resultHTML}</div>
-
-                    <div class="feedback-btn-row">
-                        <button class="try-again-btn">
-                            <i class="fa-solid fa-rotate-left"></i> Try Again
-                        </button>
-
-                        <button class="mark-complete-btn">
-                            <i class="fa-solid fa-check"></i> Mark as Completed
-                        </button>
-                    </div>
+                    ${actionButton}
                 </div>
             </div>
         `;
-
         
         document.body.appendChild(feedbackModal);
 
         const closeBtn = feedbackModal.querySelector('.feedback-close');
         const tryAgainBtn = feedbackModal.querySelector('.try-again-btn');
+        const continueTaskBtn = feedbackModal.querySelector('.continue-task-btn');
 
-        const markCompleteBtn = feedbackModal.querySelector('.mark-complete-btn');
-
-        markCompleteBtn.addEventListener('click', () => {
-            feedbackModal.remove();
-
-            // Mark situation as completed
-            progressState[`situation${currentSituation}`] = true;
-
-            showNotification(`✔ Situation ${currentSituation} marked as completed!`, 'success');
-
-            checkCompletion();
+        closeBtn.addEventListener('click', () => {
+            feedbackModal.classList.remove('active');
+            setTimeout(() => feedbackModal.remove(), 300);
         });
 
+        if (tryAgainBtn) {
+            tryAgainBtn.addEventListener('click', () => {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => {
+                    feedbackModal.remove();
+                    const key = `situation${currentSituation}-${currentRole}`;
+                    const data = vesselData[key];
+                    openRecordModal(data, currentRole);
+                }, 300);
+            });
+        }
 
-        closeBtn.addEventListener('click', () => feedbackModal.remove());
-        tryAgainBtn.addEventListener('click', () => {
-            feedbackModal.remove();
-            // Re-open modal
-            const key = `situation${currentSituation}-${currentRole}`;
-            const data = vesselData[key];
-            openRecordModal(data, currentRole);
-        });
+        // ✅ MARK AS COMPLETE BUTTON
+        if (continueTaskBtn) {
+            continueTaskBtn.addEventListener('click', () => {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => {
+                    feedbackModal.remove();
+                    markTaskAsCompleted();
+                }, 300);
+            });
+        }
+
         feedbackModal.addEventListener('click', (e) => {
-            if (e.target === feedbackModal) feedbackModal.remove();
+            if (e.target === feedbackModal) {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => feedbackModal.remove(), 300);
+            }
         });
 
-        // Update progress if accuracy >= 10%
-        if (accuracy >= 10) {
-            progressState[`situation${currentSituation}`] = true;
-            
-            // Mark cards as completed
-            const situationCard = document.querySelector(`[data-situation="${currentSituation}"]`);
-            if (situationCard) {
-                const roleCards = situationCard.closest('.situation-card').querySelectorAll('.role-practice-card');
-                roleCards.forEach(card => card.classList.add('completed'));
-            }
-            
-            checkCompletion();
-            
-            if (allCorrect) {
-                playSuccessSound();
-            }
+        if (allCorrect) {
+            playSuccessSound();
         }
     }
 
     // ==================================================
-    // CLEAN AND STEM TEXT - NEW FUNCTION
+    // ✅ MARK TASK AS COMPLETED (UPDATED)
+    // ==================================================
+    function markTaskAsCompleted() {
+        const taskKey = `situation${currentSituation}-${currentRole}`;
+        
+        // ✅ PREVENT DOUBLE COMPLETION
+        if (progressState[taskKey]) {
+            console.log(`${taskKey} already completed`);
+            return;
+        }
+        
+        // ✅ MARK AS COMPLETED
+        progressState[taskKey] = true;
+        
+        // ✅ ADD COMPLETED CLASS TO BUTTON
+        if (currentButton) {
+            currentButton.classList.add('completed');
+        }
+        
+        showNotification(`✔ ${currentRole.charAt(0).toUpperCase() + currentRole.slice(1)} completed! ✓`, 'success');
+        console.log(`✅ ${taskKey} marked as completed`);
+        console.log('📊 Current Progress:', progressState);
+        
+        // ✅ CHECK COMPLETION
+        checkCompletion();
+    }
+
+    // ==================================================
+    // CLEAN AND STEM TEXT
     // ==================================================
     function cleanAndStemText(text) {
-        // Lowercase
         text = text.toLowerCase();
-        
-        // Remove punctuation
         text = text.replace(/[.,!?"-]/g, '');
-        
-        // Split into words
         let words = text.split(/\s+/).filter(word => word.length > 0);
         
-        // Process each word
         words = words.map(word => {
-            // Jika kata adalah angka (pure number), keep as is
-            if (/^\d+$/.test(word)) {
-                return word;
-            }
+            if (/^\d+$/.test(word)) return word;
+            if (/\d/.test(word)) return word;
             
-            // Jika kata mengandung angka dan huruf (misal: 2a, b4), keep as is
-            if (/\d/.test(word)) {
-                return word;
-            }
-            
-            // Convert number words to digits (optional, tapi biasanya speech recog langsung angka)
             const numMap = {
                 'zero': '0', 'one': '1', 'two': '2', 'three': '3',
                 'four': '4', 'five': '5', 'six': '6', 'seven': '7',
                 'eight': '8', 'nine': '9'
             };
             
-            if (numMap[word]) {
-                return numMap[word];
-            }
-            
-            // Stem the word (remove common suffixes)
+            if (numMap[word]) return numMap[word];
             return simpleStem(word);
         });
         
@@ -486,7 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active');
         document.body.style.overflow = '';
         
-        // Stop recognition if active
         if (isListening) {
             try {
                 recognition.stop();
@@ -505,10 +503,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==================================================
-    // COMPLETION CHECK
+    // ✅ COMPLETION CHECK (UPDATED)
     // ==================================================
     function checkCompletion() {
-        const allComplete = progressState.situation1 && progressState.situation2;
+        // ✅ CEK: Semua 4 role sudah completed
+        const allComplete = 
+            progressState['situation1-caller'] &&
+            progressState['situation1-receiver'] &&
+            progressState['situation2-caller'] &&
+            progressState['situation2-receiver'];
+        
+        console.log('🔍 Checking completion:', {
+            'situation1-caller': progressState['situation1-caller'],
+            'situation1-receiver': progressState['situation1-receiver'],
+            'situation2-caller': progressState['situation2-caller'],
+            'situation2-receiver': progressState['situation2-receiver'],
+            allComplete: allComplete
+        });
         
         if (allComplete) {
             showContinueButton();
@@ -519,10 +530,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (continueWrapper) {
             continueWrapper.style.display = 'block';
             setTimeout(() => {
-                continueWrapper.style.opacity = '1';
+                continueWrapper.classList.add('show');
             }, 100);
             
             showNotification('🎉 All situations completed! Ready to continue!', 'success');
+            console.log('✅ Continue button shown!');
         }
     }
 
@@ -590,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ Radio Watch Duty Ready!');
 });
 
-// Notification animations
+// Notification animations + Button Styling (SAMA SEPERTI SEBELUMNYA)
 const styles = document.createElement('style');
 styles.textContent = `
     @keyframes slideInRight {
@@ -601,12 +613,16 @@ styles.textContent = `
         from { opacity: 1; transform: translateX(0); }
         to { opacity: 0; transform: translateX(100px); }
     }
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
     
     .modal-record-btn {
         width: 100%;
         padding: 18px 30px;
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: var(--white);
+        color: white;
         border: none;
         border-radius: 16px;
         font-family: 'Poppins', sans-serif;
@@ -644,31 +660,149 @@ styles.textContent = `
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4), 0 0 0 20px rgba(239, 68, 68, 0);
         }
     }
-`;
 
-styles.textContent += `
-    .feedback-btn-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 18px;
-    }
-
-    .mark-complete-btn {
-        background: #10b981;
-        color: white;
-        padding: 12px 20px;
+    .try-again-btn,
+    .continue-task-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 28px;
         border: none;
-        border-radius: 10px;
-        font-size: 1rem;
+        border-radius: 12px;
+        font-family: 'Poppins', sans-serif;
         font-weight: 600;
+        font-size: 1rem;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.3s ease;
     }
 
-    .mark-complete-btn:hover {
-        background: #059669;
+    .try-again-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .try-again-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
+
+    .continue-task-btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .continue-task-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    .try-again-btn i,
+    .continue-task-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .continue-task-btn:hover i {
+        transform: scale(1.2);
+    }
+
+    .try-again-btn:hover i {
+        transform: rotate(360deg);
+    }
+
+    .record-role-btn.completed {
+        position: relative;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: white !important;
+        border-color: #059669 !important;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .record-role-btn.completed::after {
+        content: '\\f00c';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        animation: checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes checkmarkPop {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .diff-output {
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+        line-height: 2;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 1rem;
+    }
+
+    .diff-output .correct {
+        color: #10b981;
+        background: #d1fae5;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        margin-right: 5px;
+    }
+
+    .diff-output .missing {
+        color: #ef4444;
+        background: #fee2e2;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        margin-right: 5px;
+        text-decoration: line-through;
+    }
+
+    @media (max-width: 768px) {
+        .try-again-btn,
+        .continue-task-btn {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+        }
+        
+        .record-role-btn.completed::after {
+            width: 24px;
+            height: 24px;
+            font-size: 0.7rem;
+            top: -6px;
+            right: -6px;
+        }
     }
 `;
-
 document.head.appendChild(styles);

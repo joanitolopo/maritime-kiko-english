@@ -36,9 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             callSign: 'YBON9',
             callSignReceiver: 'LAPW5',
             audio: '/static/data/audio/unit1/vhf_caller.wav',
-            targetPhrase: null, // No speech recognition for example
-            transcript: ["This is Motor Vessel Horizon, Call Sign Yankee Bravo Oscar November Niner. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares. Call sign Lima Alfa Papa Whisky Fife. Channel Wun Six. Over"
-        ]
+            targetPhrase: null,
+            transcript: ["This is Motor Vessel Horizon, Call Sign Yankee Bravo Oscar November Niner. MMSI Too Fower Ait Wun Zeero Fife Niner Zeero Zeero. Calling Motor Vessel Antares. Call sign Lima Alfa Papa Whisky Fife. Channel Wun Six. Over"]
         },
         'example-receiver': {
             name: 'ANTARES',
@@ -47,8 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             callSignReceiver: 'YBON9',
             audio: '/static/data/audio/unit1/vhf_receiver.wav',
             targetPhrase: null,
-            transcript: ["Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."
-        ]
+            transcript: ["Motor Vessel Horizon, this is Antares. Receiving you loud and clear. Over."]
         },
         'part1-caller': {
             name: 'ADOUR',
@@ -57,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             callSignReceiver: 'SWFP',
             audio: null,
             targetPhrase: "This is Motor Vessel ADOUR 635005000 Foxtrot Quebec Echo Papa calling Motor Vessel APOLLON call sign Sierra Whisky Foxtrot Papa channel one six over",
-
         },
         'part1-receiver': {
             name: 'APOLLON',
@@ -132,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAudioPlaying = false;
     let isListening = false;
     let currentRecordingKey = null;
+    let currentRecordButton = null; // ✅ TAMBAHAN: Track button yang sedang digunakan
 
     // ==================================================
     // TEXT CONTENT
@@ -219,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = vesselData[key];
 
             if (data && data.audio) {
-                openModalForPlay(data, role, example);
+                openModalForPlay(data, role, example, button); // ✅ Pass button
             }
         });
     });
@@ -237,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = vesselData[key];
 
             if (data) {
-                openModalForRecord(data, role, example, key);
+                openModalForRecord(data, role, example, key, button); // ✅ Pass button
             }
         });
     });
@@ -245,8 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // MODAL FUNCTIONS - PLAY
     // ==================================================
-    function openModalForPlay(data, role, example) {
+    function openModalForPlay(data, role, example, button) { // ✅ Accept button
         stopAllAudioAndSpeech();
+        currentRecordButton = button; // ✅ Store button reference
 
         // Populate modal
         modalTitle.textContent = `${role === 'caller' ? 'The Caller' : 'The Receiver'}: ${data.name}`;
@@ -258,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear action container
         modalActionContainer.innerHTML = '';
         
-        // ===== TAMBAHKAN BAGIAN INI =====
         // Tampilkan transcript HANYA untuk example
         if (example === 'example' && data.transcript) {
             const transcriptHTML = `
@@ -274,7 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             modalActionContainer.innerHTML = transcriptHTML;
         }
-        // ===== AKHIR TAMBAHAN =====
 
         // Show modal
         modal.classList.add('active');
@@ -295,6 +292,11 @@ document.addEventListener('DOMContentLoaded', () => {
         audio_current.addEventListener('ended', () => {
             isAudioPlaying = false;
             
+            // ✅ MARK BUTTON AS COMPLETED
+            if (button) {
+                button.classList.add('completed');
+            }
+            
             // Update progress
             if (example === 'example') {
                 progressState.examplePlayed = true;
@@ -312,9 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================================================
     // MODAL FUNCTIONS - RECORD
     // ==================================================
-    function openModalForRecord(data, role, example, key) {
+    function openModalForRecord(data, role, example, key, button) { // ✅ Accept button
         stopAllAudioAndSpeech();
         currentRecordingKey = key;
+        currentRecordButton = button; // ✅ Store button reference
 
         // Populate modal
         modalTitle.textContent = `You are ${role === 'caller' ? 'the Caller' : 'the Receiver'}: ${data.name}`;
@@ -417,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================================================
-    // PRONUNCIATION CHECKING
+    // PRONUNCIATION CHECKING (✅ UPDATED)
     // ==================================================
     function checkPronunciation(transcript, targetText, example, role) {
         const userWords = new Set(cleanText(transcript).split(' '));
@@ -438,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const accuracy = Math.round((correctCount / totalCount) * 100);
         const allCorrect = correctCount === totalCount;
+        const passedThreshold = accuracy >= 20; // ✅ 20% MINIMUM
 
         // Close main modal first
         closeModal();
@@ -448,17 +452,27 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let title = '';
         let message = '';
+        let actionButton = '';
         const roleLabel = role === 'caller' ? 'Caller' : 'Receiver';
 
+        // ✅ UPDATED: Dengan Mark as Complete
         if (allCorrect) {
             title = `<h4><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> Excellent ${roleLabel}!</h4>`;
             message = `<p style="color: #059669;">Perfect radio communication! You pronounced all key words correctly. 🎉</p>`;
-        } else if (accuracy >= 5) {
+            actionButton = '<button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>';
+        } else if (passedThreshold) {
             title = `<h4><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Good ${roleLabel}!</h4>`;
-            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Keep practicing!</p>`;
+            message = `<p style="color: #d97706;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). That's good enough to continue! You can retry for a perfect score or move on.</p>`;
+            actionButton = `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                    <button class="continue-task-btn"><i class="fa-solid fa-check"></i> Mark as Complete</button>
+                </div>
+            `;
         } else {
-            title = `<h4><i class="fa-solid fa-arrows-rotate" style="color: #3b82f6;"></i> Keep Practicing!</h4>`;
-            message = `<p style="color: #2563eb;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). Try again!</p>`;
+            title = `<h4><i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i> Keep Practicing!</h4>`;
+            message = `<p style="color: #dc2626;">You got ${correctCount} out of ${totalCount} words (${accuracy}%). You need at least 20% to continue. Don't worry! Try again!</p>`;
+            actionButton = '<button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>';
         }
         
         const transcriptDisplay = `
@@ -468,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </p>
         `;
 
-        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct):</h5>`;
+        const expectedLabel = `<h5>Word-by-word comparison (${correctCount}/${totalCount} correct - ${accuracy}%):</h5>`;
 
         feedbackModal.innerHTML = `
             <div class="feedback-modal-content">
@@ -479,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${transcriptDisplay}
                     ${expectedLabel}
                     <div class="diff-output">${resultHTML}</div>
-                    <button class="try-again-btn"><i class="fa-solid fa-microphone"></i> Try Again</button>
+                    ${actionButton}
                 </div>
             </div>
         `;
@@ -495,15 +509,30 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => feedbackModal.remove(), 300);
         });
 
-        tryAgainBtn.addEventListener('click', () => {
-            feedbackModal.classList.remove('active');
-            setTimeout(() => {
-                feedbackModal.remove();
-                // Re-open recording modal
-                const data = vesselData[currentRecordingKey];
-                openModalForRecord(data, role, example, currentRecordingKey);
-            }, 300);
-        });
+        if (tryAgainBtn) {
+            tryAgainBtn.addEventListener('click', () => {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => {
+                    feedbackModal.remove();
+                    // Re-open recording modal
+                    const data = vesselData[currentRecordingKey];
+                    const [ex, r] = currentRecordingKey.split('-');
+                    openModalForRecord(data, r, ex, currentRecordingKey, currentRecordButton);
+                }, 300);
+            });
+        }
+
+        // ✅ MARK AS COMPLETE BUTTON
+        const continueTaskBtn = feedbackModal.querySelector('.continue-task-btn');
+        if (continueTaskBtn) {
+            continueTaskBtn.addEventListener('click', () => {
+                feedbackModal.classList.remove('active');
+                setTimeout(() => {
+                    feedbackModal.remove();
+                    markTaskAsCompleted(example, role); // ✅ Mark task
+                }, 300);
+            });
+        }
 
         feedbackModal.addEventListener('click', (e) => {
             if (e.target === feedbackModal) {
@@ -512,21 +541,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Update progress if accuracy >= 50%
-        if (accuracy >= 5) {
-            if (example === 'part1' && role === 'caller') {
-                progressState.part1CallerRecorded = true;
-            } else if (example === 'part2' && role === 'receiver') {
-                progressState.part2ReceiverRecorded = true;
-            }
-            
-            updateProgress();
-            checkCompletion();
-            
-            if (allCorrect) {
-                playSuccessSound();
-            }
+        if (allCorrect) {
+            playSuccessSound();
         }
+    }
+
+    // ==================================================
+    // ✅ MARK TASK AS COMPLETED (NEW)
+    // ==================================================
+    function markTaskAsCompleted(example, role) {
+        // ✅ PREVENT DOUBLE COMPLETION
+        if (example === 'part1' && role === 'caller' && progressState.part1CallerRecorded) {
+            console.log('Part1 Caller already completed');
+            return;
+        }
+        if (example === 'part2' && role === 'receiver' && progressState.part2ReceiverRecorded) {
+            console.log('Part2 Receiver already completed');
+            return;
+        }
+        
+        // ✅ MARK AS COMPLETED
+        if (example === 'part1' && role === 'caller') {
+            progressState.part1CallerRecorded = true;
+            if (currentRecordButton) currentRecordButton.classList.add('completed');
+            showNotification('Part 1 Caller completed! ✓', 'success');
+            console.log('✅ Part 1 Caller marked as completed');
+        } else if (example === 'part2' && role === 'receiver') {
+            progressState.part2ReceiverRecorded = true;
+            if (currentRecordButton) currentRecordButton.classList.add('completed');
+            showNotification('Part 2 Receiver completed! ✓', 'success');
+            console.log('✅ Part 2 Receiver marked as completed');
+        }
+        
+        // ✅ CHECK IF ALL DONE
+        updateProgress();
+        checkCompletion();
     }
 
     function cleanText(text) {
@@ -549,19 +598,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playSuccessSound() {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        gainNode.gain.value = 0.1;
-        
-        oscillator.start();
-        setTimeout(() => oscillator.stop(), 200);
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            setTimeout(() => oscillator.stop(), 200);
+        } catch (e) {
+            console.log('Success sound not available');
+        }
     }
 
     // ==================================================
@@ -762,6 +815,11 @@ notificationStyles.textContent = `
         0%, 100% { transform: translateX(0); }
         25% { transform: translateX(-10px); }
         75% { transform: translateX(10px); }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
     }
 `;
 document.head.appendChild(notificationStyles);
