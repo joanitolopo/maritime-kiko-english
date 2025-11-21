@@ -1323,6 +1323,57 @@ body {
         width: 100%;
     }
 
+    /* ========== WARNING MODAL RESPONSIVE ========== */
+    .warning-modal {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .warning-modal-content {
+        width: 92%;
+        max-width: 92%;
+        max-height: 80vh;
+        border-radius: 18px;
+        padding: 20px 16px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Warning Modal Title */
+    .warning-modal-content h3,
+    .warning-modal-content h4 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    /* Warning Modal Icon */
+    .warning-modal-content i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    /* Warning Modal Text */
+    .warning-modal-content p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    /* Warning Modal Buttons */
+    .warning-modal button {
+        width: 100%;
+        padding: 11px 18px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+        margin-bottom: 8px;
+    }
+
+    .warning-modal button:last-child {
+        margin-bottom: 0;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -1341,5 +1392,519 @@ body {
 
     .check-btn {
         width: 100%;
+    }
+}
+
+/* ========================================
+   FEEDBACK MODAL & WARNING MODAL RESPONSIVE
+   Fokus untuk HP 360x740 & Similar
+======================================== */
+
+@media (max-width: 480px) {
+    
+    /* ========== FEEDBACK MODAL ========== */
+    .feedback-modal {
+        padding: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feedback-modal-content {
+        width: 95%;
+        max-width: 95%;
+        max-height: 85vh;
+        margin: 10px;
+        padding: 0;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Close Button */
+    .feedback-close {
+        position: sticky;
+        top: 0;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        margin: 12px 12px 0 auto;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .feedback-close:active {
+        transform: scale(0.95);
+        background: #dc2626;
+    }
+
+    /* Mic Result Box */
+    .mic-result-box {
+        padding: 20px 15px;
+        background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+        border-radius: 0 0 20px 20px;
+        text-align: center;
+        overflow-y: auto;
+        max-height: calc(85vh - 60px);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Title & Icon */
+    .mic-result-box h4 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .mic-result-box h4 i {
+        font-size: 1.3rem;
+    }
+
+    /* Message Text */
+    .mic-result-box p {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
+
+    /* Subheading (h5) */
+    .mic-result-box h5 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-top: 15px;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    /* What You Said Box */
+    .mic-result-box p[style*="font-style: italic"] {
+        font-size: 0.8rem !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        margin: 10px 0 !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Diff Output (Word Comparison) */
+    .diff-output {
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px;
+        margin: 12px 0;
+        text-align: left;
+        line-height: 1.8;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.75rem;
+        max-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .diff-output .correct {
+        color: #10b981;
+        background: #d1fae5;
+        padding: 2px 5px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin-right: 3px;
+        margin-bottom: 3px;
+        display: inline-block;
+        font-size: 0.7rem;
+    }
+
+    .diff-output .missing {
+        color: #ef4444;
+        background: #fee2e2;
+        padding: 2px 5px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin-right: 3px;
+        margin-bottom: 3px;
+        display: inline-block;
+        text-decoration: line-through;
+        font-size: 0.7rem;
+    }
+
+    /* Action Buttons Container */
+    .feedback-btn-row,
+    div[style*="display: flex"][style*="gap: 10px"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-top: 15px !important;
+        width: 100% !important;
+    }
+
+    /* Try Again Button */
+    .try-again-btn {
+        width: 100% !important;
+        padding: 12px 20px !important;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+    }
+
+    .try-again-btn:active {
+        transform: scale(0.98) !important;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    /* Mark Complete / Continue Task Button */
+    .continue-task-btn,
+    .mark-complete-btn {
+        width: 100% !important;
+        padding: 12px 20px !important;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .continue-task-btn:active,
+    .mark-complete-btn:active {
+        transform: scale(0.98) !important;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    /* Button Icons */
+    .try-again-btn i,
+    .continue-task-btn i,
+    .mark-complete-btn i {
+        font-size: 1rem !important;
+    }
+
+    /* ========== EXCHANGE MODAL (VHF Modal) ========== */
+    .modal {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        max-height: 85vh;
+        margin: 10px;
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-header {
+        padding: 15px;
+        border-radius: 20px 20px 0 0;
+        background: linear-gradient(135deg, #0B5A8F 0%, #064273 100%);
+    }
+
+    .modal-title {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .modal-unit-badge {
+        font-size: 0.75rem;
+        padding: 3px 8px;
+    }
+
+    .btn-close-custom {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+
+    .modal-body {
+        padding: 15px;
+        overflow-y: auto;
+        max-height: calc(85vh - 120px);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Vessel Info Grid */
+    .vessel-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .info-item {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .info-item label {
+        font-size: 0.7rem;
+    }
+
+    .info-item span {
+        font-size: 0.85rem;
+    }
+
+    /* Modal Reminder */
+    .modal-reminder {
+        padding: 12px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .modal-reminder i {
+        font-size: 1.2rem;
+    }
+
+    /* Modal Record Button */
+    .modal-record-btn {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 1rem !important;
+        border-radius: 12px !important;
+        margin-top: 10px !important;
+    }
+
+    .modal-record-btn i {
+        font-size: 1.2rem !important;
+    }
+
+    /* Transcript Box */
+    .transcript-box {
+        border-radius: 12px;
+        margin: 15px 0;
+    }
+
+    .transcript-box-header {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .transcript-box-content {
+        padding: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .transcript-box-content p {
+        font-size: 0.75rem;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+
+    .modal-footer {
+        padding: 12px 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* ========== PREVENT BODY SCROLL WHEN MODAL OPEN ========== */
+    body.modal-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* ========== SCROLLBAR STYLING ========== */
+    .mic-result-box::-webkit-scrollbar,
+    .diff-output::-webkit-scrollbar,
+    .modal-body::-webkit-scrollbar,
+    .transcript-box-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .mic-result-box::-webkit-scrollbar-track,
+    .diff-output::-webkit-scrollbar-track,
+    .modal-body::-webkit-scrollbar-track,
+    .transcript-box-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .mic-result-box::-webkit-scrollbar-thumb,
+    .diff-output::-webkit-scrollbar-thumb,
+    .modal-body::-webkit-scrollbar-thumb,
+    .transcript-box-content::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+
+    .mic-result-box::-webkit-scrollbar-thumb:hover,
+    .diff-output::-webkit-scrollbar-thumb:hover,
+    .modal-body::-webkit-scrollbar-thumb:hover,
+    .transcript-box-content::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+}
+
+/* ========================================
+   EXTRA SMALL DEVICES (320px - 360px)
+======================================== */
+@media (max-width: 360px) {
+    .feedback-modal-content {
+        width: 98%;
+        max-height: 88vh;
+        margin: 5px;
+    }
+
+    .feedback-close {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+        margin: 10px 10px 0 auto;
+    }
+
+    .mic-result-box {
+        padding: 15px 12px;
+    }
+
+    .mic-result-box h4 {
+        font-size: 1rem;
+    }
+
+    .mic-result-box h5 {
+        font-size: 0.85rem;
+    }
+
+    .mic-result-box p {
+        font-size: 0.8rem;
+    }
+
+    .diff-output {
+        font-size: 0.7rem;
+        padding: 10px;
+        max-height: 150px;
+    }
+
+    .diff-output .correct,
+    .diff-output .missing {
+        font-size: 0.65rem;
+        padding: 1px 4px;
+    }
+
+    .try-again-btn,
+    .continue-task-btn,
+    .mark-complete-btn {
+        padding: 10px 16px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .modal-content {
+        width: 98%;
+    }
+
+    .vessel-info-grid {
+        gap: 8px;
+    }
+
+    .info-item {
+        padding: 8px;
+    }
+
+    .info-item label {
+        font-size: 0.65rem;
+    }
+
+    .info-item span {
+        font-size: 0.8rem;
+    }
+
+    .modal-reminder {
+        padding: 10px;
+        font-size: 0.75rem;
+    }
+
+    .modal-record-btn {
+        padding: 12px 18px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ========================================
+   LANDSCAPE MODE (Small Height)
+======================================== */
+@media (max-height: 600px) and (orientation: landscape) {
+    .feedback-modal-content,
+    .modal-content {
+        max-height: 90vh;
+    }
+
+    .mic-result-box {
+        max-height: calc(90vh - 60px);
+    }
+
+    .modal-body {
+        max-height: calc(90vh - 100px);
+    }
+
+    .diff-output {
+        max-height: 150px;
+    }
+
+    .transcript-box-content {
+        max-height: 150px;
+    }
+}
+
+/* ========================================
+   IPHONE SE & SMALL SCREENS (375x667)
+======================================== */
+@media (max-width: 375px) {
+    .feedback-modal-content {
+        width: 96%;
+        max-height: 86vh;
+    }
+
+    .mic-result-box {
+        padding: 18px 14px;
+    }
+
+    .diff-output {
+        font-size: 0.72rem;
     }
 }
